@@ -4,6 +4,9 @@ syntax: glob
 # Ignore .orig files
 *.orig
 
+# Ignore Nuget Packages
+source\packages\*
+
 # Ignore Visual Studio 2008 files
 *.obj
 #*.exe
