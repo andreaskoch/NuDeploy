@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NuDeploy.Core.Commands
 {
@@ -6,7 +8,12 @@ namespace NuDeploy.Core.Commands
     {
         public ICommand ParseCommandLineArguments(IEnumerable<string> commandLineArguments)
         {
-            throw new System.NotImplementedException();
+            if (commandLineArguments == null || !commandLineArguments.Any())
+            {
+                return null;
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

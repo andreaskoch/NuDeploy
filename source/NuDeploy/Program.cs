@@ -9,9 +9,10 @@ namespace NuDeploy
     {
         public static int Main(string[] args)
         {
+            var console = new ConsoleUserInterface();
+
             try
             {
-                var console = new ConsoleUserInterface();
                 var commandLineArgumentParser = new CommandLineArgumentParser();
                 var command = commandLineArgumentParser.ParseCommandLineArguments(args);
 
@@ -19,7 +20,7 @@ namespace NuDeploy
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception.Message);
+                console.Show(exception.Message);
 
                 return 1;
             }
