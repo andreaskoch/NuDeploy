@@ -6,7 +6,7 @@ namespace NuDeploy.Core.Commands
     {
         CommandAttributes Attributes { get; }
 
-        IList<string> Arguments { get; }
+        IDictionary<string, string> Arguments { get; set; }
 
         void Execute();
     }

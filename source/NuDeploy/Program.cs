@@ -2,25 +2,40 @@
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Common;
+using NuDeploy.Core.DependencyResolution;
+
+using StructureMap;
 
 namespace NuDeploy
 {
     public class Program
     {
+        public Program()
+        {
+            StructureMapSetup.Setup();
+        }
+
         public static int Main(string[] args)
         {
-            var console = new ConsoleUserInterface();
+            var program = new Program();
+            return program.Run(args);
+        }
+
+        public int Run(string[] args)
+        {
+            var console = ObjectFactory.GetInstance<IUserInterface>();
 
             try
             {
-                var commandLineArgumentParser = new CommandLineArgumentParser();
-                var command = commandLineArgumentParser.ParseCommandLineArguments(args);
+                var commandLineArgumentParser = ObjectFactory.GetInstance<ICommandLineArgumentParser>();
+                var command = commandLineArgumentParser.ParseCommandLineArguments(args) ?? new HelpCommand(console);
 
                 command.Execute();
             }
             catch (Exception exception)
             {
                 console.Show(exception.Message);
+                console.Show(exception.StackTrace);
 
                 return 1;
             }

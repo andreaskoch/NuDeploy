@@ -37,16 +37,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.1.8.0\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandAttributes.cs" />
     <Compile Include="Commands\CommandLineArgumentParser.cs" />
+    <Compile Include="Commands\CommandProvider.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandLineArgumentParser.cs" />
+    <Compile Include="Commands\ICommandProvider.cs" />
+    <Compile Include="Commands\PackageSolutionCommand.cs" />
     <Compile Include="Common\ConsoleUserInterface.cs" />
     <Compile Include="Common\IUserInterface.cs" />
+    <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
