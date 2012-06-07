@@ -44,12 +44,18 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CommandArgumentNameMatcher.cs" />
+    <Compile Include="Commands\CommandArgumentParser.cs" />
     <Compile Include="Commands\CommandAttributes.cs" />
-    <Compile Include="Commands\CommandLineArgumentParser.cs" />
+    <Compile Include="Commands\CommandLineArgumentInterpreter.cs" />
+    <Compile Include="Commands\CommandNameMatcher.cs" />
     <Compile Include="Commands\CommandProvider.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\ICommandLineArgumentParser.cs" />
+    <Compile Include="Commands\ICommandArgumentNameMatcher.cs" />
+    <Compile Include="Commands\ICommandArgumentParser.cs" />
+    <Compile Include="Commands\ICommandLineArgumentInterpreter.cs" />
+    <Compile Include="Commands\ICommandNameMatcher.cs" />
     <Compile Include="Commands\ICommandProvider.cs" />
     <Compile Include="Commands\PackageSolutionCommand.cs" />
     <Compile Include="Common\ConsoleUserInterface.cs" />
