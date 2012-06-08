@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentNameMatcherTests.cs" />
+    <Compile Include="UnitTests\Commands\CommandArgumentParserTests.cs" />
     <Compile Include="UnitTests\Commands\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
   </ItemGroup>

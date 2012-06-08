@@ -5,7 +5,9 @@ namespace NuDeploy.Core.Commands
 {
     public class CommandArgumentParser : ICommandArgumentParser
     {
-        private readonly Regex namedArgumentRegex = new Regex("^(--|-|/)(\\w+)=(['\"]?)([^\"']+?)\\4$");
+        public const string NameFormatUnnamedParamters = "Unnamed-{0}";
+
+        private readonly Regex namedArgumentRegex = new Regex("^(--|-|/)(\\w+)=(['\"]?)([^\\3]+?)\\3$");
 
         private readonly Regex switchArgumentRegex = new Regex("^-(\\w+)$");
 
@@ -43,7 +45,7 @@ namespace NuDeploy.Core.Commands
                 }
                 
                 // argument is unnamed
-                string unnamedArgumentName = string.Format("Unnamed-{0}", unnamedArgumentIndex++);
+                string unnamedArgumentName = string.Format(NameFormatUnnamedParamters, unnamedArgumentIndex++);
                 string unnamedArgumentValue = argument;
 
                 parameters[unnamedArgumentName] = unnamedArgumentValue;
