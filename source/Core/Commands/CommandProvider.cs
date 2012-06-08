@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +10,11 @@ namespace NuDeploy.Core.Commands
 
         public CommandProvider(IEnumerable<ICommand> commands)
         {
+            if (commands == null)
+            {
+                throw new ArgumentNullException("commands");
+            }
+
             this.commands = commands.ToList();
         }
 
