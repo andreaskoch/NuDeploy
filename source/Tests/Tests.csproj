@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IntegrationTests\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentNameMatcherTests.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentParserTests.cs" />
