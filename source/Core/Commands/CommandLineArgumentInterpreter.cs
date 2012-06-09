@@ -42,11 +42,21 @@ namespace NuDeploy.Core.Commands
 
             // find command
             string commandName = commandLineArguments.First();
-            ICommand command = availableCommands.FirstOrDefault(cmd => this.commandNameMatcher.IsMatch(cmd, commandName));
-            if (command == null)
+            IList<ICommand> matchingCommands = availableCommands.Where(cmd => this.commandNameMatcher.IsMatch(cmd, commandName)).ToList();
+
+            if (matchingCommands.Count == 0)
             {
+                // no match
                 return null;
             }
+
+            if (matchingCommands.Count > 1)
+            {
+                // ambiguous command name 
+                return null;
+            }
+
+            ICommand command = matchingCommands.First();
 
             // assign command arguments (if available)
             if (commandLineArguments.Count > 1)

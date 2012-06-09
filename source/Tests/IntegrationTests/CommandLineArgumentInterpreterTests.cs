@@ -20,6 +20,14 @@ namespace NuDeploy.Tests.IntegrationTests
 
         private ICommandLineArgumentInterpreter commandLineArgumentInterpreter;
 
+        private ICommandProvider commandProvider;
+
+        private ICommandNameMatcher commandNameMatcher;
+
+        private ICommandArgumentParser commandArgumentParser;
+
+        private ICommandArgumentNameMatcher commandArgumentNameMatcher;
+
         [SetUp]
         public void Setup()
         {
@@ -29,13 +37,13 @@ namespace NuDeploy.Tests.IntegrationTests
             this.packackageSolutionCommand = new PackageSolutionCommand();
             this.commands = new List<ICommand> { this.packackageSolutionCommand, this.helpCommand };
 
-            ICommandProvider commandProvider = new CommandProvider(this.commands);
-            ICommandNameMatcher commandNameMatcher = new CommandNameMatcher();
-            ICommandArgumentParser commandArgumentParser = new CommandArgumentParser();
-            ICommandArgumentNameMatcher commandArgumentNameMatcher = new CommandArgumentNameMatcher();
+            this.commandProvider = new CommandProvider(this.commands);
+            this.commandNameMatcher = new CommandNameMatcher();
+            this.commandArgumentParser = new CommandArgumentParser();
+            this.commandArgumentNameMatcher = new CommandArgumentNameMatcher();
 
             this.commandLineArgumentInterpreter = new CommandLineArgumentInterpreter(
-                commandProvider, commandNameMatcher, commandArgumentParser, commandArgumentNameMatcher);            
+                this.commandProvider, this.commandNameMatcher, this.commandArgumentParser, this.commandArgumentNameMatcher);            
         }
 
         [Test]
@@ -92,6 +100,35 @@ namespace NuDeploy.Tests.IntegrationTests
             {
                 Assert.IsNull(result.Arguments[key]);
             }
+        }
+
+        [Test]
+        public void GetCommand_MultipleCommandsWithSimilarName_ArgumentIsOnlyPartialCommandNameWhichMatchesMoreThanOneCommand_ResultIsNull()
+        {
+            // Arrange
+            var command1 = new Mock<ICommand>();
+            command1.Setup(c => c.Attributes).Returns(new CommandAttributes { CommandName = "abc" });
+
+            var command2 = new Mock<ICommand>();
+            command2.Setup(c => c.Attributes).Returns(new CommandAttributes { CommandName = "abcd" });
+
+            var command3 = new Mock<ICommand>();
+            command3.Setup(c => c.Attributes).Returns(new CommandAttributes { CommandName = "abcde" });
+
+            var commandList = new List<ICommand> { command1.Object, command2.Object, command3.Object };
+
+            var customCommandProvider = new CommandProvider(commandList);
+
+            var interpreter = new CommandLineArgumentInterpreter(
+                customCommandProvider, this.commandNameMatcher, this.commandArgumentParser, this.commandArgumentNameMatcher);
+
+            var arguments = new[] { "abc" };
+
+            // Act
+            ICommand result = interpreter.GetCommand(arguments);
+
+            // Assert
+            Assert.IsNull(result);
         }
 
         [Test]
