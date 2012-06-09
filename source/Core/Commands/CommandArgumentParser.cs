@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -13,6 +14,11 @@ namespace NuDeploy.Core.Commands
 
         public IDictionary<string, string> ParseParameters(IEnumerable<string> commandArguments)
         {
+            if (commandArguments == null)
+            {
+                throw new ArgumentNullException("commandArguments");
+            }
+
             var parameters = new Dictionary<string, string>();
 
             // find named parameters

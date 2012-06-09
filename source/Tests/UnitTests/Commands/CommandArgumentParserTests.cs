@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using NuDeploy.Core.Commands;
 
@@ -15,6 +16,14 @@ namespace NuDeploy.Tests.UnitTests.Commands
         public void Setup()
         {
             this.commandArgumentParser = new CommandArgumentParser();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ParseParameters_ParameterIsNull_ArgumentNullExceptionIsThrown()
+        {
+            // Act
+            this.commandArgumentParser.ParseParameters(null);
         }
 
         [Test]
