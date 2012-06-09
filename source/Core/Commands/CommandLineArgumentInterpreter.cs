@@ -60,8 +60,19 @@ namespace NuDeploy.Core.Commands
 
                     string matchedArgumentName =
                         command.Arguments.Keys.FirstOrDefault(
-                            originalArgumentName => this.commandArgumentNameMatcher.IsMatch(originalArgumentName, suppliedArgumentName))
-                        ?? string.Format("Unnamed-Argument-{0}", unrecognizedArgumentIndex++);
+                            originalArgumentName => this.commandArgumentNameMatcher.IsMatch(originalArgumentName, suppliedArgumentName));
+
+                    if (matchedArgumentName == null)
+                    {
+                        if (string.IsNullOrWhiteSpace(suppliedArgumentName))
+                        {
+                            matchedArgumentName = string.Format("Unnamed-Argument-{0}", unrecognizedArgumentIndex++);
+                        }
+                        else
+                        {
+                            matchedArgumentName = suppliedArgumentName;
+                        }
+                    }
 
                     command.Arguments[matchedArgumentName] = suppliedArgumentValue;
                 }
