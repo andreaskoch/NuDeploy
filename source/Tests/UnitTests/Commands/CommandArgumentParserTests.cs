@@ -213,5 +213,43 @@ namespace NuDeploy.Tests.UnitTests.Commands
             Assert.AreEqual("argumentName3", result.Keys.Skip(2).Take(1).First());
             Assert.AreEqual("argumentValue3", result.Values.Skip(2).Take(1).First());
         }
+
+        [Test]
+        public void ParseParameters_SingleSwitchParameterIsSupplied_SwitchNameIsRecognizedAndValueIsTrue()
+        {
+            // Arrange
+            string switchArgumentName = "someSwitch";
+            string switchPrefix = "-";
+
+            string parameter = switchPrefix + switchArgumentName;
+
+            var arguments = new[] { parameter };
+
+            // Act
+            var result = this.commandArgumentParser.ParseParameters(arguments);
+
+            // Assert
+            Assert.AreEqual(switchArgumentName, result.Keys.First());
+            Assert.AreEqual(bool.TrueString, result.Values.First());
+        }
+
+        [Test]
+        public void ParseParameters_SingleSwitchParameterWithInvalidPrefixIsSupplied_ResultIsUnnamed()
+        {
+            // Arrange
+            string switchArgumentName = "someSwitch";
+            string switchPrefix = "--";
+
+            string parameter = switchPrefix + switchArgumentName;
+
+            var arguments = new[] { parameter };
+
+            // Act
+            var result = this.commandArgumentParser.ParseParameters(arguments);
+
+            // Assert
+            Assert.AreEqual(string.Format(CommandArgumentParser.NameFormatUnnamedParamters, 1), result.Keys.First());
+            Assert.AreEqual(parameter, result.Values.First());
+        }
     }
 }
