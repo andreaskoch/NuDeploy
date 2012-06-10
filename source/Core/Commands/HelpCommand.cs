@@ -8,9 +8,12 @@ namespace NuDeploy.Core.Commands
     {
         private readonly IUserInterface userInterface;
 
-        public HelpCommand(IUserInterface userInterface)
+        private readonly ApplicationInformation applicationInformation;
+
+        public HelpCommand(IUserInterface userInterface, ApplicationInformation applicationInformation)
         {
             this.userInterface = userInterface;
+            this.applicationInformation = applicationInformation;
 
             this.Attributes = new CommandAttributes
                 {
@@ -27,7 +30,13 @@ namespace NuDeploy.Core.Commands
 
         public void Execute()
         {
-            this.userInterface.Show("help");
+            this.userInterface.Show("{0} Version: {1}", this.applicationInformation.ApplicationName, this.applicationInformation.ApplicationVersion);
+            this.userInterface.Show("usage: {0} <command> [args] [options] ", this.applicationInformation.NameOfExecutable);
+            this.userInterface.Show("Type '{0} help <command>' for help on a specific command.", this.applicationInformation.NameOfExecutable);
+            this.userInterface.Show(string.Empty);
+
+            this.userInterface.Show("Available commands:");
+            this.userInterface.Show(string.Empty);
         }
     }
 }

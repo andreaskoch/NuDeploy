@@ -8,11 +8,11 @@ namespace NuDeploy.Core.Common
         {
             if (args == null || args.Length == 0)
             {
-                Console.Write(messageFormatString);
+                Console.WriteLine(messageFormatString);
             }
             else
             {
-                Console.Write(messageFormatString, args);
+                Console.WriteLine(messageFormatString, args);
             }
         }
     }

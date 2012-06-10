@@ -58,6 +58,7 @@
     <Compile Include="Commands\ICommandNameMatcher.cs" />
     <Compile Include="Commands\ICommandProvider.cs" />
     <Compile Include="Commands\PackageSolutionCommand.cs" />
+    <Compile Include="Common\ApplicationInformation.cs" />
     <Compile Include="Common\ConsoleUserInterface.cs" />
     <Compile Include="Common\IUserInterface.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Moq;
 
@@ -32,7 +33,10 @@ namespace NuDeploy.Tests.IntegrationTests
         public void Setup()
         {
             var userInterfaceMock = new Mock<IUserInterface>();
-            this.helpCommand = new HelpCommand(userInterfaceMock.Object);
+            var applicaitonInformation = new ApplicationInformation()
+                { ApplicationName = "Test", ApplicationVersion = new Version(1, 0), NameOfExecutable = "Test" };
+
+            this.helpCommand = new HelpCommand(userInterfaceMock.Object, applicaitonInformation);
 
             this.packackageSolutionCommand = new PackageSolutionCommand();
             this.commands = new List<ICommand> { this.packackageSolutionCommand, this.helpCommand };

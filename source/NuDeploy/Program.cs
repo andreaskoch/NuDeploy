@@ -28,7 +28,7 @@ namespace NuDeploy
             try
             {
                 var commandLineArgumentInterpreter = ObjectFactory.GetInstance<ICommandLineArgumentInterpreter>();
-                var command = commandLineArgumentInterpreter.GetCommand(args) ?? new HelpCommand(console);
+                var command = commandLineArgumentInterpreter.GetCommand(args) ?? ObjectFactory.GetInstance<HelpCommand>();
 
                 command.Execute();
             }
