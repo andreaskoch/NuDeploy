@@ -9,8 +9,8 @@ source\packages\*
 
 # Ignore Visual Studio 2008 files
 *.obj
-#*.exe
-#*.pdb
+source/*.exe
+source/*.pdb
 *.user
 *.aps
 *.pch
@@ -30,10 +30,10 @@ source\packages\*
 *.scc
 logs/*
 [Bb]in
-[Dd]ebug*/
+source/[Dd]ebug*/
 Data
 obj/
-[Rr]elease*/
+source\[Rr]elease*/
 [Tt]est[Rr]esult*
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml
