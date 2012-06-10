@@ -22,15 +22,13 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
-                        config.Scan(
-                            scan =>
-                                {
-                                    scan.TheCallingAssembly();
-                                    scan.WithDefaultConventions();
-                                });
-
                         config.For<IUserInterface>().Use<ConsoleUserInterface>();
                         config.For<ApplicationInformation>().Use(applicationInformation);
+
+                        config.For<ICommandArgumentNameMatcher>().Use<CommandArgumentNameMatcher>();
+                        config.For<ICommandArgumentParser>().Use<CommandArgumentParser>();
+                        config.For<ICommandLineArgumentInterpreter>().Use<CommandLineArgumentInterpreter>();
+                        config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
                     });
 
             ObjectFactory.Configure(
