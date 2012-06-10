@@ -9,7 +9,8 @@ namespace NuDeploy.Core.Commands
             this.Attributes = new CommandAttributes
             {
                 CommandName = "package",
-                AlternativeCommandNames = new[] { "pack" }
+                AlternativeCommandNames = new[] { "pack" },
+                Description = Resources.PackageSolutionCommand.CommandDescriptionText
             };
 
             this.Arguments = new Dictionary<string, string>

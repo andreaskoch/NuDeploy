@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using NuDeploy.Core.Common;
 
@@ -10,15 +11,19 @@ namespace NuDeploy.Core.Commands
 
         private readonly ApplicationInformation applicationInformation;
 
-        public HelpCommand(IUserInterface userInterface, ApplicationInformation applicationInformation)
+        private readonly ICommandProvider commandProvider;
+
+        public HelpCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, ICommandProvider commandProvider)
         {
             this.userInterface = userInterface;
             this.applicationInformation = applicationInformation;
+            this.commandProvider = commandProvider;
 
             this.Attributes = new CommandAttributes
                 {
                     CommandName = "help",
-                    AlternativeCommandNames = new[] { "?" }
+                    AlternativeCommandNames = new[] { "?" },
+                    Description = Resources.HelpCommand.CommandDescriptionText
                 };
 
             this.Arguments = new Dictionary<string, string>();
@@ -37,6 +42,14 @@ namespace NuDeploy.Core.Commands
 
             this.userInterface.Show("Available commands:");
             this.userInterface.Show(string.Empty);
+
+            IList<ICommand> availableCommands = this.commandProvider.GetAvailableCommands();
+
+            // add the help command to the list
+            availableCommands.Add(this);
+
+            // display command name and description
+            this.userInterface.ShowKeyValueStore(availableCommands.OrderBy(c => c.Attributes.CommandName).ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description));
         }
     }
 }

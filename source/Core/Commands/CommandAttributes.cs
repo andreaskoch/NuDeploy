@@ -8,10 +8,13 @@ namespace NuDeploy.Core.Commands
         {
             this.CommandName = string.Empty;
             this.AlternativeCommandNames = new string[] { };
+            this.Description = string.Empty;
         }
 
         public string CommandName { get; set; }
 
         public IEnumerable<string> AlternativeCommandNames { get; set; }
+
+        public string Description { get; set; }
     }
 }

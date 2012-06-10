@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Moq;
 
 using NuDeploy.Core.Commands;
-using NuDeploy.Core.Common;
 
 using NUnit.Framework;
 
@@ -16,8 +14,6 @@ namespace NuDeploy.Tests.IntegrationTests
         private ICommand packackageSolutionCommand;
 
         private IEnumerable<ICommand> commands;
-
-        private ICommand helpCommand;
 
         private ICommandLineArgumentInterpreter commandLineArgumentInterpreter;
 
@@ -32,14 +28,8 @@ namespace NuDeploy.Tests.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            var userInterfaceMock = new Mock<IUserInterface>();
-            var applicaitonInformation = new ApplicationInformation()
-                { ApplicationName = "Test", ApplicationVersion = new Version(1, 0), NameOfExecutable = "Test" };
-
-            this.helpCommand = new HelpCommand(userInterfaceMock.Object, applicaitonInformation);
-
             this.packackageSolutionCommand = new PackageSolutionCommand();
-            this.commands = new List<ICommand> { this.packackageSolutionCommand, this.helpCommand };
+            this.commands = new List<ICommand> { this.packackageSolutionCommand };
 
             this.commandProvider = new CommandProvider(this.commands);
             this.commandNameMatcher = new CommandNameMatcher();

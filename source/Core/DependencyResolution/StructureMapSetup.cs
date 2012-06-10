@@ -16,7 +16,7 @@ namespace NuDeploy.Core.DependencyResolution
                 {
                     ApplicationName = "NuDeploy", 
                     NameOfExecutable = "NuDeploy.exe",
-                    ApplicationVersion = Assembly.GetExecutingAssembly().GetName().Version
+                    ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version
                 };
 
             ObjectFactory.Configure(
@@ -34,17 +34,19 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
-                        var helpCommand = new HelpCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
-                        config.For<HelpCommand>().Use(helpCommand);
+                        var commands = new List<ICommand> { new PackageSolutionCommand() };
+                        ICommandProvider commandProvider = new CommandProvider(commands);
+                        config.For<ICommandProvider>().Use(commandProvider);
                     });
 
             ObjectFactory.Configure(
                 config =>
-                    {
-                        var commands = new List<ICommand> { ObjectFactory.GetInstance<HelpCommand>(), new PackageSolutionCommand() };
-                        ICommandProvider commandProvider = new CommandProvider(commands);
-                        config.For<ICommandProvider>().Use(commandProvider);
-                    });
+                {
+                    var helpCommand = new HelpCommand(
+                        ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, ObjectFactory.GetInstance<ICommandProvider>());
+
+                    config.For<HelpCommand>().Use(helpCommand);
+                });
         }
     }
 }
