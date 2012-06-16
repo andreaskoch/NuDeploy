@@ -7,5 +7,7 @@ namespace NuDeploy.Core.Common
         void Show(string messageFormatString, params object[] args);
 
         void ShowKeyValueStore(IDictionary<string, string> keyValueStore);
+
+        void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int indentation);
     }
 }

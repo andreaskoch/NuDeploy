@@ -40,10 +40,16 @@ namespace NuDeploy.Core.Common
             }
         }
 
+        public void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int indentation)
+        {
+            var margin = new string(' ', indentation);
+            this.ShowKeyValueStore(keyValueStore.ToDictionary(pair => margin + pair.Key, pair => pair.Value));
+        }
+
         public void ShowKeyValueStore(IDictionary<string, string> keyValueStore)
         {
-            int keyColumnPadding = 4;
-            int keyColumnWidth = keyValueStore.Keys.Max(k => k.Length) + keyColumnPadding;
+            const int KeyColumnPadding = 4;
+            int keyColumnWidth = keyValueStore.Keys.Max(k => k.Length) + KeyColumnPadding;
             int valueColumnWidth = this.WindowWidth - keyColumnWidth - 4;
 
             foreach (var keyValuePair in keyValueStore)

@@ -49,7 +49,7 @@ namespace NuDeploy.Core.Commands
             availableCommands.Add(this);
 
             // display command name and description
-            this.userInterface.ShowKeyValueStore(availableCommands.OrderBy(c => c.Attributes.CommandName).ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description));
+            this.userInterface.ShowKeyValueStore(availableCommands.OrderBy(c => c.Attributes.CommandName).ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description), 3);
         }
     }
 }
