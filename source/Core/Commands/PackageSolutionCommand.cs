@@ -22,6 +22,13 @@ namespace NuDeploy.Core.Commands
                 AlternativeCommandNames = this.alternativeCommandNames,
                 Description = Resources.PackageSolutionCommand.CommandDescriptionText,
                 Usage = string.Format("{0} -{1}=<Path> -{2}=<Debug|Release> -{3}=<Property1=Value1;Property2=Value2>", CommandName, ArgumentNameSolutionPath, ArgumentNameBuildConfiguration, ArgumentNameMSBuildProperties),
+                Examples = new Dictionary<string, string>
+                    {
+                        {
+                            string.Format("{0} -{1}=C:\\dev\\projects\\sample\\sample.sln -{2}=Release -{3}=IsAutoBuild=True", CommandName, ArgumentNameSolutionPath, ArgumentNameBuildConfiguration, ArgumentNameMSBuildProperties),
+                            "Creates a nuget deployment package from the solution"
+                        }
+                    },
                 ArgumentDescriptions = new Dictionary<string, string>
                     {
                         { ArgumentNameSolutionPath, Resources.PackageSolutionCommand.ArgumentDescriptionSolutionPath },

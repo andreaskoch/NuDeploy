@@ -70,7 +70,16 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to usage.
+        ///   Looks up a localized string similar to Examples.
+        /// </summary>
+        internal static string ExamplesLabel {
+            get {
+                return ResourceManager.GetString("ExamplesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usage.
         /// </summary>
         internal static string UsageLabel {
             get {

@@ -10,6 +10,7 @@ namespace NuDeploy.Core.Commands
             this.AlternativeCommandNames = new string[] { };
             this.Description = string.Empty;
             this.ArgumentDescriptions = new Dictionary<string, string>();
+            this.Examples = new Dictionary<string, string>();
         }
 
         public string CommandName { get; set; }
@@ -21,5 +22,7 @@ namespace NuDeploy.Core.Commands
         public string Usage { get; set; }
 
         public IDictionary<string, string> ArgumentDescriptions { get; set; }
+
+        public IDictionary<string, string> Examples { get; set; }
     }
 }
