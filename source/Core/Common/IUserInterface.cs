@@ -6,8 +6,10 @@ namespace NuDeploy.Core.Common
     {
         void Show(string messageFormatString, params object[] args);
 
-        void ShowKeyValueStore(IDictionary<string, string> keyValueStore);
+        void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue);
 
-        void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int indentation);
+        void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int distanceBetweenColumns, int indentation);
+
+        void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int distanceBetweenColumns);
     }
 }

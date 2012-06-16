@@ -61,6 +61,33 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to dasd.
+        /// </summary>
+        internal static string ArgumentDescriptionBuildConfiguration {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionBuildConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dasdas.
+        /// </summary>
+        internal static string ArgumentDescriptionMSBuildProperties {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionMSBuildProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sdfds.
+        /// </summary>
+        internal static string ArgumentDescriptionSolutionPath {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionSolutionPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creates a nuget package from the given solution and pushes it to the specified nuget repository..
         /// </summary>
         internal static string CommandDescriptionText {

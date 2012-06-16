@@ -120,4 +120,7 @@
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Displays general help information and information about other commands.</value>
   </data>
+  <data name="UsageLabel" xml:space="preserve">
+    <value>usage</value>
+  </data>
 </root>

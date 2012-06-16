@@ -34,19 +34,15 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
-                        var commands = new List<ICommand> { new PackageSolutionCommand() };
+                        var helpCommand = new HelpCommand(
+                            ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
+
+                        var commands = new List<ICommand> { new PackageSolutionCommand(), helpCommand };
                         ICommandProvider commandProvider = new CommandProvider(commands);
+
                         config.For<ICommandProvider>().Use(commandProvider);
+                        config.For<HelpCommand>().Use(helpCommand);
                     });
-
-            ObjectFactory.Configure(
-                config =>
-                {
-                    var helpCommand = new HelpCommand(
-                        ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, ObjectFactory.GetInstance<ICommandProvider>());
-
-                    config.For<HelpCommand>().Use(helpCommand);
-                });
         }
     }
 }

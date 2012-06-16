@@ -68,5 +68,14 @@ namespace NuDeploy.Core.Resources {
                 return ResourceManager.GetString("CommandDescriptionText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to usage.
+        /// </summary>
+        internal static string UsageLabel {
+            get {
+                return ResourceManager.GetString("UsageLabel", resourceCulture);
+            }
+        }
     }
 }

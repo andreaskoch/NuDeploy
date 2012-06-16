@@ -40,16 +40,20 @@ namespace NuDeploy.Core.Common
             }
         }
 
-        public void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int indentation)
+        public void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue)
         {
-            var margin = new string(' ', indentation);
-            this.ShowKeyValueStore(keyValueStore.ToDictionary(pair => margin + pair.Key, pair => pair.Value));
+            this.ShowKeyValueStore(new Dictionary<string, string> { { label, value } }, distanceBetweenLabelAndValue);
         }
 
-        public void ShowKeyValueStore(IDictionary<string, string> keyValueStore)
+        public void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int distanceBetweenColumns, int indentation)
         {
-            const int KeyColumnPadding = 4;
-            int keyColumnWidth = keyValueStore.Keys.Max(k => k.Length) + KeyColumnPadding;
+            var margin = new string(' ', indentation);
+            this.ShowKeyValueStore(keyValueStore.ToDictionary(pair => margin + pair.Key, pair => pair.Value), distanceBetweenColumns);
+        }
+
+        public void ShowKeyValueStore(IDictionary<string, string> keyValueStore, int distanceBetweenColumns)
+        {
+            int keyColumnWidth = keyValueStore.Keys.Max(k => k.Length) + distanceBetweenColumns;
             int valueColumnWidth = this.WindowWidth - keyColumnWidth - 4;
 
             foreach (var keyValuePair in keyValueStore)
@@ -79,8 +83,10 @@ namespace NuDeploy.Core.Common
 
             while ((chars = chars.Skip(charsToSkip).Take(maxWidth).ToArray()).Any())
             {
-                var line = paddingString + new string(chars.Take(maxWidth).ToArray());
-                stringBuilder.Append(Environment.NewLine + line);
+                string line = new string(chars.Take(maxWidth).ToArray()).TrimStart();
+                var indentedLine = paddingString + line;
+
+                stringBuilder.Append(Environment.NewLine + indentedLine);
             }
 
             return stringBuilder.ToString();
