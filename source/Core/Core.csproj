@@ -67,6 +67,7 @@
     <Compile Include="Common\ConsoleUserInterface.cs" />
     <Compile Include="Common\IConsoleTextManipulation.cs" />
     <Compile Include="Common\IUserInterface.cs" />
+    <Compile Include="Common\NuDeployConstants.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\HelpCommand.Designer.cs">
