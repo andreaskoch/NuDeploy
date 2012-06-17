@@ -98,13 +98,13 @@ namespace NuDeploy.Core.Commands
 
             foreach (KeyValuePair<string, string> pair in command.Attributes.Examples)
             {
-                string commandText = string.Format("{0} {1}", this.applicationInformation.NameOfExecutable, pair.Key);
+                string commandText = string.Format("> {0} {1}", this.applicationInformation.NameOfExecutable, pair.Key);
                 string description = pair.Value;
 
-                this.userInterface.ShowIndented(description, 5);
+                this.userInterface.ShowIndented(description, 3);
 
                 this.userInterface.Show(string.Empty);
-                this.userInterface.ShowIndented(commandText, 5);
+                this.userInterface.ShowIndented(commandText, 6);
                 this.userInterface.Show(string.Empty);
             }
         }

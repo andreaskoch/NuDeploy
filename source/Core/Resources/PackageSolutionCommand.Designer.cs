@@ -95,5 +95,14 @@ namespace NuDeploy.Core.Resources {
                 return ResourceManager.GetString("CommandDescriptionText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a nuget deployment package from the solution &quot;C:\dev\projects\sample\sample.sln&quot; using the &quot;Release&quot; build configuration with the MS Build parameter &quot;IsAutoBuild=True&quot;..
+        /// </summary>
+        internal static string CommandExampleDescription1 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
+            }
+        }
     }
 }

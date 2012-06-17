@@ -129,4 +129,7 @@
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Creates a nuget package from the given solution and pushes it to the specified nuget repository.</value>
   </data>
+  <data name="CommandExampleDescription1" xml:space="preserve">
+    <value>Create a nuget deployment package from the solution "C:\dev\projects\sample\sample.sln" using the "Release" build configuration with the MS Build parameter "IsAutoBuild=True".</value>
+  </data>
 </root>
