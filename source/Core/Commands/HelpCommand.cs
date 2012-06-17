@@ -10,6 +10,10 @@ namespace NuDeploy.Core.Commands
 {
     public class HelpCommand : ICommand
     {
+        private const string CommandName = "help";
+
+        private readonly string[] alternativeCommandNames = new[] { "?" };
+
         private readonly IUserInterface userInterface;
 
         private readonly ApplicationInformation applicationInformation;
@@ -23,10 +27,21 @@ namespace NuDeploy.Core.Commands
 
             this.Attributes = new CommandAttributes
                 {
-                    CommandName = "help",
-                    AlternativeCommandNames = new[] { "?" },
+                    CommandName = CommandName,
+                    AlternativeCommandNames = this.alternativeCommandNames,
                     Description = Resources.HelpCommand.CommandDescriptionText,
-                    Usage = ""
+                    Usage = string.Format("{0} <command-name>", CommandName),
+                    Examples = new Dictionary<string, string>
+                    {
+                        {
+                            string.Format("{0}", CommandName),
+                            Resources.HelpCommand.CommandExampleDescription1
+                        },
+                        {
+                            string.Format("{0} {1}", CommandName, "package"),
+                            Resources.HelpCommand.CommandExampleDescription2
+                        }
+                    }
                 };
 
             this.Arguments = new Dictionary<string, string>();

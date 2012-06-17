@@ -120,6 +120,12 @@
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Displays general help information and information about other commands.</value>
   </data>
+  <data name="CommandExampleDescription1" xml:space="preserve">
+    <value>Display general help information</value>
+  </data>
+  <data name="CommandExampleDescription2" xml:space="preserve">
+    <value>Display help information for the "package" command</value>
+  </data>
   <data name="ExamplesLabel" xml:space="preserve">
     <value>Examples</value>
   </data>

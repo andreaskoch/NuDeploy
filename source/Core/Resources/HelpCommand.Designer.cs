@@ -70,6 +70,24 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display general help information.
+        /// </summary>
+        internal static string CommandExampleDescription1 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display help information for the &quot;package&quot; command.
+        /// </summary>
+        internal static string CommandExampleDescription2 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Examples.
         /// </summary>
         internal static string ExamplesLabel {
