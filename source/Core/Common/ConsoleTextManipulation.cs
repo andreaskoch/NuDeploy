@@ -14,7 +14,7 @@ namespace NuDeploy.Core.Common
                 return text;
             }
 
-            List<string> lines = WordWrap(text, maxWidth);
+            List<string> lines = GetWrappedLines(text, maxWidth);
             return string.Join(Environment.NewLine, lines);
         }
 
@@ -26,31 +26,24 @@ namespace NuDeploy.Core.Common
             }
 
             string indentationText = new string(' ', indentation);
-            List<string> lines = WordWrap(text, maxWidth - indentation);
+            List<string> lines = GetWrappedLines(text, maxWidth - indentation);
             return lines.First() + Environment.NewLine + string.Join(Environment.NewLine, lines.Skip(1).Select(line => indentationText + line));
         }
 
         public string IndentText(string text, int windowWidth, int marginLeft)
         {
             var indentation = new string(' ', marginLeft);
-            List<string> lines = WordWrap(text, windowWidth - marginLeft);
+            List<string> lines = GetWrappedLines(text, windowWidth - marginLeft);
             return string.Join(Environment.NewLine, lines.Select(line => indentation + line));
         }
 
-        /// <summary>
-        /// Word wraps the given text to fit within the specified width.
-        /// </summary>
-        /// <param name="text">Text to be word wrapped</param>
-        /// <param name="width">Width, in characters, to which the text
-        /// should be word wrapped</param>
-        /// <returns>The modified text</returns>
-        private static List<string> WordWrap(string text, int width)
+        private static List<string> GetWrappedLines(string text, int maxLineWidth)
         {
             int pos, next;
             var lines = new List<string>();
 
             // Lucidity check
-            if (width < 1)
+            if (maxLineWidth < 1)
             {
                 return new List<string> { text };
             }
@@ -75,9 +68,9 @@ namespace NuDeploy.Core.Common
                     do
                     {
                         int len = eol - pos;
-                        if (len > width)
+                        if (len > maxLineWidth)
                         {
-                            len = BreakLine(text, pos, width);
+                            len = GetLineBreakPosition(text, pos, maxLineWidth);
                         }
 
                         lines.Add(text.Substring(pos, len));
@@ -96,31 +89,23 @@ namespace NuDeploy.Core.Common
             return lines;
         }
 
-        /// <summary>
-        /// Locates position to break the given line so as to avoid
-        /// breaking words.
-        /// </summary>
-        /// <param name="text">String that contains line of text</param>
-        /// <param name="pos">Index where line of text starts</param>
-        /// <param name="max">Maximum line length</param>
-        /// <returns>The modified line length</returns>
-        private static int BreakLine(string text, int pos, int max)
+        private static int GetLineBreakPosition(string text, int startPosition, int maxLineLength)
         {
             // Find last whitespace in line
-            int i = max - 1;
+            int i = maxLineLength - 1;
 
-            while (i >= 0 && !char.IsWhiteSpace(text[pos + i]))
+            while (i >= 0 && !char.IsWhiteSpace(text[startPosition + i]))
             {
                 i--;
             }
 
             if (i < 0)
             {
-                return max; // No whitespace found; break at maximum length
+                return maxLineLength; // No whitespace found; break at maximum length
             }
 
             // Find start of whitespace
-            while (i >= 0 && char.IsWhiteSpace(text[pos + i]))
+            while (i >= 0 && char.IsWhiteSpace(text[startPosition + i]))
             {
                 i--;
             }
