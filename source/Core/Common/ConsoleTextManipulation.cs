@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NuDeploy.Core.Common
 {
@@ -25,7 +24,7 @@ namespace NuDeploy.Core.Common
                 return text;
             }
 
-            string indentationText = new string(' ', indentation);
+            var indentationText = new string(' ', indentation);
             List<string> lines = GetWrappedLines(text, maxWidth - indentation);
             return lines.First() + Environment.NewLine + string.Join(Environment.NewLine, lines.Skip(1).Select(line => indentationText + line));
         }
@@ -101,7 +100,8 @@ namespace NuDeploy.Core.Common
 
             if (i < 0)
             {
-                return maxLineLength; // No whitespace found; break at maximum length
+                // No whitespace found; break at maximum length
+                return maxLineLength;
             }
 
             // Find start of whitespace
