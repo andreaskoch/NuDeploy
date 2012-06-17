@@ -38,7 +38,7 @@ namespace NuDeploy.Core.DependencyResolution
                         var helpCommand = new HelpCommand(
                             ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
 
-                        var commands = new List<ICommand> { new PackageSolutionCommand(), helpCommand };
+                        var commands = new List<ICommand> { new PackageSolutionCommand(), new SelfUpdateCommand(), helpCommand };
                         ICommandProvider commandProvider = new CommandProvider(commands);
 
                         config.For<ICommandProvider>().Use(commandProvider);
