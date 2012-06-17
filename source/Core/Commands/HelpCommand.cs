@@ -101,19 +101,19 @@ namespace NuDeploy.Core.Commands
                 string commandText = string.Format("{0} {1}", this.applicationInformation.NameOfExecutable, pair.Key);
                 string description = pair.Value;
 
-                this.userInterface.Show(description);
+                this.userInterface.ShowIndented(description, 5);
 
                 this.userInterface.Show(string.Empty);
-                this.userInterface.Show(commandText, 4);
+                this.userInterface.ShowIndented(commandText, 5);
                 this.userInterface.Show(string.Empty);
             }
         }
 
         private void Overview()
         {
-            this.userInterface.Show("{0} Version: {1}", this.applicationInformation.ApplicationName, this.applicationInformation.ApplicationVersion.ToString());
-            this.userInterface.Show("usage: {0} <command> [args] [options] ", this.applicationInformation.NameOfExecutable);
-            this.userInterface.Show("Type '{0} help <command>' for help on a specific command.", this.applicationInformation.NameOfExecutable);
+            this.userInterface.Show(string.Format("{0} Version: {1}", this.applicationInformation.ApplicationName, this.applicationInformation.ApplicationVersion));
+            this.userInterface.Show(string.Format("usage: {0} <command> [args] [options] ", this.applicationInformation.NameOfExecutable));
+            this.userInterface.Show(string.Format("Type '{0} help <command>' for help on a specific command.", this.applicationInformation.NameOfExecutable));
             this.userInterface.Show(string.Empty);
 
             this.userInterface.Show("Available commands:");

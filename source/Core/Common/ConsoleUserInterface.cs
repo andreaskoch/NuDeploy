@@ -28,16 +28,16 @@ namespace NuDeploy.Core.Common
             }
         }
 
-        public void Show(string messageFormatString, params object[] args)
+        public void ShowIndented(string text, int marginLeft)
         {
-            if (args == null || args.Length == 0)
-            {
-                Console.WriteLine(messageFormatString);
-            }
-            else
-            {
-                Console.WriteLine(messageFormatString, args);
-            }
+            var indentation = new string(' ', marginLeft);
+            string wrappedText = this.WrapLongTextWithHangingIndentation(indentation + text, this.WindowWidth, marginLeft);
+            Console.WriteLine(wrappedText);
+        }
+
+        public void Show(string text)
+        {
+            Console.WriteLine(text);
         }
 
         public void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue)
