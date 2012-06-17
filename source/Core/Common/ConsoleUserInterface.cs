@@ -42,7 +42,8 @@ namespace NuDeploy.Core.Common
 
         public void Show(string text)
         {
-            Console.WriteLine(text);
+            string wrappedText = this.textManipulation.WrapText(text, this.WindowWidth);
+            Console.WriteLine(wrappedText);
         }
 
         public void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue)
