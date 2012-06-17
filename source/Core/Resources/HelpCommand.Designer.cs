@@ -70,6 +70,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available commands.
+        /// </summary>
+        internal static string AvailableCommandsLabel {
+            get {
+                return ResourceManager.GetString("AvailableCommandsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Displays general help information and information about other commands..
         /// </summary>
         internal static string CommandDescriptionText {
@@ -106,6 +115,24 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        internal static string HelpLabel {
+            get {
+                return ResourceManager.GetString("HelpLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type &apos;{0} help &lt;command&gt;&apos; for help on a specific command..
+        /// </summary>
+        internal static string HelpPattern {
+            get {
+                return ResourceManager.GetString("HelpPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         internal static string OptionsLabel {
@@ -120,6 +147,15 @@ namespace NuDeploy.Core.Resources {
         internal static string UsageLabel {
             get {
                 return ResourceManager.GetString("UsageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} &lt;command&gt; [args] [options].
+        /// </summary>
+        internal static string UsagePattern {
+            get {
+                return ResourceManager.GetString("UsagePattern", resourceCulture);
             }
         }
     }

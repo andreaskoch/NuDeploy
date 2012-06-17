@@ -120,6 +120,9 @@
   <data name="ArgumentDescriptionCommandName" xml:space="preserve">
     <value>The name of the command to display the help information about (e.g. package).</value>
   </data>
+  <data name="AvailableCommandsLabel" xml:space="preserve">
+    <value>Available commands</value>
+  </data>
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Displays general help information and information about other commands.</value>
   </data>
@@ -132,10 +135,19 @@
   <data name="ExamplesLabel" xml:space="preserve">
     <value>Examples</value>
   </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpPattern" xml:space="preserve">
+    <value>Type '{0} help &lt;command&gt;' for help on a specific command.</value>
+  </data>
   <data name="OptionsLabel" xml:space="preserve">
     <value>Options</value>
   </data>
   <data name="UsageLabel" xml:space="preserve">
     <value>Usage</value>
+  </data>
+  <data name="UsagePattern" xml:space="preserve">
+    <value>{0} &lt;command&gt; [args] [options]</value>
   </data>
 </root>

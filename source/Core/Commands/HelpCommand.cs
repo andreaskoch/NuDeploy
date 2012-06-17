@@ -108,9 +108,9 @@ namespace NuDeploy.Core.Commands
             this.userInterface.Show(string.Empty);
 
             // command usage
-            string usageLabel = Resources.HelpCommand.UsageLabel + ": ";
+            string usageLabel = Resources.HelpCommand.UsageLabel + ":";
             string usageText = this.applicationInformation.NameOfExecutable + " " + command.Attributes.Usage;
-            this.userInterface.ShowLabelValuePair(usageLabel, usageText, distanceBetweenLabelAndValue: 1);
+            this.userInterface.ShowLabelValuePair(usageLabel, usageText, distanceBetweenLabelAndValue: 2);
 
             this.userInterface.Show(string.Empty);
 
@@ -149,12 +149,32 @@ namespace NuDeploy.Core.Commands
 
         private void Overview()
         {
-            this.userInterface.Show(string.Format("{0} Version: {1}", this.applicationInformation.ApplicationName, this.applicationInformation.ApplicationVersion));
-            this.userInterface.Show(string.Format("usage: {0} <command> [args] [options] ", this.applicationInformation.NameOfExecutable));
-            this.userInterface.Show(string.Format("Type '{0} help <command>' for help on a specific command.", this.applicationInformation.NameOfExecutable));
+            // version
+            this.userInterface.Show(string.Format("{0} ({1})", this.applicationInformation.ApplicationName, this.applicationInformation.ApplicationVersion));
+
             this.userInterface.Show(string.Empty);
 
-            this.userInterface.Show("Available commands:");
+            // usage
+            string usageLabel = Resources.HelpCommand.UsageLabel + ":" + Environment.NewLine;
+            this.userInterface.Show(usageLabel);
+
+            string usageText = string.Format(Resources.HelpCommand.UsagePattern, this.applicationInformation.NameOfExecutable);
+            this.userInterface.ShowIndented(usageText, 4);
+
+            this.userInterface.Show(string.Empty);
+
+            // help
+            string helpLabel = Resources.HelpCommand.HelpLabel + ":" + Environment.NewLine;
+            this.userInterface.Show(helpLabel);
+
+            string helpText = string.Format(Resources.HelpCommand.HelpPattern, this.applicationInformation.NameOfExecutable);
+            this.userInterface.ShowIndented(helpText, 4);
+
+            this.userInterface.Show(string.Empty);
+
+            // available commands
+            string availableCommandsLabel = Resources.HelpCommand.AvailableCommandsLabel + ":";
+            this.userInterface.Show(availableCommandsLabel);
             this.userInterface.Show(string.Empty);
 
             // display command name and description
@@ -162,6 +182,8 @@ namespace NuDeploy.Core.Commands
                 this.AvailableCommands.OrderBy(c => c.Attributes.CommandName).ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description),
                 distanceBetweenColumns: 4,
                 indentation: 2);
+
+            this.userInterface.Show(string.Empty);
         }
     }
 }
