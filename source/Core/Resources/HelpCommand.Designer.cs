@@ -61,6 +61,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The name of the command to display the help information about (e.g. package)..
+        /// </summary>
+        internal static string ArgumentDescriptionCommandName {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionCommandName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Displays general help information and information about other commands..
         /// </summary>
         internal static string CommandDescriptionText {

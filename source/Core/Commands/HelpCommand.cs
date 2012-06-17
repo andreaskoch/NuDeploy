@@ -12,6 +12,8 @@ namespace NuDeploy.Core.Commands
     {
         private const string CommandName = "help";
 
+        private const string ArgumentNameCommandName = "CommandName";
+
         private readonly string[] alternativeCommandNames = new[] { "?" };
 
         private readonly IUserInterface userInterface;
@@ -29,8 +31,10 @@ namespace NuDeploy.Core.Commands
                 {
                     CommandName = CommandName,
                     AlternativeCommandNames = this.alternativeCommandNames,
+                    RequiredArguments = new[] { ArgumentNameCommandName },
+                    PositionalArguments = new[] { ArgumentNameCommandName },
                     Description = Resources.HelpCommand.CommandDescriptionText,
-                    Usage = string.Format("{0} <command-name>", CommandName),
+                    Usage = string.Format("{0} <{1}>", CommandName, ArgumentNameCommandName),
                     Examples = new Dictionary<string, string>
                     {
                         {
@@ -41,6 +45,10 @@ namespace NuDeploy.Core.Commands
                             string.Format("{0} {1}", CommandName, "package"),
                             Resources.HelpCommand.CommandExampleDescription2
                         }
+                    },
+                    ArgumentDescriptions = new Dictionary<string, string>
+                    {
+                        { ArgumentNameCommandName, Resources.HelpCommand.ArgumentDescriptionCommandName }
                     }
                 };
 

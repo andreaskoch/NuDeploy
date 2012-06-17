@@ -16,9 +16,9 @@ namespace NuDeploy.Core.Commands
                 throw new ArgumentNullException("fullArgumentName");
             }
 
-            if (suppliedArgumentName == null)
+            if (string.IsNullOrWhiteSpace(suppliedArgumentName))
             {
-                throw new ArgumentNullException("suppliedArgumentName");
+                return false;
             }
 
             // prepare argument for comparision

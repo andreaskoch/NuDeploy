@@ -6,23 +6,20 @@ namespace NuDeploy.Core.Commands
 {
     public class CommandArgumentParser : ICommandArgumentParser
     {
-        public const string NameFormatUnnamedParamters = "Unnamed-{0}";
-
         private readonly Regex namedArgumentRegex = new Regex("^(--|-|/)(\\w+)=(['\"]?)([^\\3]+?)\\3$");
 
         private readonly Regex switchArgumentRegex = new Regex("^-(\\w+)$");
 
-        public IDictionary<string, string> ParseParameters(IEnumerable<string> commandArguments)
+        public IEnumerable<KeyValuePair<string, string>> ParseParameters(IEnumerable<string> commandArguments)
         {
             if (commandArguments == null)
             {
                 throw new ArgumentNullException("commandArguments");
             }
 
-            var parameters = new Dictionary<string, string>();
+            var parameters = new List<KeyValuePair<string, string>>();
 
             // find named parameters
-            int unnamedArgumentIndex = 1;
             foreach (var commandArgument in commandArguments)
             {
                 string argument = commandArgument.Trim();
@@ -33,8 +30,7 @@ namespace NuDeploy.Core.Commands
                     MatchCollection switchMaches = this.switchArgumentRegex.Matches(argument);
                     string switchName = switchMaches[0].Groups[1].Value;
 
-                    parameters[switchName] = bool.TrueString;
-
+                    parameters.Add(new KeyValuePair<string, string>(switchName, bool.TrueString));
                     continue;
                 }
 
@@ -45,16 +41,12 @@ namespace NuDeploy.Core.Commands
                     string argumentName = namedArgumentMatches[0].Groups[2].Value;
                     string argumentValue = namedArgumentMatches[0].Groups[4].Value;
 
-                    parameters[argumentName] = argumentValue;
-
+                    parameters.Add(new KeyValuePair<string, string>(argumentName, argumentValue));
                     continue;
                 }
                 
                 // argument is unnamed
-                string unnamedArgumentName = string.Format(NameFormatUnnamedParamters, unnamedArgumentIndex++);
-                string unnamedArgumentValue = argument;
-
-                parameters[unnamedArgumentName] = unnamedArgumentValue;
+                parameters.Add(new KeyValuePair<string, string>(string.Empty, argument));
             }
 
             return parameters;

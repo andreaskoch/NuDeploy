@@ -20,6 +20,18 @@ namespace NuDeploy.Core.Commands
             {
                 CommandName = CommandName,
                 AlternativeCommandNames = this.alternativeCommandNames,
+                RequiredArguments = new[]
+                    {
+                        ArgumentNameSolutionPath,
+                        ArgumentNameBuildConfiguration,
+                        ArgumentNameMSBuildProperties
+                    },
+                PositionalArguments = new[]
+                    {
+                        ArgumentNameSolutionPath,
+                        ArgumentNameBuildConfiguration,
+                        ArgumentNameMSBuildProperties                        
+                    },
                 Description = Resources.PackageSolutionCommand.CommandDescriptionText,
                 Usage = string.Format("{0} -{1}=<Path> -{2}=<Debug|Release> -{3}=<Property1=Value1;Property2=Value2>", CommandName, ArgumentNameSolutionPath, ArgumentNameBuildConfiguration, ArgumentNameMSBuildProperties),
                 Examples = new Dictionary<string, string>
@@ -37,12 +49,7 @@ namespace NuDeploy.Core.Commands
                     }
             };
 
-            this.Arguments = new Dictionary<string, string>
-                {
-                    { ArgumentNameSolutionPath, null },
-                    { ArgumentNameBuildConfiguration, null },
-                    { ArgumentNameMSBuildProperties, null }
-                };
+            this.Arguments = new Dictionary<string, string>();
         }
 
         public CommandAttributes Attributes { get; private set; }

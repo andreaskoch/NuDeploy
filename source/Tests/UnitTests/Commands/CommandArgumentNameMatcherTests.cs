@@ -30,15 +30,17 @@ namespace NuDeploy.Tests.UnitTests.Commands
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void IsMatch_SuppliedArgumentNameParameterIsNull_ArgumentNullExceptionIsThrown()
+        public void IsMatch_SuppliedArgumentNameParameterIsNull_ResultIsFalse()
         {
             // Arrange
             string realArgumentName = "SolutionPath";
             string suppliedArgumentName = null;
 
             // Act
-            this.commandArgumentNameMatcher.IsMatch(realArgumentName, suppliedArgumentName);
+            var result = this.commandArgumentNameMatcher.IsMatch(realArgumentName, suppliedArgumentName);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         [Test]

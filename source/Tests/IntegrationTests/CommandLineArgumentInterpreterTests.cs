@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Moq;
 
@@ -240,6 +241,28 @@ namespace NuDeploy.Tests.IntegrationTests
             Assert.AreEqual(argument1Value, result.Arguments[argument1Name]);
             Assert.AreEqual(argument2Value, result.Arguments[argument2Name]);
             Assert.AreEqual(argument3Value, result.Arguments[argument3Name]);
+        }
+
+        [Test]
+        public void GetCommand_PackageSolutionCommand_FullCommandNameIsSupplied_PositionalArguments_ResultIsThePackageSolutionCommandWithAllArgumentValues()
+        {
+            // Arrange
+            string commandName = "package";
+
+            string argument1 = @"C:\dev\project\project.sln";
+            string argument2 = "Release";
+            string argument3 = "IsAutoBuild=True";
+
+            var arguments = new[] { commandName, argument1, argument2, argument3 };
+
+            // Act
+            ICommand result = this.commandLineArgumentInterpreter.GetCommand(arguments);
+
+            // Assert
+            Assert.AreEqual(this.packackageSolutionCommand.Attributes.CommandName, result.Attributes.CommandName);
+            Assert.AreEqual(argument1, result.Arguments.Values.ToArray()[0]);
+            Assert.AreEqual(argument2, result.Arguments.Values.ToArray()[1]);
+            Assert.AreEqual(argument3, result.Arguments.Values.ToArray()[2]);
         }
     }
 }

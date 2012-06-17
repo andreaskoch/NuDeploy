@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,30 +62,47 @@ namespace NuDeploy.Core.Commands
             // assign command arguments (if available)
             if (commandLineArguments.Count > 1)
             {
+                int argumentPosition = 0;
                 int unrecognizedArgumentIndex = 1;
-                IDictionary<string, string> commandArguments = this.commandArgumentParser.ParseParameters(commandLineArguments.Skip(1).Take(commandLineArguments.Count - 1));
+                var commandArguments = this.commandArgumentParser.ParseParameters(commandLineArguments.Skip(1).Take(commandLineArguments.Count - 1));
                 foreach (var commandArgument in commandArguments)
                 {
                     string suppliedArgumentName = commandArgument.Key;
                     string suppliedArgumentValue = commandArgument.Value;
 
+                    // named argument
                     string matchedArgumentName =
-                        command.Arguments.Keys.FirstOrDefault(
+                        command.Attributes.RequiredArguments.FirstOrDefault(
                             originalArgumentName => this.commandArgumentNameMatcher.IsMatch(originalArgumentName, suppliedArgumentName));
 
                     if (matchedArgumentName == null)
                     {
+                        // positional argument
                         if (string.IsNullOrWhiteSpace(suppliedArgumentName))
                         {
-                            matchedArgumentName = string.Format("Unnamed-Argument-{0}", unrecognizedArgumentIndex++);
+                            matchedArgumentName =
+                                command.Attributes.PositionalArguments.Where((s, positionalArgumentIndex) => positionalArgumentIndex == argumentPosition).
+                                    FirstOrDefault();                            
                         }
-                        else
+
+                        // unnamed argument
+                        if (matchedArgumentName == null)
                         {
-                            matchedArgumentName = suppliedArgumentName;
+                            if (string.IsNullOrWhiteSpace(suppliedArgumentName))
+                            {
+                                // unnamed argument without a name
+                                matchedArgumentName = string.Format("Unnamed-Argument-{0}", unrecognizedArgumentIndex++);
+                            }
+                            else
+                            {
+                                // unrecognized argument
+                                matchedArgumentName = suppliedArgumentName;
+                            }                            
                         }
                     }
 
                     command.Arguments[matchedArgumentName] = suppliedArgumentValue;
+                    argumentPosition++;
                 }
             }
 

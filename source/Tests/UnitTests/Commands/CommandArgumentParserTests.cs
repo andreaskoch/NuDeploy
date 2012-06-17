@@ -33,7 +33,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new string[] { };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
             Assert.AreEqual(0, result.Count);
@@ -46,7 +46,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { string.Empty };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
             Assert.AreEqual(1, result.Count);
@@ -62,7 +62,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var result = this.commandArgumentParser.ParseParameters(arguments);
 
             // Assert
-            Assert.AreEqual(string.Format(CommandArgumentParser.NameFormatUnnamedParamters, 1), result.Keys.First());
+            Assert.AreEqual(string.Empty, result.First().Key);
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var result = this.commandArgumentParser.ParseParameters(arguments);
 
             // Assert
-            Assert.AreEqual(argumentName, result.Keys.First());
+            Assert.AreEqual(argumentName, result.First().Key);
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var result = this.commandArgumentParser.ParseParameters(arguments);
 
             // Assert
-            Assert.AreEqual(argumentName, result.Keys.First());
+            Assert.AreEqual(argumentName, result.First().Key);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var result = this.commandArgumentParser.ParseParameters(arguments);
 
             // Assert
-            Assert.AreEqual(argumentName, result.Keys.First());
+            Assert.AreEqual(argumentName, result.First().Key);
         }
 
         [Test]
@@ -136,11 +136,11 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { parameter };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
-            Assert.AreEqual(argumentName, result.Keys.First());
-            Assert.AreEqual(argumentValue, result.Values.First());
+            Assert.AreEqual(argumentName, result.First().Key);
+            Assert.AreEqual(argumentValue, result.First().Value);
         }
 
         [Test]
@@ -157,11 +157,11 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { parameter };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
-            Assert.AreEqual(argumentName, result.Keys.First());
-            Assert.AreEqual(argumentValue, result.Values.First());
+            Assert.AreEqual(argumentName, result.First().Key);
+            Assert.AreEqual(argumentValue, result.First().Value);
         }
 
         [Test]
@@ -175,11 +175,11 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { parameter };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
-            Assert.AreEqual(string.Format(CommandArgumentParser.NameFormatUnnamedParamters, 1), result.Keys.First());
-            Assert.AreEqual(parameter, result.Values.First());
+            Assert.AreEqual(string.Empty, result.First().Key);
+            Assert.AreEqual(parameter, result.First().Value);
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var result = this.commandArgumentParser.ParseParameters(arguments);
 
             // Assert
-            Assert.AreEqual(arguments, result.Values.ToArray());
+            Assert.AreEqual(arguments, result.Select(pair => pair.Value).ToArray());
         }
 
         [Test]
@@ -210,17 +210,17 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { parameter1, paramter2, parameter3 };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
-            Assert.AreEqual("argumentName1", result.Keys.Skip(0).Take(1).First());
-            Assert.AreEqual("argumentValue1", result.Values.Skip(0).Take(1).First());
+            Assert.AreEqual("argumentName1", result.Skip(0).Take(1).First().Key);
+            Assert.AreEqual("argumentValue1", result.Skip(0).Take(1).First().Value);
 
-            Assert.AreEqual("argumentName2", result.Keys.Skip(1).Take(1).First());
-            Assert.AreEqual("argumentValue2", result.Values.Skip(1).Take(1).First());
+            Assert.AreEqual("argumentName2", result.Skip(1).Take(1).First().Key);
+            Assert.AreEqual("argumentValue2", result.Skip(1).Take(1).First().Value);
 
-            Assert.AreEqual("argumentName3", result.Keys.Skip(2).Take(1).First());
-            Assert.AreEqual("argumentValue3", result.Values.Skip(2).Take(1).First());
+            Assert.AreEqual("argumentName3", result.Skip(2).Take(1).First().Key);
+            Assert.AreEqual("argumentValue3", result.Skip(2).Take(1).First().Value);
         }
 
         [Test]
@@ -235,11 +235,11 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { parameter };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
-            Assert.AreEqual(switchArgumentName, result.Keys.First());
-            Assert.AreEqual(bool.TrueString, result.Values.First());
+            Assert.AreEqual(switchArgumentName, result.First().Key);
+            Assert.AreEqual(bool.TrueString, result.First().Value);
         }
 
         [Test]
@@ -254,11 +254,11 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var arguments = new[] { parameter };
 
             // Act
-            var result = this.commandArgumentParser.ParseParameters(arguments);
+            var result = this.commandArgumentParser.ParseParameters(arguments).ToList();
 
             // Assert
-            Assert.AreEqual(string.Format(CommandArgumentParser.NameFormatUnnamedParamters, 1), result.Keys.First());
-            Assert.AreEqual(parameter, result.Values.First());
+            Assert.AreEqual(string.Empty, result.First().Key);
+            Assert.AreEqual(parameter, result.First().Value);
         }
     }
 }

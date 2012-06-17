@@ -8,6 +8,8 @@ namespace NuDeploy.Core.Commands
         {
             this.CommandName = string.Empty;
             this.AlternativeCommandNames = new string[] { };
+            this.RequiredArguments = new List<string>();
+            this.PositionalArguments = new List<string>();
             this.Description = string.Empty;
             this.ArgumentDescriptions = new Dictionary<string, string>();
             this.Examples = new Dictionary<string, string>();
@@ -16,6 +18,10 @@ namespace NuDeploy.Core.Commands
         public string CommandName { get; set; }
 
         public IEnumerable<string> AlternativeCommandNames { get; set; }
+
+        public IEnumerable<string> RequiredArguments { get; set; }
+
+        public IEnumerable<string> PositionalArguments { get; set; }
 
         public string Description { get; set; }
 
