@@ -22,6 +22,7 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
+                        config.For<IConsoleTextManipulation>().Use<ConsoleTextManipulation>();
                         config.For<IUserInterface>().Use<ConsoleUserInterface>();
                         config.For<ApplicationInformation>().Use(applicationInformation);
 

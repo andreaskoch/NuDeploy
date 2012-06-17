@@ -53,6 +53,7 @@
     <Compile Include="UnitTests\Commands\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="UnitTests\Commands\CommandNameMatcherTests.cs" />
     <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
+    <Compile Include="UnitTests\Common\ConsoleTextManipulationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
