@@ -122,6 +122,21 @@ namespace NuDeploy.Core.Commands
                 this.userInterface.ShowIndented(commandText, 6);
                 this.userInterface.Show(string.Empty);
             }
+
+            this.userInterface.Show(string.Empty);
+
+            // options
+            string optionsLabel = Resources.HelpCommand.OptionsLabel + ":";
+            this.userInterface.Show(optionsLabel);
+            this.userInterface.Show(string.Empty);
+
+            var formattedOptions =
+                command.Attributes.ArgumentDescriptions.Select(pair => new KeyValuePair<string, string>("-" + pair.Key, pair.Value)).ToDictionary(
+                    pair => pair.Key, pair => pair.Value);
+
+            this.userInterface.ShowKeyValueStore(formattedOptions, 4, 3);
+
+            this.userInterface.Show(string.Empty);
         }
 
         private void Overview()

@@ -61,7 +61,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to dasd.
+        ///   Looks up a localized string similar to The name of the build configuration to use (e.g. Debug, Release)..
         /// </summary>
         internal static string ArgumentDescriptionBuildConfiguration {
             get {
@@ -70,7 +70,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to dasdas.
+        ///   Looks up a localized string similar to The properties to pass to MS Build (e.g. IsAutoBuild=True)..
         /// </summary>
         internal static string ArgumentDescriptionMSBuildProperties {
             get {
@@ -79,7 +79,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to sdfds.
+        ///   Looks up a localized string similar to The path of the solution to package (e.g. C:\dev\projects\sample\sample.sln)..
         /// </summary>
         internal static string ArgumentDescriptionSolutionPath {
             get {

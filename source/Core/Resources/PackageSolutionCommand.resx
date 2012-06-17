@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ArgumentDescriptionBuildConfiguration" xml:space="preserve">
-    <value>dasd</value>
+    <value>The name of the build configuration to use (e.g. Debug, Release).</value>
   </data>
   <data name="ArgumentDescriptionMSBuildProperties" xml:space="preserve">
-    <value>dasdas</value>
+    <value>The properties to pass to MS Build (e.g. IsAutoBuild=True).</value>
   </data>
   <data name="ArgumentDescriptionSolutionPath" xml:space="preserve">
-    <value>sdfds</value>
+    <value>The path of the solution to package (e.g. C:\dev\projects\sample\sample.sln).</value>
   </data>
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Creates a nuget package from the given solution and pushes it to the specified nuget repository.</value>
