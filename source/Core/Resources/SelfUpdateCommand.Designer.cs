@@ -61,20 +61,83 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updates this application instance..
+        ///   Looks up a localized string similar to Update the running {0} to the newest version available from the server..
         /// </summary>
-        internal static string CommandDescriptionText {
+        internal static string CommandDescriptionTextTemplate {
             get {
-                return ResourceManager.GetString("CommandDescriptionText", resourceCulture);
+                return ResourceManager.GetString("CommandDescriptionTextTemplate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trigger a self-update..
+        ///   Looks up a localized string similar to Update this application to the latest version available on the server..
         /// </summary>
         internal static string CommandExampleDescription1 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are currently running {0} version {1}..
+        /// </summary>
+        internal static string CurrentVersionTemplate {
+            get {
+                return ResourceManager.GetString("CurrentVersionTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid {0} package. Unable to locate {1} within the package..
+        /// </summary>
+        internal static string ExecutableNotFoundInPackageMessageTemplate {
+            get {
+                return ResourceManager.GetString("ExecutableNotFoundInPackageMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your current version of {0} is up to date..
+        /// </summary>
+        internal static string NoUpdateRequiredMessageTemplate {
+            get {
+                return ResourceManager.GetString("NoUpdateRequiredMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package was not found..
+        /// </summary>
+        internal static string PackageNotFound {
+            get {
+                return ResourceManager.GetString("PackageNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching for the latest version of the Resources.SelfUpdateCommand.SelfupdateMessageTemplate &quot;{0}&quot; package at &quot;{1}&quot;..
+        /// </summary>
+        internal static string SelfupdateMessageTemplate {
+            get {
+                return ResourceManager.GetString("SelfupdateMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating {0} to {1}..
+        /// </summary>
+        internal static string UpdateMessageTemplate {
+            get {
+                return ResourceManager.GetString("UpdateMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update successful..
+        /// </summary>
+        internal static string UpdateSuccessful {
+            get {
+                return ResourceManager.GetString("UpdateSuccessful", resourceCulture);
             }
         }
     }

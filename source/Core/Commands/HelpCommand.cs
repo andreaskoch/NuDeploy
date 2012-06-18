@@ -117,10 +117,11 @@ namespace NuDeploy.Core.Commands
             // examples
             string examplesLabel = Resources.HelpCommand.ExamplesLabel + ":";
             this.userInterface.Show(examplesLabel);
-            this.userInterface.Show(string.Empty);
 
             foreach (KeyValuePair<string, string> pair in command.Attributes.Examples)
             {
+                this.userInterface.Show(string.Empty);
+
                 string commandText = string.Format("> {0} {1}", this.applicationInformation.NameOfExecutable, pair.Key);
                 string description = pair.Value;
 
@@ -128,23 +129,25 @@ namespace NuDeploy.Core.Commands
 
                 this.userInterface.Show(string.Empty);
                 this.userInterface.ShowIndented(commandText, 6);
-                this.userInterface.Show(string.Empty);
             }
 
             this.userInterface.Show(string.Empty);
 
             // options
-            string optionsLabel = Resources.HelpCommand.OptionsLabel + ":";
-            this.userInterface.Show(optionsLabel);
-            this.userInterface.Show(string.Empty);
+            if (command.Attributes.ArgumentDescriptions.Count > 0)
+            {
+                string optionsLabel = Resources.HelpCommand.OptionsLabel + ":";
+                this.userInterface.Show(optionsLabel);
+                this.userInterface.Show(string.Empty);
 
-            var formattedOptions =
-                command.Attributes.ArgumentDescriptions.Select(pair => new KeyValuePair<string, string>("-" + pair.Key, pair.Value)).ToDictionary(
-                    pair => pair.Key, pair => pair.Value);
+                var formattedOptions =
+                    command.Attributes.ArgumentDescriptions.Select(pair => new KeyValuePair<string, string>("-" + pair.Key, pair.Value)).ToDictionary(
+                        pair => pair.Key, pair => pair.Value);
 
-            this.userInterface.ShowKeyValueStore(formattedOptions, 4, 3);
+                this.userInterface.ShowKeyValueStore(formattedOptions, 4, 3);
 
-            this.userInterface.Show(string.Empty);
+                this.userInterface.Show(string.Empty);                
+            }
         }
 
         private void Overview()

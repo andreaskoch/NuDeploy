@@ -3,8 +3,13 @@ using System.Reflection;
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Repositories;
+
+using NuGet;
 
 using StructureMap;
+
+using PackageRepositoryFactory = NuDeploy.Core.Repositories.PackageRepositoryFactory;
 
 namespace NuDeploy.Core.DependencyResolution
 {
@@ -30,6 +35,8 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICommandArgumentParser>().Use<CommandArgumentParser>();
                         config.For<ICommandLineArgumentInterpreter>().Use<CommandLineArgumentInterpreter>();
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
+
+                        config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
                     });
 
             ObjectFactory.Configure(
@@ -38,7 +45,13 @@ namespace NuDeploy.Core.DependencyResolution
                         var helpCommand = new HelpCommand(
                             ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
 
-                        var commands = new List<ICommand> { new PackageSolutionCommand(), new SelfUpdateCommand(), helpCommand };
+                        var commands = new List<ICommand>
+                            {
+                                new PackageSolutionCommand(),
+                                new SelfUpdateCommand(
+                                    ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, ObjectFactory.GetInstance<IPackageRepositoryFactory>()),
+                                helpCommand
+                            };
                         ICommandProvider commandProvider = new CommandProvider(commands);
 
                         config.For<ICommandProvider>().Use(commandProvider);

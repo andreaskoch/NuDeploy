@@ -34,7 +34,7 @@ namespace NuDeploy.Core.Commands
                 AlternativeCommandNames = this.alternativeCommandNames,
                 RequiredArguments = new string[] { },
                 PositionalArguments = new string[] { },
-                Description = Resources.SelfUpdateCommand.CommandDescriptionText,
+                Description = string.Format(Resources.SelfUpdateCommand.CommandDescriptionTextTemplate, this.applicationInformation.NameOfExecutable),
                 Usage = string.Format("{0}", CommandName),
                 Examples = new Dictionary<string, string>
                     {
@@ -59,56 +59,59 @@ namespace NuDeploy.Core.Commands
             this.SelfUpdate(assembly.Location, new SemanticVersion(assembly.GetName().Version));
         }
 
-        internal void SelfUpdate(string exePath, SemanticVersion version)
+        private void SelfUpdate(string exePath, SemanticVersion version)
         {
-            //Console.WriteLine(NuGetResources.UpdateCommandCheckingForUpdates, NuGetConstants.DefaultFeedUrl);
+            string selfUpdateMessage = string.Format(
+                Resources.SelfUpdateCommand.SelfupdateMessageTemplate, 
+                NuDeployConstants.NuDeployCommandLinePackageId, 
+                NuDeployConstants.DefaultFeedUrl);
 
-            // Get the nuget command line package from the specified repository
+            this.userInterface.Show(selfUpdateMessage);
+
+            // fetch package
             IPackageRepository packageRepository = this.repositoryFactory.CreateRepository(NuDeployConstants.DefaultFeedUrl);
-
             IPackage package = packageRepository.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
-
-            // We didn't find it so complain
             if (package == null)
             {
-                throw new Exception("NuGetResources.UpdateCommandUnableToFindPackage, NuGetCommandLinePackageId");
+                this.userInterface.Show(Resources.SelfUpdateCommand.PackageNotFound);
+                return;
             }
 
-            //Console.WriteLine(NuGetResources.UpdateCommandCurrentlyRunningNuGetExe, version);
-
-            // Check to see if an update is needed
+            // version check
+            this.userInterface.Show(string.Format(Resources.SelfUpdateCommand.CurrentVersionTemplate, this.applicationInformation.NameOfExecutable, version));
             if (version >= package.Version)
             {
-                //Console.WriteLine(NuGetResources.UpdateCommandNuGetUpToDate);
+                this.userInterface.Show(string.Format(Resources.SelfUpdateCommand.NoUpdateRequiredMessageTemplate, this.applicationInformation.NameOfExecutable));
+                return;
             }
-            else
+
+            // update
+            this.userInterface.Show(string.Format(Resources.SelfUpdateCommand.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, package.Version));
+
+            IPackageFile executable =
+                package.GetFiles().FirstOrDefault(
+                    file => Path.GetFileName(file.Path).Equals(this.applicationInformation.NameOfExecutable, StringComparison.OrdinalIgnoreCase));
+
+            if (executable == null)
             {
-                //Console.WriteLine(NuGetResources.UpdateCommandUpdatingNuGet, package.Version);
-
-                // Get NuGet.exe file from the package
-                IPackageFile file =
-                    package.GetFiles().FirstOrDefault(
-                        f => Path.GetFileName(f.Path).Equals(this.applicationInformation.NameOfExecutable, StringComparison.OrdinalIgnoreCase));
-
-                // If for some reason this package doesn't have NuGet.exe then we don't want to use it
-                if (file == null)
-                {
-                    throw new Exception("NuGetResources.UpdateCommandUnableToLocateNuGetExe");
-                }
-
-                // Get the exe path and move it to a temp file (NuGet.exe.old) so we can replace the running exe with the bits we got 
-                // from the package repository
-                string renamedPath = exePath + ".old";
-                Move(exePath, renamedPath);
-
-                // Update the file
-                UpdateFile(exePath, file);
-
-                //Console.WriteLine(NuGetResources.UpdateCommandUpdateSuccessful);
+                this.userInterface.Show(
+                    string.Format(
+                        Resources.SelfUpdateCommand.ExecutableNotFoundInPackageMessageTemplate,
+                        NuDeployConstants.NuDeployCommandLinePackageId,
+                        this.applicationInformation.NameOfExecutable));
             }
+
+            // Get the exe path and move it to a temp file (NuGet.exe.old) so we can replace the running exe with the bits we got from the package repository
+            string renamedPath = exePath + ".old";
+            this.MoveFile(exePath, renamedPath);
+
+            // Update the file
+            this.UpdateFile(exePath, executable);
+
+            this.userInterface.Show(Resources.SelfUpdateCommand.UpdateSuccessful);
         }
 
-        protected virtual void UpdateFile(string exePath, IPackageFile file)
+        private void UpdateFile(string exePath, IPackageFile file)
         {
             using (Stream fromStream = file.GetStream(), toStream = File.Create(exePath))
             {
@@ -116,7 +119,7 @@ namespace NuDeploy.Core.Commands
             }
         }
 
-        protected virtual void Move(string oldPath, string newPath)
+        private void MoveFile(string oldPath, string newPath)
         {
             try
             {
@@ -127,72 +130,9 @@ namespace NuDeploy.Core.Commands
             }
             catch (FileNotFoundException)
             {
-
             }
 
             File.Move(oldPath, newPath);
-        }
-    }
-
-    public class PackageRepositoryFactory : IPackageRepositoryFactory
-    {
-        private static readonly PackageRepositoryFactory _default = new PackageRepositoryFactory();
-        private static readonly Func<Uri, IHttpClient> _defaultHttpClientFactory = u => new RedirectedHttpClient(u);
-        private Func<Uri, IHttpClient> _httpClientFactory;
-
-        public static PackageRepositoryFactory Default
-        {
-            get
-            {
-                return _default;
-            }
-        }
-
-        public Func<Uri, IHttpClient> HttpClientFactory
-        {
-            get { return _httpClientFactory ?? _defaultHttpClientFactory; }
-            set { _httpClientFactory = value; }
-        }
-
-        public virtual IPackageRepository CreateRepository(string packageSource)
-        {
-            if (packageSource == null)
-            {
-                throw new ArgumentNullException("packageSource");
-            }
-
-            Uri uri = new Uri(packageSource);
-            if (uri.IsFile)
-            {
-                return new LocalPackageRepository(uri.LocalPath);
-            }
-
-            var client = HttpClientFactory(uri);
-
-            // Make sure we get resolve any fwlinks before creating the repository
-            return new DataServicePackageRepository(client);
-        }
-    }
-
-    public class CommandLineRepositoryFactory : PackageRepositoryFactory
-    {
-        public static readonly string UserAgent = "NuGet Command Line";
-
-        public override IPackageRepository CreateRepository(string packageSource)
-        {
-            var repository = base.CreateRepository(packageSource);
-            var httpClientEvents = repository as IHttpClientEvents;
-
-            if (httpClientEvents != null)
-            {
-                httpClientEvents.SendingRequest += (sender, args) =>
-                {
-                    string userAgent = HttpUtility.CreateUserAgentString(UserAgent);
-                    HttpUtility.SetUserAgent(args.Request, userAgent);
-                };
-            }
-
-            return repository;
         }
     }
 }
