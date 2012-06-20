@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402823D9-F3BF-4E0D-B880-BE8A6B1C90B0}"
 	ProjectSection(SolutionItems) = preProject
 		NuDeploy.CommandLine.nuspec = NuDeploy.CommandLine.nuspec
+		Build\Package.targets = Build\Package.targets
 	EndProjectSection
 EndProject
 Global
