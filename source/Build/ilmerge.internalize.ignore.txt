@@ -1,0 +1,2 @@
+NuDeploy.*
+NuGet.*

@@ -96,14 +96,34 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <Target Name="MergeExecutable" Inputs="$(OutputPath)\StructureMap.dll;$(OutputPath)\NuGet.Core.dll;$(OutputPath)\NuDeploy.Core.dll;$(OutputPath)\Deploy.exe" Outputs="$(SolutionDir)\..\binaries\$(Configuration)\NuDeploy.exe">
+    <PropertyGroup>
+      <ILMergeExe>$(SolutionDir)\tools\ILMerge\ILMerge.exe</ILMergeExe>
+      <ILMergeInternalizeIgnoreFile>$(SolutionDir)\Build\ilmerge.internalize.ignore.txt</ILMergeInternalizeIgnoreFile>
+      <ILMergeOutputFile>NuDeploy.exe</ILMergeOutputFile>
+      <ILMergeOutputFolder>$(SolutionDir)\..\binaries\$(Configuration)</ILMergeOutputFolder>
+      <ILMergeOutputFilePath>$(ILMergeOutputFolder)\$(ILMergeOutputFile)</ILMergeOutputFilePath>
+      <FrameworkPath>$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0</FrameworkPath>
+      <FrameworkPath Condition="'$(MSBuildProgramFiles32)' != ''">$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0</FrameworkPath>
+    </PropertyGroup>
+	
+    <ItemGroup>
+      <ILMergeItems Include="$(OutputPath)\*.dll;$(OutputPath)\*.exe" />
+    </ItemGroup>
+	
+    <Delete Files="$(ILMergeOutputFilePath)" Condition="Exists($(ILMergeOutputFilePath))" />
+	
+    <!-- ILMerge does not yet support .NET 4.0  http://nitoprograms.blogspot.com/2010/09/using-ilmerge-with-net-40-andor-rx.html /targetplatform:v4,"%ProgramFiles%\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" -->
+    <Error Condition="!Exists('$(FrameworkPath)')" Text="Could not find 4.0 reference assemblies in $(FrameworkPath)" />
+    <Exec Command="&quot;$(ILMergeExe)&quot; /targetplatform:&quot;v4, $(FrameworkPath)&quot; /internalize:&quot;$(ILMergeInternalizeIgnoreFile)&quot; /target:exe /out:&quot;$(ILMergeOutputFilePath)&quot; /log:&quot;$(ILMergeOutputFolder)\ilmerge.msbuild.log&quot; /ndebug /allowDup NuDeploy.exe StructureMap.dll NuGet.Core.dll NuDeploy.Core.dll" WorkingDirectory="$(OutputPath)" />
+  </Target>  
+  
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)tools\ILMerge\ILMerge.exe /out:"$(SolutionDir)..\binaries\$(Configuration)\$(TargetFileName)" "$(TargetDir)$(TargetFileName)" "$(TargetDir)*.dll" "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\WindowsBase.dll" /target:exe /targetplatform:v4,C:\Windows\Microsoft.NET\Framework64\v4.0.30319 /wildcards</PostBuildEvent>
-  </PropertyGroup>
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-	<MSBuild Projects="$(SolutionDir)\tools\Package\Package.targets"/>
+	<CallTarget Targets="MergeExecutable" />
+    <!--<MSBuild Projects="$(SolutionDir)\tools\Package\Package.targets" />-->
   </Target>
 </Project>
