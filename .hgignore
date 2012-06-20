@@ -6,6 +6,7 @@ syntax: glob
 
 # Ignore Nuget Packages
 source\packages\*
+package\*
 
 # Ignore Visual Studio 2008 files
 *.obj
