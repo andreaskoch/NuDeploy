@@ -3,11 +3,12 @@
   <metadata>
     <id>NuDeploy.CommandLine</id>
     <version>1.0.0</version>
-    <authors>Andreas Koch</authors>
+    <authors>andreaskoch</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Utility for NuGet based web-server deployments</description>
-    <releaseNotes />
-    <tags>NuGet Deployment Web Tool</tags>
+    <language>en-US</language>
+    <projectUrl>https://bitbucket.org/andreaskoch/nudeploy</projectUrl>
+    <tags>NuGet Deployment NuDeploy</tags>
   </metadata>
   <files>
     <file src="NuDeploy.exe" target="tools" />

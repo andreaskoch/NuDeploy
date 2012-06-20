@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402823D9-F3BF-4E0D-B880-BE8A6B1C90B0}"
 	ProjectSection(SolutionItems) = preProject
+		Build\ilmerge.internalize.ignore.txt = Build\ilmerge.internalize.ignore.txt
 		NuDeploy.CommandLine.nuspec = NuDeploy.CommandLine.nuspec
 		Build\Package.targets = Build\Package.targets
 	EndProjectSection

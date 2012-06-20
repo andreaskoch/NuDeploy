@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -8,6 +9,7 @@
 [assembly: AssemblyCopyright("Copyright © 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyDescription("Utility for NuGet based web-server deployments")]
+[assembly: NeutralResourcesLanguage("en-US")]
 
 
 // Setting ComVisible to false makes the types in this assembly not visible 
