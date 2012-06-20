@@ -15,12 +15,23 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+		<VersionSeedAssemblies Include="$(BinariesDirectory)\*.exe" />
 		<NugetPackageContent Include="$(BinariesDirectory)\*.*" />
 	</ItemGroup>
+	
+	<Target Name="GetVersion">
+		<GetAssemblyIdentity
+				AssemblyFiles="@(VersionSeedAssemblies)">
+				<Output
+					TaskParameter="Assemblies"
+					ItemName="NugetPackageAssemblyIdentities"/>
+			</GetAssemblyIdentity>
+	</Target>	
 
-    <Target Name="CreateNugetPackage">
+    <Target Name="CreateNugetPackage" DependsOnTargets="GetVersion">
         <Message Text="Creating a NuGet Package" />
 		
+		<Message Text="NuSpecFileVersion: %(NugetPackageAssemblyIdentities.Version)" />
 		<Message Text="BinariesDirectory: $(BinariesDirectory)" />
 		<Message Text="PackageDirectory: $(PackageDirectory)" />
 		<Message Text="Files: @(NugetPackageContent)" />
