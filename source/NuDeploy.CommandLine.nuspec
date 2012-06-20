@@ -2,11 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>NuDeploy.CommandLine</id>
-    <version>$version$</version>
-    <authors>$author$</authors>
+    <version>1.0.0</version>
+    <authors>Andreas Koch</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Ya da ya da</description>
     <releaseNotes />
     <tags>NuGet Deployment Web Tool</tags>
   </metadata>
+  <files>
+    <file src="NuDeploy.exe" target="tools" />
+  </files>
 </package>
