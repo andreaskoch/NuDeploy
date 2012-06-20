@@ -124,6 +124,6 @@
   </Target>
   <Target Name="AfterBuild">
 	<CallTarget Targets="MergeExecutable" />
-    <!--<MSBuild Projects="$(SolutionDir)\tools\Package\Package.targets" />-->
+    <MSBuild Projects="$(SolutionDir)\Build\Package.targets" />
   </Target>
 </Project>
