@@ -5,7 +5,7 @@
     <version>1.0.0</version>
     <authors>Andreas Koch</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Ya da ya da</description>
+    <description>Utility for NuGet based web-server deployments</description>
     <releaseNotes />
     <tags>NuGet Deployment Web Tool</tags>
   </metadata>
