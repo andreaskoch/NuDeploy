@@ -10,8 +10,6 @@
 		<NuSpecFileName>NuDeploy.CommandLine.nuspec</NuSpecFileName>
 		<NuSpecFileSource>$([System.IO.Path]::Combine($(SolutionDir), $(NuSpecFileName)))</NuSpecFileSource>
 		<NuSpecFileDestination>$([System.IO.Path]::Combine($(PackageDirectory), $(NuSpecFileName)))</NuSpecFileDestination>
-		
-		<CreateNugetPackageCommand>$(NuGetCommand) pack "$(NuSpecFileDestination)" -o "$(PackageDirectory)" -BasePath "$(BinariesDirectory)"</CreateNugetPackageCommand>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -44,10 +42,7 @@
 		
 		<Message Text="Preparing NuSpec file" />
 		<Copy SourceFiles="$(NuSpecFileSource)" DestinationFiles="$(NuSpecFileDestination)" />
-		
-		<Message Text="Package command: $(CreateNugetPackageCommand)" />
-        <Exec Command="$(CreateNugetPackageCommand)" />
-		
+        <Exec Command="$(NuGetCommand) pack &quot;$(NuSpecFileDestination)&quot; -version &quot;%(NugetPackageAssemblyIdentities.Version)&quot; -o &quot;$(PackageDirectory)&quot; -BasePath &quot;$(BinariesDirectory)&quot;" />
 		<Delete Files="$(NuSpecFileDestination)" />
     </Target>
 	
