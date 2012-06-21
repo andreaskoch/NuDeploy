@@ -54,6 +54,7 @@
     <Compile Include="Commands\CommandLineArgumentInterpreter.cs" />
     <Compile Include="Commands\CommandNameMatcher.cs" />
     <Compile Include="Commands\CommandProvider.cs" />
+    <Compile Include="Commands\InstallCommand.cs" />
     <Compile Include="Commands\SelfUpdateCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
@@ -78,6 +79,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HelpCommand.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\InstallCommand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstallCommand.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PackageSolutionCommand.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -96,6 +102,10 @@
     <EmbeddedResource Include="Resources\HelpCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>HelpCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstallCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InstallCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

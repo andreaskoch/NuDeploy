@@ -9,8 +9,6 @@ using NuGet;
 
 using StructureMap;
 
-using PackageRepositoryFactory = NuDeploy.Core.Repositories.PackageRepositoryFactory;
-
 namespace NuDeploy.Core.DependencyResolution
 {
     public static class StructureMapSetup
@@ -19,8 +17,8 @@ namespace NuDeploy.Core.DependencyResolution
         {
             var applicationInformation = new ApplicationInformation
                 {
-                    ApplicationName = "NuDeploy", 
-                    NameOfExecutable = "NuDeploy.exe",
+                    ApplicationName = NuDeployConstants.ApplicationName, 
+                    NameOfExecutable = NuDeployConstants.ExecutableName,
                     ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version
                 };
 
@@ -48,6 +46,7 @@ namespace NuDeploy.Core.DependencyResolution
                         var commands = new List<ICommand>
                             {
                                 new PackageSolutionCommand(),
+                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new SelfUpdateCommand(
                                     ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, ObjectFactory.GetInstance<IPackageRepositoryFactory>()),
                                 helpCommand
