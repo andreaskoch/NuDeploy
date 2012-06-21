@@ -47,6 +47,7 @@ namespace NuDeploy.Core.DependencyResolution
                             {
                                 new PackageSolutionCommand(),
                                 new InstallCommand(ObjectFactory.GetInstance<IUserInterface>()),
+                                new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new SelfUpdateCommand(
                                     ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, ObjectFactory.GetInstance<IPackageRepositoryFactory>()),
                                 helpCommand
