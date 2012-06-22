@@ -40,17 +40,18 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
+                        var packageRepository = ObjectFactory.GetInstance<IPackageRepositoryFactory>().CreateRepository(NuDeployConstants.DefaultFeedUrl);
+
                         var helpCommand = new HelpCommand(
                             ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
 
                         var commands = new List<ICommand>
                             {
                                 new PackageSolutionCommand(),
-                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>()),
+                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository),
                                 new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>()),
-                                new SelfUpdateCommand(
-                                    ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, ObjectFactory.GetInstance<IPackageRepositoryFactory>()),
+                                new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository),
                                 helpCommand
                             };
                         ICommandProvider commandProvider = new CommandProvider(commands);

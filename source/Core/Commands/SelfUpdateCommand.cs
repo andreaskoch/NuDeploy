@@ -20,13 +20,13 @@ namespace NuDeploy.Core.Commands
 
         private readonly ApplicationInformation applicationInformation;
 
-        private readonly IPackageRepositoryFactory repositoryFactory;
+        private readonly IPackageRepository packageRepository;
 
-        public SelfUpdateCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepositoryFactory repositoryFactory)
+        public SelfUpdateCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepository packageRepository)
         {
             this.userInterface = userInterface;
             this.applicationInformation = applicationInformation;
-            this.repositoryFactory = repositoryFactory;
+            this.packageRepository = packageRepository;
 
             this.Attributes = new CommandAttributes
             {
@@ -69,8 +69,7 @@ namespace NuDeploy.Core.Commands
             this.userInterface.Show(selfUpdateMessage);
 
             // fetch package
-            IPackageRepository packageRepository = this.repositoryFactory.CreateRepository(NuDeployConstants.DefaultFeedUrl);
-            IPackage package = packageRepository.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
+            IPackage package = this.packageRepository.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
             if (package == null)
             {
                 this.userInterface.Show(Resources.SelfUpdateCommand.PackageNotFound);
