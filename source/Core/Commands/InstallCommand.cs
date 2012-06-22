@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 
 using NuDeploy.Core.Common;
 
@@ -19,8 +22,6 @@ namespace NuDeploy.Core.Commands
         private readonly IUserInterface userInterface;
 
         private readonly IPackageRepository packageRepository;
-
-        private IPackageManager packageManager;
 
         public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository)
         {
@@ -49,35 +50,14 @@ namespace NuDeploy.Core.Commands
             };
 
             this.Arguments = new Dictionary<string, string>();
+
+            Environment.SetEnvironmentVariable(
+                "PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
         }
 
         public CommandAttributes Attributes { get; private set; }
 
         public IDictionary<string, string> Arguments { get; set; }
-
-        protected IPackageManager PackageManager
-        {
-            get
-            {
-                if (this.packageManager == null)
-                {
-                    this.packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
-
-                    this.packageManager.PackageInstalling +=
-                        (sender, args) =>
-                        this.userInterface.Show(
-                            string.Format("Installing package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
-
-                    this.packageManager.PackageInstalled +=
-                        (sender, args) =>
-                        this.userInterface.Show(
-                            string.Format(
-                                "Package \"{0}\" (Version: {1}) has been installed to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
-                }
-
-                return this.packageManager;
-            }
-        }
 
         public void Execute()
         {
@@ -98,7 +78,49 @@ namespace NuDeploy.Core.Commands
 
             this.userInterface.Show(string.Format("Starting installation of package \"{0}\".", package.Id));
 
-            this.PackageManager.InstallPackage(package, false, true);
+            var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
+
+            packageManager.PackageInstalling +=
+                (sender, args) =>
+                this.userInterface.Show(
+                    string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
+
+            packageManager.PackageInstalled += (sender, args) =>
+                {
+                    string packageFolder = args.InstallPath;
+                    string installScriptPath = Path.Combine(packageFolder, "Deploy.ps1");
+
+                    this.userInterface.Show(
+                        string.Format(
+                            "Package \"{0}\" (Version: {1}) has been downloaded to folder \"{2}\".", args.Package.Id, args.Package.Version, packageFolder));
+
+                    if (File.Exists(installScriptPath) == false)
+                    {
+                        return;
+                    }
+
+                    this.userInterface.Show("Starting the package installation.");
+
+                    var deployCommand = new Command(installScriptPath);
+                    var deploymentTypeParameter = new CommandParameter("DeploymentType", "Full");
+                    deployCommand.Parameters.Add(deploymentTypeParameter);
+
+                    using (Runspace runspace = RunspaceFactory.CreateRunspace())
+                    {
+                        runspace.ThreadOptions = PSThreadOptions.UseCurrentThread;
+
+                        var ps = PowerShell.Create();
+                        ps.AddScript(string.Format("& '{0}' {1}", installScriptPath, "-DeploymentType Full"));
+                        var results = ps.Invoke();
+
+                        foreach (var psObject in results)
+                        {
+                            this.userInterface.Show(psObject.ToString());
+                        }                        
+                    }
+                };
+
+            packageManager.InstallPackage(package, false, true);
 
             this.userInterface.Show("Installation finished.");
         }
