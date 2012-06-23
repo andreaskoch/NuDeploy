@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Common;
@@ -17,6 +18,12 @@ namespace NuDeploy
 
         public static int Main(string[] args)
         {
+#if DEBUG
+            int processId = Process.GetCurrentProcess().Id;
+            Console.WriteLine(string.Format("For debug attach to process {0} and hit <Enter>.", processId));
+            Console.ReadLine();
+#endif
+
             var program = new Program();
             return program.Run(args);
         }
