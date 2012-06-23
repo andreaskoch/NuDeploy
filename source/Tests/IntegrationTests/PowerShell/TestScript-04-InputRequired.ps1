@@ -1,0 +1,2 @@
+﻿$input = Read-Host
+$input

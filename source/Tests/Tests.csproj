@@ -63,6 +63,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="IntegrationTests\PowerShell\TestScript-04-InputRequired.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="IntegrationTests\PowerShell\TestScript-03-AnotherScript.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

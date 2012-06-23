@@ -208,8 +208,10 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
 
             string scriptPath = GetAbsoluteScriptPath("TestScript-02-RequiredParameter-Echo-Test.ps1");
 
-            // Assert
+            // Act
             var exception = Assert.Throws<PowerShellException>(() => this.powerShellScriptExecutor.ExecuteScript(scriptPath, parameters));
+
+            // Assert
             Assert.That(exception.Message.Contains("mandatory") && exception.Message.Contains("DeploymentType"));
         }
 
@@ -224,6 +226,19 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
 
             // Assert
             Assert.AreEqual("TestScript-03-AnotherScript.ps1", result.Trim());
+        }
+
+        [Test]
+        public void ExecuteScript_ScriptRequiresInput_PowerShellExceptionIsThrown()
+        {
+            // Arrange
+            string scriptPath = GetAbsoluteScriptPath("TestScript-04-InputRequired.ps1");
+
+            // Act
+            var exception = Assert.Throws<PowerShellException>(() => this.powerShellScriptExecutor.ExecuteScript(scriptPath));
+
+            // Assert
+            Assert.That(exception.Message.Equals("Cannot invoke this function because the current host does not implement it."));
         }
 
         #endregion
