@@ -69,6 +69,20 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         }
 
         [Test]
+        public void ExecuteCommand_WriteHost_PowerShellExceptionIsThrown()
+        {
+            // Arrange
+            string message = "test";
+            string script = string.Format("Write-Host \"{0}\"", message);
+
+            // Act
+            var exception = Assert.Throws<PowerShellException>(() => this.powerShellScriptExecutor.ExecuteCommand(script));
+
+            // Assert
+            Assert.That(exception.Message.Equals("Cannot invoke this function because the current host does not implement it."));
+        }
+
+        [Test]
         public void ExecuteCommand_ExecuteScript_RelativePath_ScriptResultsAreReturned()
         {
             // Arrange
