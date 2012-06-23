@@ -101,7 +101,7 @@ namespace NuDeploy.Core.Commands
                     this.userInterface.Show("Starting the package installation.");
 
                     string installPowerShellCommand = string.Format("{0} -DeploymentType {1}", installScriptPath, "Full");
-                    this.powerShellScriptExecutor.RunScript(installPowerShellCommand);
+                    this.powerShellScriptExecutor.ExecuteCommand(installPowerShellCommand);
                 };
 
             packageManager.InstallPackage(package, false, true);

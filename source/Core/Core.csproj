@@ -76,6 +76,7 @@
     <Compile Include="Common\IUserInterface.cs" />
     <Compile Include="Common\NuDeployConstants.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
+    <Compile Include="Exceptions\PowerShellException.cs" />
     <Compile Include="PowerShell\IPowerShellScriptExecutor.cs" />
     <Compile Include="PowerShell\PowerShellScriptExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
