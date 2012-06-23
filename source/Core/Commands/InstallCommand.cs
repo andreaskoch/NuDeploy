@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
 
 using NuDeploy.Core.Common;
+using NuDeploy.Core.PowerShell;
 
 using NuGet;
 
@@ -23,10 +22,13 @@ namespace NuDeploy.Core.Commands
 
         private readonly IPackageRepository packageRepository;
 
-        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository)
+        private readonly IPowerShellScriptExecutor powerShellScriptExecutor;
+
+        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, IPowerShellScriptExecutor powerShellScriptExecutor)
         {
             this.userInterface = userInterface;
             this.packageRepository = packageRepository;
+            this.powerShellScriptExecutor = powerShellScriptExecutor;
 
             this.Attributes = new CommandAttributes
             {
@@ -50,9 +52,6 @@ namespace NuDeploy.Core.Commands
             };
 
             this.Arguments = new Dictionary<string, string>();
-
-            Environment.SetEnvironmentVariable(
-                "PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
         }
 
         public CommandAttributes Attributes { get; private set; }
@@ -101,23 +100,8 @@ namespace NuDeploy.Core.Commands
 
                     this.userInterface.Show("Starting the package installation.");
 
-                    var deployCommand = new Command(installScriptPath);
-                    var deploymentTypeParameter = new CommandParameter("DeploymentType", "Full");
-                    deployCommand.Parameters.Add(deploymentTypeParameter);
-
-                    using (Runspace runspace = RunspaceFactory.CreateRunspace())
-                    {
-                        runspace.ThreadOptions = PSThreadOptions.UseCurrentThread;
-
-                        var ps = PowerShell.Create();
-                        ps.AddScript(string.Format("& '{0}' {1}", installScriptPath, "-DeploymentType Full"));
-                        var results = ps.Invoke();
-
-                        foreach (var psObject in results)
-                        {
-                            this.userInterface.Show(psObject.ToString());
-                        }                        
-                    }
+                    string installPowerShellCommand = string.Format("{0} -DeploymentType {1}", installScriptPath, "Full");
+                    this.powerShellScriptExecutor.RunScript(installPowerShellCommand);
                 };
 
             packageManager.InstallPackage(package, false, true);

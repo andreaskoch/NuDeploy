@@ -3,6 +3,7 @@ using System.Reflection;
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Common;
+using NuDeploy.Core.PowerShell;
 using NuDeploy.Core.Repositories;
 
 using NuGet;
@@ -34,6 +35,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICommandLineArgumentInterpreter>().Use<CommandLineArgumentInterpreter>();
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
 
+                        config.For<IPowerShellScriptExecutor>().Use<PowerShellScriptExecutor>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
                     });
 
@@ -48,7 +50,7 @@ namespace NuDeploy.Core.DependencyResolution
                         var commands = new List<ICommand>
                             {
                                 new PackageSolutionCommand(),
-                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository),
+                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository, ObjectFactory.GetInstance<IPowerShellScriptExecutor>()),
                                 new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository),
