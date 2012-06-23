@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Management.Automation.Host;
 
 using NuDeploy.Core.Exceptions;
 using NuDeploy.Core.PowerShell;
@@ -16,7 +17,8 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         [TestFixtureSetUp]
         public void Setup()
         {
-            this.powerShellScriptExecutor = new PowerShellScriptExecutor();
+            PSHost powerShellHost = new PowerShellHost();
+            this.powerShellScriptExecutor = new PowerShellScriptExecutor(powerShellHost);
         }
 
         #region ExecuteCommand
@@ -69,17 +71,17 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         }
 
         [Test]
-        public void ExecuteCommand_WriteHost_PowerShellExceptionIsThrown()
+        public void ExecuteCommand_WriteHost_ResultEqualsMessage()
         {
             // Arrange
             string message = "test";
             string script = string.Format("Write-Host \"{0}\"", message);
 
             // Act
-            var exception = Assert.Throws<PowerShellException>(() => this.powerShellScriptExecutor.ExecuteCommand(script));
+            var result = this.powerShellScriptExecutor.ExecuteCommand(script);
 
             // Assert
-            Assert.That(exception.Message.Equals("Cannot invoke this function because the current host does not implement it."));
+            Assert.AreEqual(message, result.Trim());
         }
 
         [Test]

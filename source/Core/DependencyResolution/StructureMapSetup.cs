@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Management.Automation.Host;
 using System.Reflection;
 
 using NuDeploy.Core.Commands;
@@ -35,6 +36,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICommandLineArgumentInterpreter>().Use<CommandLineArgumentInterpreter>();
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
 
+                        config.For<PSHost>().Use<PowerShellHost>();
                         config.For<IPowerShellScriptExecutor>().Use<PowerShellScriptExecutor>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
                     });

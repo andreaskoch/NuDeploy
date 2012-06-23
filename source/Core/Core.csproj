@@ -77,7 +77,10 @@
     <Compile Include="Common\NuDeployConstants.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="Exceptions\PowerShellException.cs" />
+    <Compile Include="PowerShell\NuDeployPowerShellUserInterface.cs" />
+    <Compile Include="PowerShell\NuDeployRawPowerShellUserInterface.cs" />
     <Compile Include="PowerShell\IPowerShellScriptExecutor.cs" />
+    <Compile Include="PowerShell\PowerShellHost.cs" />
     <Compile Include="PowerShell\PowerShellScriptExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CommandLineRepositoryFactory.cs" />

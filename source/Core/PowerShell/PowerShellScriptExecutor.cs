@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Management.Automation;
+using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
 using System.Text;
 
@@ -11,8 +12,11 @@ namespace NuDeploy.Core.PowerShell
 {
     public class PowerShellScriptExecutor : IPowerShellScriptExecutor
     {
-        public PowerShellScriptExecutor()
+        private readonly PSHost powerShellHost;
+
+        public PowerShellScriptExecutor(PSHost powerShellHost)
         {
+            this.powerShellHost = powerShellHost;
             Environment.SetEnvironmentVariable("PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
         }
 
@@ -24,47 +28,44 @@ namespace NuDeploy.Core.PowerShell
             }
 
             // create Powershell runspace
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-
-            // open it
-            runspace.Open();
-
-            // create a pipeline and feed it the script text
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(scriptText);
-
-            // add an extra command to transform the script
-            // output objects into nicely formatted strings
-
-            // remove this line to get the actual objects
-            // that the script returns. For example, the script
-
-            // "Get-Process" returns a collection
-            // of System.Diagnostics.Process instances.
-            pipeline.Commands.Add("Out-String");
-
-            // execute the script
-            Collection<PSObject> results;
-            try
+            using (Runspace runspace = RunspaceFactory.CreateRunspace(this.powerShellHost))
             {
-                results = pipeline.Invoke();
-            }
-            catch (Exception powerShellException)
-            {
-                throw new PowerShellException(powerShellException.Message, powerShellException);
-            }
+                // open it
+                runspace.Open();
 
-            // close the runspace
-            runspace.Close();
+                var stringBuilder = new StringBuilder();
+                using (System.Management.Automation.PowerShell powerShell = System.Management.Automation.PowerShell.Create())
+                {
+                    powerShell.Runspace = runspace;
 
-            // convert the script result into a single string
-            var stringBuilder = new StringBuilder();
-            foreach (PSObject obj in results)
-            {
-                stringBuilder.AppendLine(obj.ToString());
+                    // create a pipeline and feed it the script text
+                    Pipeline pipeline = runspace.CreatePipeline();
+                    pipeline.Commands.AddScript(scriptText);
+                    pipeline.Commands.Add("Out-String");
+
+                    // execute the script
+                    Collection<PSObject> results;
+                    try
+                    {
+                        results = pipeline.Invoke();
+                    }
+                    catch (Exception powerShellException)
+                    {
+                        throw new PowerShellException(powerShellException.Message, powerShellException);
+                    }
+
+                    // convert the script result into a single string                
+                    foreach (PSObject obj in results)
+                    {
+                        stringBuilder.AppendLine(obj.ToString());
+                    }
+                }
+
+                // close the runspace
+                runspace.Close();
+
+                return stringBuilder.ToString();
             }
-
-            return stringBuilder.ToString();
         }
 
         public string ExecuteScript(string scriptPath, params string[] parameters)
