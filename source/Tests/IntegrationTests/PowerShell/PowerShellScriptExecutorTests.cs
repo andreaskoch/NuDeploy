@@ -213,6 +213,19 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             Assert.That(exception.Message.Contains("mandatory") && exception.Message.Contains("DeploymentType"));
         }
 
+        [Test]
+        public void ExecuteScript_ScriptWhichCallsAnotherScript_DependentScriptIsExecuted()
+        {
+            // Arrange
+            string scriptPath = GetAbsoluteScriptPath("TestScript-03-CallAnotherScript.ps1");
+
+            // Act
+            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+
+            // Assert
+            Assert.AreEqual("TestScript-03-AnotherScript.ps1", result.Trim());
+        }
+
         #endregion
 
         #region help methods
