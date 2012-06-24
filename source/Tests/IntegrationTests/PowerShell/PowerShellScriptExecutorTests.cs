@@ -288,16 +288,29 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         }
 
         [Test]
-        public void ExecuteScript_ScriptRequiresInput_PowerShellExceptionIsThrown()
+        public void ExecuteScript_ScriptRequiresInput_NothingIsReturned()
         {
             // Arrange
             string scriptPath = GetAbsoluteScriptPath("TestScript-04-InputRequired.ps1");
 
             // Act
-            var exception = Assert.Throws<PowerShellException>(() => this.powerShellScriptExecutor.ExecuteScript(scriptPath));
+            var result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
 
             // Assert
-            Assert.That(exception.Message.Equals("Cannot invoke this function because the current host does not implement it."));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(result));
+        }
+
+        [Test]
+        public void ExecuteScript_ScriptImportsIISModule_LocationIsIIS()
+        {
+            // Arrange
+            string scriptPath = GetAbsoluteScriptPath("TestScript-05-ImportModule-IIS.ps1");
+
+            // Act
+            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+
+            // Assert
+            Assert.AreEqual("IIS:\\", result.Trim());
         }
 
         #endregion

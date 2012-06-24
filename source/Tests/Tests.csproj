@@ -64,6 +64,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="IntegrationTests\PowerShell\TestScript-05-ImportModule-IIS.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="IntegrationTests\PowerShell\TestScript-04-InputRequired.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
