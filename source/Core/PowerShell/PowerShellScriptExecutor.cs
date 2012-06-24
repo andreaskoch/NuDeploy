@@ -4,6 +4,7 @@ using System.IO;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
+using System.Text;
 using System.Threading;
 
 namespace NuDeploy.Core.PowerShell
@@ -16,11 +17,14 @@ namespace NuDeploy.Core.PowerShell
 
         private readonly System.Management.Automation.PowerShell powerShell;
 
+        private readonly StringBuilder pipelineOutput;
+
         private PipelineExecutor pipelineExecutor;
 
         public PowerShellScriptExecutor(PSHost powerShellHost)
         {
             this.powerShellHost = powerShellHost;
+            this.pipelineOutput = new StringBuilder();
 
             Environment.SetEnvironmentVariable("PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
             this.runspace = RunspaceFactory.CreateRunspace(this.powerShellHost);
@@ -30,7 +34,7 @@ namespace NuDeploy.Core.PowerShell
             this.powerShell.Runspace = this.runspace;
         }
 
-        public void ExecuteCommand(string scriptText)
+        public string ExecuteCommand(string scriptText)
         {
             if (scriptText == null)
             {
@@ -46,9 +50,11 @@ namespace NuDeploy.Core.PowerShell
             {
                 Thread.Sleep(500);
             }
+
+            return this.pipelineOutput.ToString();
         }
 
-        public void ExecuteScript(string scriptPath, params string[] parameters)
+        public string ExecuteScript(string scriptPath, params string[] parameters)
         {
             if (string.IsNullOrWhiteSpace(scriptPath))
             {
@@ -66,14 +72,16 @@ namespace NuDeploy.Core.PowerShell
                 commandText += " " + string.Join(" ", parameters);
             }
 
-            this.ExecuteCommand(commandText);
+            return this.ExecuteCommand(commandText);
         }
 
         private void PipelineExecutorOnDataReady(PipelineExecutor sender, ICollection<PSObject> data)
         {
             foreach (PSObject obj in data)
             {
-                this.powerShellHost.UI.WriteLine(obj.ToString());
+                string message = obj.ToString();
+                this.pipelineOutput.AppendLine(message);
+                this.powerShellHost.UI.WriteLine(message);
             }
         }
 
@@ -81,7 +89,9 @@ namespace NuDeploy.Core.PowerShell
         {
             foreach (object e in data)
             {
-                this.powerShellHost.UI.WriteLine("Error : " + e.ToString());
+                string message = "Error : " + e;
+                this.pipelineOutput.AppendLine(message);
+                this.powerShellHost.UI.WriteLine(message);
             }
         }
 

@@ -2,8 +2,8 @@ namespace NuDeploy.Core.PowerShell
 {
     public interface IPowerShellScriptExecutor
     {
-        void ExecuteCommand(string scriptText);
+        string ExecuteCommand(string scriptText);
 
-        void ExecuteScript(string scriptPath, params string[] parameters);
+        string ExecuteScript(string scriptPath, params string[] parameters);
     }
 }

@@ -16,11 +16,6 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         private readonly Pipeline pipeline;
 
-        /// <summary>
-        ///   Event set when the user wants to stop script execution.
-        /// </summary>
-        private readonly ManualResetEvent stopEvent;
-
         #endregion
 
         #region Constructors and Destructors
@@ -37,9 +32,6 @@ namespace NuDeploy.Core.PowerShell
         /// </param>
         public PipelineExecutor(Runspace runSpace, string command)
         {
-            // initialize event members
-            this.stopEvent = new ManualResetEvent(false);
-
             // create a pipeline and feed it the script text
             this.pipeline = runSpace.CreatePipeline(command);
 
@@ -112,9 +104,6 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public void Stop()
         {
-            // first make sure StoppableInvoke() stops blocking
-            this.stopEvent.Set();
-
             // then tell the pipeline to stop the script
             this.pipeline.Stop();
         }
