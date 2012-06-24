@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.Management.Automation.Host;
 
+using NuDeploy.Core.Common;
+
 namespace NuDeploy.Core.PowerShell
 {
     /// <summary>
@@ -12,35 +14,20 @@ namespace NuDeploy.Core.PowerShell
     /// </summary>
     public class PowerShellHost : PSHost
     {
-        /// <summary>
-        /// The culture information of the thread that created
-        /// this object.
-        /// </summary>
-        private CultureInfo originalCultureInfo =
-            System.Threading.Thread.CurrentThread.CurrentCulture;
+        private readonly PSHostUserInterface userInterface;
 
-        /// <summary>
-        /// The UI culture information of the thread that created
-        /// this object.
-        /// </summary>
-        private CultureInfo originalUICultureInfo =
-            System.Threading.Thread.CurrentThread.CurrentUICulture;
+        private readonly ApplicationInformation applicationInformation;
 
-        /// <summary>
-        /// The identifier of this PSHost implementation.
-        /// </summary>
-        private Guid myId = Guid.NewGuid();
+        private readonly CultureInfo originalCultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-        /// <summary>
-        /// Initializes a new instance of the MyHost class. Keep
-        /// a reference to the host application object so that it 
-        /// can be informed of when to exit.
-        /// </summary>
-        /// <param name="program">
-        /// A reference to the host application object.
-        /// </param>
-        public PowerShellHost()
+        private readonly CultureInfo originalUICultureInfo = System.Threading.Thread.CurrentThread.CurrentUICulture;
+
+        private readonly Guid instanceId = Guid.NewGuid();
+
+        public PowerShellHost(PSHostUserInterface userInterface, ApplicationInformation applicationInformation)
         {
+            this.userInterface = userInterface;
+            this.applicationInformation = applicationInformation;
         }
 
         /// <summary>
@@ -48,7 +35,7 @@ namespace NuDeploy.Core.PowerShell
         /// returns a snapshot of the culture information of the thread 
         /// that created this object.
         /// </summary>
-        public override System.Globalization.CultureInfo CurrentCulture
+        public override CultureInfo CurrentCulture
         {
             get { return this.originalCultureInfo; }
         }
@@ -58,7 +45,7 @@ namespace NuDeploy.Core.PowerShell
         /// returns a snapshot of the UI culture information of the thread 
         /// that created this object.
         /// </summary>
-        public override System.Globalization.CultureInfo CurrentUICulture
+        public override CultureInfo CurrentUICulture
         {
             get { return this.originalUICultureInfo; }
         }
@@ -69,7 +56,7 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Guid InstanceId
         {
-            get { return this.myId; }
+            get { return this.instanceId; }
         }
 
         /// <summary>
@@ -79,10 +66,11 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override string Name
         {
-            get { return "MySampleConsoleHostImplementation"; }
+            get
+            {
+                return string.Format("{0} {1}", this.applicationInformation.ApplicationName, "PowerShell Host");
+            }
         }
-
-        private PSHostUserInterface ui;
 
         /// <summary>
         /// This sample does not implement a PSHostUserInterface component so
@@ -92,12 +80,7 @@ namespace NuDeploy.Core.PowerShell
         {
             get
             {
-                if (this.ui == null)
-                {
-                    this.ui = new NuDeployPowerShellUserInterface();
-                }
-
-                return this.ui;
+                return this.userInterface;
             }
         }
 
@@ -107,23 +90,18 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Version Version
         {
-            get { return new Version(1, 0, 0, 0); }
+            get
+            {
+                return this.applicationInformation.ApplicationVersion;
+            }
         }
 
-        /// <summary>
-        /// Not implemented by this example class. The call fails with
-        /// a NotImplementedException exception.
-        /// </summary>
         public override void EnterNestedPrompt()
         {
             throw new NotImplementedException(
                 "The method or operation is not implemented.");
         }
 
-        /// <summary>
-        /// Not implemented by this example class. The call fails
-        /// with a NotImplementedException exception.
-        /// </summary>
         public override void ExitNestedPrompt()
         {
             throw new NotImplementedException(
@@ -139,7 +117,6 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override void NotifyBeginApplication()
         {
-            return;
         }
 
         /// <summary>
@@ -150,7 +127,6 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override void NotifyEndApplication()
         {
-            return;
         }
 
         /// <summary>
@@ -161,8 +137,8 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="exitCode">The exit code to use.</param>
         public override void SetShouldExit(int exitCode)
         {
-            //this.program.ShouldExit = true;
-            //this.program.ExitCode = exitCode;
+            // this.program.ShouldExit = true;
+            // this.program.ExitCode = exitCode;
         }
     }
 }

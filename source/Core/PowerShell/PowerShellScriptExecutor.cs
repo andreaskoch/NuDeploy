@@ -49,6 +49,16 @@ namespace NuDeploy.Core.PowerShell
                     {
                         results = pipeline.Invoke();
                     }
+                    catch (RuntimeException powerShellRuntimeException)
+                    {
+                        string message = string.Format(
+                            "PowerShell Runtime Exception: {0}: {1}\r\n{2}",
+                            powerShellRuntimeException.ErrorRecord.InvocationInfo.InvocationName,
+                            powerShellRuntimeException.Message,
+                            powerShellRuntimeException.ErrorRecord.InvocationInfo.PositionMessage);
+
+                            throw new PowerShellException(message, powerShellRuntimeException);
+                    }
                     catch (Exception powerShellException)
                     {
                         throw new PowerShellException(powerShellException.Message, powerShellException);

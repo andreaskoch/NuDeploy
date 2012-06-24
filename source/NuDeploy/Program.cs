@@ -41,8 +41,8 @@ namespace NuDeploy
             }
             catch (Exception exception)
             {
-                console.Show(exception.Message);
-                console.Show(exception.StackTrace);
+                console.WriteLine(exception.Message);
+                console.WriteLine(exception.StackTrace);
 
                 return 1;
             }

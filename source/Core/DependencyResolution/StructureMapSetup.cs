@@ -37,6 +37,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
 
                         config.For<PSHost>().Use<PowerShellHost>();
+                        config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
                         config.For<IPowerShellScriptExecutor>().Use<PowerShellScriptExecutor>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
                     });

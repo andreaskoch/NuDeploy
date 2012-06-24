@@ -4,14 +4,23 @@ using System.Globalization;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 
+using NuDeploy.Core.Common;
+
 namespace NuDeploy.Core.PowerShell
 {
     public class NuDeployPowerShellUserInterface : PSHostUserInterface
     {
+        private readonly IUserInterface userInterface;
+
         /// <summary>
         /// An instance of the PSRawUserInterface class.
         /// </summary>
         private NuDeployRawPowerShellUserInterface rawUi;
+
+        public NuDeployPowerShellUserInterface(IUserInterface userInterface)
+        {
+            this.userInterface = userInterface;
+        }
 
         /// <summary>
         /// Gets an instance of the PSRawUserInterface class for this host
@@ -114,7 +123,7 @@ namespace NuDeploy.Core.PowerShell
         /// <returns>The characters that are entered by the user.</returns>
         public override string ReadLine()
         {
-            return Console.ReadLine();
+            return this.userInterface.GetInput();
         }
 
         /// <summary>
@@ -135,7 +144,7 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="value">The characters to be written.</param>
         public override void Write(string value)
         {
-            Console.Write(value);
+            this.userInterface.Write(value);
         }
 
         /// <summary>
@@ -151,8 +160,7 @@ namespace NuDeploy.Core.PowerShell
                                    ConsoleColor backgroundColor,
                                    string value)
         {
-            // Colors are ignored.
-            Console.Write(value);
+            this.userInterface.Write(value);
         }
 
         /// <summary>
@@ -161,7 +169,7 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="message">The debug message that is displayed.</param>
         public override void WriteDebugLine(string message)
         {
-            Console.WriteLine(string.Format(CultureInfo.CurrentCulture, "DEBUG: {0}", message));
+            this.userInterface.WriteLine(string.Format(CultureInfo.CurrentCulture, "DEBUG: {0}", message));
         }
 
         /// <summary>
@@ -170,7 +178,7 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="value">The error message that is displayed.</param>
         public override void WriteErrorLine(string value)
         {
-            Console.WriteLine(string.Format(CultureInfo.CurrentCulture, "ERROR: {0}", value));
+            this.userInterface.WriteLine(string.Format(CultureInfo.CurrentCulture, "ERROR: {0}", value));
         }
 
         /// <summary>
@@ -179,7 +187,7 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override void WriteLine()
         {
-            Console.WriteLine();
+            this.userInterface.WriteLine(string.Empty);
         }
 
         /// <summary>
@@ -189,7 +197,7 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="value">The line to be written.</param>
         public override void WriteLine(string value)
         {
-            Console.WriteLine(value);
+            this.userInterface.WriteLine(value);
         }
 
         /// <summary>
@@ -202,7 +210,7 @@ namespace NuDeploy.Core.PowerShell
         public override void WriteLine(ConsoleColor foregroundColor, ConsoleColor backgroundColor, string value)
         {
             // Write to the output stream, ignore the colors
-            Console.WriteLine(value);
+            this.userInterface.WriteLine(value);
         }
 
         /// <summary>
@@ -220,7 +228,7 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="message">The verbose message that is displayed.</param>
         public override void WriteVerboseLine(string message)
         {
-            Console.WriteLine(string.Format(CultureInfo.CurrentCulture, "VERBOSE: {0}", message));
+            this.userInterface.WriteLine(string.Format(CultureInfo.CurrentCulture, "VERBOSE: {0}", message));
         }
 
         /// <summary>
@@ -229,7 +237,7 @@ namespace NuDeploy.Core.PowerShell
         /// <param name="message">The warning message that is displayed.</param>
         public override void WriteWarningLine(string message)
         {
-            Console.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: {0}", message));
+            this.userInterface.WriteLine(string.Format(CultureInfo.CurrentCulture, "WARNING: {0}", message));
         }
     }
 }

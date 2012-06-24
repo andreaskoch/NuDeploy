@@ -63,7 +63,7 @@ namespace NuDeploy.Core.Commands
             string packageId = this.Arguments.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(packageId))
             {
-                this.userInterface.Show("No package id specified.");
+                this.userInterface.WriteLine("No package id specified.");
                 return;
             }
 
@@ -71,17 +71,17 @@ namespace NuDeploy.Core.Commands
             IPackage package = this.packageRepository.FindPackage(packageId);
             if (package == null)
             {
-                this.userInterface.Show(string.Format("Package \"{0}\"was not found at \"{1}\".", packageId, this.packageRepository.Source));
+                this.userInterface.WriteLine(string.Format("Package \"{0}\"was not found at \"{1}\".", packageId, this.packageRepository.Source));
                 return;
             }
 
-            this.userInterface.Show(string.Format("Starting installation of package \"{0}\".", package.Id));
+            this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\".", package.Id));
 
             var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
 
             packageManager.PackageInstalling +=
                 (sender, args) =>
-                this.userInterface.Show(
+                this.userInterface.WriteLine(
                     string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
 
             packageManager.PackageInstalled += (sender, args) =>
@@ -89,7 +89,7 @@ namespace NuDeploy.Core.Commands
                     string packageFolder = args.InstallPath;
                     string installScriptPath = Path.Combine(packageFolder, "Deploy.ps1");
 
-                    this.userInterface.Show(
+                    this.userInterface.WriteLine(
                         string.Format(
                             "Package \"{0}\" (Version: {1}) has been downloaded to folder \"{2}\".", args.Package.Id, args.Package.Version, packageFolder));
 
@@ -98,13 +98,13 @@ namespace NuDeploy.Core.Commands
                         return;
                     }
 
-                    this.userInterface.Show("Starting the package installation.");
+                    this.userInterface.WriteLine("Starting the package installation.");
                     this.powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
                 };
 
             packageManager.InstallPackage(package, false, true);
 
-            this.userInterface.Show("Installation finished.");
+            this.userInterface.WriteLine("Installation finished.");
         }
     }
 }

@@ -34,13 +34,23 @@ namespace NuDeploy.Core.Common
             }
         }
 
+        public string GetInput()
+        {
+            return Console.ReadLine();
+        }
+
         public void ShowIndented(string text, int marginLeft)
         {
             string indentedText = this.textManipulation.IndentText(text, this.WindowWidth, marginLeft);
             Console.WriteLine(indentedText);
         }
 
-        public void Show(string text)
+        public void Write(string text)
+        {
+            Console.Write(text);
+        }
+
+        public void WriteLine(string text)
         {
             string wrappedText = this.textManipulation.WrapText(text, this.WindowWidth);
             Console.WriteLine(wrappedText);

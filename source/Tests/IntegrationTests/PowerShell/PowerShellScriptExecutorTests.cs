@@ -2,6 +2,7 @@
 using System.IO;
 using System.Management.Automation.Host;
 
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Exceptions;
 using NuDeploy.Core.PowerShell;
 
@@ -14,10 +15,26 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
     {
         private IPowerShellScriptExecutor powerShellScriptExecutor;
 
+        private PSHostUserInterface powerShellUserInterface;
+
+        private IUserInterface userInterface;
+
         [TestFixtureSetUp]
         public void Setup()
         {
-            PSHost powerShellHost = new PowerShellHost();
+            var applicationInformation = new ApplicationInformation
+                { 
+                    ApplicationName = "NuDeploy.Tests", 
+                    ApplicationVersion = new Version(1, 0),
+                    NameOfExecutable = "NuDeploy.Tests.exe"
+                };
+
+            IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
+
+            this.userInterface = new ConsoleUserInterface(consoleTextManipulation);
+            this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
+            PSHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
+
             this.powerShellScriptExecutor = new PowerShellScriptExecutor(powerShellHost);
         }
 
@@ -58,6 +75,32 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         }
 
         [Test]
+        public void ExecuteCommand_ErrorActionPreference_ResultIsContinue()
+        {
+            // Arrange
+            string script = "$ErrorActionPreference";
+
+            // Act
+            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+
+            // Assert
+            Assert.AreEqual("Continue", result.Trim());
+        }
+
+        [Test]
+        public void ExecuteCommand_VerbosePreference_ResultIsSilentlyContinue()
+        {
+            // Arrange
+            string script = "$VerbosePreference";
+
+            // Act
+            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+
+            // Assert
+            Assert.AreEqual("SilentlyContinue", result.Trim());
+        }
+
+        [Test]
         public void ExecuteCommand_GetLocation_PowerShellLocationIsCurrentDirectory()
         {
             // Arrange
@@ -81,7 +124,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             var result = this.powerShellScriptExecutor.ExecuteCommand(script);
 
             // Assert
-            Assert.AreEqual(message, result.Trim());
+            Assert.AreEqual(string.Empty, result.Trim());
         }
 
         [Test]

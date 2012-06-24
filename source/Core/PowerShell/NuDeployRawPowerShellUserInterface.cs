@@ -11,8 +11,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override ConsoleColor BackgroundColor
         {
-            get { return Console.BackgroundColor; }
-            set { Console.BackgroundColor = value; }
+            get
+            {
+                return Console.BackgroundColor;
+            }
+
+            set
+            {
+                Console.BackgroundColor = value;
+            }
         }
 
         /// <summary>
@@ -21,8 +28,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Size BufferSize
         {
-            get { return new Size(100, 100); }
-            set { Console.SetBufferSize(value.Width, value.Height); }
+            get
+            {
+                return new Size(100, 100);
+            }
+
+            set
+            {
+                Console.SetBufferSize(value.Width, value.Height);
+            }
         }
 
         /// <summary>
@@ -51,8 +65,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override int CursorSize
         {
-            get { return Console.CursorSize; }
-            set { Console.CursorSize = value; }
+            get
+            {
+                return Console.CursorSize;
+            }
+
+            set
+            {
+                Console.CursorSize = value;
+            }
         }
 
         /// <summary>
@@ -61,8 +82,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override ConsoleColor ForegroundColor
         {
-            get { return Console.ForegroundColor; }
-            set { Console.ForegroundColor = value; }
+            get
+            {
+                return Console.ForegroundColor;
+            }
+
+            set
+            {
+                Console.ForegroundColor = value;
+            }
         }
 
         /// <summary>
@@ -71,7 +99,10 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override bool KeyAvailable
         {
-            get { return Console.KeyAvailable; }
+            get
+            {
+                return Console.KeyAvailable;
+            }
         }
 
         /// <summary>
@@ -83,7 +114,10 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Size MaxPhysicalWindowSize
         {
-            get { return new Size(Console.LargestWindowWidth, Console.LargestWindowHeight); }
+            get
+            {
+                return new Size(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            }
         }
 
         /// <summary>
@@ -94,7 +128,10 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Size MaxWindowSize
         {
-            get { return new Size(Console.LargestWindowWidth, Console.LargestWindowHeight); }
+            get
+            {
+                return new Size(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            }
         }
 
         /// <summary>
@@ -104,8 +141,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Coordinates WindowPosition
         {
-            get { return new Coordinates(Console.WindowLeft, Console.WindowTop); }
-            set { Console.SetWindowPosition(value.X, value.Y); }
+            get
+            {
+                return new Coordinates(Console.WindowLeft, Console.WindowTop);
+            }
+
+            set
+            {
+                Console.SetWindowPosition(value.X, value.Y);
+            }
         }
 
         /// <summary>
@@ -115,8 +159,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override Size WindowSize
         {
-            get { return new Size(Console.WindowWidth, Console.WindowHeight); }
-            set { Console.SetWindowSize(value.Width, value.Height); }
+            get
+            {
+                return new Size(Console.WindowWidth, Console.WindowHeight);
+            }
+
+            set
+            {
+                Console.SetWindowSize(value.Width, value.Height);
+            }
         }
 
         /// <summary>
@@ -125,8 +176,15 @@ namespace NuDeploy.Core.PowerShell
         /// </summary>
         public override string WindowTitle
         {
-            get { return Console.Title; }
-            set { Console.Title = value; }
+            get
+            {
+                return Console.Title;
+            }
+
+            set
+            {
+                Console.Title = value;
+            }
         }
 
         /// <summary>

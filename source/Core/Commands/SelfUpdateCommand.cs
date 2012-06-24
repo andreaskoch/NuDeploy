@@ -66,26 +66,26 @@ namespace NuDeploy.Core.Commands
                 NuDeployConstants.NuDeployCommandLinePackageId, 
                 NuDeployConstants.DefaultFeedUrl);
 
-            this.userInterface.Show(selfUpdateMessage);
+            this.userInterface.WriteLine(selfUpdateMessage);
 
             // fetch package
             IPackage package = this.packageRepository.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
             if (package == null)
             {
-                this.userInterface.Show(Resources.SelfUpdateCommand.PackageNotFound);
+                this.userInterface.WriteLine(Resources.SelfUpdateCommand.PackageNotFound);
                 return;
             }
 
             // version check
-            this.userInterface.Show(string.Format(Resources.SelfUpdateCommand.CurrentVersionTemplate, this.applicationInformation.NameOfExecutable, version));
+            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.CurrentVersionTemplate, this.applicationInformation.NameOfExecutable, version));
             if (version >= package.Version)
             {
-                this.userInterface.Show(string.Format(Resources.SelfUpdateCommand.NoUpdateRequiredMessageTemplate, this.applicationInformation.NameOfExecutable));
+                this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.NoUpdateRequiredMessageTemplate, this.applicationInformation.NameOfExecutable));
                 return;
             }
 
             // update
-            this.userInterface.Show(string.Format(Resources.SelfUpdateCommand.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, package.Version));
+            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, package.Version));
 
             IPackageFile executable =
                 package.GetFiles().FirstOrDefault(
@@ -93,7 +93,7 @@ namespace NuDeploy.Core.Commands
 
             if (executable == null)
             {
-                this.userInterface.Show(
+                this.userInterface.WriteLine(
                     string.Format(
                         Resources.SelfUpdateCommand.ExecutableNotFoundInPackageMessageTemplate,
                         NuDeployConstants.NuDeployCommandLinePackageId,
@@ -107,7 +107,7 @@ namespace NuDeploy.Core.Commands
             // Update the file
             this.UpdateFile(exePath, executable);
 
-            this.userInterface.Show(Resources.SelfUpdateCommand.UpdateSuccessful);
+            this.userInterface.WriteLine(Resources.SelfUpdateCommand.UpdateSuccessful);
         }
 
         private void UpdateFile(string exePath, IPackageFile file)

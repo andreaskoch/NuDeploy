@@ -4,9 +4,13 @@ namespace NuDeploy.Core.Common
 {
     public interface IUserInterface
     {
-        void ShowIndented(string text, int marginLeft);
+        string GetInput();
 
-        void Show(string text);
+        void Write(string text);
+
+        void WriteLine(string text);
+
+        void ShowIndented(string text, int marginLeft);
 
         void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue);
 
