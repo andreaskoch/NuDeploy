@@ -1,7 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management.Automation.Host;
+using System.Threading;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.PowerShell;
@@ -22,13 +23,15 @@ namespace NuDeploy.Core.Commands
 
         private readonly IPackageRepository packageRepository;
 
-        private readonly IPowerShellScriptExecutor powerShellScriptExecutor;
+        private readonly PSHost powerShellHost;
 
-        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, IPowerShellScriptExecutor powerShellScriptExecutor)
+        private bool finished;
+
+        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost)
         {
             this.userInterface = userInterface;
             this.packageRepository = packageRepository;
-            this.powerShellScriptExecutor = powerShellScriptExecutor;
+            this.powerShellHost = powerShellHost;
 
             this.Attributes = new CommandAttributes
             {
@@ -77,6 +80,8 @@ namespace NuDeploy.Core.Commands
 
             this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\".", package.Id));
 
+            var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost, () => { this.finished = true; });
+
             var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
 
             packageManager.PackageInstalling +=
@@ -99,10 +104,15 @@ namespace NuDeploy.Core.Commands
                     }
 
                     this.userInterface.WriteLine("Starting the package installation.");
-                    this.powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
+                    powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
                 };
 
             packageManager.InstallPackage(package, false, true);
+
+            while (!this.finished)
+            {
+                Thread.Sleep(100);
+            }
 
             this.userInterface.WriteLine("Installation finished.");
         }

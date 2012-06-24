@@ -38,7 +38,6 @@ namespace NuDeploy.Core.DependencyResolution
 
                         config.For<PSHost>().Use<PowerShellHost>();
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
-                        config.For<IPowerShellScriptExecutor>().Use<PowerShellScriptExecutor>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
                     });
 
@@ -53,7 +52,7 @@ namespace NuDeploy.Core.DependencyResolution
                         var commands = new List<ICommand>
                             {
                                 new PackageSolutionCommand(),
-                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository, ObjectFactory.GetInstance<IPowerShellScriptExecutor>()),
+                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository, ObjectFactory.GetInstance<PSHost>()),
                                 new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>()),
                                 new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository),

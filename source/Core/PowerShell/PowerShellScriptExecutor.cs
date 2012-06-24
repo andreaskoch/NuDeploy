@@ -1,84 +1,54 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
-using System.Text;
-
-using NuDeploy.Core.Exceptions;
+using System.Threading.Tasks;
 
 namespace NuDeploy.Core.PowerShell
 {
-    public class PowerShellScriptExecutor : IPowerShellScriptExecutor
+    public class PowerShellScriptExecutor : IPowerShellScriptExecutor, ISynchronizeInvoke, IDisposable
     {
         private readonly PSHost powerShellHost;
 
-        public PowerShellScriptExecutor(PSHost powerShellHost)
+        private readonly Action ready;
+
+        private readonly Runspace runspace;
+
+        private readonly System.Management.Automation.PowerShell powerShell;
+
+        private PipelineExecutor pipelineExecutor;
+
+        public PowerShellScriptExecutor(PSHost powerShellHost, Action ready)
         {
             this.powerShellHost = powerShellHost;
+            this.ready = ready;
+
             Environment.SetEnvironmentVariable("PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
+            this.runspace = RunspaceFactory.CreateRunspace(this.powerShellHost);
+            this.runspace.Open();
+
+            this.powerShell = System.Management.Automation.PowerShell.Create();
+            this.powerShell.Runspace = this.runspace;
         }
 
-        public string ExecuteCommand(string scriptText)
+        public void ExecuteCommand(string scriptText)
         {
             if (scriptText == null)
             {
                 throw new ArgumentNullException("scriptText");
             }
 
-            // create Powershell runspace
-            using (Runspace runspace = RunspaceFactory.CreateRunspace(this.powerShellHost))
-            {
-                // open it
-                runspace.Open();
-
-                var stringBuilder = new StringBuilder();
-                using (System.Management.Automation.PowerShell powerShell = System.Management.Automation.PowerShell.Create())
-                {
-                    powerShell.Runspace = runspace;
-
-                    // create a pipeline and feed it the script text
-                    Pipeline pipeline = runspace.CreatePipeline();
-                    pipeline.Commands.AddScript(scriptText);
-                    pipeline.Commands.Add("Out-String");
-
-                    // execute the script
-                    Collection<PSObject> results;
-                    try
-                    {
-                        results = pipeline.Invoke();
-                    }
-                    catch (RuntimeException powerShellRuntimeException)
-                    {
-                        string message = string.Format(
-                            "PowerShell Runtime Exception: {0}: {1}\r\n{2}",
-                            powerShellRuntimeException.ErrorRecord.InvocationInfo.InvocationName,
-                            powerShellRuntimeException.Message,
-                            powerShellRuntimeException.ErrorRecord.InvocationInfo.PositionMessage);
-
-                            throw new PowerShellException(message, powerShellRuntimeException);
-                    }
-                    catch (Exception powerShellException)
-                    {
-                        throw new PowerShellException(powerShellException.Message, powerShellException);
-                    }
-
-                    // convert the script result into a single string                
-                    foreach (PSObject obj in results)
-                    {
-                        stringBuilder.AppendLine(obj.ToString());
-                    }
-                }
-
-                // close the runspace
-                runspace.Close();
-
-                return stringBuilder.ToString();
-            }
+            this.pipelineExecutor = new PipelineExecutor(this.powerShell.Runspace, this, scriptText);
+            this.pipelineExecutor.OnDataReady += this.pipelineExecutor_OnDataReady;
+            this.pipelineExecutor.OnDataEnd += this.pipelineExecutor_OnDataEnd;
+            this.pipelineExecutor.OnErrorReady += this.pipelineExecutor_OnErrorReady;
+            this.pipelineExecutor.Start();
         }
 
-        public string ExecuteScript(string scriptPath, params string[] parameters)
+        public void ExecuteScript(string scriptPath, params string[] parameters)
         {
             if (string.IsNullOrWhiteSpace(scriptPath))
             {
@@ -96,7 +66,77 @@ namespace NuDeploy.Core.PowerShell
                 commandText += " " + string.Join(" ", parameters);
             }
 
-            return this.ExecuteCommand(commandText);
+            this.ExecuteCommand(commandText);
+        }
+
+        private void StopScript()
+        {
+            if (this.pipelineExecutor != null)
+            {
+                this.pipelineExecutor.OnDataReady -= this.pipelineExecutor_OnDataReady;
+                this.pipelineExecutor.OnDataEnd -= this.pipelineExecutor_OnDataEnd;
+                this.pipelineExecutor.Stop();
+                this.pipelineExecutor = null;
+            }
+        }
+
+        private void pipelineExecutor_OnDataEnd(PipelineExecutor sender)
+        {
+            if (sender.Pipeline.PipelineStateInfo.State == PipelineState.Failed)
+            {
+                this.powerShellHost.UI.WriteLine(string.Format("Error in script: {0}", sender.Pipeline.PipelineStateInfo.Reason));
+            }
+            else
+            {
+                this.powerShellHost.UI.WriteLine("Ready.");
+            }
+
+            this.ready();
+        }
+
+        private void pipelineExecutor_OnDataReady(PipelineExecutor sender, ICollection<PSObject> data)
+        {
+            foreach (PSObject obj in data)
+            {
+                this.powerShellHost.UI.WriteLine(obj.ToString());
+            }
+        }
+
+        void pipelineExecutor_OnErrorReady(PipelineExecutor sender, ICollection<object> data)
+        {
+            foreach (object e in data)
+            {
+                this.powerShellHost.UI.WriteLine("Error : " + e.ToString());
+            }
+        }
+
+        public IAsyncResult BeginInvoke(Delegate method, object[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object EndInvoke(IAsyncResult result)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Invoke(Delegate method, object[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool InvokeRequired
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public void Dispose()
+        {
+            this.powerShell.Stop();
+            this.runspace.Close();
         }
     }
 }
