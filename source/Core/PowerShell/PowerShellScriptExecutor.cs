@@ -4,6 +4,7 @@ using System.IO;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
+using System.Threading;
 
 namespace NuDeploy.Core.PowerShell
 {
@@ -11,18 +12,15 @@ namespace NuDeploy.Core.PowerShell
     {
         private readonly PSHost powerShellHost;
 
-        private readonly Action ready;
-
         private readonly Runspace runspace;
 
         private readonly System.Management.Automation.PowerShell powerShell;
 
         private PipelineExecutor pipelineExecutor;
 
-        public PowerShellScriptExecutor(PSHost powerShellHost, Action ready)
+        public PowerShellScriptExecutor(PSHost powerShellHost)
         {
             this.powerShellHost = powerShellHost;
-            this.ready = ready;
 
             Environment.SetEnvironmentVariable("PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
             this.runspace = RunspaceFactory.CreateRunspace(this.powerShellHost);
@@ -40,9 +38,14 @@ namespace NuDeploy.Core.PowerShell
             }
 
             this.pipelineExecutor = new PipelineExecutor(this.powerShell.Runspace, scriptText);
-            this.pipelineExecutor.OnDataReady += this.pipelineExecutor_OnDataReady;
-            this.pipelineExecutor.OnErrorReady += this.pipelineExecutor_OnErrorReady;
+            this.pipelineExecutor.OnDataReady += this.PipelineExecutorOnDataReady;
+            this.pipelineExecutor.OnErrorReady += this.PipelineExecutorOnErrorReady;
             this.pipelineExecutor.Start();
+
+            while (!this.pipelineExecutor.Pipeline.Output.EndOfPipeline)
+            {
+                Thread.Sleep(500);
+            }
         }
 
         public void ExecuteScript(string scriptPath, params string[] parameters)
@@ -66,7 +69,7 @@ namespace NuDeploy.Core.PowerShell
             this.ExecuteCommand(commandText);
         }
 
-        private void pipelineExecutor_OnDataReady(PipelineExecutor sender, ICollection<PSObject> data)
+        private void PipelineExecutorOnDataReady(PipelineExecutor sender, ICollection<PSObject> data)
         {
             foreach (PSObject obj in data)
             {
@@ -74,7 +77,7 @@ namespace NuDeploy.Core.PowerShell
             }
         }
 
-        void pipelineExecutor_OnErrorReady(PipelineExecutor sender, ICollection<object> data)
+        private void PipelineExecutorOnErrorReady(PipelineExecutor sender, ICollection<object> data)
         {
             foreach (object e in data)
             {

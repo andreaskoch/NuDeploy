@@ -44,8 +44,8 @@ namespace NuDeploy.Core.PowerShell
             this.pipeline = runSpace.CreatePipeline(command);
 
             // we'll listen for script output data by way of the DataReady event
-            this.pipeline.Output.DataReady += this.Output_DataReady;
-            this.pipeline.Error.DataReady += this.Error_DataReady;
+            this.pipeline.Output.DataReady += this.OutputDataReady;
+            this.pipeline.Error.DataReady += this.ErrorDataReady;
         }
 
         #endregion
@@ -123,7 +123,7 @@ namespace NuDeploy.Core.PowerShell
 
         #region Methods
 
-        private void Error_DataReady(object sender, EventArgs e)
+        private void ErrorDataReady(object sender, EventArgs e)
         {
             // fetch all available objects
             Collection<object> data = this.pipeline.Error.NonBlockingRead();
@@ -140,7 +140,7 @@ namespace NuDeploy.Core.PowerShell
         /// </param>
         /// <param name="e">
         /// </param>
-        private void Output_DataReady(object sender, EventArgs e)
+        private void OutputDataReady(object sender, EventArgs e)
         {
             // fetch all available objects
             Collection<PSObject> data = this.pipeline.Output.NonBlockingRead();

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation.Host;
-using System.Threading;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.PowerShell;
@@ -24,8 +23,6 @@ namespace NuDeploy.Core.Commands
         private readonly IPackageRepository packageRepository;
 
         private readonly PSHost powerShellHost;
-
-        private bool finished;
 
         public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost)
         {
@@ -80,7 +77,7 @@ namespace NuDeploy.Core.Commands
 
             this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\".", package.Id));
 
-            var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost, () => { this.finished = true; });
+            var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost);
 
             var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
 
@@ -108,11 +105,6 @@ namespace NuDeploy.Core.Commands
                 };
 
             packageManager.InstallPackage(package, false, true);
-
-            while (!this.finished)
-            {
-                Thread.Sleep(100);
-            }
 
             this.userInterface.WriteLine("Installation finished.");
         }
