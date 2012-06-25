@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,11 +25,14 @@ namespace NuDeploy.Core.Commands
 
         private readonly PSHost powerShellHost;
 
-        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost)
+        private readonly IInstallationStatusProvider installationStatusProvider;
+
+        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost, IInstallationStatusProvider installationStatusProvider)
         {
             this.userInterface = userInterface;
             this.packageRepository = packageRepository;
             this.powerShellHost = powerShellHost;
+            this.installationStatusProvider = installationStatusProvider;
 
             this.Attributes = new CommandAttributes
             {
@@ -75,12 +79,48 @@ namespace NuDeploy.Core.Commands
                 return;
             }
 
-            this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\".", package.Id));
+            // check if package is already installed
+            if (this.installationStatusProvider.IsInstalled(package.Id))
+            {
+                NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id);
+                if (package.Version == packageInfoOfInstalledVersion.Version)
+                {
+                    this.userInterface.WriteLine(
+                        string.Format(
+                            "You already have the latest version installed: {0} (Version: {1}).",
+                            packageInfoOfInstalledVersion.Id,
+                            packageInfoOfInstalledVersion.Version));
+
+                    return;
+                }
+
+                if (package.Version < packageInfoOfInstalledVersion.Version)
+                {
+                    this.userInterface.WriteLine(
+                        string.Format(
+                            "You already have a more recent version installed: {0} (Version: {1}).",
+                            packageInfoOfInstalledVersion.Id,
+                            packageInfoOfInstalledVersion.Version));
+
+                    return;
+                }
+
+                /* installed version is older and must be removed */
+                this.userInterface.WriteLine(string.Format("Removing previous version of {0} from folder {1}.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
+                if (this.Uninstall(packageInfoOfInstalledVersion) == false)
+                {
+                    this.userInterface.WriteLine(
+                        string.Format(
+                            "The removal of the the previous version of {0} (Version: {1}) failed. Please make sure the package has been removed properly before proceeding.",
+                            packageInfoOfInstalledVersion.Id,
+                            packageInfoOfInstalledVersion.Version));
+
+                    return;
+                }
+            }
 
             var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost);
-
             var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
-
             packageManager.PackageInstalling +=
                 (sender, args) =>
                 this.userInterface.WriteLine(
@@ -104,9 +144,43 @@ namespace NuDeploy.Core.Commands
                     powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
                 };
 
+            this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
             packageManager.InstallPackage(package, false, true);
-
             this.userInterface.WriteLine("Installation finished.");
+        }
+
+        private bool Uninstall(NuDeployPackageInfo packageInfoOfInstalledVersion)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class NuDeployPackageInfo
+    {
+        public SemanticVersion Version { get; set; }
+
+        public object Id { get; set; }
+
+        public object Folder { get; set; }
+    }
+
+    public interface IInstallationStatusProvider
+    {
+        bool IsInstalled(string id);
+
+        NuDeployPackageInfo GetPackageInfo(string id);
+    }
+
+    public class ConfigFileInstallationStatusProvider : IInstallationStatusProvider
+    {
+        public bool IsInstalled(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public NuDeployPackageInfo GetPackageInfo(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
