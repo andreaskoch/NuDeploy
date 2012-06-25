@@ -79,7 +79,7 @@ namespace NuDeploy.Core.PowerShell
         {
             foreach (PSObject obj in data)
             {
-                string message = obj.ToString();
+                string message = obj != null ? obj.ToString() : "<null>";
                 this.pipelineOutput.AppendLine(message);
                 this.powerShellHost.UI.WriteLine(message);
             }
@@ -87,9 +87,9 @@ namespace NuDeploy.Core.PowerShell
 
         private void PipelineExecutorOnErrorReady(PipelineExecutor sender, ICollection<object> data)
         {
-            foreach (object e in data)
+            foreach (object obj in data)
             {
-                string message = "Error : " + e;
+                string message = "Error : " + (obj != null ? obj.ToString() : "<null>");
                 this.pipelineOutput.AppendLine(message);
                 this.powerShellHost.UI.WriteLine(message);
             }
