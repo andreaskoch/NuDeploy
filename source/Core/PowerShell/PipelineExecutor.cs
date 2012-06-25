@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
-using System.Threading;
 
 namespace NuDeploy.Core.PowerShell
 {
@@ -34,6 +33,7 @@ namespace NuDeploy.Core.PowerShell
         {
             // create a pipeline and feed it the script text
             this.pipeline = runSpace.CreatePipeline(command);
+            this.pipeline.Commands[0].MergeMyResults(PipelineResultTypes.Error, PipelineResultTypes.Output);
 
             // we'll listen for script output data by way of the DataReady event
             this.pipeline.Output.DataReady += this.OutputDataReady;
