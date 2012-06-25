@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
@@ -77,9 +78,9 @@ namespace NuDeploy.Core.PowerShell
 
         private void PipelineExecutorOnDataReady(PipelineExecutor sender, ICollection<PSObject> data)
         {
-            foreach (PSObject obj in data)
+            foreach (PSObject obj in data.Where(o => o != null))
             {
-                string message = obj != null ? obj.ToString() : "<null>";
+                string message = obj.ToString();
                 this.pipelineOutput.AppendLine(message);
                 this.powerShellHost.UI.WriteLine(message);
             }
@@ -87,9 +88,9 @@ namespace NuDeploy.Core.PowerShell
 
         private void PipelineExecutorOnErrorReady(PipelineExecutor sender, ICollection<object> data)
         {
-            foreach (object obj in data)
+            foreach (object obj in data.Where(o => o != null))
             {
-                string message = "Error : " + (obj != null ? obj.ToString() : "<null>");
+                string message = "Error : " + obj;
                 this.pipelineOutput.AppendLine(message);
                 this.powerShellHost.UI.WriteLine(message);
             }

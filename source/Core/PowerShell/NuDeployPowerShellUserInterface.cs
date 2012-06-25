@@ -48,8 +48,22 @@ namespace NuDeploy.Core.PowerShell
                                                             string message,
                                                             System.Collections.ObjectModel.Collection<FieldDescription> descriptions)
         {
-            throw new NotImplementedException(
-                "The method or operation is not implemented.");
+            var results = new Dictionary<string, PSObject>();
+
+            this.userInterface.WriteLine(message);
+            foreach (var fieldDescription in descriptions)
+            {
+                string key = fieldDescription.Name;
+
+                this.userInterface.Write(key + ": ");
+                var inputString = this.userInterface.GetInput();
+                if (string.IsNullOrWhiteSpace(inputString) == false)
+                {
+                    results.Add(key, new PSObject(inputString));
+                }
+            }
+
+            return results;
         }
 
         /// <summary>

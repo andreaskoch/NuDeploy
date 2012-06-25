@@ -260,21 +260,6 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         }
 
         [Test]
-        public void ExecuteScript_ParameterizedScript_RequiredParameterIsNotSupplied_PowerShellExceptionIsThrown()
-        {
-            // Arrange
-            var parameters = new string[] { };
-
-            string scriptPath = GetAbsoluteScriptPath("TestScript-02-RequiredParameter-Echo-Test.ps1");
-
-            // Act
-            var exception = Assert.Throws<PowerShellException>(() => this.powerShellScriptExecutor.ExecuteScript(scriptPath, parameters));
-
-            // Assert
-            Assert.That(exception.Message.Contains("mandatory") && exception.Message.Contains("DeploymentType"));
-        }
-
-        [Test]
         public void ExecuteScript_ScriptWhichCallsAnotherScript_DependentScriptIsExecuted()
         {
             // Arrange
