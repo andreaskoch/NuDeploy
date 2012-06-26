@@ -43,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -73,8 +75,9 @@
     <Compile Include="Common\IConsoleTextManipulation.cs" />
     <Compile Include="Common\IUserInterface.cs" />
     <Compile Include="Common\NuDeployConstants.cs" />
+    <Compile Include="Common\NuDeployPackageInfo.cs" />
+    <Compile Include="Common\PackageInfo.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
-    <Compile Include="Exceptions\PowerShellException.cs" />
     <Compile Include="PowerShell\PipelineExecutor.cs" />
     <Compile Include="PowerShell\NuDeployPowerShellUserInterface.cs" />
     <Compile Include="PowerShell\NuDeployRawPowerShellUserInterface.cs" />
@@ -114,6 +117,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SelfUpdateCommand.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\ConfigFileInstallationStatusProvider.cs" />
+    <Compile Include="Services\IInstallationStatusProvider.cs" />
+    <Compile Include="Services\IPackageConfigurationFileReader.cs" />
+    <Compile Include="Services\IPackageInstaller.cs" />
+    <Compile Include="Services\PackageConfigurationFileReader.cs" />
+    <Compile Include="Services\PackageInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

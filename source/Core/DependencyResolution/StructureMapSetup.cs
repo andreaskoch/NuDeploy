@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Management.Automation.Host;
 using System.Reflection;
@@ -6,6 +7,7 @@ using NuDeploy.Core.Commands;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.PowerShell;
 using NuDeploy.Core.Repositories;
+using NuDeploy.Core.Services;
 
 using NuGet;
 
@@ -21,7 +23,8 @@ namespace NuDeploy.Core.DependencyResolution
                 {
                     ApplicationName = NuDeployConstants.ApplicationName, 
                     NameOfExecutable = NuDeployConstants.ExecutableName,
-                    ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version
+                    ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version,
+                    StartupFolder = Environment.CurrentDirectory
                 };
 
             ObjectFactory.Configure(
@@ -39,6 +42,9 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<PSHost>().Use<PowerShellHost>();
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
+
+                        config.For<IPackageInstaller>().Use<PackageInstaller>();
+                        config.For<IInstallationStatusProvider>().Use<ConfigFileInstallationStatusProvider>();
                     });
 
             ObjectFactory.Configure(
@@ -46,18 +52,25 @@ namespace NuDeploy.Core.DependencyResolution
                     {
                         var packageRepository = ObjectFactory.GetInstance<IPackageRepositoryFactory>().CreateRepository(NuDeployConstants.DefaultFeedUrl);
 
+                        var packageCommand = new PackageSolutionCommand();
+
                         var helpCommand = new HelpCommand(
                             ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
 
-                        var commands = new List<ICommand>
-                            {
-                                new PackageSolutionCommand(),
-                                new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository, ObjectFactory.GetInstance<PSHost>()),
-                                new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>()),
-                                new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>()),
-                                new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository),
-                                helpCommand
-                            };
+                        var installCommand = new InstallCommand(
+                            ObjectFactory.GetInstance<IUserInterface>(),
+                            packageRepository,
+                            ObjectFactory.GetInstance<PSHost>(),
+                            ObjectFactory.GetInstance<IInstallationStatusProvider>(),
+                            ObjectFactory.GetInstance<IPackageInstaller>());
+
+                        var removeCommand = new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>());
+
+                        var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>());
+
+                        var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
+
+                        var commands = new List<ICommand> { packageCommand, installCommand, removeCommand, cleanupCommand, selfUpdateCommand, helpCommand };
                         ICommandProvider commandProvider = new CommandProvider(commands);
 
                         config.For<ICommandProvider>().Use(commandProvider);

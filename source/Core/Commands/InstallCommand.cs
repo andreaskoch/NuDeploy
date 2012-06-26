@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +5,7 @@ using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.PowerShell;
+using NuDeploy.Core.Services;
 
 using NuGet;
 
@@ -27,12 +27,15 @@ namespace NuDeploy.Core.Commands
 
         private readonly IInstallationStatusProvider installationStatusProvider;
 
-        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost, IInstallationStatusProvider installationStatusProvider)
+        private readonly IPackageInstaller packageInstaller;
+
+        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller)
         {
             this.userInterface = userInterface;
             this.packageRepository = packageRepository;
             this.powerShellHost = powerShellHost;
             this.installationStatusProvider = installationStatusProvider;
+            this.packageInstaller = packageInstaller;
 
             this.Attributes = new CommandAttributes
             {
@@ -107,7 +110,7 @@ namespace NuDeploy.Core.Commands
 
                 /* installed version is older and must be removed */
                 this.userInterface.WriteLine(string.Format("Removing previous version of {0} from folder {1}.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
-                if (this.Uninstall(packageInfoOfInstalledVersion) == false)
+                if (this.packageInstaller.Uninstall(packageInfoOfInstalledVersion) == false)
                 {
                     this.userInterface.WriteLine(
                         string.Format(
@@ -147,40 +150,6 @@ namespace NuDeploy.Core.Commands
             this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
             packageManager.InstallPackage(package, false, true);
             this.userInterface.WriteLine("Installation finished.");
-        }
-
-        private bool Uninstall(NuDeployPackageInfo packageInfoOfInstalledVersion)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class NuDeployPackageInfo
-    {
-        public SemanticVersion Version { get; set; }
-
-        public object Id { get; set; }
-
-        public object Folder { get; set; }
-    }
-
-    public interface IInstallationStatusProvider
-    {
-        bool IsInstalled(string id);
-
-        NuDeployPackageInfo GetPackageInfo(string id);
-    }
-
-    public class ConfigFileInstallationStatusProvider : IInstallationStatusProvider
-    {
-        public bool IsInstalled(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public NuDeployPackageInfo GetPackageInfo(string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

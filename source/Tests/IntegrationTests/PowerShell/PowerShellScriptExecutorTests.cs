@@ -3,7 +3,6 @@ using System.IO;
 using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Exceptions;
 using NuDeploy.Core.PowerShell;
 
 using NUnit.Framework;
@@ -300,7 +299,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
 
         #endregion
 
-        #region help methods
+        #region utility methods
 
         private static string GetAbsoluteScriptPath(string scriptName)
         {

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<packages>
+	<package id="Sample.Project.1" version="1.0.1" />
+	<package id="Sample.Project.2" version="1.0.2" />
+	<package id="Sample.Project.3" version="1.0.3" />
+	<package id="Sample.Project.4" version="1.0.4" />
+	<package id="Sample.Project.5" version="1.0.5" />
+</packages>

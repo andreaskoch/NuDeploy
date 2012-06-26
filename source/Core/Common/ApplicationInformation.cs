@@ -9,5 +9,7 @@ namespace NuDeploy.Core.Common
         public Version ApplicationVersion { get; set; }
 
         public string ApplicationName { get; set; }
+
+        public string StartupFolder { get; set; }
     }
 }
