@@ -8,13 +8,13 @@ using NuGet;
 
 namespace NuDeploy.Core.Commands
 {
-    public class RemoveCommand : ICommand
+    public class UninstallCommand : ICommand
     {
-        private const string CommandName = "remove";
+        private const string CommandName = "uninstall";
 
         private const string ArgumentNameNugetPackageId = "NugetPackageId";
 
-        private readonly string[] alternativeCommandNames = new string[] { };
+        private readonly string[] alternativeCommandNames = new[] { "remove" };
 
         private readonly IUserInterface userInterface;
 
@@ -24,7 +24,7 @@ namespace NuDeploy.Core.Commands
 
         private readonly IPackageInstaller packageInstaller;
 
-        public RemoveCommand(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller, IPackageRepository packageRepository)
+        public UninstallCommand(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller, IPackageRepository packageRepository)
         {
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
@@ -37,18 +37,18 @@ namespace NuDeploy.Core.Commands
                 AlternativeCommandNames = this.alternativeCommandNames,
                 RequiredArguments = new[] { ArgumentNameNugetPackageId },
                 PositionalArguments = new[] { ArgumentNameNugetPackageId },
-                Description = Resources.RemoveCommand.CommandDescriptionText,
+                Description = Resources.UninstallCommand.CommandDescriptionText,
                 Usage = string.Format("{0} <{1}>", CommandName, ArgumentNameNugetPackageId),
                 Examples = new Dictionary<string, string>
                     {
                         {
                             string.Format("{0} <{1}>", CommandName, ArgumentNameNugetPackageId),
-                            Resources.RemoveCommand.CommandExampleDescription1
+                            Resources.UninstallCommand.CommandExampleDescription1
                         }
                     },
                 ArgumentDescriptions = new Dictionary<string, string>
                     {
-                        { ArgumentNameNugetPackageId, Resources.RemoveCommand.ArgumentDescriptionNugetPackageId }
+                        { ArgumentNameNugetPackageId, Resources.UninstallCommand.ArgumentDescriptionNugetPackageId }
                     }
             };
 

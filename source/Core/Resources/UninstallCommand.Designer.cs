@@ -22,14 +22,14 @@ namespace NuDeploy.Core.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class RemoveCommand {
+    internal class UninstallCommand {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal RemoveCommand() {
+        internal UninstallCommand() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NuDeploy.Core.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NuDeploy.Core.Resources.RemoveCommand", typeof(RemoveCommand).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NuDeploy.Core.Resources.UninstallCommand", typeof(UninstallCommand).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The id of the NuGet package to remove..
+        ///   Looks up a localized string similar to The id of the NuGet package to uninstall..
         /// </summary>
         internal static string ArgumentDescriptionNugetPackageId {
             get {
@@ -70,7 +70,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove the specified NuGet package..
+        ///   Looks up a localized string similar to Uninstall the specified NuGet package..
         /// </summary>
         internal static string CommandDescriptionText {
             get {
@@ -79,7 +79,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove the application/package with the given NuGet package id..
+        ///   Looks up a localized string similar to Uninstall the application/package with the given NuGet package id..
         /// </summary>
         internal static string CommandExampleDescription1 {
             get {

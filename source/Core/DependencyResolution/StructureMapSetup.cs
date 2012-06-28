@@ -69,14 +69,14 @@ namespace NuDeploy.Core.DependencyResolution
                             installationStatusProvider,
                             packageInstaller);
 
-                        var removeCommand = new RemoveCommand(
+                        var uninstallCommand = new UninstallCommand(
                             ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider, packageInstaller, packageRepository);
 
                         var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>());
 
                         var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
 
-                        var commands = new List<ICommand> { packageCommand, installCommand, removeCommand, cleanupCommand, selfUpdateCommand, helpCommand };
+                        var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, selfUpdateCommand, helpCommand };
                         ICommandProvider commandProvider = new CommandProvider(commands);
 
                         config.For<ICommandProvider>().Use(commandProvider);
