@@ -81,7 +81,8 @@ namespace NuDeploy.Core.Commands
             bool forceInstallation =
                 this.Arguments.Any(
                     pair =>
-                    pair.Key.Equals("Force", StringComparison.OrdinalIgnoreCase) && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
+                    pair.Key.Equals(NuDeployConstants.CommonCommandOptionNameForce, StringComparison.OrdinalIgnoreCase)
+                    && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
 
             // fetch package
             IPackage package = this.packageRepository.FindPackage(packageId);

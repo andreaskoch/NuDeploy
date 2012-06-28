@@ -53,6 +53,10 @@ namespace NuDeploy.Core.DependencyResolution
                     {
                         var packageRepository = ObjectFactory.GetInstance<IPackageRepositoryFactory>().CreateRepository(NuDeployConstants.DefaultFeedUrl);
 
+                        var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
+
+                        var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
+
                         var packageCommand = new PackageSolutionCommand();
 
                         var helpCommand = new HelpCommand(
@@ -62,10 +66,11 @@ namespace NuDeploy.Core.DependencyResolution
                             ObjectFactory.GetInstance<IUserInterface>(),
                             packageRepository,
                             ObjectFactory.GetInstance<PSHost>(),
-                            ObjectFactory.GetInstance<IInstallationStatusProvider>(),
-                            ObjectFactory.GetInstance<IPackageInstaller>());
+                            installationStatusProvider,
+                            packageInstaller);
 
-                        var removeCommand = new RemoveCommand(ObjectFactory.GetInstance<IUserInterface>());
+                        var removeCommand = new RemoveCommand(
+                            ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider, packageInstaller, packageRepository);
 
                         var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>());
 

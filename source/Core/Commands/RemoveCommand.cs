@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Services;
+
+using NuGet;
 
 namespace NuDeploy.Core.Commands
 {
@@ -14,9 +18,18 @@ namespace NuDeploy.Core.Commands
 
         private readonly IUserInterface userInterface;
 
-        public RemoveCommand(IUserInterface userInterface)
+        private readonly IPackageRepository packageRepository;
+
+        private readonly IInstallationStatusProvider installationStatusProvider;
+
+        private readonly IPackageInstaller packageInstaller;
+
+        public RemoveCommand(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller, IPackageRepository packageRepository)
         {
             this.userInterface = userInterface;
+            this.installationStatusProvider = installationStatusProvider;
+            this.packageInstaller = packageInstaller;
+            this.packageRepository = packageRepository;
 
             this.Attributes = new CommandAttributes
             {
@@ -48,7 +61,41 @@ namespace NuDeploy.Core.Commands
 
         public void Execute()
         {
-            throw new System.NotImplementedException();
+            string packageId = this.Arguments.Values.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                this.userInterface.WriteLine("No package id specified.");
+                return;
+            }
+
+            // check if package is installed
+            if (!this.installationStatusProvider.IsInstalled(packageId))
+            {
+                this.userInterface.WriteLine(string.Format("Package \"{0}\" is not installed in the folder \"{1}\".", packageId, this.packageRepository.Source));
+                return;
+            }
+
+            // remove the package
+            NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(packageId);
+
+            this.userInterface.WriteLine(
+                string.Format("Removing package \"{0}\" from folder \"{1}\".", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
+
+            bool result = this.packageInstaller.Uninstall(packageInfoOfInstalledVersion);
+            if (result)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        "{0} (Version: {1}) has been successfully uninstalled.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
+            }
+            else
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        "The uninstallation of the package \"{0} (Version: {1})\" failed.",
+                        packageInfoOfInstalledVersion.Id,
+                        packageInfoOfInstalledVersion.Version));
+            }
         }
     }
 }
