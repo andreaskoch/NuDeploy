@@ -56,14 +56,16 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         }
 
         [Test]
-        [ExpectedException(typeof(FileNotFoundException))]
-        public void GetInstalledPackages_ConfigugrationFilePathDoesNotExist_FileNotFoundExceptionIsThrown()
+        public void GetInstalledPackages_ConfigugrationFilePathDoesNotExist_EmptyListIsReturned()
         {
             // Arrange
             string configurationFilePath = this.GetConfigurationFilePath("Test-Packages-Does-Not-Exist.txt");
 
             // Act
-            this.packageConfigurationFileReader.GetInstalledPackages(configurationFilePath);
+            var result = this.packageConfigurationFileReader.GetInstalledPackages(configurationFilePath).ToList();
+
+            // Assert
+            Assert.AreEqual(0, result.Count);
         }
 
         [Test]

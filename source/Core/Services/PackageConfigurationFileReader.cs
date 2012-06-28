@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -24,6 +25,11 @@ namespace NuDeploy.Core.Services
             if (string.IsNullOrWhiteSpace(configurationFilePath))
             {
                 throw new ArgumentException("configurationFilePath");
+            }
+
+            if (File.Exists(configurationFilePath) == false)
+            {
+                return new List<PackageInfo>();
             }
 
             XDocument packagesConfiguration = XDocument.Load(configurationFilePath);

@@ -43,6 +43,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
 
+                        config.For<IPackageConfigurationFileReader>().Use<PackageConfigurationFileReader>();
                         config.For<IPackageInstaller>().Use<PackageInstaller>();
                         config.For<IInstallationStatusProvider>().Use<ConfigFileInstallationStatusProvider>();
                     });

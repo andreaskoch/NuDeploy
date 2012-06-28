@@ -19,9 +19,10 @@ namespace NuDeploy.Core.Services
 
         public ConfigFileInstallationStatusProvider(ApplicationInformation applicationInformation, IPackageConfigurationFileReader packageConfigurationFileReader)
         {
-            this.packageConfigurationFilePath = this.GetPackageConfigurationFilePath();
             this.applicationInformation = applicationInformation;
             this.packageConfigurationFileReader = packageConfigurationFileReader;
+
+            this.packageConfigurationFilePath = this.GetPackageConfigurationFilePath();
         }
 
         public bool IsInstalled(string id)
