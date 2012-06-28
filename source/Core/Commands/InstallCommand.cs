@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -76,6 +77,12 @@ namespace NuDeploy.Core.Commands
                 return;
             }
 
+            // options
+            bool forceInstallation =
+                this.Arguments.Any(
+                    pair =>
+                    pair.Key.Equals("Force", StringComparison.OrdinalIgnoreCase) && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
+
             // fetch package
             IPackage package = this.packageRepository.FindPackage(packageId);
             if (package == null)
@@ -88,26 +95,30 @@ namespace NuDeploy.Core.Commands
             if (this.installationStatusProvider.IsInstalled(package.Id))
             {
                 NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id);
-                if (package.Version == packageInfoOfInstalledVersion.Version)
+
+                if (forceInstallation == false)
                 {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            "You already have the latest version installed: {0} (Version: {1}).",
-                            packageInfoOfInstalledVersion.Id,
-                            packageInfoOfInstalledVersion.Version));
+                    if (package.Version == packageInfoOfInstalledVersion.Version)
+                    {
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                "You already have the latest version installed: {0} (Version: {1}).",
+                                packageInfoOfInstalledVersion.Id,
+                                packageInfoOfInstalledVersion.Version));
 
-                    return;
-                }
+                        return;
+                    }
 
-                if (package.Version < packageInfoOfInstalledVersion.Version)
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            "You already have a more recent version installed: {0} (Version: {1}).",
-                            packageInfoOfInstalledVersion.Id,
-                            packageInfoOfInstalledVersion.Version));
+                    if (package.Version < packageInfoOfInstalledVersion.Version)
+                    {
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                "You already have a more recent version installed: {0} (Version: {1}).",
+                                packageInfoOfInstalledVersion.Id,
+                                packageInfoOfInstalledVersion.Version));
 
-                    return;
+                        return;
+                    }                    
                 }
 
                 /* installed version is older and must be removed */
@@ -122,6 +133,9 @@ namespace NuDeploy.Core.Commands
 
                     return;
                 }
+
+                this.userInterface.WriteLine(
+                    string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
             }
 
             var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost);

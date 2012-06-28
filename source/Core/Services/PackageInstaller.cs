@@ -37,8 +37,13 @@ namespace NuDeploy.Core.Services
                 return false;
             }
 
+            // uninstall
             this.userInterface.WriteLine(string.Format("Uninstalling package \"{0} Version({1})\"", installedPackage.Id, installedPackage.Version));
             powerShellScriptExecutor.ExecuteScript(uninstallScriptPath);
+
+            // remove package files
+            this.userInterface.WriteLine(string.Format("Deleting package folder \"{0}\"", installedPackage.Folder));
+            Directory.Delete(installedPackage.Folder, true);
 
             return true;
         }
