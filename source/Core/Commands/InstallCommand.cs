@@ -138,14 +138,15 @@ namespace NuDeploy.Core.Commands
                     string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
             }
 
-            var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost);
-            var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
-            packageManager.PackageInstalling +=
-                (sender, args) =>
-                this.userInterface.WriteLine(
-                    string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
+            using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
+            {
+                var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
+                packageManager.PackageInstalling +=
+                    (sender, args) =>
+                    this.userInterface.WriteLine(
+                        string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
 
-            packageManager.PackageInstalled += (sender, args) =>
+                packageManager.PackageInstalled += (sender, args) =>
                 {
                     string packageFolder = args.InstallPath;
                     string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
@@ -163,9 +164,10 @@ namespace NuDeploy.Core.Commands
                     powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
                 };
 
-            this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
-            packageManager.InstallPackage(package, false, true);
-            this.userInterface.WriteLine("Installation finished.");
+                this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
+                packageManager.InstallPackage(package, false, true);
+                this.userInterface.WriteLine("Installation finished.");                
+            }
         }
     }
 }

@@ -76,6 +76,12 @@ namespace NuDeploy.Core.PowerShell
             return this.ExecuteCommand(commandText);
         }
 
+        public void Dispose()
+        {
+            this.powerShell.Stop();
+            this.runspace.Close();
+        }
+
         private void PipelineExecutorOnDataReady(PipelineExecutor sender, ICollection<PSObject> data)
         {
             foreach (PSObject obj in data.Where(o => o != null))
@@ -94,12 +100,6 @@ namespace NuDeploy.Core.PowerShell
                 this.pipelineOutput.AppendLine(message);
                 this.powerShellHost.UI.WriteLine(message);
             }
-        }
-
-        public void Dispose()
-        {
-            this.powerShell.Stop();
-            this.runspace.Close();
         }
     }
 }
