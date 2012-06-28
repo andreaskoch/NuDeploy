@@ -6,8 +6,8 @@ namespace NuDeploy.Core.Common
     {
         public SemanticVersion Version { get; set; }
 
-        public object Id { get; set; }
+        public string Id { get; set; }
 
-        public object Folder { get; set; }
+        public string Folder { get; set; }
     }
 }

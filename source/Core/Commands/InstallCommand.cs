@@ -17,6 +17,8 @@ namespace NuDeploy.Core.Commands
 
         private const string ArgumentNameNugetPackageId = "NugetPackageId";
 
+        private const string InstallPowerShellScriptName = "Deploy.ps1";
+
         private readonly string[] alternativeCommandNames = new string[] { };
 
         private readonly IUserInterface userInterface;
@@ -132,7 +134,7 @@ namespace NuDeploy.Core.Commands
             packageManager.PackageInstalled += (sender, args) =>
                 {
                     string packageFolder = args.InstallPath;
-                    string installScriptPath = Path.Combine(packageFolder, "Deploy.ps1");
+                    string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
 
                     this.userInterface.WriteLine(
                         string.Format(
