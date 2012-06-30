@@ -42,16 +42,27 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<PSHost>().Use<PowerShellHost>();
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
-
-                        config.For<IPackageConfigurationFileReader>().Use<PackageConfigurationFileReader>();
-                        config.For<IPackageInstaller>().Use<PackageInstaller>();
-                        config.For<IInstallationStatusProvider>().Use<ConfigFileInstallationStatusProvider>();
                     });
 
             ObjectFactory.Configure(
                 config =>
+                {
+                    var packageRepository = ObjectFactory.GetInstance<IPackageRepositoryFactory>().CreateRepository(NuDeployConstants.DefaultFeedUrl);
+                    config.For<IPackageRepository>().Use(packageRepository);
+                });
+
+            ObjectFactory.Configure(
+                config =>
+                {
+                    config.For<IPackageConfigurationFileReader>().Use<PackageConfigurationFileReader>();
+                    config.For<IPackageInstaller>().Use<PackageInstaller>();
+                    config.For<IInstallationStatusProvider>().Use<ConfigFileInstallationStatusProvider>();
+                });
+
+            ObjectFactory.Configure(
+                config =>
                     {
-                        var packageRepository = ObjectFactory.GetInstance<IPackageRepositoryFactory>().CreateRepository(NuDeployConstants.DefaultFeedUrl);
+                        var packageRepository = ObjectFactory.GetInstance<IPackageRepository>();
 
                         var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
 
