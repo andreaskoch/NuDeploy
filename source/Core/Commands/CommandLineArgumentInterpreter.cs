@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -81,8 +80,7 @@ namespace NuDeploy.Core.Commands
                         if (string.IsNullOrWhiteSpace(suppliedArgumentName))
                         {
                             matchedArgumentName =
-                                command.Attributes.PositionalArguments.Where((s, positionalArgumentIndex) => positionalArgumentIndex == argumentPosition).
-                                    FirstOrDefault();                            
+                                command.Attributes.PositionalArguments.Where((s, positionalArgIndex) => positionalArgIndex == argumentPosition).FirstOrDefault();
                         }
 
                         // unnamed argument

@@ -8,27 +8,8 @@ namespace NuDeploy.Core.PowerShell
 {
     public class PipelineExecutor
     {
-        #region Constants and Fields
-
-        /// <summary>
-        ///   The powershell script pipeline that will be executed asynchronously.
-        /// </summary>
         private readonly Pipeline pipeline;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PipelineExecutor"/> class. 
-        /// Constructor, creates a new PipelineExecutor for the given powershell script.
-        /// </summary>
-        /// <param name="runSpace">
-        /// Powershell runspace to use for creating and executing the script. 
-        /// </param>
-        /// <param name="command">
-        /// The script to run 
-        /// </param>
         public PipelineExecutor(Runspace runSpace, string command)
         {
             // create a pipeline and feed it the script text
@@ -41,37 +22,16 @@ namespace NuDeploy.Core.PowerShell
             this.pipeline.Error.DataReady += this.ErrorDataReady;
         }
 
-        #endregion
-
-        #region Delegates
-
         public delegate void DataEndDelegate(PipelineExecutor sender);
 
         public delegate void DataReadyDelegate(PipelineExecutor sender, ICollection<PSObject> data);
 
         public delegate void ErrorReadyDelegate(PipelineExecutor sender, ICollection<object> data);
 
-        #endregion
-
-        #region Public Events
-
-        /// <summary>
-        ///   Occurs when there is new data available from the powershell script.
-        /// </summary>
         public event DataReadyDelegate OnDataReady;
 
-        /// <summary>
-        ///   Occurs when there is new errordata available from the powershell script.
-        /// </summary>
         public event ErrorReadyDelegate OnErrorReady;
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///   Gets the powershell Pipeline associated with this PipelineExecutor
-        /// </summary>
         public Pipeline Pipeline
         {
             get
@@ -80,13 +40,6 @@ namespace NuDeploy.Core.PowerShell
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        ///   Start executing the script in the background.
-        /// </summary>
         public void Start()
         {
             if (this.pipeline.PipelineStateInfo.State == PipelineState.NotStarted)
@@ -100,18 +53,11 @@ namespace NuDeploy.Core.PowerShell
             }
         }
 
-        /// <summary>
-        ///   Stop executing the script.
-        /// </summary>
         public void Stop()
         {
             // then tell the pipeline to stop the script
             this.pipeline.Stop();
         }
-
-        #endregion
-
-        #region Methods
 
         private void ErrorDataReady(object sender, EventArgs e)
         {
@@ -123,13 +69,6 @@ namespace NuDeploy.Core.PowerShell
             }
         }
 
-        /// <summary>
-        /// Event handler for the DataReady event of the powershell script pipeline.
-        /// </summary>
-        /// <param name="sender">
-        /// </param>
-        /// <param name="e">
-        /// </param>
         private void OutputDataReady(object sender, EventArgs e)
         {
             // fetch all available objects
@@ -139,7 +78,5 @@ namespace NuDeploy.Core.PowerShell
                 this.OnDataReady(this, data);
             }
         }
-
-        #endregion
     }
 }

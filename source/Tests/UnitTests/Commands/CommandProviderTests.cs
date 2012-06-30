@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 using Moq;
 
-using NUnit.Framework;
-
 using NuDeploy.Core.Commands;
+
+using NUnit.Framework;
 
 namespace NuDeploy.Tests.UnitTests.Commands
 {
