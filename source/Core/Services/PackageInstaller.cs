@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Management.Automation.Host;
 
@@ -94,38 +95,35 @@ namespace NuDeploy.Core.Services
                 }
             }
 
-            using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
+            var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
+            packageManager.PackageInstalling +=
+                (sender, args) =>
+                this.userInterface.WriteLine(
+                    string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
+
+            packageManager.PackageInstalled += (sender, args) =>
             {
-                var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
-                packageManager.PackageInstalling +=
-                    (sender, args) =>
-                    this.userInterface.WriteLine(
-                        string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
+                string packageFolder = args.InstallPath;
+                string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
 
-                packageManager.PackageInstalled += (sender, args) =>
+                this.userInterface.WriteLine(
+                    string.Format(
+                        "Package \"{0}\" (Version: {1}) has been downloaded to folder \"{2}\".", args.Package.Id, args.Package.Version, packageFolder));
+
+                if (File.Exists(installScriptPath) == false)
                 {
-                    string packageFolder = args.InstallPath;
-                    string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
+                    return;
+                }
 
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            "Package \"{0}\" (Version: {1}) has been downloaded to folder \"{2}\".", args.Package.Id, args.Package.Version, packageFolder));
+                this.userInterface.WriteLine("Starting the package installation.");
+                this.ExecuteScriptInNewPowerShellHost(installScriptPath, new[] { "-DeploymentType Full" });
+            };
 
-                    if (File.Exists(installScriptPath) == false)
-                    {
-                        return;
-                    }
+            this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
+            packageManager.InstallPackage(package, false, true);
+            this.userInterface.WriteLine("Installation finished.");
 
-                    this.userInterface.WriteLine("Starting the package installation.");
-                    powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
-                };
-
-                this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
-                packageManager.InstallPackage(package, false, true);
-                this.userInterface.WriteLine("Installation finished.");
-
-                return true;
-            }
+            return true;
         }
 
         public bool Uninstall(string packageId, SemanticVersion version = null)
@@ -140,32 +138,47 @@ namespace NuDeploy.Core.Services
             // remove the package
             NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId);
 
+            string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
+            if (File.Exists(uninstallScriptPath) == false)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        "Uninstall script \"{0}\" not found for package \"{1} Version({2})\" in folder \"{3}\".",
+                        UninstallPowerShellScriptName,
+                        installedPackage.Id,
+                        installedPackage.Version,
+                        installedPackage.Folder));
+
+                return false;
+            }
+
+            // uninstall
+            this.userInterface.WriteLine(string.Format("Uninstalling package \"{0} Version({1})\"", installedPackage.Id, installedPackage.Version));
+            this.ExecuteScriptInNewPowerShellHost(uninstallScriptPath);
+
+            // remove package files
+            this.userInterface.WriteLine(string.Format("Deleting package folder \"{0}\"", installedPackage.Folder));
+            Directory.Delete(installedPackage.Folder, true);
+
+            return true;
+        }
+
+        private void ExecuteScriptInNewPowerShellHost(string scriptPath, params string[] parameters)
+        {
+            if (string.IsNullOrWhiteSpace(scriptPath))
+            {
+                throw new ArgumentException("scriptPath");
+            }
+
+            if (!File.Exists(scriptPath))
+            {
+                throw new FileNotFoundException("Could not find PowerShell script", scriptPath);
+            }
+
             using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
             {
-                string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
-                if (File.Exists(uninstallScriptPath) == false)
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            "Uninstall script \"{0}\" not found for package \"{1} Version({2})\" in folder \"{3}\".",
-                            UninstallPowerShellScriptName,
-                            installedPackage.Id,
-                            installedPackage.Version,
-                            installedPackage.Folder));
-
-                    return false;
-                }
-
-                // uninstall
-                this.userInterface.WriteLine(string.Format("Uninstalling package \"{0} Version({1})\"", installedPackage.Id, installedPackage.Version));
-                powerShellScriptExecutor.ExecuteScript(uninstallScriptPath);
-
-                // remove package files
-                this.userInterface.WriteLine(string.Format("Deleting package folder \"{0}\"", installedPackage.Folder));
-                Directory.Delete(installedPackage.Folder, true);
-
-                return true;
-            }
+                powerShellScriptExecutor.ExecuteScript(scriptPath, parameters);
+            }            
         }
     }
 }
