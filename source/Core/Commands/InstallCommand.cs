@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common;
-using NuDeploy.Core.PowerShell;
 using NuDeploy.Core.Services;
 
 using NuGet;
@@ -18,25 +15,20 @@ namespace NuDeploy.Core.Commands
 
         private const string ArgumentNameNugetPackageId = "NugetPackageId";
 
-        private const string InstallPowerShellScriptName = "Deploy.ps1";
-
         private readonly string[] alternativeCommandNames = new string[] { };
 
         private readonly IUserInterface userInterface;
 
         private readonly IPackageRepository packageRepository;
 
-        private readonly PSHost powerShellHost;
-
         private readonly IInstallationStatusProvider installationStatusProvider;
 
         private readonly IPackageInstaller packageInstaller;
 
-        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller)
+        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller)
         {
             this.userInterface = userInterface;
             this.packageRepository = packageRepository;
-            this.powerShellHost = powerShellHost;
             this.installationStatusProvider = installationStatusProvider;
             this.packageInstaller = packageInstaller;
 
@@ -70,6 +62,7 @@ namespace NuDeploy.Core.Commands
 
         public void Execute()
         {
+            // package id (required parameter)
             string packageId = this.Arguments.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -139,36 +132,8 @@ namespace NuDeploy.Core.Commands
                     string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
             }
 
-            using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
-            {
-                var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
-                packageManager.PackageInstalling +=
-                    (sender, args) =>
-                    this.userInterface.WriteLine(
-                        string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
-
-                packageManager.PackageInstalled += (sender, args) =>
-                {
-                    string packageFolder = args.InstallPath;
-                    string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
-
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            "Package \"{0}\" (Version: {1}) has been downloaded to folder \"{2}\".", args.Package.Id, args.Package.Version, packageFolder));
-
-                    if (File.Exists(installScriptPath) == false)
-                    {
-                        return;
-                    }
-
-                    this.userInterface.WriteLine("Starting the package installation.");
-                    powerShellScriptExecutor.ExecuteScript(installScriptPath, new[] { "-DeploymentType Full" });
-                };
-
-                this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
-                packageManager.InstallPackage(package, false, true);
-                this.userInterface.WriteLine("Installation finished.");                
-            }
+            // install the package
+            this.packageInstaller.Install(package);
         }
     }
 }

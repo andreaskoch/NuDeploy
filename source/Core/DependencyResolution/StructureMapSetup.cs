@@ -63,11 +63,7 @@ namespace NuDeploy.Core.DependencyResolution
                             ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
 
                         var installCommand = new InstallCommand(
-                            ObjectFactory.GetInstance<IUserInterface>(),
-                            packageRepository,
-                            ObjectFactory.GetInstance<PSHost>(),
-                            installationStatusProvider,
-                            packageInstaller);
+                            ObjectFactory.GetInstance<IUserInterface>(), packageRepository, installationStatusProvider, packageInstaller);
 
                         var uninstallCommand = new UninstallCommand(
                             ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider, packageInstaller, packageRepository);
