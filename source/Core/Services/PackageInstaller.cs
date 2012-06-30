@@ -16,19 +16,77 @@ namespace NuDeploy.Core.Services
 
         private readonly IUserInterface userInterface;
 
+        private readonly IInstallationStatusProvider installationStatusProvider;
+
         private readonly IPackageRepository packageRepository;
 
         private readonly PSHost powerShellHost;
 
-        public PackageInstaller(IUserInterface userInterface, IPackageRepository packageRepository, PSHost powerShellHost)
+        public PackageInstaller(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageRepository packageRepository, PSHost powerShellHost)
         {
             this.userInterface = userInterface;
+            this.installationStatusProvider = installationStatusProvider;
             this.packageRepository = packageRepository;
             this.powerShellHost = powerShellHost;
         }
 
-        public bool Install(IPackage package)
+        public bool Install(string packageId, bool forceInstallation)
         {
+            // fetch package
+            IPackage package = this.packageRepository.FindPackage(packageId);
+            if (package == null)
+            {
+                this.userInterface.WriteLine(string.Format("Package \"{0}\"was not found at \"{1}\".", packageId, this.packageRepository.Source));
+                return false;
+            }
+
+            // check if package is already installed
+            if (this.installationStatusProvider.IsInstalled(package.Id))
+            {
+                NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id);
+
+                if (forceInstallation == false)
+                {
+                    if (package.Version == packageInfoOfInstalledVersion.Version)
+                    {
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                "You already have the latest version installed: {0} (Version: {1}).",
+                                packageInfoOfInstalledVersion.Id,
+                                packageInfoOfInstalledVersion.Version));
+
+                        return false;
+                    }
+
+                    if (package.Version < packageInfoOfInstalledVersion.Version)
+                    {
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                "You already have a more recent version installed: {0} (Version: {1}).",
+                                packageInfoOfInstalledVersion.Id,
+                                packageInfoOfInstalledVersion.Version));
+
+                        return false;
+                    }
+                }
+
+                /* installed version is older and must be removed */
+                this.userInterface.WriteLine(string.Format("Removing previous version of {0} from folder {1}.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
+                if (this.Uninstall(packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version) == false)
+                {
+                    this.userInterface.WriteLine(
+                        string.Format(
+                            "The removal of the the previous version of {0} (Version: {1}) failed. Please make sure the package has been removed properly before proceeding.",
+                            packageInfoOfInstalledVersion.Id,
+                            packageInfoOfInstalledVersion.Version));
+
+                    return false;
+                }
+
+                this.userInterface.WriteLine(
+                    string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
+            }
+
             using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
             {
                 var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
@@ -63,8 +121,18 @@ namespace NuDeploy.Core.Services
             }
         }
 
-        public bool Uninstall(NuDeployPackageInfo installedPackage)
+        public bool Uninstall(string packageId, SemanticVersion version = null)
         {
+            // check if package is installed
+            if (!this.installationStatusProvider.IsInstalled(packageId))
+            {
+                this.userInterface.WriteLine(string.Format("Package \"{0}\" is not installed in the current folder.", packageId));
+                return false;
+            }
+
+            // remove the package
+            NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId);
+
             using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
             {
                 string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);

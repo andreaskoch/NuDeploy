@@ -5,8 +5,6 @@ using System.Linq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services;
 
-using NuGet;
-
 namespace NuDeploy.Core.Commands
 {
     public class InstallCommand : ICommand
@@ -19,17 +17,11 @@ namespace NuDeploy.Core.Commands
 
         private readonly IUserInterface userInterface;
 
-        private readonly IPackageRepository packageRepository;
-
-        private readonly IInstallationStatusProvider installationStatusProvider;
-
         private readonly IPackageInstaller packageInstaller;
 
-        public InstallCommand(IUserInterface userInterface, IPackageRepository packageRepository, IInstallationStatusProvider installationStatusProvider, IPackageInstaller packageInstaller)
+        public InstallCommand(IUserInterface userInterface, IPackageInstaller packageInstaller)
         {
             this.userInterface = userInterface;
-            this.packageRepository = packageRepository;
-            this.installationStatusProvider = installationStatusProvider;
             this.packageInstaller = packageInstaller;
 
             this.Attributes = new CommandAttributes
@@ -77,63 +69,8 @@ namespace NuDeploy.Core.Commands
                     pair.Key.Equals(NuDeployConstants.CommonCommandOptionNameForce, StringComparison.OrdinalIgnoreCase)
                     && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
 
-            // fetch package
-            IPackage package = this.packageRepository.FindPackage(packageId);
-            if (package == null)
-            {
-                this.userInterface.WriteLine(string.Format("Package \"{0}\"was not found at \"{1}\".", packageId, this.packageRepository.Source));
-                return;
-            }
-
-            // check if package is already installed
-            if (this.installationStatusProvider.IsInstalled(package.Id))
-            {
-                NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id);
-
-                if (forceInstallation == false)
-                {
-                    if (package.Version == packageInfoOfInstalledVersion.Version)
-                    {
-                        this.userInterface.WriteLine(
-                            string.Format(
-                                "You already have the latest version installed: {0} (Version: {1}).",
-                                packageInfoOfInstalledVersion.Id,
-                                packageInfoOfInstalledVersion.Version));
-
-                        return;
-                    }
-
-                    if (package.Version < packageInfoOfInstalledVersion.Version)
-                    {
-                        this.userInterface.WriteLine(
-                            string.Format(
-                                "You already have a more recent version installed: {0} (Version: {1}).",
-                                packageInfoOfInstalledVersion.Id,
-                                packageInfoOfInstalledVersion.Version));
-
-                        return;
-                    }                    
-                }
-
-                /* installed version is older and must be removed */
-                this.userInterface.WriteLine(string.Format("Removing previous version of {0} from folder {1}.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
-                if (this.packageInstaller.Uninstall(packageInfoOfInstalledVersion) == false)
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            "The removal of the the previous version of {0} (Version: {1}) failed. Please make sure the package has been removed properly before proceeding.",
-                            packageInfoOfInstalledVersion.Id,
-                            packageInfoOfInstalledVersion.Version));
-
-                    return;
-                }
-
-                this.userInterface.WriteLine(
-                    string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
-            }
-
             // install the package
-            this.packageInstaller.Install(package);
+            this.packageInstaller.Install(packageId, forceInstallation);
         }
     }
 }

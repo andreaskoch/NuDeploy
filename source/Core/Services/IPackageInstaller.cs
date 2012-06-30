@@ -1,13 +1,11 @@
-using NuDeploy.Core.Common;
-
 using NuGet;
 
 namespace NuDeploy.Core.Services
 {
     public interface IPackageInstaller
     {
-        bool Install(IPackage package);
+        bool Install(string packageId, bool forceInstallation);
 
-        bool Uninstall(NuDeployPackageInfo installedPackage);
+        bool Uninstall(string packageId, SemanticVersion version);
     }
 }

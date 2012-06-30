@@ -63,13 +63,12 @@ namespace NuDeploy.Core.DependencyResolution
                 config =>
                 {
                     var packageRepository = ObjectFactory.GetInstance<IPackageRepository>();
-                    var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
                     var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
 
                     var packageCommand = new PackageSolutionCommand();
                     var helpCommand = new HelpCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
-                    var installCommand = new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository, installationStatusProvider, packageInstaller);
-                    var uninstallCommand = new UninstallCommand(ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider, packageInstaller, packageRepository);
+                    var installCommand = new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
+                    var uninstallCommand = new UninstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
                     var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>());
                     var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
 
