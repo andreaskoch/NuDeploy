@@ -86,16 +86,7 @@ namespace NuDeploy.Core.Commands
                         // unnamed argument
                         if (matchedArgumentName == null)
                         {
-                            if (string.IsNullOrWhiteSpace(suppliedArgumentName))
-                            {
-                                // unnamed argument without a name
-                                matchedArgumentName = string.Format("Unnamed-Argument-{0}", unrecognizedArgumentIndex++);
-                            }
-                            else
-                            {
-                                // unrecognized argument
-                                matchedArgumentName = suppliedArgumentName;
-                            }                            
+                            matchedArgumentName = string.IsNullOrWhiteSpace(suppliedArgumentName) ? string.Format("Unnamed-Argument-{0}", unrecognizedArgumentIndex++) : suppliedArgumentName;                            
                         }
                     }
 

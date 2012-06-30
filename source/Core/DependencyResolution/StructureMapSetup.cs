@@ -61,34 +61,24 @@ namespace NuDeploy.Core.DependencyResolution
 
             ObjectFactory.Configure(
                 config =>
-                    {
-                        var packageRepository = ObjectFactory.GetInstance<IPackageRepository>();
+                {
+                    var packageRepository = ObjectFactory.GetInstance<IPackageRepository>();
+                    var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
+                    var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
 
-                        var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
+                    var packageCommand = new PackageSolutionCommand();
+                    var helpCommand = new HelpCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
+                    var installCommand = new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageRepository, installationStatusProvider, packageInstaller);
+                    var uninstallCommand = new UninstallCommand(ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider, packageInstaller, packageRepository);
+                    var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>());
+                    var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
 
-                        var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
+                    var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, selfUpdateCommand, helpCommand };
+                    ICommandProvider commandProvider = new CommandProvider(commands);
 
-                        var packageCommand = new PackageSolutionCommand();
-
-                        var helpCommand = new HelpCommand(
-                            ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
-
-                        var installCommand = new InstallCommand(
-                            ObjectFactory.GetInstance<IUserInterface>(), packageRepository, installationStatusProvider, packageInstaller);
-
-                        var uninstallCommand = new UninstallCommand(
-                            ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider, packageInstaller, packageRepository);
-
-                        var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>());
-
-                        var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
-
-                        var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, selfUpdateCommand, helpCommand };
-                        ICommandProvider commandProvider = new CommandProvider(commands);
-
-                        config.For<ICommandProvider>().Use(commandProvider);
-                        config.For<HelpCommand>().Use(helpCommand);
-                    });
+                    config.For<ICommandProvider>().Use(commandProvider);
+                    config.For<HelpCommand>().Use(helpCommand);
+                });
         }
     }
 }
