@@ -36,7 +36,7 @@ namespace NuDeploy.Core.Services
             IPackage package = this.packageRepository.FindPackage(packageId);
             if (package == null)
             {
-                this.userInterface.WriteLine(string.Format("Package \"{0}\"was not found at \"{1}\".", packageId, this.packageRepository.Source));
+                this.userInterface.WriteLine(string.Format("Package \"{0}\" was not found at \"{1}\".", packageId, this.packageRepository.Source));
                 return false;
             }
 
@@ -62,7 +62,7 @@ namespace NuDeploy.Core.Services
                     {
                         this.userInterface.WriteLine(
                             string.Format(
-                                "You already have a more recent version installed: {0} (Version: {1}).",
+                                "You already have a more recent version installed: {0} (Version: {1}). Use the -force option if you still want to install this older version.",
                                 packageInfoOfInstalledVersion.Id,
                                 packageInfoOfInstalledVersion.Version));
 
@@ -72,19 +72,26 @@ namespace NuDeploy.Core.Services
 
                 /* installed version is older and must be removed */
                 this.userInterface.WriteLine(string.Format("Removing previous version of {0} from folder {1}.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
-                if (this.Uninstall(packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version) == false)
+                bool uninstallResult = this.Uninstall(packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version);
+                if (uninstallResult)
+                {
+                    this.userInterface.WriteLine(
+                        string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));                    
+                }
+                else
                 {
                     this.userInterface.WriteLine(
                         string.Format(
-                            "The removal of the the previous version of {0} (Version: {1}) failed. Please make sure the package has been removed properly before proceeding.",
+                            "The removal of the the previous version of {0} (Version: {1}) failed.",
                             packageInfoOfInstalledVersion.Id,
                             packageInfoOfInstalledVersion.Version));
 
-                    return false;
+                    if (forceInstallation == false)
+                    {
+                        this.userInterface.WriteLine("Please make sure the package has been removed properly before installing a new version or use the -force option if you still want to install the new version.");
+                        return false;
+                    }
                 }
-
-                this.userInterface.WriteLine(
-                    string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));
             }
 
             using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
@@ -140,10 +147,11 @@ namespace NuDeploy.Core.Services
                 {
                     this.userInterface.WriteLine(
                         string.Format(
-                            "Uninstall script \"{0}\" not found for package \"{1} Version({2})\".",
+                            "Uninstall script \"{0}\" not found for package \"{1} Version({2})\" in folder \"{3}\".",
                             UninstallPowerShellScriptName,
                             installedPackage.Id,
-                            installedPackage.Version));
+                            installedPackage.Version,
+                            installedPackage.Folder));
 
                     return false;
                 }
