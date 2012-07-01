@@ -22,14 +22,14 @@ namespace NuDeploy.Core.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CleanupCommand {
+    internal class CleanupService {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CleanupCommand() {
+        internal CleanupService() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NuDeploy.Core.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NuDeploy.Core.Resources.CleanupCommand", typeof(CleanupCommand).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NuDeploy.Core.Resources.CleanupService", typeof(CleanupService).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,29 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The id of the NuGet package to install (e.g. &quot;Newtonsoft.Json&quot;). If you don&apos;t specifiy a package id, the cleanup will be performed for all packages in the current folder..
+        ///   Looks up a localized string similar to Deleting package &quot;{0} (Version {1})&quot;..
         /// </summary>
-        internal static string ArgumentDescriptionNugetPackageId {
+        internal static string DeleteMessageTemplate {
             get {
-                return ResourceManager.GetString("ArgumentDescriptionNugetPackageId", resourceCulture);
+                return ResourceManager.GetString("DeleteMessageTemplate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Starting cleanup for all installed packages..
+        ///   Looks up a localized string similar to No packages applicable for a cleanup..
         /// </summary>
-        internal static string CleanupMessageAllInstalledPackages {
+        internal static string NoApplicablePackagesForCleanupFound {
             get {
-                return ResourceManager.GetString("CleanupMessageAllInstalledPackages", resourceCulture);
+                return ResourceManager.GetString("NoApplicablePackagesForCleanupFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Starting cleanup for package &quot;{0}&quot;..
+        ///   Looks up a localized string similar to There are no versions of &quot;{0}&quot; applicable for a cleanup..
         /// </summary>
-        internal static string CleanupMessageTemplateSpecificPackage {
+        internal static string NoApplicableVersionForPackageCleanupFoundTemplate {
             get {
-                return ResourceManager.GetString("CleanupMessageTemplateSpecificPackage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Removes previously installed versions of a specific package or for all packages in the current folder..
-        /// </summary>
-        internal static string CommandDescriptionText {
-            get {
-                return ResourceManager.GetString("CommandDescriptionText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove all package folders of all NuGet packages which are currently not installed..
-        /// </summary>
-        internal static string CommandExampleDescription1 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove all package folders which are not the currently installed version of the given NuGet package id..
-        /// </summary>
-        internal static string CommandExampleDescription2 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription2", resourceCulture);
+                return ResourceManager.GetString("NoApplicableVersionForPackageCleanupFoundTemplate", resourceCulture);
             }
         }
     }

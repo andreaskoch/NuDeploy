@@ -92,6 +92,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CleanupCommand.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\CleanupService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CleanupService.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\HelpCommand.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -117,7 +122,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SelfUpdateCommand.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\CleanupService.cs" />
     <Compile Include="Services\ConfigFileInstallationStatusProvider.cs" />
+    <Compile Include="Services\ICleanupService.cs" />
     <Compile Include="Services\IInstallationStatusProvider.cs" />
     <Compile Include="Services\IPackageConfigurationFileReader.cs" />
     <Compile Include="Services\IPackageInstaller.cs" />
@@ -131,6 +138,10 @@
     <EmbeddedResource Include="Resources\CleanupCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CleanupCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CleanupService.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CleanupService.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HelpCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

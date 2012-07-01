@@ -9,5 +9,7 @@ namespace NuDeploy.Core.Common
         public string Id { get; set; }
 
         public string Folder { get; set; }
+
+        public bool IsInstalled { get; set; }
     }
 }

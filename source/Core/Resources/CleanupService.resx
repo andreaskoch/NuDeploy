@@ -117,22 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
-    <value>The id of the NuGet package to install (e.g. "Newtonsoft.Json"). If you don't specifiy a package id, the cleanup will be performed for all packages in the current folder.</value>
+  <data name="DeleteMessageTemplate" xml:space="preserve">
+    <value>Deleting package "{0} (Version {1})".</value>
   </data>
-  <data name="CleanupMessageAllInstalledPackages" xml:space="preserve">
-    <value>Starting cleanup for all installed packages.</value>
+  <data name="NoApplicablePackagesForCleanupFound" xml:space="preserve">
+    <value>No packages applicable for a cleanup.</value>
   </data>
-  <data name="CleanupMessageTemplateSpecificPackage" xml:space="preserve">
-    <value>Starting cleanup for package "{0}".</value>
-  </data>
-  <data name="CommandDescriptionText" xml:space="preserve">
-    <value>Removes previously installed versions of a specific package or for all packages in the current folder.</value>
-  </data>
-  <data name="CommandExampleDescription1" xml:space="preserve">
-    <value>Remove all package folders of all NuGet packages which are currently not installed.</value>
-  </data>
-  <data name="CommandExampleDescription2" xml:space="preserve">
-    <value>Remove all package folders which are not the currently installed version of the given NuGet package id.</value>
+  <data name="NoApplicableVersionForPackageCleanupFoundTemplate" xml:space="preserve">
+    <value>There are no versions of "{0}" applicable for a cleanup.</value>
   </data>
 </root>

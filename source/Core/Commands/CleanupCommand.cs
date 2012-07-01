@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Services;
 
 namespace NuDeploy.Core.Commands
 {
@@ -14,9 +16,12 @@ namespace NuDeploy.Core.Commands
 
         private readonly IUserInterface userInterface;
 
-        public CleanupCommand(IUserInterface userInterface)
+        private readonly ICleanupService cleanupService;
+
+        public CleanupCommand(IUserInterface userInterface, ICleanupService cleanupService)
         {
             this.userInterface = userInterface;
+            this.cleanupService = cleanupService;
 
             this.Attributes = new CommandAttributes
             {
@@ -52,7 +57,17 @@ namespace NuDeploy.Core.Commands
 
         public void Execute()
         {
-            throw new System.NotImplementedException();
+            // package id (required parameter)
+            string packageId = this.Arguments.Values.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                this.userInterface.WriteLine(Resources.CleanupCommand.CleanupMessageAllInstalledPackages);
+                this.cleanupService.Cleanup();
+                return;
+            }
+
+            this.userInterface.WriteLine(string.Format(Resources.CleanupCommand.CleanupMessageTemplateSpecificPackage, packageId));
+            this.cleanupService.Cleanup(packageId);
         }
     }
 }

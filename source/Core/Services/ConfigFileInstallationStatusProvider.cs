@@ -5,6 +5,8 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 
+using NuGet;
+
 namespace NuDeploy.Core.Services
 {
     public class ConfigFileInstallationStatusProvider : IInstallationStatusProvider
@@ -36,6 +38,24 @@ namespace NuDeploy.Core.Services
             return installedPackages.Any(pair => pair.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
         }
 
+        public IEnumerable<NuDeployPackageInfo> GetAllPackageInCurrentFolder()
+        {
+            IEnumerable<PackageInfo> installedPackages = this.packageConfigurationFileReader.GetInstalledPackages(this.packageConfigurationFilePath);
+            foreach (PackageInfo package in installedPackages)
+            {
+                var packageDirectories = Directory.GetDirectories(this.applicationInformation.StartupFolder, string.Format("{0}.*", package.Id));
+                foreach (string packageDirectory in packageDirectories)
+                {
+                    var directoryInfo = new DirectoryInfo(packageDirectory);
+                    string packageVersionString = directoryInfo.Name.Replace(string.Format("{0}.", package.Id), string.Empty);
+                    var packageVersion = new SemanticVersion(packageVersionString);
+                    var isInstalled = packageVersion.Equals(package.Version);
+
+                    yield return new NuDeployPackageInfo { Id = package.Id, Version = packageVersion, Folder = packageDirectory, IsInstalled = isInstalled };
+                }
+            }
+        }
+
         public NuDeployPackageInfo GetPackageInfo(string id)
         {
             IEnumerable<PackageInfo> installedPackages = this.packageConfigurationFileReader.GetInstalledPackages(this.packageConfigurationFilePath);
@@ -47,9 +67,10 @@ namespace NuDeploy.Core.Services
 
             return new NuDeployPackageInfo
                 {
-                    Id = installedPackageInfo.Id, 
+                    Id = installedPackageInfo.Id,
                     Version = installedPackageInfo.Version,
-                    Folder = this.GetPackageInstallationPath(installedPackageInfo)
+                    Folder = this.GetPackageInstallationPath(installedPackageInfo),
+                    IsInstalled = true
                 };
         }
 
