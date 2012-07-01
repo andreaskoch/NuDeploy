@@ -58,7 +58,7 @@ namespace NuDeploy.Core.Commands
             string packageId = this.Arguments.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(packageId))
             {
-                this.userInterface.WriteLine("No package id specified.");
+                this.userInterface.WriteLine(Resources.InstallCommand.NoPackageIdSpecifiedMessage);
                 return;
             }
 

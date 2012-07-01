@@ -107,6 +107,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InstallCommand.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\PackageInstaller.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PackageInstaller.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PackageSolutionCommand.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -150,6 +155,10 @@
     <EmbeddedResource Include="Resources\InstallCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InstallCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PackageInstaller.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackageInstaller.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

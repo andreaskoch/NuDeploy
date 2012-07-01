@@ -15,6 +15,8 @@ namespace NuDeploy.Core.Services
 
         private const string UninstallPowerShellScriptName = "Remove.ps1";
 
+        private readonly string[] installScriptParameters = new[] { "-DeploymentType Full" };
+
         private readonly IUserInterface userInterface;
 
         private readonly IInstallationStatusProvider installationStatusProvider;
@@ -37,7 +39,7 @@ namespace NuDeploy.Core.Services
             IPackage package = this.packageRepository.FindPackage(packageId);
             if (package == null)
             {
-                this.userInterface.WriteLine(string.Format("Package \"{0}\" was not found at \"{1}\".", packageId, this.packageRepository.Source));
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageNotFoundMessageTemplate, packageId, this.packageRepository.Source));
                 return false;
             }
 
@@ -52,7 +54,7 @@ namespace NuDeploy.Core.Services
                     {
                         this.userInterface.WriteLine(
                             string.Format(
-                                "You already have the latest version installed: {0} (Version: {1}).",
+                                Resources.PackageInstaller.LatestVersionAlreadyInstalledMessageTemplate,
                                 packageInfoOfInstalledVersion.Id,
                                 packageInfoOfInstalledVersion.Version));
 
@@ -63,7 +65,7 @@ namespace NuDeploy.Core.Services
                     {
                         this.userInterface.WriteLine(
                             string.Format(
-                                "You already have a more recent version installed: {0} (Version: {1}). Use the -force option if you still want to install this older version.",
+                                Resources.PackageInstaller.NewerVersionAlreadyInstalledMessageTemplate,
                                 packageInfoOfInstalledVersion.Id,
                                 packageInfoOfInstalledVersion.Version));
 
@@ -72,24 +74,32 @@ namespace NuDeploy.Core.Services
                 }
 
                 /* installed version is older and must be removed */
-                this.userInterface.WriteLine(string.Format("Removing previous version of {0} from folder {1}.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Folder));
+                this.userInterface.WriteLine(
+                    string.Format(
+                        Resources.PackageInstaller.RemovingPreviousVersionMessageTemplate,
+                        packageInfoOfInstalledVersion.Id,
+                        packageInfoOfInstalledVersion.Folder));
+
                 bool uninstallResult = this.Uninstall(packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version);
                 if (uninstallResult)
                 {
                     this.userInterface.WriteLine(
-                        string.Format("{0} (Version: {1}) has been successfully removed.", packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version));                    
+                        string.Format(
+                            Resources.PackageInstaller.PackageSuccessfullyRemovedMessageTemplate,
+                            packageInfoOfInstalledVersion.Id,
+                            packageInfoOfInstalledVersion.Version));
                 }
                 else
                 {
                     this.userInterface.WriteLine(
                         string.Format(
-                            "The removal of the the previous version of {0} (Version: {1}) failed.",
+                            Resources.PackageInstaller.PackageRemovalFailedMessageTemplate,
                             packageInfoOfInstalledVersion.Id,
                             packageInfoOfInstalledVersion.Version));
 
                     if (forceInstallation == false)
                     {
-                        this.userInterface.WriteLine("Please make sure the package has been removed properly before installing a new version or use the -force option if you still want to install the new version.");
+                        this.userInterface.WriteLine(Resources.PackageInstaller.PackageRemovalFailedForceHintMessage);
                         return false;
                     }
                 }
@@ -99,7 +109,7 @@ namespace NuDeploy.Core.Services
             packageManager.PackageInstalling +=
                 (sender, args) =>
                 this.userInterface.WriteLine(
-                    string.Format("Downloading package \"{0}\" (Version: {1}) to folder \"{2}\".", args.Package.Id, args.Package.Version, args.InstallPath));
+                    string.Format(Resources.PackageInstaller.DownloadingPackageMessageTemplate, args.Package.Id, args.Package.Version, args.InstallPath));
 
             packageManager.PackageInstalled += (sender, args) =>
             {
@@ -107,21 +117,24 @@ namespace NuDeploy.Core.Services
                 string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
 
                 this.userInterface.WriteLine(
-                    string.Format(
-                        "Package \"{0}\" (Version: {1}) has been downloaded to folder \"{2}\".", args.Package.Id, args.Package.Version, packageFolder));
+                    string.Format(Resources.PackageInstaller.PackageDownloadedMessageTemplate, args.Package.Id, args.Package.Version, packageFolder));
 
                 if (File.Exists(installScriptPath) == false)
                 {
+                    this.userInterface.WriteLine(
+                        string.Format(
+                            Resources.PackageInstaller.InstallScriptNotFoundMessageTemplate, installScriptPath, package.Id, package.Version, packageFolder));
+
                     return;
                 }
 
-                this.userInterface.WriteLine("Starting the package installation.");
-                this.ExecuteScriptInNewPowerShellHost(installScriptPath, new[] { "-DeploymentType Full" });
+                this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
+                this.ExecuteScriptInNewPowerShellHost(installScriptPath, this.installScriptParameters);
             };
 
-            this.userInterface.WriteLine(string.Format("Starting installation of package \"{0}\" (Version: {1}).", package.Id, package.Version));
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingInstallationMessageTemplate, package.Id, package.Version));
             packageManager.InstallPackage(package, false, true);
-            this.userInterface.WriteLine("Installation finished.");
+            this.userInterface.WriteLine(Resources.PackageInstaller.InstallationFinishedMessage);
 
             return true;
         }
@@ -131,7 +144,7 @@ namespace NuDeploy.Core.Services
             // check if package is installed
             if (!this.installationStatusProvider.IsInstalled(packageId))
             {
-                this.userInterface.WriteLine(string.Format("Package \"{0}\" is not installed in the current folder.", packageId));
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageIsNotInstalledMessageTemplate, packageId));
                 return false;
             }
 
@@ -143,7 +156,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Uninstall script \"{0}\" not found for package \"{1} Version({2})\" in folder \"{3}\".",
+                        Resources.PackageInstaller.UninstallScriptNotFoundMessageTemplate,
                         UninstallPowerShellScriptName,
                         installedPackage.Id,
                         installedPackage.Version,
@@ -153,11 +166,13 @@ namespace NuDeploy.Core.Services
             }
 
             // uninstall
-            this.userInterface.WriteLine(string.Format("Uninstalling package \"{0} Version({1})\"", installedPackage.Id, installedPackage.Version));
+            this.userInterface.WriteLine(
+                string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
+
             this.ExecuteScriptInNewPowerShellHost(uninstallScriptPath);
 
             // remove package files
-            this.userInterface.WriteLine(string.Format("Deleting package folder \"{0}\"", installedPackage.Folder));
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
             Directory.Delete(installedPackage.Folder, true);
 
             return true;
@@ -172,7 +187,7 @@ namespace NuDeploy.Core.Services
 
             if (!File.Exists(scriptPath))
             {
-                throw new FileNotFoundException("Could not find PowerShell script", scriptPath);
+                throw new FileNotFoundException("Could not find PowerShell script.", scriptPath);
             }
 
             using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))

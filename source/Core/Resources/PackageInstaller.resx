@@ -117,16 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
-    <value>The id of the NuGet package to install (e.g. "Newtonsoft.Json").</value>
+  <data name="DeletingPackageFolderMessageTemplate" xml:space="preserve">
+    <value>Deleting package folder "{0}".</value>
   </data>
-  <data name="CommandDescriptionText" xml:space="preserve">
-    <value>Install the specified NuGet package.</value>
+  <data name="DownloadingPackageMessageTemplate" xml:space="preserve">
+    <value>Downloading package "{0}" (Version: {1}) to folder "{2}".</value>
   </data>
-  <data name="CommandExampleDescription1" xml:space="preserve">
-    <value>Install the application/package with the given Nuget package id (e.g. "Newtonsoft.Json").</value>
+  <data name="InstallationFinishedMessage" xml:space="preserve">
+    <value>Installation finished.</value>
   </data>
-  <data name="NoPackageIdSpecifiedMessage" xml:space="preserve">
-    <value>No package id specified.</value>
+  <data name="InstallScriptNotFoundMessageTemplate" xml:space="preserve">
+    <value>Install script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
+  </data>
+  <data name="LatestVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
+    <value>You already have the latest version installed: {0} (Version: {1}).</value>
+  </data>
+  <data name="NewerVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
+    <value>You already have a more recent version installed: {0} (Version: {1}). Use the -force option if you still want to install this older version.</value>
+  </data>
+  <data name="PackageDownloadedMessageTemplate" xml:space="preserve">
+    <value>Package "{0}" (Version: {1}) has been downloaded to folder "{2}".</value>
+  </data>
+  <data name="PackageIsNotInstalledMessageTemplate" xml:space="preserve">
+    <value>Package "{0}" is not installed in the current folder.</value>
+  </data>
+  <data name="PackageNotFoundMessageTemplate" xml:space="preserve">
+    <value>Package "{0}" was not found at "{1}".</value>
+  </data>
+  <data name="PackageRemovalFailedForceHintMessage" xml:space="preserve">
+    <value>Please make sure the package has been removed properly before installing a new version or use the -force option if you still want to install the new version.</value>
+  </data>
+  <data name="PackageRemovalFailedMessageTemplate" xml:space="preserve">
+    <value>The removal of the the previous version of {0} (Version: {1}) failed.</value>
+  </data>
+  <data name="PackageSuccessfullyRemovedMessageTemplate" xml:space="preserve">
+    <value>{0} (Version: {1}) has been successfully removed.</value>
+  </data>
+  <data name="RemovingPreviousVersionMessageTemplate" xml:space="preserve">
+    <value>Removing previous version of {0} from folder {1}.</value>
+  </data>
+  <data name="StartingInstallationMessageTemplate" xml:space="preserve">
+    <value>Starting installation of package "{0}" (Version: {1}).</value>
+  </data>
+  <data name="StartingInstallationPowerShellScriptExecutionMessageTemplate" xml:space="preserve">
+    <value>Starting the package installation.</value>
+  </data>
+  <data name="StartingUninstallMessageTemplate" xml:space="preserve">
+    <value>Uninstalling package "{0} (Version {1})".</value>
+  </data>
+  <data name="UninstallScriptNotFoundMessageTemplate" xml:space="preserve">
+    <value>Uninstall script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
   </data>
 </root>
