@@ -86,5 +86,14 @@ namespace NuDeploy.Core.Resources {
                 return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No package id specified..
+        /// </summary>
+        internal static string NoPackageIdSpecifiedMessage {
+            get {
+                return ResourceManager.GetString("NoPackageIdSpecifiedMessage", resourceCulture);
+            }
+        }
     }
 }

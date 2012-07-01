@@ -126,4 +126,7 @@
   <data name="CommandExampleDescription1" xml:space="preserve">
     <value>Uninstall the application/package with the given NuGet package id.</value>
   </data>
+  <data name="NoPackageIdSpecifiedMessage" xml:space="preserve">
+    <value>No package id specified.</value>
+  </data>
 </root>
