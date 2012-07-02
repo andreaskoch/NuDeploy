@@ -182,7 +182,7 @@ namespace NuDeploy.Core.Commands
 
             // display command name and description
             this.userInterface.ShowKeyValueStore(
-                this.AvailableCommands.OrderBy(c => c.Attributes.CommandName).ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description),
+                this.AvailableCommands.ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description),
                 distanceBetweenColumns: 4,
                 indentation: 2);
 
