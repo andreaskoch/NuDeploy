@@ -4,6 +4,7 @@ using System.Management.Automation.Host;
 using System.Reflection;
 
 using NuDeploy.Core.Commands;
+using NuDeploy.Core.Commands.Console;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.PowerShell;
 using NuDeploy.Core.Repositories;

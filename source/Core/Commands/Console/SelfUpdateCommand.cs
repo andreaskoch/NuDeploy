@@ -8,7 +8,7 @@ using NuDeploy.Core.Common;
 
 using NuGet;
 
-namespace NuDeploy.Core.Commands
+namespace NuDeploy.Core.Commands.Console
 {
     public class SelfUpdateCommand : ICommand
     {

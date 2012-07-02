@@ -1,4 +1,4 @@
-namespace NuDeploy.Core.Commands
+namespace NuDeploy.Core.Commands.Console
 {
     public interface ICommandArgumentNameMatcher
     {

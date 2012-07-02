@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace NuDeploy.Core.Commands
+namespace NuDeploy.Core.Commands.Console
 {
     public class CommandArgumentNameMatcher : ICommandArgumentNameMatcher
     {

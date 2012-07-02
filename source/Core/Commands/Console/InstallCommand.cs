@@ -5,7 +5,7 @@ using System.Linq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services;
 
-namespace NuDeploy.Core.Commands
+namespace NuDeploy.Core.Commands.Console
 {
     public class InstallCommand : ICommand
     {

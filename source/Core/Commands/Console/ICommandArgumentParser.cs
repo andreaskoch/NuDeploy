@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NuDeploy.Core.Commands
+namespace NuDeploy.Core.Commands.Console
 {
     public interface ICommandArgumentParser
     {

@@ -6,7 +6,7 @@ using NuDeploy.Core.Common;
 
 using StructureMap;
 
-namespace NuDeploy.Core.Commands
+namespace NuDeploy.Core.Commands.Console
 {
     public class HelpCommand : ICommand
     {
