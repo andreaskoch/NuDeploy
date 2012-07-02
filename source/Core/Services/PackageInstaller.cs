@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common;
@@ -44,10 +45,9 @@ namespace NuDeploy.Core.Services
             }
 
             // check if package is already installed
-            if (this.installationStatusProvider.IsInstalled(package.Id))
+            NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id).FirstOrDefault(p => p.IsInstalled);
+            if (packageInfoOfInstalledVersion != null)
             {
-                NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id);
-
                 if (forceInstallation == false)
                 {
                     if (package.Version == packageInfoOfInstalledVersion.Version)
@@ -142,15 +142,14 @@ namespace NuDeploy.Core.Services
         public bool Uninstall(string packageId, SemanticVersion version = null)
         {
             // check if package is installed
-            if (!this.installationStatusProvider.IsInstalled(packageId))
+            NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId).FirstOrDefault(p => p.IsInstalled);
+            if (installedPackage == null)
             {
                 this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageIsNotInstalledMessageTemplate, packageId));
                 return false;
             }
 
             // remove the package
-            NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId);
-
             string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
             if (File.Exists(uninstallScriptPath) == false)
             {

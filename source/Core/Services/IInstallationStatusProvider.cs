@@ -6,10 +6,8 @@ namespace NuDeploy.Core.Services
 {
     public interface IInstallationStatusProvider
     {
-        bool IsInstalled(string id);
+        IEnumerable<NuDeployPackageInfo> GetPackageInfo();
 
-        IEnumerable<NuDeployPackageInfo> GetAllPackageInCurrentFolder();
-
-        NuDeployPackageInfo GetPackageInfo(string id);
+        IEnumerable<NuDeployPackageInfo> GetPackageInfo(string id);
     }
 }

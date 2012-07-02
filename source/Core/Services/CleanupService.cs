@@ -21,7 +21,7 @@ namespace NuDeploy.Core.Services
 
         public void Cleanup()
         {
-            var packages = this.installationStatusProvider.GetAllPackageInCurrentFolder().Where(p => p.IsInstalled == false).ToList();
+            var packages = this.installationStatusProvider.GetPackageInfo().Where(p => p.IsInstalled == false).ToList();
 
             if (packages.Count == 0)
             {
@@ -35,7 +35,7 @@ namespace NuDeploy.Core.Services
         public void Cleanup(string packageId)
         {
             var packages =
-                this.installationStatusProvider.GetAllPackageInCurrentFolder().Where(
+                this.installationStatusProvider.GetPackageInfo().Where(
                     p => p.IsInstalled == false && p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (packages.Count == 0)

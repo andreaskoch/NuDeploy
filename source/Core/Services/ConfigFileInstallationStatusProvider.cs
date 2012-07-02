@@ -27,18 +27,18 @@ namespace NuDeploy.Core.Services
             this.packageConfigurationFilePath = this.GetPackageConfigurationFilePath();
         }
 
-        public bool IsInstalled(string id)
+        public IEnumerable<NuDeployPackageInfo> GetPackageInfo()
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return false;
-            }
-
-            IEnumerable<PackageInfo> installedPackages = this.packageConfigurationFileReader.GetInstalledPackages(this.packageConfigurationFilePath);
-            return installedPackages.Any(pair => pair.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+            return this.GetAllPackages();
         }
 
-        public IEnumerable<NuDeployPackageInfo> GetAllPackageInCurrentFolder()
+        public IEnumerable<NuDeployPackageInfo> GetPackageInfo(string id)
+        {
+            IEnumerable<NuDeployPackageInfo> packages = this.GetAllPackages();
+            return packages.Where(p => p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private IEnumerable<NuDeployPackageInfo> GetAllPackages()
         {
             IEnumerable<PackageInfo> installedPackages = this.packageConfigurationFileReader.GetInstalledPackages(this.packageConfigurationFilePath);
             foreach (PackageInfo package in installedPackages)
@@ -54,30 +54,6 @@ namespace NuDeploy.Core.Services
                     yield return new NuDeployPackageInfo { Id = package.Id, Version = packageVersion, Folder = packageDirectory, IsInstalled = isInstalled };
                 }
             }
-        }
-
-        public NuDeployPackageInfo GetPackageInfo(string id)
-        {
-            IEnumerable<PackageInfo> installedPackages = this.packageConfigurationFileReader.GetInstalledPackages(this.packageConfigurationFilePath);
-            PackageInfo installedPackageInfo = installedPackages.First(p => p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
-            if (installedPackageInfo == null)
-            {
-                return null;
-            }
-
-            return new NuDeployPackageInfo
-                {
-                    Id = installedPackageInfo.Id,
-                    Version = installedPackageInfo.Version,
-                    Folder = this.GetPackageInstallationPath(installedPackageInfo),
-                    IsInstalled = true
-                };
-        }
-
-        private string GetPackageInstallationPath(PackageInfo packageInfo)
-        {
-            string packageFolderName = string.Format("{0}.{1}", packageInfo.Id, packageInfo.Version);
-            return Path.Combine(this.applicationInformation.StartupFolder, packageFolderName);
         }
 
         private string GetPackageConfigurationFilePath()

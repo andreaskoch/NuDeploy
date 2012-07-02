@@ -58,6 +58,7 @@
     <Compile Include="Commands\CommandNameMatcher.cs" />
     <Compile Include="Commands\CommandProvider.cs" />
     <Compile Include="Commands\CleanupCommand.cs" />
+    <Compile Include="Commands\InstallationStatusCommand.cs" />
     <Compile Include="Commands\UninstallCommand.cs" />
     <Compile Include="Commands\InstallCommand.cs" />
     <Compile Include="Commands\SelfUpdateCommand.cs" />
@@ -101,6 +102,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HelpCommand.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\InstallationStatusCommand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstallationStatusCommand.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\InstallCommand.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -151,6 +157,10 @@
     <EmbeddedResource Include="Resources\HelpCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>HelpCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstallationStatusCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InstallationStatusCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\InstallCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

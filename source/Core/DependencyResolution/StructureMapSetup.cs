@@ -66,15 +66,17 @@ namespace NuDeploy.Core.DependencyResolution
                     var packageRepository = ObjectFactory.GetInstance<IPackageRepository>();
                     var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
                     var cleanupService = ObjectFactory.GetInstance<ICleanupService>();
+                    var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
 
                     var packageCommand = new PackageSolutionCommand();
                     var helpCommand = new HelpCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation);
+                    var installationStatusCommand = new InstallationStatusCommand(ObjectFactory.GetInstance<IUserInterface>(), installationStatusProvider);
                     var installCommand = new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
                     var uninstallCommand = new UninstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
                     var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>(), cleanupService);
                     var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
 
-                    var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, selfUpdateCommand, helpCommand };
+                    var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, installationStatusCommand, selfUpdateCommand, helpCommand };
                     ICommandProvider commandProvider = new CommandProvider(commands);
 
                     config.For<ICommandProvider>().Use(commandProvider);
