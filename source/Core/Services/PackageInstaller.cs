@@ -67,7 +67,8 @@ namespace NuDeploy.Core.Services
                             string.Format(
                                 Resources.PackageInstaller.NewerVersionAlreadyInstalledMessageTemplate,
                                 packageInfoOfInstalledVersion.Id,
-                                packageInfoOfInstalledVersion.Version));
+                                packageInfoOfInstalledVersion.Version,
+                                NuDeployConstants.CommonCommandOptionNameForce));
 
                         return false;
                     }
@@ -99,7 +100,10 @@ namespace NuDeploy.Core.Services
 
                     if (forceInstallation == false)
                     {
-                        this.userInterface.WriteLine(Resources.PackageInstaller.PackageRemovalFailedForceHintMessage);
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                Resources.PackageInstaller.PackageRemovalFailedForceHintMessageTemplate, NuDeployConstants.CommonCommandOptionNameForce));
+
                         return false;
                     }
                 }

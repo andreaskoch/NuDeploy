@@ -169,6 +169,7 @@
     <EmbeddedResource Include="Resources\PackageInstaller.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PackageInstaller.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

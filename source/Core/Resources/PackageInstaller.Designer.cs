@@ -106,7 +106,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You already have a more recent version installed: {0} (Version: {1}). Use the -force option if you still want to install this older version..
+        ///   Looks up a localized string similar to You already have a more recent version installed: {0} (Version: {1}). Use the -{2} option if you still want to install this older version..
         /// </summary>
         internal static string NewerVersionAlreadyInstalledMessageTemplate {
             get {
@@ -142,11 +142,11 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please make sure the package has been removed properly before installing a new version or use the -force option if you still want to install the new version..
+        ///   Looks up a localized string similar to Please make sure the package has been removed properly before installing a new version or use the -{0} option if you still want to install the new version..
         /// </summary>
-        internal static string PackageRemovalFailedForceHintMessage {
+        internal static string PackageRemovalFailedForceHintMessageTemplate {
             get {
-                return ResourceManager.GetString("PackageRemovalFailedForceHintMessage", resourceCulture);
+                return ResourceManager.GetString("PackageRemovalFailedForceHintMessageTemplate", resourceCulture);
             }
         }
         

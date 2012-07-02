@@ -133,7 +133,7 @@
     <value>You already have the latest version installed: {0} (Version: {1}).</value>
   </data>
   <data name="NewerVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
-    <value>You already have a more recent version installed: {0} (Version: {1}). Use the -force option if you still want to install this older version.</value>
+    <value>You already have a more recent version installed: {0} (Version: {1}). Use the -{2} option if you still want to install this older version.</value>
   </data>
   <data name="PackageDownloadedMessageTemplate" xml:space="preserve">
     <value>Package "{0}" (Version: {1}) has been downloaded to folder "{2}".</value>
@@ -144,8 +144,8 @@
   <data name="PackageNotFoundMessageTemplate" xml:space="preserve">
     <value>Package "{0}" was not found at "{1}".</value>
   </data>
-  <data name="PackageRemovalFailedForceHintMessage" xml:space="preserve">
-    <value>Please make sure the package has been removed properly before installing a new version or use the -force option if you still want to install the new version.</value>
+  <data name="PackageRemovalFailedForceHintMessageTemplate" xml:space="preserve">
+    <value>Please make sure the package has been removed properly before installing a new version or use the -{0} option if you still want to install the new version.</value>
   </data>
   <data name="PackageRemovalFailedMessageTemplate" xml:space="preserve">
     <value>The removal of the the previous version of {0} (Version: {1}) failed.</value>
