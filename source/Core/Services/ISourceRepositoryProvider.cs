@@ -11,5 +11,7 @@ namespace NuDeploy.Core.Services
         void SaveRepositoryConfiguration(SourceRepositoryConfiguration sourceRepositoryConfiguration);
 
         void DeleteRepositoryConfiguration(string repositoryName);
+
+        void ResetRepositoryConfiguration();
     }
 }

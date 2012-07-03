@@ -64,6 +64,11 @@ namespace NuDeploy.Core.Services
             this.Save(repositories.ToArray());
         }
 
+        public void ResetRepositoryConfiguration()
+        {
+            this.CreateDefaultConfiguration();
+        }
+
         private IEnumerable<SourceRepositoryConfiguration> GetRepositoriesFromConfigFile()
         {
             if (!File.Exists(SourceRepositoryConfigurationFileName))

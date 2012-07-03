@@ -50,7 +50,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services.SourceRepositoryProvider
         public void SaveRepository_SuppliedRepositoryIsInvalid_ArgumentExceptionIsThrown()
         {
             // Arrange
-            var repository = new SourceRepositoryConfiguration { Name = string.Empty, Url = string.Empty };
+            var repository = new SourceRepositoryConfiguration { Name = string.Empty, Url = new Uri("http://sample-url.com") };
 
             // Act
             this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository);
@@ -76,7 +76,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services.SourceRepositoryProvider
         {
             // Arrange
             string repositoryName = "Test Repository";
-            string repositoryUrl = "http://sample-url.com";
+            Uri repositoryUrl = new Uri("http://sample-url.com");
             var repository = new SourceRepositoryConfiguration { Name = repositoryName, Url = repositoryUrl };
 
             // Act
@@ -94,8 +94,8 @@ namespace NuDeploy.Tests.IntegrationTests.Services.SourceRepositoryProvider
         {
             // Arrange
             string repositoryName = "Test Repository";
-            string repository1Url = "http://sample-url.com/1";
-            string repository2Url = "http://sample-url.com/2";
+            Uri repository1Url = new Uri("http://sample-url.com/1");
+            Uri repository2Url = new Uri("http://sample-url.com/2");
 
             var repository1 = new SourceRepositoryConfiguration { Name = repositoryName, Url = repository1Url };
             var repository2 = new SourceRepositoryConfiguration { Name = repositoryName, Url = repository2Url };

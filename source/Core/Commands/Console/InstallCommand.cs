@@ -35,7 +35,7 @@ namespace NuDeploy.Core.Commands.Console
                 Examples = new Dictionary<string, string>
                     {
                         {
-                            string.Format("{0} {1}", CommandName, "Newtonsoft.Json"),
+                            string.Format("{0} {1}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId),
                             Resources.InstallCommand.CommandExampleDescription1
                         }
                     },

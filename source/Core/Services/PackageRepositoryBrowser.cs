@@ -23,7 +23,7 @@ namespace NuDeploy.Core.Services
             this.packageRepositoryFactory = packageRepositoryFactory;
 
             this.repositoryConfigurationConfigurations = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToArray();
-            this.repositories = this.repositoryConfigurationConfigurations.Select(r => this.packageRepositoryFactory.CreateRepository(r.Url)).ToArray();
+            this.repositories = this.repositoryConfigurationConfigurations.Select(r => this.packageRepositoryFactory.CreateRepository(r.Url.ToString())).ToArray();
         }
 
         public IEnumerable<SourceRepositoryConfiguration> RepositoryConfigurations

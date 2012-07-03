@@ -60,6 +60,7 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                 {
+                    var sourceRepositoryConfigurationProvider = ObjectFactory.GetInstance<ISourceRepositoryProvider>();
                     var packageRepositoryBrowser = ObjectFactory.GetInstance<IPackageRepositoryBrowser>();
                     var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
                     var cleanupService = ObjectFactory.GetInstance<ICleanupService>();
@@ -72,8 +73,21 @@ namespace NuDeploy.Core.DependencyResolution
                     var uninstallCommand = new UninstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
                     var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>(), cleanupService);
                     var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepositoryBrowser);
+                    var configureSources = new RepositorySourceConfigurationCommand(
+                        ObjectFactory.GetInstance<IUserInterface>(), sourceRepositoryConfigurationProvider);
 
-                    var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, installationStatusCommand, selfUpdateCommand, helpCommand };
+                    var commands = new List<ICommand>
+                        {
+                            packageCommand,
+                            installCommand,
+                            uninstallCommand,
+                            cleanupCommand,
+                            installationStatusCommand,
+                            configureSources,
+                            selfUpdateCommand,
+                            helpCommand
+                        };
+
                     ICommandProvider commandProvider = new CommandProvider(commands);
 
                     config.For<ICommandProvider>().Use(commandProvider);

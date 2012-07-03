@@ -61,6 +61,7 @@
     <Compile Include="Commands\Console\CommandAttributes.cs" />
     <Compile Include="Commands\Console\CommandLineArgumentInterpreter.cs" />
     <Compile Include="Commands\Console\CommandNameMatcher.cs" />
+    <Compile Include="Commands\Console\RepositorySourceConfigurationCommand.cs" />
     <Compile Include="Commands\Console\HelpCommand.cs" />
     <Compile Include="Commands\Console\ICommandArgumentNameMatcher.cs" />
     <Compile Include="Commands\Console\ICommandArgumentParser.cs" />
@@ -132,6 +133,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PackageSolutionCommand.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\RepositorySourceConfigurationCommand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RepositorySourceConfigurationCommand.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\UninstallCommand.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -191,6 +197,10 @@
     <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PackageSolutionCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\RepositorySourceConfigurationCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RepositorySourceConfigurationCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UninstallCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

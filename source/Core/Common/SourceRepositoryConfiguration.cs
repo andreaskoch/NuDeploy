@@ -1,3 +1,5 @@
+using System;
+
 using Newtonsoft.Json;
 
 namespace NuDeploy.Core.Common
@@ -6,14 +8,14 @@ namespace NuDeploy.Core.Common
     {
         public string Name { get; set; }
 
-        public string Url { get; set; }
+        public Uri Url { get; set; }
 
         [JsonIgnore]
         public bool IsValid
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(this.Name) && !string.IsNullOrWhiteSpace(this.Url);
+                return !string.IsNullOrWhiteSpace(this.Name);
             }
         }
     }
