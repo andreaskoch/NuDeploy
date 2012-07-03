@@ -9,22 +9,16 @@ using NuGet;
 
 namespace NuDeploy.Core.Services
 {
-    public class ConfigFileInstallationStatusProvider : IInstallationStatusProvider
+    public class InstallationStatusProvider : IInstallationStatusProvider
     {
-        private const string PackageConfigurationFileName = "packages.config";
-
-        private readonly string packageConfigurationFilePath;
-
         private readonly ApplicationInformation applicationInformation;
 
-        private readonly IPackageConfigurationFileReader packageConfigurationFileReader;
+        private readonly IPackageConfigurationAccessor packageConfigurationAccessor;
 
-        public ConfigFileInstallationStatusProvider(ApplicationInformation applicationInformation, IPackageConfigurationFileReader packageConfigurationFileReader)
+        public InstallationStatusProvider(ApplicationInformation applicationInformation, IPackageConfigurationAccessor packageConfigurationAccessor)
         {
             this.applicationInformation = applicationInformation;
-            this.packageConfigurationFileReader = packageConfigurationFileReader;
-
-            this.packageConfigurationFilePath = this.GetPackageConfigurationFilePath();
+            this.packageConfigurationAccessor = packageConfigurationAccessor;
         }
 
         public IEnumerable<NuDeployPackageInfo> GetPackageInfo()
@@ -40,7 +34,7 @@ namespace NuDeploy.Core.Services
 
         private IEnumerable<NuDeployPackageInfo> GetAllPackages()
         {
-            IEnumerable<PackageInfo> installedPackages = this.packageConfigurationFileReader.GetInstalledPackages(this.packageConfigurationFilePath);
+            IEnumerable<PackageInfo> installedPackages = this.packageConfigurationAccessor.GetInstalledPackages();
             foreach (PackageInfo package in installedPackages)
             {
                 var packageDirectories = Directory.GetDirectories(this.applicationInformation.StartupFolder, string.Format("{0}.*", package.Id));
@@ -49,16 +43,11 @@ namespace NuDeploy.Core.Services
                     var directoryInfo = new DirectoryInfo(packageDirectory);
                     string packageVersionString = directoryInfo.Name.Replace(string.Format("{0}.", package.Id), string.Empty);
                     var packageVersion = new SemanticVersion(packageVersionString);
-                    var isInstalled = packageVersion.Equals(package.Version);
+                    var isInstalled = packageVersion.ToString().Equals(package.Version);
 
                     yield return new NuDeployPackageInfo { Id = package.Id, Version = packageVersion, Folder = packageDirectory, IsInstalled = isInstalled };
                 }
             }
-        }
-
-        private string GetPackageConfigurationFilePath()
-        {
-            return Path.Combine(this.applicationInformation.StartupFolder, PackageConfigurationFileName);
         }
     }
 }

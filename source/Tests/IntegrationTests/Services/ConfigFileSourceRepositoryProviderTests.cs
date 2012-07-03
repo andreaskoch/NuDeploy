@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
+
+using NUnit.Framework;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services;
 
-using NUnit.Framework;
-
-namespace NuDeploy.Tests.IntegrationTests.Services.SourceRepositoryProvider
+namespace NuDeploy.Tests.IntegrationTests.Services
 {
     [TestFixture]
     public class ConfigFileSourceRepositoryProviderTests

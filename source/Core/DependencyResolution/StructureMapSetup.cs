@@ -51,10 +51,10 @@ namespace NuDeploy.Core.DependencyResolution
                 config =>
                 {
                     config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
-                    config.For<IPackageConfigurationFileReader>().Use<PackageConfigurationFileReader>();
+                    config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
                     config.For<IPackageInstaller>().Use<PackageInstaller>();
                     config.For<ICleanupService>().Use<CleanupService>();
-                    config.For<IInstallationStatusProvider>().Use<ConfigFileInstallationStatusProvider>();
+                    config.For<IInstallationStatusProvider>().Use<InstallationStatusProvider>();
                 });
 
             ObjectFactory.Configure(
