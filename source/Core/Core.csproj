@@ -81,7 +81,7 @@
     <Compile Include="Common\NuDeployConstants.cs" />
     <Compile Include="Common\NuDeployPackageInfo.cs" />
     <Compile Include="Common\PackageInfo.cs" />
-    <Compile Include="Common\SourceRepository.cs" />
+    <Compile Include="Common\SourceRepositoryConfiguration.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="PowerShell\PipelineExecutor.cs" />
     <Compile Include="PowerShell\NuDeployPowerShellUserInterface.cs" />
@@ -101,6 +101,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CleanupService.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Exceptions.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\HelpCommand.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -161,6 +166,10 @@
     <EmbeddedResource Include="Resources\CleanupService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CleanupService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Exceptions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HelpCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

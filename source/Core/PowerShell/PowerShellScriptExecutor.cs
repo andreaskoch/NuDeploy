@@ -59,12 +59,12 @@ namespace NuDeploy.Core.PowerShell
         {
             if (string.IsNullOrWhiteSpace(scriptPath))
             {
-                throw new ArgumentException("The supplied script path cannot be null or empty.");
+                throw new ArgumentException(Resources.Exceptions.InvalidPowerShellScriptPath);
             }
 
             if (!File.Exists(scriptPath))
             {
-                throw new FileNotFoundException("Script not found.", scriptPath);
+                throw new FileNotFoundException(Resources.Exceptions.PowerShellScriptNotFound, scriptPath);
             }
 
             string commandText = string.Format("& '{0}'", scriptPath);

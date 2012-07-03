@@ -8,7 +8,7 @@ namespace NuDeploy.Core.Services
 {
     public interface IPackageRepositoryBrowser
     {
-        IEnumerable<SourceRepository> RepositoryConfigurations { get; }
+        IEnumerable<SourceRepositoryConfiguration> RepositoryConfigurations { get; }
 
         IPackage FindPackage(string packageId, out IPackageRepository packageRepository);
     }

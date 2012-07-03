@@ -16,42 +16,42 @@ namespace NuDeploy.Core.Services
 
         private static readonly Encoding ConfigurationFileEncoding = Encoding.UTF8;
 
-        public IEnumerable<SourceRepository> GetRepositories()
+        public IEnumerable<SourceRepositoryConfiguration> GetRepositoryConfigurations()
         {
             return this.GetRepositoriesFromConfigFile();
         }
 
-        public void SaveRepository(SourceRepository sourceRepository)
+        public void SaveRepositoryConfiguration(SourceRepositoryConfiguration sourceRepositoryConfiguration)
         {
-            if (sourceRepository == null)
+            if (sourceRepositoryConfiguration == null)
             {
-                throw new ArgumentNullException("sourceRepository");
+                throw new ArgumentNullException("sourceRepositoryConfiguration");
             }
 
-            if (!sourceRepository.IsValid)
+            if (!sourceRepositoryConfiguration.IsValid)
             {
-                throw new ArgumentException("The supplied SourceRepository is not valid.", "sourceRepository");
+                throw new ArgumentException(Resources.Exceptions.SourceRepositoryConfigurationInvalid, "sourceRepositoryConfiguration");
             }
 
-            // get existing repositories
+            // get existing repositoriesConfiguration
             var repositories = this.GetRepositoriesFromConfigFile().ToDictionary(r => r.Name, r => r);
 
             // add or update
-            string existingKey = repositories.Keys.FirstOrDefault(k => k.Equals(sourceRepository.Name, StringComparison.OrdinalIgnoreCase));
+            string existingKey = repositories.Keys.FirstOrDefault(k => k.Equals(sourceRepositoryConfiguration.Name, StringComparison.OrdinalIgnoreCase));
             if (existingKey == null)
             {
-                repositories.Add(sourceRepository.Name, sourceRepository);
+                repositories.Add(sourceRepositoryConfiguration.Name, sourceRepositoryConfiguration);
             }
             else
             {
-                repositories[existingKey] = sourceRepository;
+                repositories[existingKey] = sourceRepositoryConfiguration;
             }
 
             // save
             this.Save(repositories.Values.ToArray());
         }
 
-        public void DeleteRepository(string repositoryName)
+        public void DeleteRepositoryConfiguration(string repositoryName)
         {
             if (string.IsNullOrWhiteSpace(repositoryName))
             {
@@ -64,7 +64,7 @@ namespace NuDeploy.Core.Services
             this.Save(repositories.ToArray());
         }
 
-        private IEnumerable<SourceRepository> GetRepositoriesFromConfigFile()
+        private IEnumerable<SourceRepositoryConfiguration> GetRepositoriesFromConfigFile()
         {
             if (!File.Exists(SourceRepositoryConfigurationFileName))
             {
@@ -72,18 +72,18 @@ namespace NuDeploy.Core.Services
             }
 
             string json = File.ReadAllText(SourceRepositoryConfigurationFileName, ConfigurationFileEncoding);
-            return JsonConvert.DeserializeObject<SourceRepository[]>(json);
+            return JsonConvert.DeserializeObject<SourceRepositoryConfiguration[]>(json);
         }
 
         private void CreateDefaultConfiguration()
         {
-            var defaultSources = new[] { new SourceRepository { Name = "Default Repository", Url = NuDeployConstants.DefaultFeedUrl } };
+            var defaultSources = new[] { new SourceRepositoryConfiguration { Name = "Default Repository", Url = NuDeployConstants.DefaultFeedUrl } };
             this.Save(defaultSources);
         }
 
-        private void Save(SourceRepository[] repositories)
+        private void Save(SourceRepositoryConfiguration[] repositoriesConfiguration)
         {
-            string json = JsonConvert.SerializeObject(repositories);
+            string json = JsonConvert.SerializeObject(repositoriesConfiguration);
             File.WriteAllText(SourceRepositoryConfigurationFileName, json, ConfigurationFileEncoding);            
         }
     }

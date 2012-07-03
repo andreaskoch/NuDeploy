@@ -6,10 +6,10 @@ namespace NuDeploy.Core.Services
 {
     public interface ISourceRepositoryProvider
     {
-        IEnumerable<SourceRepository> GetRepositories();
+        IEnumerable<SourceRepositoryConfiguration> GetRepositoryConfigurations();
 
-        void SaveRepository(SourceRepository sourceRepository);
+        void SaveRepositoryConfiguration(SourceRepositoryConfiguration sourceRepositoryConfiguration);
 
-        void DeleteRepository(string repositoryName);
+        void DeleteRepositoryConfiguration(string repositoryName);
     }
 }

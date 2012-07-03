@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace NuDeploy.Core.Common
 {
-    public class SourceRepository
+    public class SourceRepositoryConfiguration
     {
         public string Name { get; set; }
 

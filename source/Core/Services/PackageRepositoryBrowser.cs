@@ -15,22 +15,22 @@ namespace NuDeploy.Core.Services
 
         private readonly IPackageRepository[] repositories;
 
-        private readonly SourceRepository[] repositoryConfigurations;
+        private readonly SourceRepositoryConfiguration[] repositoryConfigurationConfigurations;
 
         public PackageRepositoryBrowser(ISourceRepositoryProvider sourceRepositoryProvider, IPackageRepositoryFactory packageRepositoryFactory)
         {
             this.sourceRepositoryProvider = sourceRepositoryProvider;
             this.packageRepositoryFactory = packageRepositoryFactory;
 
-            this.repositoryConfigurations = this.sourceRepositoryProvider.GetRepositories().ToArray();
-            this.repositories = this.repositoryConfigurations.Select(r => this.packageRepositoryFactory.CreateRepository(r.Url)).ToArray();
+            this.repositoryConfigurationConfigurations = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToArray();
+            this.repositories = this.repositoryConfigurationConfigurations.Select(r => this.packageRepositoryFactory.CreateRepository(r.Url)).ToArray();
         }
 
-        public IEnumerable<SourceRepository> RepositoryConfigurations
+        public IEnumerable<SourceRepositoryConfiguration> RepositoryConfigurations
         {
             get
             {
-                return this.repositoryConfigurations;
+                return this.repositoryConfigurationConfigurations;
             }
         }
 
