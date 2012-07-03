@@ -40,6 +40,8 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICommandLineArgumentInterpreter>().Use<CommandLineArgumentInterpreter>();
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
 
+                        config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
+
                         config.For<PSHost>().Use<PowerShellHost>();
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();

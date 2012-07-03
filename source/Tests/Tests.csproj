@@ -50,7 +50,8 @@
     </Compile>
     <Compile Include="IntegrationTests\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
-    <Compile Include="IntegrationTests\Services\PackageConfigurationFileReaderTests.cs" />
+    <Compile Include="IntegrationTests\Services\PackageConfiguration\PackageConfigurationFileReaderTests.cs" />
+    <Compile Include="IntegrationTests\Services\SourceRepositoryProvider\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentNameMatcherTests.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentParserTests.cs" />
@@ -84,19 +85,19 @@
     <None Include="IntegrationTests\PowerShell\TestScript-01-ReturnResults.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Services\Test-Packages-5-Invalid-Version-Number-Format.txt">
+    <None Include="IntegrationTests\Services\PackageConfiguration\Test-Packages-5-Invalid-Version-Number-Format.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Services\Test-Packages-4-Empty.txt">
+    <None Include="IntegrationTests\Services\PackageConfiguration\Test-Packages-4-Empty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Services\Test-Packages-3-InvalidXml.txt">
+    <None Include="IntegrationTests\Services\PackageConfiguration\Test-Packages-3-InvalidXml.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Services\Test-Packages-2-Zero-Entries.txt">
+    <None Include="IntegrationTests\Services\PackageConfiguration\Test-Packages-2-Zero-Entries.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Services\Test-Packages-1-Five-Entries.txt">
+    <None Include="IntegrationTests\Services\PackageConfiguration\Test-Packages-1-Five-Entries.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

@@ -9,7 +9,7 @@ using NuDeploy.Core.Services;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.Services
+namespace NuDeploy.Tests.IntegrationTests.Services.PackageConfiguration
 {
     [TestFixture]
     public class PackageConfigurationFileReaderTests
@@ -133,7 +133,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         
         private string GetConfigurationFilePath(string filename)
         {
-            return Path.Combine(Environment.CurrentDirectory, "IntegrationTests\\Services", filename);
+            return Path.Combine(Environment.CurrentDirectory, "IntegrationTests\\Services\\PackageConfiguration", filename);
         }
 
         #endregion

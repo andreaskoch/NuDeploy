@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NuGet.Core, Version=1.8.30423.9026, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.1.8.0\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -78,6 +81,7 @@
     <Compile Include="Common\NuDeployConstants.cs" />
     <Compile Include="Common\NuDeployPackageInfo.cs" />
     <Compile Include="Common\PackageInfo.cs" />
+    <Compile Include="Common\SourceRepository.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="PowerShell\PipelineExecutor.cs" />
     <Compile Include="PowerShell\NuDeployPowerShellUserInterface.cs" />
@@ -139,8 +143,10 @@
     <Compile Include="Services\IInstallationStatusProvider.cs" />
     <Compile Include="Services\IPackageConfigurationFileReader.cs" />
     <Compile Include="Services\IPackageInstaller.cs" />
+    <Compile Include="Services\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\PackageConfigurationFileReader.cs" />
     <Compile Include="Services\PackageInstaller.cs" />
+    <Compile Include="Services\ConfigFileSourceRepositoryProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

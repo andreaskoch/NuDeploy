@@ -10,6 +10,29 @@ using NuGet;
 
 namespace NuDeploy.Core.Services
 {
+    public interface IPackageRepositoryBrowser
+    {
+        IPackage FindPackage(string packageId);
+    }
+
+    public class PackageRepositoryBrowser : IPackageRepositoryBrowser
+    {
+        private readonly IPackageRepository packageRepository;
+
+        private readonly ISourceRepositoryProvider sourceRepositoryProvider;
+
+        public PackageRepositoryBrowser(IPackageRepository packageRepository, ISourceRepositoryProvider sourceRepositoryProvider)
+        {
+            this.packageRepository = packageRepository;
+            this.sourceRepositoryProvider = sourceRepositoryProvider;
+        }
+
+        public IPackage FindPackage(string packageId)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class PackageInstaller : IPackageInstaller
     {
         private const string InstallPowerShellScriptName = "Deploy.ps1";
@@ -22,25 +45,25 @@ namespace NuDeploy.Core.Services
 
         private readonly IInstallationStatusProvider installationStatusProvider;
 
-        private readonly IPackageRepository packageRepository;
+        private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
 
         private readonly PSHost powerShellHost;
 
-        public PackageInstaller(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageRepository packageRepository, PSHost powerShellHost)
+        public PackageInstaller(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageRepositoryBrowser packageRepositoryBrowser, PSHost powerShellHost)
         {
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
-            this.packageRepository = packageRepository;
+            this.packageRepositoryBrowser = packageRepositoryBrowser;
             this.powerShellHost = powerShellHost;
         }
 
         public bool Install(string packageId, bool forceInstallation)
         {
             // fetch package
-            IPackage package = this.packageRepository.FindPackage(packageId);
+            IPackage package = this.packageRepositoryBrowser.FindPackage(packageId);
             if (package == null)
             {
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageNotFoundMessageTemplate, packageId, this.packageRepository.Source));
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageNotFoundMessageTemplate, packageId, this.packageRepositoryBrowser.Source));
                 return false;
             }
 
@@ -109,7 +132,7 @@ namespace NuDeploy.Core.Services
                 }
             }
 
-            var packageManager = new PackageManager(this.packageRepository, Directory.GetCurrentDirectory());
+            var packageManager = new PackageManager(this.packageRepositoryBrowser, Directory.GetCurrentDirectory());
             packageManager.PackageInstalling +=
                 (sender, args) =>
                 this.userInterface.WriteLine(
