@@ -50,13 +50,7 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                 {
-                    var packageRepository = ObjectFactory.GetInstance<IPackageRepositoryFactory>().CreateRepository(NuDeployConstants.DefaultFeedUrl);
-                    config.For<IPackageRepository>().Use(packageRepository);
-                });
-
-            ObjectFactory.Configure(
-                config =>
-                {
+                    config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
                     config.For<IPackageConfigurationFileReader>().Use<PackageConfigurationFileReader>();
                     config.For<IPackageInstaller>().Use<PackageInstaller>();
                     config.For<ICleanupService>().Use<CleanupService>();
@@ -66,7 +60,7 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                 {
-                    var packageRepository = ObjectFactory.GetInstance<IPackageRepository>();
+                    var packageRepositoryBrowser = ObjectFactory.GetInstance<IPackageRepositoryBrowser>();
                     var packageInstaller = ObjectFactory.GetInstance<IPackageInstaller>();
                     var cleanupService = ObjectFactory.GetInstance<ICleanupService>();
                     var installationStatusProvider = ObjectFactory.GetInstance<IInstallationStatusProvider>();
@@ -77,7 +71,7 @@ namespace NuDeploy.Core.DependencyResolution
                     var installCommand = new InstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
                     var uninstallCommand = new UninstallCommand(ObjectFactory.GetInstance<IUserInterface>(), packageInstaller);
                     var cleanupCommand = new CleanupCommand(ObjectFactory.GetInstance<IUserInterface>(), cleanupService);
-                    var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepository);
+                    var selfUpdateCommand = new SelfUpdateCommand(ObjectFactory.GetInstance<IUserInterface>(), applicationInformation, packageRepositoryBrowser);
 
                     var commands = new List<ICommand> { packageCommand, installCommand, uninstallCommand, cleanupCommand, installationStatusCommand, selfUpdateCommand, helpCommand };
                     ICommandProvider commandProvider = new CommandProvider(commands);

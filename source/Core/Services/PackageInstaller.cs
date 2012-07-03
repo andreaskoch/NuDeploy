@@ -10,29 +10,6 @@ using NuGet;
 
 namespace NuDeploy.Core.Services
 {
-    public interface IPackageRepositoryBrowser
-    {
-        IPackage FindPackage(string packageId);
-    }
-
-    public class PackageRepositoryBrowser : IPackageRepositoryBrowser
-    {
-        private readonly IPackageRepository packageRepository;
-
-        private readonly ISourceRepositoryProvider sourceRepositoryProvider;
-
-        public PackageRepositoryBrowser(IPackageRepository packageRepository, ISourceRepositoryProvider sourceRepositoryProvider)
-        {
-            this.packageRepository = packageRepository;
-            this.sourceRepositoryProvider = sourceRepositoryProvider;
-        }
-
-        public IPackage FindPackage(string packageId)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class PackageInstaller : IPackageInstaller
     {
         private const string InstallPowerShellScriptName = "Deploy.ps1";
@@ -40,6 +17,8 @@ namespace NuDeploy.Core.Services
         private const string UninstallPowerShellScriptName = "Remove.ps1";
 
         private readonly string[] installScriptParameters = new[] { "-DeploymentType Full" };
+
+        private readonly ApplicationInformation applicationInformation;
 
         private readonly IUserInterface userInterface;
 
@@ -49,8 +28,9 @@ namespace NuDeploy.Core.Services
 
         private readonly PSHost powerShellHost;
 
-        public PackageInstaller(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageRepositoryBrowser packageRepositoryBrowser, PSHost powerShellHost)
+        public PackageInstaller(ApplicationInformation applicationInformation, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageRepositoryBrowser packageRepositoryBrowser, PSHost powerShellHost)
         {
+            this.applicationInformation = applicationInformation;
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
@@ -59,11 +39,24 @@ namespace NuDeploy.Core.Services
 
         public bool Install(string packageId, bool forceInstallation)
         {
+            // check package source configuration
+            if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
+            {
+                this.userInterface.WriteLine(Resources.PackageInstaller.NoPackageRepositoryConfigurationsAvailable);
+                return false;
+            }
+
             // fetch package
-            IPackage package = this.packageRepositoryBrowser.FindPackage(packageId);
+            IPackageRepository packageRepository;
+            IPackage package = this.packageRepositoryBrowser.FindPackage(packageId, out packageRepository);
             if (package == null)
             {
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageNotFoundMessageTemplate, packageId, this.packageRepositoryBrowser.Source));
+                this.userInterface.WriteLine(
+                    string.Format(
+                        Resources.PackageInstaller.PackageNotFoundMessageTemplate,
+                        packageId,
+                        string.Join(", ", this.packageRepositoryBrowser.RepositoryConfigurations.Select(r => r.Url))));
+
                 return false;
             }
 
@@ -132,7 +125,7 @@ namespace NuDeploy.Core.Services
                 }
             }
 
-            var packageManager = new PackageManager(this.packageRepositoryBrowser, Directory.GetCurrentDirectory());
+            var packageManager = new PackageManager(packageRepository, this.applicationInformation.StartupFolder);
             packageManager.PackageInstalling +=
                 (sender, args) =>
                 this.userInterface.WriteLine(

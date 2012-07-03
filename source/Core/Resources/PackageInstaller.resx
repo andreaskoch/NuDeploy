@@ -142,7 +142,7 @@
     <value>Package "{0}" is not installed in the current folder.</value>
   </data>
   <data name="PackageNotFoundMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" was not found at "{1}".</value>
+    <value>Package "{0}" was not found at "{1}". Please check your spelling or your package source configuration.</value>
   </data>
   <data name="PackageRemovalFailedForceHintMessageTemplate" xml:space="preserve">
     <value>Please make sure the package has been removed properly before installing a new version or use the -{0} option if you still want to install the new version.</value>
@@ -167,5 +167,8 @@
   </data>
   <data name="UninstallScriptNotFoundMessageTemplate" xml:space="preserve">
     <value>Uninstall script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
+  </data>
+  <data name="NoPackageRepositoryConfigurationsAvailable" xml:space="preserve">
+    <value>There are no package repositories configured. Please check your package repository configuration.</value>
   </data>
 </root>

@@ -143,10 +143,12 @@
     <Compile Include="Services\IInstallationStatusProvider.cs" />
     <Compile Include="Services\IPackageConfigurationFileReader.cs" />
     <Compile Include="Services\IPackageInstaller.cs" />
+    <Compile Include="Services\IPackageRepositoryBrowser.cs" />
     <Compile Include="Services\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\PackageConfigurationFileReader.cs" />
     <Compile Include="Services\PackageInstaller.cs" />
     <Compile Include="Services\ConfigFileSourceRepositoryProvider.cs" />
+    <Compile Include="Services\PackageRepositoryBrowser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

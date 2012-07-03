@@ -115,6 +115,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no package repositories configured. Please check your package repository configuration..
+        /// </summary>
+        internal static string NoPackageRepositoryConfigurationsAvailable {
+            get {
+                return ResourceManager.GetString("NoPackageRepositoryConfigurationsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Package &quot;{0}&quot; (Version: {1}) has been downloaded to folder &quot;{2}&quot;..
         /// </summary>
         internal static string PackageDownloadedMessageTemplate {
@@ -133,7 +142,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Package &quot;{0}&quot; was not found at &quot;{1}&quot;..
+        ///   Looks up a localized string similar to Package &quot;{0}&quot; was not found at &quot;{1}&quot;. Please check your spelling or your package source configuration..
         /// </summary>
         internal static string PackageNotFoundMessageTemplate {
             get {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Services;
 
 using NuGet;
 
@@ -20,13 +21,13 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly ApplicationInformation applicationInformation;
 
-        private readonly IPackageRepository packageRepository;
+        private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
 
-        public SelfUpdateCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepository packageRepository)
+        public SelfUpdateCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepositoryBrowser packageRepositoryBrowser)
         {
             this.userInterface = userInterface;
             this.applicationInformation = applicationInformation;
-            this.packageRepository = packageRepository;
+            this.packageRepositoryBrowser = packageRepositoryBrowser;
 
             this.Attributes = new CommandAttributes
             {
@@ -69,7 +70,8 @@ namespace NuDeploy.Core.Commands.Console
             this.userInterface.WriteLine(selfUpdateMessage);
 
             // fetch package
-            IPackage package = this.packageRepository.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
+            IPackageRepository packageRepository;
+            IPackage package = this.packageRepositoryBrowser.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId, out packageRepository);
             if (package == null)
             {
                 this.userInterface.WriteLine(Resources.SelfUpdateCommand.PackageNotFound);
