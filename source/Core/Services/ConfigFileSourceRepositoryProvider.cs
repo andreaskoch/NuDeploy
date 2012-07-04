@@ -81,7 +81,7 @@ namespace NuDeploy.Core.Services
 
         private void CreateDefaultConfiguration()
         {
-            var defaultSources = new[] { new SourceRepositoryConfiguration { Name = "Default Repository", Url = NuDeployConstants.DefaultFeedUrl } };
+            var defaultSources = new[] { new SourceRepositoryConfiguration { Name = Resources.RepositorySourceConfigurationCommand.DefaultRepositoryName, Url = NuDeployConstants.DefaultFeedUrl } };
             this.Save(defaultSources);
         }
 

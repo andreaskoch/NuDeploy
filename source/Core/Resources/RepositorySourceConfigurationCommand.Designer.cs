@@ -124,6 +124,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default Repository.
+        /// </summary>
+        internal static string DefaultRepositoryName {
+            get {
+                return ResourceManager.GetString("DefaultRepositoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove the specified repository configuration (using positional arguments)..
         /// </summary>
         internal static string DeleteCommandExampleDescriptionPositionalArguments {

@@ -138,6 +138,9 @@
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Add, remove or reset the repository source configuration.</value>
   </data>
+  <data name="DefaultRepositoryName" xml:space="preserve">
+    <value>Default Repository</value>
+  </data>
   <data name="DeleteCommandExampleDescriptionPositionalArguments" xml:space="preserve">
     <value>Remove the specified repository configuration (using positional arguments).</value>
   </data>
