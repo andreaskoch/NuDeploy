@@ -61,6 +61,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding package &quot;{0}&quot; Version({1}) to the package configuration..
+        /// </summary>
+        internal static string AddingPackageToConfigurationMessageTemplate {
+            get {
+                return ResourceManager.GetString("AddingPackageToConfigurationMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting package folder &quot;{0}&quot;..
         /// </summary>
         internal static string DeletingPackageFolderMessageTemplate {
@@ -75,6 +84,24 @@ namespace NuDeploy.Core.Resources {
         internal static string DownloadingPackageMessageTemplate {
             get {
                 return ResourceManager.GetString("DownloadingPackageMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executing install script &quot;{0}&quot;..
+        /// </summary>
+        internal static string ExecutingInstallScriptMessageTemplate {
+            get {
+                return ResourceManager.GetString("ExecutingInstallScriptMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executing uninstall script &quot;{0}&quot;..
+        /// </summary>
+        internal static string ExecutingUninstallScriptMessageTemplate {
+            get {
+                return ResourceManager.GetString("ExecutingUninstallScriptMessageTemplate", resourceCulture);
             }
         }
         
@@ -174,6 +201,15 @@ namespace NuDeploy.Core.Resources {
         internal static string PackageSuccessfullyRemovedMessageTemplate {
             get {
                 return ResourceManager.GetString("PackageSuccessfullyRemovedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing package &quot;{0}&quot; Version({1}) from the package configuration..
+        /// </summary>
+        internal static string RemovingPackageFromConfigurationMessageTemplate {
+            get {
+                return ResourceManager.GetString("RemovingPackageFromConfigurationMessageTemplate", resourceCulture);
             }
         }
         

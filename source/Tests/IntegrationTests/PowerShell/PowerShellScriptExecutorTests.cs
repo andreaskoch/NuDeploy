@@ -21,18 +21,12 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         [SetUp]
         public void Setup()
         {
-            var applicationInformation = new ApplicationInformation
-                {
-                    ApplicationName = "NuDeploy.Tests",
-                    ApplicationVersion = new Version(1, 0),
-                    NameOfExecutable = "NuDeploy.Tests.exe",
-                    StartupFolder = Environment.CurrentDirectory,
-                    ConfigurationFileFolder = Environment.CurrentDirectory
-                };
+            var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
+            IActionLogger actionLogger = new ActionLogger(applicationInformation);
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
 
-            this.userInterface = new ConsoleUserInterface(consoleTextManipulation);
+            this.userInterface = new ConsoleUserInterface(consoleTextManipulation, actionLogger);
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
             PSHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 

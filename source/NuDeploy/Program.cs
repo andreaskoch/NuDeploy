@@ -31,9 +31,13 @@ namespace NuDeploy
         public int Run(string[] args)
         {
             var console = ObjectFactory.GetInstance<IUserInterface>();
+            var logger = ObjectFactory.GetInstance<IActionLogger>();
+            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
 
             try
             {
+                logger.Log("Command: {0} {1}", applicationInformation.NameOfExecutable, string.Join(" ", args));
+
                 var commandLineArgumentInterpreter = ObjectFactory.GetInstance<ICommandLineArgumentInterpreter>();
                 var command = commandLineArgumentInterpreter.GetCommand(args) ?? ObjectFactory.GetInstance<HelpCommand>();
 

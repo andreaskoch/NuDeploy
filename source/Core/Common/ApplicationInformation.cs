@@ -1,7 +1,5 @@
 using System;
 
-using NuDeploy.Core.DependencyResolution;
-
 namespace NuDeploy.Core.Common
 {
     public class ApplicationInformation
@@ -16,6 +14,10 @@ namespace NuDeploy.Core.Common
 
         public string ConfigurationFileFolder { get; set; }
 
+        public string LogFolder { get; set; }
+
         public UserProperties ExecutingUser { get; set; }
+
+        public string MachineName { get; set; }
     }
 }

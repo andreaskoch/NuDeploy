@@ -154,9 +154,11 @@ namespace NuDeploy.Core.Services
                 this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
 
                 // execute installation script
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath));
                 this.ExecuteScriptInNewPowerShellHost(installScriptPath, this.installScriptParameters);
 
                 // update package configuration
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.AddingPackageToConfigurationMessageTemplate, package.Id, package.Id));
                 packageConfigurationAccessor.AddOrUpdate(new PackageInfo { Id = package.Id, Version = package.Version.ToString() });
             };
 
@@ -193,13 +195,12 @@ namespace NuDeploy.Core.Services
             }
 
             // uninstall
-            this.userInterface.WriteLine(
-                string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
-
-            // execute unistall script
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptMessageTemplate, uninstallScriptPath));
             this.ExecuteScriptInNewPowerShellHost(uninstallScriptPath);
 
             // update package configuration
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.RemovingPackageFromConfigurationMessageTemplate, installedPackage.Id, installedPackage.Id));
             this.packageConfigurationAccessor.Remove(installedPackage.Id);
 
             // remove package files
@@ -218,7 +219,7 @@ namespace NuDeploy.Core.Services
 
             if (!File.Exists(scriptPath))
             {
-                throw new FileNotFoundException("Could not find PowerShell script.", scriptPath);
+                throw new FileNotFoundException(Resources.Exceptions.PowerShellScriptNotFound, scriptPath);
             }
 
             using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))

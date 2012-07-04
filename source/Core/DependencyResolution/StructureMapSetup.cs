@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Management.Automation.Host;
-using System.Reflection;
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Commands.Console;
@@ -20,19 +18,13 @@ namespace NuDeploy.Core.DependencyResolution
     {
         public static void Setup()
         {
-            var applicationInformation = new ApplicationInformation
-                {
-                    ApplicationName = NuDeployConstants.ApplicationName,
-                    NameOfExecutable = NuDeployConstants.ExecutableName,
-                    ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version,
-                    StartupFolder = Environment.CurrentDirectory,
-                    ConfigurationFileFolder = Environment.CurrentDirectory,
-                    ExecutingUser = new UserProperties { Username = Environment.UserName, Domain = Environment.UserDomainName, IsInteractiveUser = Environment.UserInteractive }
-                };
+            var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
             ObjectFactory.Configure(
                 config =>
                     {
+                        config.For<IActionLogger>().Singleton().Use<ActionLogger>();
+
                         config.For<IConsoleTextManipulation>().Use<ConsoleTextManipulation>();
                         config.For<IUserInterface>().Use<ConsoleUserInterface>();
                         config.For<ApplicationInformation>().Use(applicationInformation);

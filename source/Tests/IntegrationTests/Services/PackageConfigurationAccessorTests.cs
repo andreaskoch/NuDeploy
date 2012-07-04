@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -22,15 +21,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         [TestFixtureSetUp]
         public void Setup()
         {
-            var applicationInformation = new ApplicationInformation
-                {
-                    ApplicationName = "NuDeploy.Tests",
-                    ApplicationVersion = new Version(1, 0),
-                    NameOfExecutable = "NuDeploy.Tests.exe",
-                    StartupFolder = Environment.CurrentDirectory,
-                    ConfigurationFileFolder = Environment.CurrentDirectory
-                };
-
+            var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
             this.packageConfigurationAccessor = new PackageConfigurationAccessor(applicationInformation);
         }
 

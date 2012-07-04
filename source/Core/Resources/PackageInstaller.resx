@@ -171,4 +171,16 @@
   <data name="NoPackageRepositoryConfigurationsAvailable" xml:space="preserve">
     <value>There are no package repositories configured. Please check your package repository configuration.</value>
   </data>
+  <data name="AddingPackageToConfigurationMessageTemplate" xml:space="preserve">
+    <value>Adding package "{0}" Version({1}) to the package configuration.</value>
+  </data>
+  <data name="ExecutingInstallScriptMessageTemplate" xml:space="preserve">
+    <value>Executing install script "{0}".</value>
+  </data>
+  <data name="ExecutingUninstallScriptMessageTemplate" xml:space="preserve">
+    <value>Executing uninstall script "{0}".</value>
+  </data>
+  <data name="RemovingPackageFromConfigurationMessageTemplate" xml:space="preserve">
+    <value>Removing package "{0}" Version({1}) from the package configuration.</value>
+  </data>
 </root>

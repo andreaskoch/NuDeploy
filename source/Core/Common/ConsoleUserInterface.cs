@@ -9,9 +9,12 @@ namespace NuDeploy.Core.Common
     {
         private readonly IConsoleTextManipulation textManipulation;
 
-        public ConsoleUserInterface(IConsoleTextManipulation textManipulation)
+        private readonly IActionLogger logger;
+
+        public ConsoleUserInterface(IConsoleTextManipulation textManipulation, IActionLogger logger)
         {
             this.textManipulation = textManipulation;
+            this.logger = logger;
         }
 
         public int WindowWidth
@@ -36,24 +39,33 @@ namespace NuDeploy.Core.Common
 
         public string GetInput()
         {
-            return Console.ReadLine();
+            this.logger.Log("Requesting input from user.");
+
+            string input = Console.ReadLine();
+
+            this.logger.Log("User entered {0}", input);
+            return input;
         }
 
         public void ShowIndented(string text, int marginLeft)
-        {
+        {       
             string indentedText = this.textManipulation.IndentText(text, this.WindowWidth, marginLeft);
             Console.WriteLine(indentedText);
+            this.logger.Log(text);
         }
 
         public void Write(string text)
         {
             Console.Write(text);
+            this.logger.Log(text);
         }
 
         public void WriteLine(string text)
         {
             string wrappedText = this.textManipulation.WrapText(text, this.WindowWidth);
+
             Console.WriteLine(wrappedText);
+            this.logger.Log(text);
         }
 
         public void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue)
@@ -77,9 +89,10 @@ namespace NuDeploy.Core.Common
                 string keyColumnText = string.Format("{0,-" + keyColumnWidth + "}", keyValuePair.Key);
                 string valueColumnText = this.textManipulation.WrapLongTextWithHangingIndentation(keyValuePair.Value, valueColumnWidth, keyColumnWidth);
 
-                Console.Write(keyColumnText);
-                Console.Write(valueColumnText);
-                Console.Write(Environment.NewLine);
+                string text = string.Concat(keyColumnText, valueColumnText);
+
+                Console.Write(text + Environment.NewLine);
+                this.logger.Log(text);
             }
         }
     }
