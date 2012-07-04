@@ -8,8 +8,9 @@ syntax: glob
 source\packages\*
 package\*
 
-# Ignore ILMerge logs
+# Binary Folders
 binaries\*\*.log
+binaries\*\*.config
 
 # Ignore Visual Studio 2008 files
 *.obj
