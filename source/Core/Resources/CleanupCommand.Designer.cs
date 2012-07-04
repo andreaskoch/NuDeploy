@@ -61,7 +61,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The id of the NuGet package to install (e.g. &quot;Newtonsoft.Json&quot;). If you don&apos;t specifiy a package id, the cleanup will be performed for all packages in the current folder..
+        ///   Looks up a localized string similar to The id of the NuGet package to install (e.g. &quot;NuDeploy.CommandLine&quot;). If you don&apos;t specifiy a package id, the cleanup will be performed for all packages in the current folder..
         /// </summary>
         internal static string ArgumentDescriptionNugetPackageId {
             get {

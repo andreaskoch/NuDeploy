@@ -88,7 +88,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Executing install script &quot;{0}&quot;..
+        ///   Looks up a localized string similar to Executing install script &quot;{0}&quot; with parameter &quot;{1}&quot;..
         /// </summary>
         internal static string ExecutingInstallScriptMessageTemplate {
             get {

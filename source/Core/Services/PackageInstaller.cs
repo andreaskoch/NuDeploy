@@ -16,8 +16,6 @@ namespace NuDeploy.Core.Services
 
         private const string UninstallPowerShellScriptName = "Remove.ps1";
 
-        private readonly string[] installScriptParameters = new[] { "-DeploymentType Full" };
-
         private readonly ApplicationInformation applicationInformation;
 
         private readonly IUserInterface userInterface;
@@ -40,7 +38,7 @@ namespace NuDeploy.Core.Services
             this.powerShellHost = powerShellHost;
         }
 
-        public bool Install(string packageId, bool forceInstallation)
+        public bool Install(string packageId, string deploymentType, bool forceInstallation)
         {
             // check package source configuration
             if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
@@ -154,8 +152,9 @@ namespace NuDeploy.Core.Services
                 this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
 
                 // execute installation script
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath));
-                this.ExecuteScriptInNewPowerShellHost(installScriptPath, this.installScriptParameters);
+                string scriptParameter = string.Format("-DeploymentType {0}", deploymentType);
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath, scriptParameter));
+                this.ExecuteScriptInNewPowerShellHost(installScriptPath, scriptParameter);
 
                 // update package configuration
                 this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.AddingPackageToConfigurationMessageTemplate, package.Id, package.Id));

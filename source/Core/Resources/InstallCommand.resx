@@ -117,14 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArgumentDescriptionDeploymentTypeTemplate" xml:space="preserve">
+    <value>The deployment type: {0} (default: {1}).</value>
+  </data>
   <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
-    <value>The id of the NuGet package to install (e.g. "Newtonsoft.Json").</value>
+    <value>The id of the NuGet package to install (e.g. "NuDeploy.CommandLine").</value>
   </data>
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Install the specified NuGet package.</value>
   </data>
   <data name="CommandExampleDescription1" xml:space="preserve">
-    <value>Install the application/package with the given Nuget package id (e.g. "Newtonsoft.Json").</value>
+    <value>Install the application/package with the given package id (e.g. "NuDeploy.CommandLine").</value>
+  </data>
+  <data name="CommandExampleDescription2" xml:space="preserve">
+    <value>Install the package with the given package id using the supplied deployment type (positional parameters).</value>
+  </data>
+  <data name="CommandExampleDescription3" xml:space="preserve">
+    <value>Install the package with the given package id using the supplied deployment type (named parameters).</value>
+  </data>
+  <data name="DeploymentTypeWasNotRecognizedMessageTemplate" xml:space="preserve">
+    <value>The deployment type "{0}" is unknown. Please use one of these instead: {1}.</value>
   </data>
   <data name="NoPackageIdSpecifiedMessage" xml:space="preserve">
     <value>No package id specified.</value>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
-    <value>The id of the NuGet package to install (e.g. "Newtonsoft.Json"). If you don't specifiy a package id, the cleanup will be performed for all packages in the current folder.</value>
+    <value>The id of the NuGet package to install (e.g. "NuDeploy.CommandLine"). If you don't specifiy a package id, the cleanup will be performed for all packages in the current folder.</value>
   </data>
   <data name="CleanupMessageAllInstalledPackages" xml:space="preserve">
     <value>Starting cleanup for all installed packages.</value>

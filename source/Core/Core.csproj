@@ -170,6 +170,7 @@
     <EmbeddedResource Include="Resources\CleanupCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CleanupCommand.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CleanupService.resx">
       <Generator>ResXFileCodeGenerator</Generator>

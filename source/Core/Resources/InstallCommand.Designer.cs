@@ -61,7 +61,16 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The id of the NuGet package to install (e.g. &quot;Newtonsoft.Json&quot;)..
+        ///   Looks up a localized string similar to The deployment type: {0} (default: {1})..
+        /// </summary>
+        internal static string ArgumentDescriptionDeploymentTypeTemplate {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionDeploymentTypeTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The id of the NuGet package to install (e.g. &quot;NuDeploy.CommandLine&quot;)..
         /// </summary>
         internal static string ArgumentDescriptionNugetPackageId {
             get {
@@ -79,11 +88,38 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install the application/package with the given Nuget package id (e.g. &quot;Newtonsoft.Json&quot;)..
+        ///   Looks up a localized string similar to Install the application/package with the given package id (e.g. &quot;NuDeploy.CommandLine&quot;)..
         /// </summary>
         internal static string CommandExampleDescription1 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install the package with the given package id using the supplied deployment type (positional parameters)..
+        /// </summary>
+        internal static string CommandExampleDescription2 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install the package with the given package id using the supplied deployment type (named parameters)..
+        /// </summary>
+        internal static string CommandExampleDescription3 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The deployment type &quot;{0}&quot; is unknown. Please use one of these instead: {1}..
+        /// </summary>
+        internal static string DeploymentTypeWasNotRecognizedMessageTemplate {
+            get {
+                return ResourceManager.GetString("DeploymentTypeWasNotRecognizedMessageTemplate", resourceCulture);
             }
         }
         
