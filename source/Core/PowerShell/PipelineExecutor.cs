@@ -14,7 +14,7 @@ namespace NuDeploy.Core.PowerShell
         {
             // create a pipeline and feed it the script text
             this.pipeline = runSpace.CreatePipeline(command);
-            this.pipeline.Commands.Add("out-default");
+            this.pipeline.Commands.Add("out-string");
             this.pipeline.Commands[0].MergeMyResults(PipelineResultTypes.Error, PipelineResultTypes.Output);
 
             // we'll listen for script output data by way of the DataReady event
