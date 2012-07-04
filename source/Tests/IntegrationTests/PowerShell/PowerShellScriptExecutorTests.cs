@@ -26,7 +26,8 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
                     ApplicationName = "NuDeploy.Tests",
                     ApplicationVersion = new Version(1, 0),
                     NameOfExecutable = "NuDeploy.Tests.exe",
-                    StartupFolder = Environment.CurrentDirectory
+                    StartupFolder = Environment.CurrentDirectory,
+                    ConfigurationFileFolder = Environment.CurrentDirectory
                 };
 
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();

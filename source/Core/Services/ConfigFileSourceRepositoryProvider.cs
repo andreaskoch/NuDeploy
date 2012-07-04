@@ -16,9 +16,19 @@ namespace NuDeploy.Core.Services
 
         private static readonly Encoding ConfigurationFileEncoding = Encoding.UTF8;
 
+        private readonly ApplicationInformation applicationInformation;
+
+        private readonly string sourceConfigurationFilePath;
+
+        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation)
+        {
+            this.applicationInformation = applicationInformation;
+            this.sourceConfigurationFilePath = this.GetSourceConfigurationFilePath();
+        }
+
         public IEnumerable<SourceRepositoryConfiguration> GetRepositoryConfigurations()
         {
-            return this.GetRepositoriesFromConfigFile();
+            return this.Load();
         }
 
         public void SaveRepositoryConfiguration(SourceRepositoryConfiguration sourceRepositoryConfiguration)
@@ -34,7 +44,7 @@ namespace NuDeploy.Core.Services
             }
 
             // get existing repositoriesConfiguration
-            var repositories = this.GetRepositoriesFromConfigFile().ToDictionary(r => r.Name, r => r);
+            var repositories = this.Load().ToDictionary(r => r.Name, r => r);
 
             // add or update
             string existingKey = repositories.Keys.FirstOrDefault(k => k.Equals(sourceRepositoryConfiguration.Name, StringComparison.OrdinalIgnoreCase));
@@ -58,7 +68,7 @@ namespace NuDeploy.Core.Services
                 throw new ArgumentException("repositoryName");
             }
 
-            var repositories = this.GetRepositoriesFromConfigFile().Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false);
+            var repositories = this.Load().Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false);
 
             // save
             this.Save(repositories.ToArray());
@@ -69,27 +79,32 @@ namespace NuDeploy.Core.Services
             this.CreateDefaultConfiguration();
         }
 
-        private IEnumerable<SourceRepositoryConfiguration> GetRepositoriesFromConfigFile()
-        {
-            if (!File.Exists(SourceRepositoryConfigurationFileName))
-            {
-                this.CreateDefaultConfiguration();
-            }
-
-            string json = File.ReadAllText(SourceRepositoryConfigurationFileName, ConfigurationFileEncoding);
-            return JsonConvert.DeserializeObject<SourceRepositoryConfiguration[]>(json);
-        }
-
         private void CreateDefaultConfiguration()
         {
             var defaultSources = new[] { new SourceRepositoryConfiguration { Name = "Default Repository", Url = NuDeployConstants.DefaultFeedUrl } };
             this.Save(defaultSources);
         }
 
+        private IEnumerable<SourceRepositoryConfiguration> Load()
+        {
+            if (!File.Exists(this.sourceConfigurationFilePath))
+            {
+                this.CreateDefaultConfiguration();
+            }
+
+            string json = File.ReadAllText(this.sourceConfigurationFilePath, ConfigurationFileEncoding);
+            return JsonConvert.DeserializeObject<SourceRepositoryConfiguration[]>(json);
+        }
+
         private void Save(SourceRepositoryConfiguration[] repositoriesConfiguration)
         {
             string json = JsonConvert.SerializeObject(repositoriesConfiguration);
-            File.WriteAllText(SourceRepositoryConfigurationFileName, json, ConfigurationFileEncoding);            
+            File.WriteAllText(this.sourceConfigurationFilePath, json, ConfigurationFileEncoding);
+        }
+
+        private string GetSourceConfigurationFilePath()
+        {
+            return Path.Combine(this.applicationInformation.ConfigurationFileFolder, SourceRepositoryConfigurationFileName);
         }
     }
 }

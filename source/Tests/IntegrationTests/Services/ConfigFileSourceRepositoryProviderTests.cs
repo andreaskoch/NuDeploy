@@ -17,7 +17,16 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         [TestFixtureSetUp]
         public void Setup()
         {
-            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider();
+            var applicationInformation = new ApplicationInformation
+            {
+                ApplicationName = "NuDeploy.Tests",
+                ApplicationVersion = new Version(1, 0),
+                NameOfExecutable = "NuDeploy.Tests.exe",
+                StartupFolder = Environment.CurrentDirectory,
+                ConfigurationFileFolder = Environment.CurrentDirectory
+            };
+
+            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation);
         }
 
         [SetUp]

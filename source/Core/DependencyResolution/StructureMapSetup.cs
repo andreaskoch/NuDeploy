@@ -25,7 +25,8 @@ namespace NuDeploy.Core.DependencyResolution
                     ApplicationName = NuDeployConstants.ApplicationName, 
                     NameOfExecutable = NuDeployConstants.ExecutableName,
                     ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version,
-                    StartupFolder = Environment.CurrentDirectory
+                    StartupFolder = Environment.CurrentDirectory,
+                    ConfigurationFileFolder = Environment.CurrentDirectory
                 };
 
             ObjectFactory.Configure(

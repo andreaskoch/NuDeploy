@@ -11,5 +11,7 @@ namespace NuDeploy.Core.Common
         public string ApplicationName { get; set; }
 
         public string StartupFolder { get; set; }
+
+        public string ConfigurationFileFolder { get; set; }
     }
 }

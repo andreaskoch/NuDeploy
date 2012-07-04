@@ -103,7 +103,7 @@ namespace NuDeploy.Core.Services
 
         private string GetPackageConfigurationFilePath()
         {
-            return Path.Combine(this.applicationInformation.StartupFolder, PackageConfigurationFileName);
+            return Path.Combine(this.applicationInformation.ConfigurationFileFolder, PackageConfigurationFileName);
         }
     }
 }
