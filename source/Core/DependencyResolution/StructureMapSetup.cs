@@ -22,11 +22,12 @@ namespace NuDeploy.Core.DependencyResolution
         {
             var applicationInformation = new ApplicationInformation
                 {
-                    ApplicationName = NuDeployConstants.ApplicationName, 
+                    ApplicationName = NuDeployConstants.ApplicationName,
                     NameOfExecutable = NuDeployConstants.ExecutableName,
                     ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version,
                     StartupFolder = Environment.CurrentDirectory,
-                    ConfigurationFileFolder = Environment.CurrentDirectory
+                    ConfigurationFileFolder = Environment.CurrentDirectory,
+                    ExecutingUser = new UserProperties { Username = Environment.UserName, Domain = Environment.UserDomainName, IsInteractiveUser = Environment.UserInteractive }
                 };
 
             ObjectFactory.Configure(

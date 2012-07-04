@@ -1,5 +1,7 @@
 using System;
 
+using NuDeploy.Core.DependencyResolution;
+
 namespace NuDeploy.Core.Common
 {
     public class ApplicationInformation
@@ -13,5 +15,7 @@ namespace NuDeploy.Core.Common
         public string StartupFolder { get; set; }
 
         public string ConfigurationFileFolder { get; set; }
+
+        public UserProperties ExecutingUser { get; set; }
     }
 }

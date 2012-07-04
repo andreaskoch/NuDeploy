@@ -81,6 +81,7 @@
     <Compile Include="Common\NuDeployPackageInfo.cs" />
     <Compile Include="Common\PackageInfo.cs" />
     <Compile Include="Common\SourceRepositoryConfiguration.cs" />
+    <Compile Include="Common\UserProperties.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="PowerShell\PipelineExecutor.cs" />
     <Compile Include="PowerShell\NuDeployPowerShellUserInterface.cs" />
