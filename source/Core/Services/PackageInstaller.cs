@@ -24,15 +24,18 @@ namespace NuDeploy.Core.Services
 
         private readonly IInstallationStatusProvider installationStatusProvider;
 
+        private readonly IPackageConfigurationAccessor packageConfigurationAccessor;
+
         private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
 
         private readonly PSHost powerShellHost;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageRepositoryBrowser packageRepositoryBrowser, PSHost powerShellHost)
+        public PackageInstaller(ApplicationInformation applicationInformation, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, PSHost powerShellHost)
         {
             this.applicationInformation = applicationInformation;
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
+            this.packageConfigurationAccessor = packageConfigurationAccessor;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
             this.powerShellHost = powerShellHost;
         }
@@ -149,7 +152,12 @@ namespace NuDeploy.Core.Services
                 }
 
                 this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
+
+                // execute installation script
                 this.ExecuteScriptInNewPowerShellHost(installScriptPath, this.installScriptParameters);
+
+                // update package configuration
+                packageConfigurationAccessor.AddOrUpdate(new PackageInfo { Id = package.Id, Version = package.Version.ToString() });
             };
 
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingInstallationMessageTemplate, package.Id, package.Version));
@@ -188,7 +196,11 @@ namespace NuDeploy.Core.Services
             this.userInterface.WriteLine(
                 string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
 
+            // execute unistall script
             this.ExecuteScriptInNewPowerShellHost(uninstallScriptPath);
+
+            // update package configuration
+            this.packageConfigurationAccessor.Remove(installedPackage.Id);
 
             // remove package files
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
