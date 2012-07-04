@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 
-using NuDeploy.Core.Commands;
 using NuDeploy.Core.Commands.Console;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.DependencyResolution;

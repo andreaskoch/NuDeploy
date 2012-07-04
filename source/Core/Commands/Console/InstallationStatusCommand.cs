@@ -68,15 +68,11 @@ namespace NuDeploy.Core.Commands.Console
             // abort if no packages are returned
             if (packages.Count == 0)
             {
-                if (string.IsNullOrWhiteSpace(packageId))
-                {
-                    this.userInterface.WriteLine(Resources.InstallationStatusCommand.NoPackagesInstalledMessage);
-                }
-                else
-                {
-                    this.userInterface.WriteLine(string.Format(Resources.InstallationStatusCommand.NoInstancesOfPackageInstalledMessageTemplate, packageId));
-                }
-                
+                this.userInterface.WriteLine(
+                    string.IsNullOrWhiteSpace(packageId)
+                        ? Resources.InstallationStatusCommand.NoPackagesInstalledMessage
+                        : string.Format(Resources.InstallationStatusCommand.NoInstancesOfPackageInstalledMessageTemplate, packageId));
+
                 return;
             }
 

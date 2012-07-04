@@ -91,7 +91,11 @@ namespace NuDeploy.Core.Commands.Console
 
             IPackageFile executable =
                 package.GetFiles().FirstOrDefault(
-                    file => Path.GetFileName(file.Path).Equals(this.applicationInformation.NameOfExecutable, StringComparison.OrdinalIgnoreCase));
+                    file =>
+                        {
+                            var fileName = Path.GetFileName(file.Path);
+                            return fileName != null && fileName.Equals(this.applicationInformation.NameOfExecutable, StringComparison.OrdinalIgnoreCase);
+                        });
 
             if (executable == null)
             {

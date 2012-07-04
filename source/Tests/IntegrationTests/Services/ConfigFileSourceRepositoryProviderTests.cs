@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Linq;
 
-using NUnit.Framework;
-
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services;
+
+using NUnit.Framework;
 
 namespace NuDeploy.Tests.IntegrationTests.Services
 {
