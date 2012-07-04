@@ -1,5 +1,7 @@
 using System;
 
+using Newtonsoft.Json;
+
 namespace NuDeploy.Core.Common
 {
     public class PackageInfo
@@ -7,6 +9,15 @@ namespace NuDeploy.Core.Common
         public string Id { get; set; }
 
         public string Version { get; set; }
+
+        [JsonIgnore]
+        public bool IsValid
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(this.Id) && !string.IsNullOrWhiteSpace(this.Version);
+            }
+        }
 
         public override string ToString()
         {

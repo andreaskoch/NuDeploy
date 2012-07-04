@@ -16,6 +16,8 @@ namespace NuDeploy.Core.Services
 
         private static readonly Encoding ConfigFileEncoding = Encoding.UTF8;
 
+        private static readonly Func<PackageInfo, string> PackageSortKeySelector = p => p.Id;
+
         private readonly string packageConfigurationFilePath;
 
         private readonly ApplicationInformation applicationInformation;
@@ -28,6 +30,59 @@ namespace NuDeploy.Core.Services
 
         public IEnumerable<PackageInfo> GetInstalledPackages()
         {
+            var packages = this.Load();
+            return packages.Distinct().OrderBy(PackageSortKeySelector).ToList();
+        }
+
+        public void AddOrUpdate(PackageInfo packageInfo)
+        {
+            if (packageInfo == null)
+            {
+                return;
+            }
+
+            if (!packageInfo.IsValid)
+            {
+                return;
+            }
+
+            var packages = this.Load().ToDictionary(p => p.Id, p => p);
+            if (packages.Keys.Any(id => id.Equals(packageInfo.Id, StringComparison.OrdinalIgnoreCase)))
+            {
+                var existingEntry = packages[packageInfo.Id];
+
+                // update
+                if (existingEntry.Equals(packageInfo) == false)
+                {
+                    packages[packageInfo.Id] = packageInfo;
+                }
+            }
+            else
+            {
+                // add
+                packages.Add(packageInfo.Id, packageInfo);
+            }
+
+            // sort
+            var packagesSorted = packages.Values.OrderBy(PackageSortKeySelector).ToArray();
+
+            // save
+            this.Save(packagesSorted);
+        }
+
+        public void Remove(string packageId)
+        {
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                return;
+            }
+
+            var packages = this.Load().Where(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase) == false).ToArray();
+            this.Save(packages);
+        }
+
+        private IEnumerable<PackageInfo> Load()
+        {
             if (!File.Exists(this.packageConfigurationFilePath))
             {
                 return new List<PackageInfo>();
@@ -36,17 +91,14 @@ namespace NuDeploy.Core.Services
             string json = File.ReadAllText(this.packageConfigurationFilePath, ConfigFileEncoding);
             var packages = JsonConvert.DeserializeObject<PackageInfo[]>(json);
 
-            return packages.Distinct().OrderBy(p => p.Id).ToList();
+            return packages.Where(p => p.IsValid);
         }
 
-        public void AddOrUpdate(PackageInfo packageInfo)
+        private void Save(IEnumerable<PackageInfo> packageInfos)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(string packageId)
-        {
-            throw new NotImplementedException();
+            var validPackages = packageInfos.Where(p => p.IsValid).ToArray();
+            string json = JsonConvert.SerializeObject(validPackages);
+            File.WriteAllText(this.packageConfigurationFilePath, json, ConfigFileEncoding);
         }
 
         private string GetPackageConfigurationFilePath()
