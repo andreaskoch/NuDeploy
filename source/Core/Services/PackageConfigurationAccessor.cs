@@ -12,7 +12,7 @@ namespace NuDeploy.Core.Services
 {
     public class PackageConfigurationAccessor : IPackageConfigurationAccessor
     {
-        public const string PackageConfigurationFileName = "packages.config";
+        public const string PackageConfigurationFileName = "NuDeploy.Packages.config";
 
         private static readonly Encoding ConfigFileEncoding = Encoding.UTF8;
 

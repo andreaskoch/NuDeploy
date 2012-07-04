@@ -12,7 +12,7 @@ namespace NuDeploy.Core.Services
 {
     public class ConfigFileSourceRepositoryProvider : ISourceRepositoryProvider
     {
-        public const string SourceRepositoryConfigurationFileName = "sources.config";
+        public const string SourceRepositoryConfigurationFileName = "NuDeploy.Sources.config";
 
         private static readonly Encoding ConfigurationFileEncoding = Encoding.UTF8;
 
