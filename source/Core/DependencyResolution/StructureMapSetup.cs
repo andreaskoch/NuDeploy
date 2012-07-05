@@ -49,6 +49,8 @@ namespace NuDeploy.Core.DependencyResolution
                     config.For<IPackageInstaller>().Use<PackageInstaller>();
                     config.For<ICleanupService>().Use<CleanupService>();
                     config.For<IInstallationStatusProvider>().Use<InstallationStatusProvider>();
+
+                    config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
                 });
 
             ObjectFactory.Configure(
