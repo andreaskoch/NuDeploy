@@ -2,6 +2,8 @@
 using System.IO;
 using System.Management.Automation.Host;
 
+using Moq;
+
 using NuDeploy.Core.Common;
 using NuDeploy.Core.PowerShell;
 
@@ -23,10 +25,10 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
-            IActionLogger actionLogger = new ActionLogger(applicationInformation);
+            var actionLoggerMock = new Mock<IActionLogger>();
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
 
-            this.userInterface = new ConsoleUserInterface(consoleTextManipulation, actionLogger);
+            this.userInterface = new ConsoleUserInterface(consoleTextManipulation, actionLoggerMock.Object);
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
             PSHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 
