@@ -109,6 +109,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CleanupService.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ConfigurationFileTransformer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigurationFileTransformer.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -181,6 +186,10 @@
     <EmbeddedResource Include="Resources\CleanupService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CleanupService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ConfigurationFileTransformer.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfigurationFileTransformer.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>

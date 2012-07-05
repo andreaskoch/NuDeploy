@@ -21,44 +21,45 @@ namespace NuDeploy.Core.Services
         {
             if (string.IsNullOrWhiteSpace(sourceFilePath))
             {
-                this.userInterface.WriteLine(string.Format("The specified source file path \"{0}\" for the configuration file transformation cannot be null or empty.", transformationFilePath));
+                this.userInterface.WriteLine(
+                    string.Format(Resources.ConfigurationFileTransformer.SourceFilePathCannotBeNullOrEmptyMessageTemplate, transformationFilePath));
 
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(transformationFilePath))
             {
-                this.userInterface.WriteLine(string.Format("The specified transformation file path \"{0}\" for the configuration file transformation cannot be null or empty.", transformationFilePath));
+                this.userInterface.WriteLine(
+                    string.Format(Resources.ConfigurationFileTransformer.TransformationFilePathCannotBeNullOrEmptyMessageTemplate, transformationFilePath));
 
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(destinationFilePath))
             {
-                this.userInterface.WriteLine(string.Format("The specified destination file path \"{0}\" for the configuration file transformation cannot be null or empty.", destinationFilePath));
+                this.userInterface.WriteLine(
+                    string.Format(Resources.ConfigurationFileTransformer.DestinationFilePathCannotBeNullOrEmptyMessageTemplate, destinationFilePath));
 
                 return false;
             }
 
             if (!File.Exists(sourceFilePath))
             {
-                this.userInterface.WriteLine(
-                    string.Format("The specified source file \"{0}\" for the configuration file transformation was not found.", sourceFilePath));
-
+                this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.SourceFilePathDoesNotExistMessageTemplate, sourceFilePath));
                 return false;
             }
 
             if (!File.Exists(transformationFilePath))
             {
                 this.userInterface.WriteLine(
-                    string.Format("The specified transformation file \"{0}\" for the configuration file transformation was not found.", transformationFilePath));
+                    string.Format(Resources.ConfigurationFileTransformer.TransformationFilePathDoesNotExistMessageTemplate, transformationFilePath));
 
                 return false;
             }
 
             this.userInterface.WriteLine(
                 string.Format(
-                    "Starting the transformation of the specified configuration file \"{0}\" with the transformation file \"{1}\" into the new file \"{2}\".",
+                    Resources.ConfigurationFileTransformer.TransformationStartMessageTemplate,
                     sourceFilePath,
                     transformationFilePath,
                     destinationFilePath));
@@ -72,7 +73,7 @@ namespace NuDeploy.Core.Services
                 {
                     this.userInterface.WriteLine(
                         string.Format(
-                            "The configuration file has been transformed successfully ({0} + {1} => {2}).",
+                            Resources.ConfigurationFileTransformer.TransformationSuccessMessageTemplate,
                             sourceFilePath,
                             transformationFilePath,
                             destinationFilePath));
@@ -81,7 +82,7 @@ namespace NuDeploy.Core.Services
                 }
             }
 
-            this.userInterface.WriteLine("The configuration file transformation failed.");
+            this.userInterface.WriteLine(Resources.ConfigurationFileTransformer.TransformationFailedMessage);
             return false;
         }
 
@@ -97,7 +98,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Could not load the source file \"{0}\" for the configuration file transformation because the file contains invalid XML: {1}",
+                        Resources.ConfigurationFileTransformer.GetSourceFileXmlExceptionMessageTemplate,
                         filePath,
                         xmlException));
             }
@@ -105,7 +106,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Opening the the source file \"{0}\" for the configuration file transformation failed with the following exception: {1}",
+                        Resources.ConfigurationFileTransformer.GetSourceFileGeneralExceptionMessageTemplate,
                         filePath,
                         generalException));
             }
@@ -123,7 +124,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Could not load the transformation file \"{0}\" for the configuration file transformation because the file contains invalid XML: {1}",
+                        Resources.ConfigurationFileTransformer.GetTransformationFileXmlExceptionMessageTemplate,
                         filePath,
                         xmlException));
             }
@@ -131,7 +132,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Opening the the transformation file \"{0}\" for the configuration file transformation failed with the following exception: {1}",
+                        Resources.ConfigurationFileTransformer.GetTransformationFileGeneralExceptionMessageTemplate,
                         filePath,
                         generalException));
             }
@@ -155,7 +156,7 @@ namespace NuDeploy.Core.Services
             {
                 if (File.Exists(destinationFilePath))
                 {
-                    this.userInterface.WriteLine(string.Format("The specified destination file for the configuration file transformation does already exist. Please note that the file will be overidden."));
+                    this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.DestinationFileAlreadyExistsMessageTemplate, destinationFilePath));
                     File.Delete(destinationFilePath);
                 }
 
@@ -166,7 +167,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Could not save the transformed configuration file to the specified path \"{0}\" because the file contains invalid XML: {1}",
+                        Resources.ConfigurationFileTransformer.SaveTransformedFileXmlExceptionMessageTemplate,
                         destinationFilePath,
                         xmlException));
             }
@@ -174,7 +175,7 @@ namespace NuDeploy.Core.Services
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        "Saving the transformed configuration file to the specified path \"{0}\" failed with the following exception: {1}",
+                        Resources.ConfigurationFileTransformer.SaveTransformedFileGeneralExceptionMessageTemplate,
                         destinationFilePath,
                         generalException));
             }
