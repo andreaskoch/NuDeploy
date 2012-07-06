@@ -178,8 +178,6 @@ namespace NuDeploy.Core.Services
                     {
                         File.Copy(destinationFilePath, sourceFilePath, true);
                     }
-
-                    return;
                 }
 
                 // execute installation script
