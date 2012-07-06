@@ -14,6 +14,8 @@ namespace NuDeploy.Core.Services
     {
         public const string InstallPowerShellScriptName = "Deploy.ps1";
 
+        public const string InstallPowerShellScriptDeploymentTypeParameterName = "DeploymentType";
+
         public const string UninstallPowerShellScriptName = "Remove.ps1";
 
         public const string SystemSettingsFileName = "systemsettings.xml";
@@ -183,7 +185,7 @@ namespace NuDeploy.Core.Services
                 // execute installation script
                 this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
 
-                string scriptParameter = string.Format("-DeploymentType {0}", deploymentType);
+                string scriptParameter = string.Format("-{0} {1}", InstallPowerShellScriptDeploymentTypeParameterName, deploymentType);
                 this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath, scriptParameter));
                 this.ExecuteScriptInNewPowerShellHost(installScriptPath, scriptParameter);
 
