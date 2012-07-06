@@ -70,6 +70,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applying transformations to the system settings of your deployment package using the &quot;{0}&quot; profile..
+        /// </summary>
+        internal static string ApplyingSystemSettingsTransformationProfileMessageTemplate {
+            get {
+                return ResourceManager.GetString("ApplyingSystemSettingsTransformationProfileMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting package folder &quot;{0}&quot;..
         /// </summary>
         internal static string DeletingPackageFolderMessageTemplate {

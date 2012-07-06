@@ -12,9 +12,17 @@ namespace NuDeploy.Core.Services
 {
     public class PackageInstaller : IPackageInstaller
     {
-        private const string InstallPowerShellScriptName = "Deploy.ps1";
+        public const string InstallPowerShellScriptName = "Deploy.ps1";
 
-        private const string UninstallPowerShellScriptName = "Remove.ps1";
+        public const string UninstallPowerShellScriptName = "Remove.ps1";
+
+        public const string SystemSettingsFileName = "systemsettings.xml";
+
+        public const string SystemSettingsFolder = "tools";
+
+        public const string SystemSettingsTransformationFilenameTemplate = "systemsettings.transformation.{0}.xml";
+
+        public const string TransformedSystemSettingsFileName = SystemSettingsFileName + ".transformed";
 
         private readonly ApplicationInformation applicationInformation;
 
@@ -41,7 +49,7 @@ namespace NuDeploy.Core.Services
             this.powerShellHost = powerShellHost;
         }
 
-        public bool Install(string packageId, string deploymentType, bool forceInstallation, params string[] subTransformationNames)
+        public bool Install(string packageId, string deploymentType, bool forceInstallation, string systemSettingTransformationProfileName)
         {
             // check package source configuration
             if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
@@ -152,20 +160,21 @@ namespace NuDeploy.Core.Services
                     return;
                 }
 
-                // apply system settings transformations
-                if (subTransformationNames != null && subTransformationNames.Count() > 0)
+                // apply transformations on the system settings before installation
+                if (string.IsNullOrWhiteSpace(systemSettingTransformationProfileName) == false)
                 {
-                    string sourceFilePath = Path.Combine(packageFolder, "tools", "systemsettings.xml");
+                    this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ApplyingSystemSettingsTransformationProfileMessageTemplate, systemSettingTransformationProfileName));
 
-                    foreach (var subTransformationName in subTransformationNames)
+                    string sourceFilePath = Path.Combine(packageFolder, SystemSettingsFolder, SystemSettingsFileName);
+
+                    string transformationFilename = string.Format(SystemSettingsTransformationFilenameTemplate, systemSettingTransformationProfileName);
+                    string transformationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, transformationFilename);
+
+                    string destinationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, TransformedSystemSettingsFileName);
+
+                    if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
                     {
-                        string transformationFilename = string.Format("systemsettings.transformation.{0}.xml", subTransformationName);
-                        string transformationFilePath = Path.Combine(packageFolder, "tools", transformationFilename);
-                        string destinationFilePath = sourceFilePath + ".transformed";
-                        if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
-                        {
-                            File.Copy(destinationFilePath, sourceFilePath, true);
-                        }
+                        File.Copy(destinationFilePath, sourceFilePath, true);
                     }
 
                     return;

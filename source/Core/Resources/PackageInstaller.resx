@@ -183,4 +183,7 @@
   <data name="RemovingPackageFromConfigurationMessageTemplate" xml:space="preserve">
     <value>Removing package "{0}" Version({1}) from the package configuration.</value>
   </data>
+  <data name="ApplyingSystemSettingsTransformationProfileMessageTemplate" xml:space="preserve">
+    <value>Applying transformations to the system settings of your deployment package using the "{0}" profile.</value>
+  </data>
 </root>

@@ -79,11 +79,11 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The names of the system settings transformtions that shall be executed before the installation..
+        ///   Looks up a localized string similar to The name of the system settings transformtion profile that shall be applied to the system settings of your deployment package before the installation (optional parameter; e.g. &quot;PROD-A&quot;, &quot;PROD-B&quot;, &quot;PROD-C&quot;). The transformed file will be saved in the &quot;{0}&quot; file of your package..
         /// </summary>
-        internal static string ArgumentDescriptionSystemSettingTransformationNames {
+        internal static string ArgumentDescriptionSystemSettingTransformationProfileTemplate {
             get {
-                return ResourceManager.GetString("ArgumentDescriptionSystemSettingTransformationNames", resourceCulture);
+                return ResourceManager.GetString("ArgumentDescriptionSystemSettingTransformationProfileTemplate", resourceCulture);
             }
         }
         
@@ -120,6 +120,15 @@ namespace NuDeploy.Core.Resources {
         internal static string CommandExampleDescription3 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install the package with the given package id while applying the &quot;PROD-A&quot; system setting transformation before the installation (named parameters)..
+        /// </summary>
+        internal static string CommandExampleDescription4 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription4", resourceCulture);
             }
         }
         
