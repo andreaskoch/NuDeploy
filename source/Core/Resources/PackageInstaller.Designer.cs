@@ -259,6 +259,24 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tranformation failed..
+        /// </summary>
+        internal static string SystemSettingTransformationFailedMessage {
+            get {
+                return ResourceManager.GetString("SystemSettingTransformationFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tranformation succeeded..
+        /// </summary>
+        internal static string SystemSettingTransformationSucceededMessage {
+            get {
+                return ResourceManager.GetString("SystemSettingTransformationSucceededMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstall script &quot;{0}&quot; not found for package &quot;{1} (Version {2})&quot; in folder &quot;{3}&quot;..
         /// </summary>
         internal static string UninstallScriptNotFoundMessageTemplate {

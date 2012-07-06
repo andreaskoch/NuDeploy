@@ -176,7 +176,12 @@ namespace NuDeploy.Core.Services
 
                     if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
                     {
-                        File.Copy(destinationFilePath, sourceFilePath, true);
+                        this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationSucceededMessage);
+                    }
+                    else
+                    {
+                        File.Delete(destinationFilePath);
+                        this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationFailedMessage);
                     }
                 }
 

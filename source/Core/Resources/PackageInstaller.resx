@@ -186,4 +186,10 @@
   <data name="ApplyingSystemSettingsTransformationProfileMessageTemplate" xml:space="preserve">
     <value>Applying transformations to the system settings of your deployment package using the "{0}" profile.</value>
   </data>
+  <data name="SystemSettingTransformationFailedMessage" xml:space="preserve">
+    <value>Tranformation failed.</value>
+  </data>
+  <data name="SystemSettingTransformationSucceededMessage" xml:space="preserve">
+    <value>Tranformation succeeded.</value>
+  </data>
 </root>
