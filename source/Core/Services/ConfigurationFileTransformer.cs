@@ -157,7 +157,6 @@ namespace NuDeploy.Core.Services
                 if (File.Exists(destinationFilePath))
                 {
                     this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.DestinationFileAlreadyExistsMessageTemplate, destinationFilePath));
-                    File.Delete(destinationFilePath);
                 }
 
                 transformedDocument.Save(destinationFilePath);

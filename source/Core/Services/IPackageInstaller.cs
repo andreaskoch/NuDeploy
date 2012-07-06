@@ -4,7 +4,7 @@ namespace NuDeploy.Core.Services
 {
     public interface IPackageInstaller
     {
-        bool Install(string packageId, string deploymentType, bool forceInstallation);
+        bool Install(string packageId, string deploymentType, bool forceInstallation, params string[] subTransformationNames);
 
         bool Uninstall(string packageId, SemanticVersion version);
     }

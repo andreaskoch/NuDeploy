@@ -19,6 +19,8 @@ namespace NuDeploy.Core.Commands.Console
 
         private const string DeploymentTypeUpdate = "update";
 
+        private const string ArgumentNameSystemSettingTransformationNames = "Transformations";
+
         private const string DeploymentTypeDefault = DeploymentTypeFull;
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
@@ -38,8 +40,8 @@ namespace NuDeploy.Core.Commands.Console
             {
                 CommandName = CommandName,
                 AlternativeCommandNames = this.alternativeCommandNames,
-                RequiredArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType },
-                PositionalArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType },
+                RequiredArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType, ArgumentNameSystemSettingTransformationNames },
+                PositionalArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType, ArgumentNameSystemSettingTransformationNames },
                 Description = Resources.InstallCommand.CommandDescriptionText,
                 Usage = string.Format("{0} <{1}> <{2}>", CommandName, ArgumentNameNugetPackageId, string.Join("|", this.allowedDeploymentTypes)),
                 Examples = new Dictionary<string, string>
@@ -60,7 +62,8 @@ namespace NuDeploy.Core.Commands.Console
                 ArgumentDescriptions = new Dictionary<string, string>
                     {
                         { ArgumentNameNugetPackageId, Resources.InstallCommand.ArgumentDescriptionNugetPackageId },
-                        { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), DeploymentTypeDefault) }
+                        { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), DeploymentTypeDefault) },
+                        { ArgumentNameSystemSettingTransformationNames, Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationNames }
                     }
             };
 
@@ -97,6 +100,14 @@ namespace NuDeploy.Core.Commands.Console
                 return;
             }
 
+            // system settings transformation names
+            string[] systemSettingTransformationNames = null;
+            string transformationNamesParameterValue = this.Arguments.ContainsKey(ArgumentNameSystemSettingTransformationNames) ? this.Arguments[ArgumentNameSystemSettingTransformationNames] : string.Empty;
+            if (string.IsNullOrWhiteSpace(transformationNamesParameterValue) == false)
+            {
+                systemSettingTransformationNames = transformationNamesParameterValue.Split(',').Select(t => t.Trim()).ToArray();
+            }
+
             // options
             bool forceInstallation =
                 this.Arguments.Any(
@@ -105,7 +116,7 @@ namespace NuDeploy.Core.Commands.Console
                     && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
 
             // install the package
-            this.packageInstaller.Install(packageId, deploymentType, forceInstallation);
+            this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationNames);
         }
     }
 }

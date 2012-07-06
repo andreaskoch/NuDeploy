@@ -123,6 +123,9 @@
   <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
     <value>The id of the NuGet package to install (e.g. "NuDeploy.CommandLine").</value>
   </data>
+  <data name="ArgumentDescriptionSystemSettingTransformationNames" xml:space="preserve">
+    <value>The names of the system settings transformtions that shall be executed before the installation.</value>
+  </data>
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Install the specified NuGet package.</value>
   </data>

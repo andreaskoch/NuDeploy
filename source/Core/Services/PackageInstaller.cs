@@ -26,19 +26,22 @@ namespace NuDeploy.Core.Services
 
         private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
 
+        private readonly IConfigurationFileTransformer configurationFileTransformer;
+
         private readonly PSHost powerShellHost;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, PSHost powerShellHost)
+        public PackageInstaller(ApplicationInformation applicationInformation, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, PSHost powerShellHost)
         {
             this.applicationInformation = applicationInformation;
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
             this.packageConfigurationAccessor = packageConfigurationAccessor;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
+            this.configurationFileTransformer = configurationFileTransformer;
             this.powerShellHost = powerShellHost;
         }
 
-        public bool Install(string packageId, string deploymentType, bool forceInstallation)
+        public bool Install(string packageId, string deploymentType, bool forceInstallation, params string[] subTransformationNames)
         {
             // check package source configuration
             if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
@@ -149,9 +152,28 @@ namespace NuDeploy.Core.Services
                     return;
                 }
 
-                this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
+                // apply system settings transformations
+                if (subTransformationNames != null && subTransformationNames.Count() > 0)
+                {
+                    string sourceFilePath = Path.Combine(packageFolder, "tools", "systemsettings.xml");
+
+                    foreach (var subTransformationName in subTransformationNames)
+                    {
+                        string transformationFilename = string.Format("systemsettings.transformation.{0}.xml", subTransformationName);
+                        string transformationFilePath = Path.Combine(packageFolder, "tools", transformationFilename);
+                        string destinationFilePath = sourceFilePath + ".transformed";
+                        if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
+                        {
+                            File.Copy(destinationFilePath, sourceFilePath, true);
+                        }
+                    }
+
+                    return;
+                }
 
                 // execute installation script
+                this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
+
                 string scriptParameter = string.Format("-DeploymentType {0}", deploymentType);
                 this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath, scriptParameter));
                 this.ExecuteScriptInNewPowerShellHost(installScriptPath, scriptParameter);

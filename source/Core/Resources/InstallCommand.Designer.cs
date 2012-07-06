@@ -79,6 +79,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The names of the system settings transformtions that shall be executed before the installation..
+        /// </summary>
+        internal static string ArgumentDescriptionSystemSettingTransformationNames {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionSystemSettingTransformationNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install the specified NuGet package..
         /// </summary>
         internal static string CommandDescriptionText {
