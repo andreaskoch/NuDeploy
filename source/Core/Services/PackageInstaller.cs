@@ -28,6 +28,8 @@ namespace NuDeploy.Core.Services
 
         private readonly ApplicationInformation applicationInformation;
 
+        private readonly IFilesystemAccessor filesystemAccessor;
+
         private readonly IUserInterface userInterface;
 
         private readonly IInstallationStatusProvider installationStatusProvider;
@@ -40,9 +42,10 @@ namespace NuDeploy.Core.Services
 
         private readonly PSHost powerShellHost;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, PSHost powerShellHost)
+        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, PSHost powerShellHost)
         {
             this.applicationInformation = applicationInformation;
+            this.filesystemAccessor = filesystemAccessor;
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
             this.packageConfigurationAccessor = packageConfigurationAccessor;
@@ -153,7 +156,7 @@ namespace NuDeploy.Core.Services
                 this.userInterface.WriteLine(
                     string.Format(Resources.PackageInstaller.PackageDownloadedMessageTemplate, args.Package.Id, args.Package.Version, packageFolder));
 
-                if (File.Exists(installScriptPath) == false)
+                if (this.filesystemAccessor.FileExists(installScriptPath) == false)
                 {
                     this.userInterface.WriteLine(
                         string.Format(
@@ -216,7 +219,7 @@ namespace NuDeploy.Core.Services
 
             // remove the package
             string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
-            if (File.Exists(uninstallScriptPath) == false)
+            if (this.filesystemAccessor.FileExists(uninstallScriptPath) == false)
             {
                 this.userInterface.WriteLine(
                     string.Format(
@@ -252,15 +255,15 @@ namespace NuDeploy.Core.Services
                 throw new ArgumentException("scriptPath");
             }
 
-            if (!File.Exists(scriptPath))
+            if (this.filesystemAccessor.FileExists(scriptPath) == false)
             {
                 throw new FileNotFoundException(Resources.Exceptions.PowerShellScriptNotFound, scriptPath);
             }
 
-            using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost))
+            using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost, this.filesystemAccessor))
             {
                 powerShellScriptExecutor.ExecuteScript(scriptPath, parameters);
-            }            
+            }
         }
     }
 }

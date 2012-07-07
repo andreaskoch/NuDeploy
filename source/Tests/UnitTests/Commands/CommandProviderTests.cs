@@ -17,14 +17,14 @@ namespace NuDeploy.Tests.UnitTests.Commands
         public void Initialize_CommandProvider_CommandListParameterIsNull_ArgumentNullExceptionIsThrown()
         {
             // Act
-            new CommandProvider(null);
+            new NuDeployConsoleCommandProvider(null);
         }
 
         [Test]
         public void GetCommands_EmptyListOfCommandsIsProvided_ResultIsEmptyListOfCommands()
         {
             // Arrange
-            ICommandProvider commandProvider = new CommandProvider(new List<ICommand>());
+            ICommandProvider commandProvider = new NuDeployConsoleCommandProvider(new List<ICommand>());
 
             // Act
             var result = commandProvider.GetAvailableCommands();
@@ -41,7 +41,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
             var command2 = new Mock<ICommand>();
             var commandList = new List<ICommand> { command1.Object, command2.Object };
 
-            ICommandProvider commandProvider = new CommandProvider(commandList);
+            ICommandProvider commandProvider = new NuDeployConsoleCommandProvider(commandList);
 
             // Act
             var result = commandProvider.GetAvailableCommands();

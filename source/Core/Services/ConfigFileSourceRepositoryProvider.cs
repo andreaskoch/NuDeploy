@@ -18,11 +18,14 @@ namespace NuDeploy.Core.Services
 
         private readonly ApplicationInformation applicationInformation;
 
+        private readonly IFilesystemAccessor filesystemAccessor;
+
         private readonly string sourceConfigurationFilePath;
 
-        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation)
+        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
             this.applicationInformation = applicationInformation;
+            this.filesystemAccessor = filesystemAccessor;
             this.sourceConfigurationFilePath = this.GetSourceConfigurationFilePath();
         }
 
@@ -87,7 +90,7 @@ namespace NuDeploy.Core.Services
 
         private IEnumerable<SourceRepositoryConfiguration> Load()
         {
-            if (!File.Exists(this.sourceConfigurationFilePath))
+            if (!this.filesystemAccessor.FileExists(this.sourceConfigurationFilePath))
             {
                 this.CreateDefaultConfiguration();
             }

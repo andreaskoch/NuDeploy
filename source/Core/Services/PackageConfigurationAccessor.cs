@@ -22,9 +22,12 @@ namespace NuDeploy.Core.Services
 
         private readonly ApplicationInformation applicationInformation;
 
-        public PackageConfigurationAccessor(ApplicationInformation applicationInformation)
+        private readonly IFilesystemAccessor filesystemAccessor;
+
+        public PackageConfigurationAccessor(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
             this.applicationInformation = applicationInformation;
+            this.filesystemAccessor = filesystemAccessor;
             this.packageConfigurationFilePath = this.GetPackageConfigurationFilePath();
         }
 
@@ -83,7 +86,7 @@ namespace NuDeploy.Core.Services
 
         private IEnumerable<PackageInfo> Load()
         {
-            if (!File.Exists(this.packageConfigurationFilePath))
+            if (!this.filesystemAccessor.FileExists(this.packageConfigurationFilePath))
             {
                 return new List<PackageInfo>();
             }

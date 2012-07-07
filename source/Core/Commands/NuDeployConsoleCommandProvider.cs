@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace NuDeploy.Core.Commands
 {
-    public class CommandProvider : ICommandProvider
+    public class NuDeployConsoleCommandProvider : ICommandProvider
     {
         private readonly List<ICommand> commands;
 
-        public CommandProvider(IEnumerable<ICommand> commands)
+        public NuDeployConsoleCommandProvider(IEnumerable<ICommand> commands)
         {
             if (commands == null)
             {

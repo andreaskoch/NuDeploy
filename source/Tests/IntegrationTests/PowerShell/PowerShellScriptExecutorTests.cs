@@ -24,6 +24,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
+            var fileSystemAccessor = new PhysicalFilesystemAccessor();
 
             var actionLoggerMock = new Mock<IActionLogger>();
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
@@ -32,7 +33,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
             PSHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 
-            this.powerShellScriptExecutor = new PowerShellScriptExecutor(powerShellHost);
+            this.powerShellScriptExecutor = new PowerShellScriptExecutor(powerShellHost, fileSystemAccessor);
         }
 
         #region ExecuteCommand

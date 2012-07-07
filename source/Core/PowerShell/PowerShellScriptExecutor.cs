@@ -8,11 +8,15 @@ using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading;
 
+using NuDeploy.Core.Common;
+
 namespace NuDeploy.Core.PowerShell
 {
     public class PowerShellScriptExecutor : IPowerShellScriptExecutor, IDisposable
     {
         private readonly PSHost powerShellHost;
+
+        private readonly IFilesystemAccessor filesystemAccessor;
 
         private readonly Runspace runspace;
 
@@ -22,9 +26,10 @@ namespace NuDeploy.Core.PowerShell
 
         private PipelineExecutor pipelineExecutor;
 
-        public PowerShellScriptExecutor(PSHost powerShellHost)
+        public PowerShellScriptExecutor(PSHost powerShellHost, IFilesystemAccessor filesystemAccessor)
         {
             this.powerShellHost = powerShellHost;
+            this.filesystemAccessor = filesystemAccessor;
             this.pipelineOutput = new StringBuilder();
 
             Environment.SetEnvironmentVariable("PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
@@ -62,7 +67,7 @@ namespace NuDeploy.Core.PowerShell
                 throw new ArgumentException(Resources.Exceptions.InvalidPowerShellScriptPath);
             }
 
-            if (!File.Exists(scriptPath))
+            if (!this.filesystemAccessor.FileExists(scriptPath))
             {
                 throw new FileNotFoundException(Resources.Exceptions.PowerShellScriptNotFound, scriptPath);
             }

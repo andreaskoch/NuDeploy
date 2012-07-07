@@ -23,11 +23,14 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
 
-        public SelfUpdateCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepositoryBrowser packageRepositoryBrowser)
+        private readonly IFilesystemAccessor filesystemAccessor;
+
+        public SelfUpdateCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepositoryBrowser packageRepositoryBrowser, IFilesystemAccessor filesystemAccessor)
         {
             this.userInterface = userInterface;
             this.applicationInformation = applicationInformation;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
+            this.filesystemAccessor = filesystemAccessor;
 
             this.Attributes = new CommandAttributes
             {
@@ -128,7 +131,7 @@ namespace NuDeploy.Core.Commands.Console
         {
             try
             {
-                if (File.Exists(newPath))
+                if (this.filesystemAccessor.FileExists(newPath))
                 {
                     File.Delete(newPath);
                 }

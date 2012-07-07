@@ -22,7 +22,8 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
-            this.packageConfigurationAccessor = new PackageConfigurationAccessor(applicationInformation);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor();
+            this.packageConfigurationAccessor = new PackageConfigurationAccessor(applicationInformation, fileSystemAccessor);
         }
 
         [SetUp]

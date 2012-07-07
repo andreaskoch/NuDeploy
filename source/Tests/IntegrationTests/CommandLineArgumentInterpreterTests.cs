@@ -33,7 +33,7 @@ namespace NuDeploy.Tests.IntegrationTests
             this.packackageSolutionCommand = new PackageSolutionCommand();
             this.commands = new List<ICommand> { this.packackageSolutionCommand };
 
-            this.commandProvider = new CommandProvider(this.commands);
+            this.commandProvider = new NuDeployConsoleCommandProvider(this.commands);
             this.commandNameMatcher = new CommandNameMatcher();
             this.commandArgumentParser = new CommandArgumentParser();
             this.commandArgumentNameMatcher = new CommandArgumentNameMatcher();
@@ -113,7 +113,7 @@ namespace NuDeploy.Tests.IntegrationTests
 
             var commandList = new List<ICommand> { command1.Object, command2.Object, command3.Object };
 
-            var customCommandProvider = new CommandProvider(commandList);
+            var customCommandProvider = new NuDeployConsoleCommandProvider(commandList);
 
             var interpreter = new CommandLineArgumentInterpreter(
                 customCommandProvider, this.commandNameMatcher, this.commandArgumentParser, this.commandArgumentNameMatcher);

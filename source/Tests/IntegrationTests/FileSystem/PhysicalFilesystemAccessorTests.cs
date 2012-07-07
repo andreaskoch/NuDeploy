@@ -86,6 +86,19 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
+        public void FileExists_SuppliedPathIsNotExistingFile_ResultIsFalse()
+        {
+            // Arrange
+            var path = "There-Is-No-Way-This-File-Can-Exist-salkfjaskjksad43242jf.txt";
+
+            // Act
+            bool result = this.filesystemAccessor.FileExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
         public void FileExists_SuppliedPathIsExistingFile_ResultIsTrue()
         {
             // Arrange
@@ -141,6 +154,58 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void DirectoryExists_SuppliedPathIsAnExistingFile_ResultIsFalse()
+        {
+            // Arrange
+            var path = this.CreateFile("test-file.txt").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsAnNonExistingFile_ResultIsFalse()
+        {
+            // Arrange
+            var path = "There-Is-No-Way-This-File-Can-Exist-salkfjaskjksad43242jf.txt";
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsNonExistingDirectory_ResultIsFalse()
+        {
+            // Arrange
+            var path = "NonExistingTestDirectory";
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsExistingDirectory_ResultIsTrue()
+        {
+            // Arrange
+            var path = this.CreateDirectory("TestDirectory").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
         #endregion
 
         #region utility methods
@@ -151,6 +216,15 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             File.WriteAllText(filePath, Guid.NewGuid().ToString());
             var fileInfo = new FileInfo(filePath);
             return fileInfo;
+        }
+
+        private DirectoryInfo CreateDirectory(string relativeDirectoryPath)
+        {
+            string directoryPath = Path.Combine(Environment.CurrentDirectory, SampleFileFolder, relativeDirectoryPath);
+            Directory.CreateDirectory(directoryPath);
+
+            var directoryInfo = new DirectoryInfo(directoryPath);
+            return directoryInfo;
         }
 
         #endregion

@@ -13,13 +13,16 @@ namespace NuDeploy.Core.Common
 
         private readonly ApplicationInformation applicationInformation;
 
+        private readonly IFilesystemAccessor filesystemAccessor;
+
         private readonly StreamWriter logStreamWriter;
 
         private readonly Regex tooMuchWhiteSpaceRegex = new Regex("\\s{2,}");
 
-        public ActionLogger(ApplicationInformation applicationInformation)
+        public ActionLogger(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
             this.applicationInformation = applicationInformation;
+            this.filesystemAccessor = filesystemAccessor;
 
             var logfilPath = this.GetLogfilePath();
             this.logStreamWriter = new StreamWriter(logfilPath, true, Encoding.UTF8);
@@ -61,7 +64,7 @@ namespace NuDeploy.Core.Common
 
         private string GetLogfilePath()
         {
-            if (!Directory.Exists(this.applicationInformation.LogFolder))
+            if (!this.filesystemAccessor.DirectoryExists(this.applicationInformation.LogFolder))
             {
                 Directory.CreateDirectory(this.applicationInformation.LogFolder);
             }

@@ -18,7 +18,8 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
-            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor();
+            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor);
         }
 
         [SetUp]
