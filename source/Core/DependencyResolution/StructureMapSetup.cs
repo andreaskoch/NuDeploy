@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Management.Automation.Host;
 
 using NuDeploy.Core.Commands;
@@ -52,26 +51,7 @@ namespace NuDeploy.Core.DependencyResolution
                     config.For<IInstallationStatusProvider>().Use<InstallationStatusProvider>();
 
                     config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
-                });
-
-            ObjectFactory.Configure(
-                config =>
-                    {
-                        var commands = new List<ICommand>
-                            {
-                                ObjectFactory.GetInstance<PackageSolutionCommand>(),
-                                ObjectFactory.GetInstance<HelpCommand>(),
-                                ObjectFactory.GetInstance<InstallationStatusCommand>(),
-                                ObjectFactory.GetInstance<InstallCommand>(),
-                                ObjectFactory.GetInstance<UninstallCommand>(),
-                                ObjectFactory.GetInstance<CleanupCommand>(),
-                                ObjectFactory.GetInstance<SelfUpdateCommand>(),
-                                ObjectFactory.GetInstance<RepositorySourceConfigurationCommand>(),
-                            };
-
-                    ICommandProvider commandProvider = new NuDeployConsoleCommandProvider(commands);
-
-                    config.For<ICommandProvider>().Use(commandProvider);
+                    config.For<ICommandProvider>().Use<NuDeployConsoleCommandProvider>();
                 });
         }
     }
