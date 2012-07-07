@@ -39,20 +39,16 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<PSHost>().Use<PowerShellHost>();
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
+
+                        config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
+                        config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
+                        config.For<IPackageInstaller>().Use<PackageInstaller>();
+                        config.For<ICleanupService>().Use<CleanupService>();
+                        config.For<IInstallationStatusProvider>().Use<InstallationStatusProvider>();
+
+                        config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
+                        config.For<ICommandProvider>().Use<NuDeployConsoleCommandProvider>();
                     });
-
-            ObjectFactory.Configure(
-                config =>
-                {
-                    config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
-                    config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
-                    config.For<IPackageInstaller>().Use<PackageInstaller>();
-                    config.For<ICleanupService>().Use<CleanupService>();
-                    config.For<IInstallationStatusProvider>().Use<InstallationStatusProvider>();
-
-                    config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
-                    config.For<ICommandProvider>().Use<NuDeployConsoleCommandProvider>();
-                });
         }
     }
 }
