@@ -23,6 +23,7 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
+                        config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
                         config.For<IActionLogger>().Singleton().Use<ActionLogger>();
 
                         config.For<IConsoleTextManipulation>().Use<ConsoleTextManipulation>();

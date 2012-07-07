@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Xml;
 
 using Microsoft.Web.Publishing.Tasks;
@@ -12,9 +11,12 @@ namespace NuDeploy.Core.Services
     {
         private readonly IUserInterface userInterface;
 
-        public ConfigurationFileTransformer(IUserInterface userInterface)
+        private readonly IFilesystemAccessor filesystemAccessor;
+
+        public ConfigurationFileTransformer(IUserInterface userInterface, IFilesystemAccessor filesystemAccessor)
         {
             this.userInterface = userInterface;
+            this.filesystemAccessor = filesystemAccessor;
         }
 
         public bool Transform(string sourceFilePath, string transformationFilePath, string destinationFilePath)
@@ -43,13 +45,13 @@ namespace NuDeploy.Core.Services
                 return false;
             }
 
-            if (!File.Exists(sourceFilePath))
+            if (!this.filesystemAccessor.FileExists(sourceFilePath))
             {
                 this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.SourceFilePathDoesNotExistMessageTemplate, sourceFilePath));
                 return false;
             }
 
-            if (!File.Exists(transformationFilePath))
+            if (!this.filesystemAccessor.FileExists(transformationFilePath))
             {
                 this.userInterface.WriteLine(
                     string.Format(Resources.ConfigurationFileTransformer.TransformationFilePathDoesNotExistMessageTemplate, transformationFilePath));
@@ -154,7 +156,7 @@ namespace NuDeploy.Core.Services
 
             try
             {
-                if (File.Exists(destinationFilePath))
+                if (this.filesystemAccessor.FileExists(destinationFilePath))
                 {
                     this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.DestinationFileAlreadyExistsMessageTemplate, destinationFilePath));
                 }

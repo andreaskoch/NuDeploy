@@ -51,6 +51,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IntegrationTests\CommandLineArgumentInterpreterTests.cs" />
+    <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="IntegrationTests\Services\PackageConfigurationAccessorTests.cs" />
