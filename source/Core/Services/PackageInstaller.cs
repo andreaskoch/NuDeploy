@@ -183,7 +183,7 @@ namespace NuDeploy.Core.Services
                     }
                     else
                     {
-                        File.Delete(destinationFilePath);
+                        this.filesystemAccessor.DeleteFile(destinationFilePath);
                         this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationFailedMessage);
                     }
                 }
@@ -243,7 +243,7 @@ namespace NuDeploy.Core.Services
 
             // remove package files
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
-            Directory.Delete(installedPackage.Folder, true);
+            this.filesystemAccessor.DeleteFolder(installedPackage.Folder);
 
             return true;
         }

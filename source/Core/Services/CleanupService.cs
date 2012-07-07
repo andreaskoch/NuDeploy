@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using NuDeploy.Core.Common;
@@ -13,10 +12,13 @@ namespace NuDeploy.Core.Services
 
         private readonly IInstallationStatusProvider installationStatusProvider;
 
-        public CleanupService(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider)
+        private readonly IFilesystemAccessor filesystemAccessor;
+
+        public CleanupService(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IFilesystemAccessor filesystemAccessor)
         {
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
+            this.filesystemAccessor = filesystemAccessor;
         }
 
         public void Cleanup()
@@ -52,7 +54,7 @@ namespace NuDeploy.Core.Services
             foreach (NuDeployPackageInfo package in packages)
             {
                 this.userInterface.WriteLine(string.Format(Resources.CleanupService.DeleteMessageTemplate, package.Id, package.Version));
-                Directory.Delete(package.Folder, true);
+                this.filesystemAccessor.DeleteFolder(package.Folder);
             }
         }
     }

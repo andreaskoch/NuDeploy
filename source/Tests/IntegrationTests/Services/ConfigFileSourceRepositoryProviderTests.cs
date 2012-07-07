@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 
+using Moq;
+
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services;
 
@@ -17,8 +19,9 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         [TestFixtureSetUp]
         public void Setup()
         {
+            var loggerMock = new Mock<IActionLogger>();
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor();
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(loggerMock.Object);
             this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor);
         }
 

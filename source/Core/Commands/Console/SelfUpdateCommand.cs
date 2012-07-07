@@ -111,7 +111,7 @@ namespace NuDeploy.Core.Commands.Console
 
             // Get the exe path and move it to a temp file (NuGet.exe.old) so we can replace the running exe with the bits we got from the package repository
             string renamedPath = exePath + ".old";
-            this.MoveFile(exePath, renamedPath);
+            this.filesystemAccessor.MoveFile(exePath, renamedPath);
 
             // Update the file
             this.UpdateFile(exePath, executable);
@@ -125,22 +125,6 @@ namespace NuDeploy.Core.Commands.Console
             {
                 fromStream.CopyTo(toStream);
             }
-        }
-
-        private void MoveFile(string oldPath, string newPath)
-        {
-            try
-            {
-                if (this.filesystemAccessor.FileExists(newPath))
-                {
-                    File.Delete(newPath);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-            }
-
-            File.Move(oldPath, newPath);
         }
     }
 }

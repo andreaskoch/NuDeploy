@@ -24,7 +24,8 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor();
+            var loggerMock = new Mock<IActionLogger>();
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(loggerMock.Object);
 
             var actionLoggerMock = new Mock<IActionLogger>();
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
