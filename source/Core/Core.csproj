@@ -172,11 +172,13 @@
     <Compile Include="Services\IPackageConfigurationAccessor.cs" />
     <Compile Include="Services\IPackageInstaller.cs" />
     <Compile Include="Services\IPackageRepositoryBrowser.cs" />
+    <Compile Include="Services\ISelfUpdateService.cs" />
     <Compile Include="Services\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\PackageConfigurationAccessor.cs" />
     <Compile Include="Services\PackageInstaller.cs" />
     <Compile Include="Services\ConfigFileSourceRepositoryProvider.cs" />
     <Compile Include="Services\PackageRepositoryBrowser.cs" />
+    <Compile Include="Services\SelfUpdateService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
