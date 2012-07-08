@@ -828,6 +828,228 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #region GetTextReader
+
+        [Test]
+        public void GetTextReader_FilePathIsNull_ResultIsNull()
+        {
+            // Arrange
+            string filePath = null;
+
+            // Act
+            var textReader = this.filesystemAccessor.GetTextReader(filePath);
+
+            // Assert
+            Assert.IsNull(textReader);
+        }
+
+        [Test]
+        public void GetTextReader_FilePathIsEmpty_ResultIsNull()
+        {
+            // Arrange
+            string filePath = string.Empty;
+
+            // Act
+            var textReader = this.filesystemAccessor.GetTextReader(filePath);
+
+            // Assert
+            Assert.IsNull(textReader);
+        }
+
+        [Test]
+        public void GetTextReader_FilePathIsWhitespace_ResultIsNull()
+        {
+            // Arrange
+            string filePath = " ";
+
+            // Act
+            var textReader = this.filesystemAccessor.GetTextReader(filePath);
+
+            // Assert
+            Assert.IsNull(textReader);
+        }
+
+        [Test]
+        public void GetTextReader_FileDoesNotExist_ResultIsNull()
+        {
+            // Arrange
+            string filePath = "There-Is-No-Way-This-File-Can-Exist-salkfjaskjksad43242jf.txt";
+
+            // Act
+            var textReader = this.filesystemAccessor.GetTextReader(filePath);
+
+            // Assert
+            Assert.IsNull(textReader);
+        }
+
+        [Test]
+        public void GetTextReader_FileExists_ButIsBeingWrittenTo_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File-That-Is-Being-Written-To.txt").FullName;
+            var streamWriter = new StreamWriter(filePath);
+
+            // Act
+            var textReader = this.filesystemAccessor.GetTextReader(filePath);
+
+            // Assert
+            Assert.IsNull(textReader);
+            streamWriter.Close();
+        }
+
+        [Test]
+        public void GetTextReader_FileExists_ButIsBeingReadByAnotherProcess_ResultIsNotNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File-That-Is-Being-Read.txt").FullName;
+            var streamReader = new StreamReader(filePath);
+
+            // Act
+            using (var textReader = this.filesystemAccessor.GetTextReader(filePath))
+            {
+                // Assert
+                Assert.IsNotNull(textReader);
+                streamReader.Close();                
+            }
+        }
+
+        [Test]
+        public void GetTextReader_FileExists_ResultIsNotNull_TextReaderReturnsFileContent()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+            string fileContent = this.GetFileContent(filePath);
+
+            // Act
+            using (var textReader = this.filesystemAccessor.GetTextReader(filePath))
+            {
+                // Assert
+                Assert.IsNotNull(textReader);
+                Assert.AreEqual(fileContent, textReader.ReadToEnd());                
+            }
+        }
+
+        #endregion
+
+        #region GetTextWriter
+
+        [Test]
+        public void GetTextWriter_FilePathIsNull_ResultIsNull()
+        {
+            // Arrange
+            string filePath = null;
+
+            // Act
+            var textWriter = this.filesystemAccessor.GetTextWriter(filePath);
+
+            // Assert
+            Assert.IsNull(textWriter);
+        }
+
+        [Test]
+        public void GetTextWriter_FilePathIsEmpty_ResultIsNull()
+        {
+            // Arrange
+            string filePath = string.Empty;
+
+            // Act
+            var textWriter = this.filesystemAccessor.GetTextWriter(filePath);
+
+            // Assert
+            Assert.IsNull(textWriter);
+        }
+
+        [Test]
+        public void GetTextWriter_FilePathIsWhitespace_ResultIsNull()
+        {
+            // Arrange
+            string filePath = " ";
+
+            // Act
+            var textWriter = this.filesystemAccessor.GetTextWriter(filePath);
+
+            // Assert
+            Assert.IsNull(textWriter);
+        }
+
+        [Test]
+        public void GetTextWriter_FileExists_AndIsBeingReadByAnotherProcess_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File-That-is-being-read.txt").FullName;
+            var streamReader = new StreamReader(filePath);
+
+            // Act
+            var textWriter = this.filesystemAccessor.GetTextWriter(filePath);
+
+            // Assert
+            Assert.IsNull(textWriter);
+            streamReader.Close();
+        }
+
+        [Test]
+        public void GetTextWriter_FileExists_AndIsWrittenToByAnotherProcess_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File-That-Is-Being-Written-To.txt").FullName;
+            var streamWriter = new StreamWriter(filePath);
+
+            // Act
+            var textWriter = this.filesystemAccessor.GetTextWriter(filePath);
+
+            // Assert
+            Assert.IsNull(textWriter);
+            streamWriter.Close();
+        }
+
+        [Test]
+        public void GetTextWriter_FileExists_ResultIsNotNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+
+            // Act
+            using (var textWriter = this.filesystemAccessor.GetTextWriter(filePath))
+            {
+                // Assert
+                Assert.IsNotNull(textWriter);                
+            }
+        }
+
+        [Test]
+        public void GetTextWriter_FileDoesNotExist_ResultIsNotNull()
+        {
+            // Arrange
+            string filePath = this.GetPath("new-file.txt");
+
+            // Act
+            using (var textWriter = this.filesystemAccessor.GetTextWriter(filePath))
+            {
+                // Assert
+                Assert.IsNotNull(textWriter);
+            }
+        }
+
+        [Test]
+        public void GetTextWriter_FileDoesNotExist_FileIsCreated_TextIsWrittenToFile()
+        {
+            // Arrange
+            string filePath = this.GetPath("new-file.txt");
+            string fileContent = Guid.NewGuid().ToString();
+
+            // Act
+            using (var textWriter = this.filesystemAccessor.GetTextWriter(filePath))
+            {
+                textWriter.Write(fileContent);
+            }
+
+            // Assert
+            Assert.IsTrue(File.Exists(filePath));
+            Assert.AreEqual(fileContent, this.GetFileContent(filePath));
+        }
+
+        #endregion
+
         #region utility methods
 
         private string GetFileContent(string filePath)
