@@ -80,8 +80,10 @@
     <Compile Include="Common\ApplicationInformationProvider.cs" />
     <Compile Include="Common\ConsoleTextManipulation.cs" />
     <Compile Include="Common\ConsoleUserInterface.cs" />
+    <Compile Include="Common\DefaultFileEncodingProvider.cs" />
     <Compile Include="Common\IActionLogger.cs" />
     <Compile Include="Common\IConsoleTextManipulation.cs" />
+    <Compile Include="Common\IEncodingProvider.cs" />
     <Compile Include="Common\IFilesystemAccessor.cs" />
     <Compile Include="Common\IUserInterface.cs" />
     <Compile Include="Common\ActionLogger.cs" />

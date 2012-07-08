@@ -11,5 +11,9 @@
         bool DeleteFile(string filePath);
 
         bool DeleteFolder(string folderPath);
+
+        string GetFileContent(string filePath);
+
+        bool WriteContentToFile(string content, string filePath);
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 using Newtonsoft.Json;
 
@@ -13,8 +12,6 @@ namespace NuDeploy.Core.Services
     public class PackageConfigurationAccessor : IPackageConfigurationAccessor
     {
         public const string PackageConfigurationFileName = "NuDeploy.Packages.config";
-
-        private static readonly Encoding ConfigFileEncoding = Encoding.UTF8;
 
         private static readonly Func<PackageInfo, string> PackageSortKeySelector = p => p.Id;
 
@@ -91,7 +88,7 @@ namespace NuDeploy.Core.Services
                 return new List<PackageInfo>();
             }
 
-            string json = File.ReadAllText(this.packageConfigurationFilePath, ConfigFileEncoding);
+            string json = this.filesystemAccessor.GetFileContent(this.packageConfigurationFilePath);
             var packages = JsonConvert.DeserializeObject<PackageInfo[]>(json);
 
             return packages.Where(p => p.IsValid);
@@ -101,7 +98,7 @@ namespace NuDeploy.Core.Services
         {
             var validPackages = packageInfos.Where(p => p.IsValid).ToArray();
             string json = JsonConvert.SerializeObject(validPackages);
-            File.WriteAllText(this.packageConfigurationFilePath, json, ConfigFileEncoding);
+            this.filesystemAccessor.WriteContentToFile(json, this.packageConfigurationFilePath);
         }
 
         private string GetPackageConfigurationFilePath()

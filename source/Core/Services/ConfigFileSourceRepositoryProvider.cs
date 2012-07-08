@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 using Newtonsoft.Json;
 
@@ -13,8 +12,6 @@ namespace NuDeploy.Core.Services
     public class ConfigFileSourceRepositoryProvider : ISourceRepositoryProvider
     {
         public const string SourceRepositoryConfigurationFileName = "NuDeploy.Sources.config";
-
-        private static readonly Encoding ConfigurationFileEncoding = Encoding.UTF8;
 
         private readonly ApplicationInformation applicationInformation;
 
@@ -95,14 +92,14 @@ namespace NuDeploy.Core.Services
                 this.CreateDefaultConfiguration();
             }
 
-            string json = File.ReadAllText(this.sourceConfigurationFilePath, ConfigurationFileEncoding);
+            string json = this.filesystemAccessor.GetFileContent(this.sourceConfigurationFilePath);
             return JsonConvert.DeserializeObject<SourceRepositoryConfiguration[]>(json);
         }
 
         private void Save(SourceRepositoryConfiguration[] repositoriesConfiguration)
         {
             string json = JsonConvert.SerializeObject(repositoriesConfiguration);
-            File.WriteAllText(this.sourceConfigurationFilePath, json, ConfigurationFileEncoding);
+            this.filesystemAccessor.WriteContentToFile(json, this.sourceConfigurationFilePath);
         }
 
         private string GetSourceConfigurationFilePath()

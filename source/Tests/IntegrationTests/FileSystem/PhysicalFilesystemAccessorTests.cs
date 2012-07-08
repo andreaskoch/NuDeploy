@@ -18,11 +18,14 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         private Mock<IActionLogger> loggerMock;
 
+        private IEncodingProvider encodingProvider;
+
         [TestFixtureSetUp]
         public void Setup()
         {
             this.loggerMock = new Mock<IActionLogger>();
-            this.filesystemAccessor = new PhysicalFilesystemAccessor(this.loggerMock.Object);
+            this.encodingProvider = new DefaultFileEncodingProvider();
+            this.filesystemAccessor = new PhysicalFilesystemAccessor(this.loggerMock.Object, encodingProvider);
         }
 
         [SetUp]
@@ -602,7 +605,237 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #region GetFileContent
+
+        [Test]
+        public void GetFileContent_FilePathIsNull_ResultIsNull()
+        {
+            // Arrange
+            string filePath = null;
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetFileContent_FilePathIsEmpty_ResultIsNull()
+        {
+            // Arrange
+            string filePath = string.Empty;
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetFileContent_FilePathIsWhitespace_ResultIsNull()
+        {
+            // Arrange
+            string filePath = " ";
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetFileContent_FileDoesNotExist_ResultIsNull()
+        {
+            // Arrange
+            string filePath = "There-Is-No-Way-This-File-Can-Exist-salkfjaskjksad43242jf.txt";
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetFileContent_FileExists_ButIsBeingWrittenTo_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("File-That-Is-Being-Written-To-By-Another-Process.txt").FullName;
+            var streamWriter = new StreamWriter(filePath);
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+            streamWriter.Close();
+        }
+
+        [Test]
+        public void GetFileContent_FileExists_IsBeingRead_ResultIsNotNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("File-That-Is-Being-Read-By-Another-Process.txt").FullName;
+            var streamWriter = new StreamReader(filePath);
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.IsNotNull(result);
+            streamWriter.Close();
+        }
+
+        [Test]
+        public void GetFileContent_FileExists_ResultIsContentOfTheSpecifiedFilePath()
+        {
+            // Arrange
+            string filePath = this.CreateFile("File-That-Is-Being-Read-By-Another-Process.txt").FullName;
+            var fileContent = this.GetFileContent(filePath);
+
+            // Act
+            string result = this.filesystemAccessor.GetFileContent(filePath);
+
+            // Assert
+            Assert.AreEqual(fileContent, result);
+        }
+
+        #endregion
+
+        #region WriteContentToFile
+
+        [Test]
+        public void WriteContentToFile_ContentIsNull_ResultIsFalse_TargetFileIsNotCreated()
+        {
+            // Arrange
+            string content = null;
+            string filePath = this.GetPath("Target-File.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsFalse(result);
+            Assert.IsFalse(File.Exists(filePath));
+        }
+
+        [Test]
+        public void WriteContentToFile_FilePathIsNull_ResultIsFalse()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = null;
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void WriteContentToFile_FilePathIsEmpty_ResultIsFalse()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = string.Empty;
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void WriteContentToFile_FilePathIsWhitespace_ResultIsFalse()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = " ";
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void WriteContentToFile_TargetFileExistAndIsBeingRead_ResultIsFalse()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = this.CreateFile("Target-File.txt").FullName;
+            var streamReader = new StreamReader(filePath);
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsFalse(result);
+            streamReader.Close();
+        }
+
+        [Test]
+        public void WriteContentToFile_TargetFileExistAndIsWrittenTo_ResultIsFalse()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = this.CreateFile("Target-File.txt").FullName;
+            var streamWriter = new StreamWriter(filePath);
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsFalse(result);
+            streamWriter.Close();
+        }
+
+        [Test]
+        public void WriteContentToFile_TargetFileExist_ResultIsTrue_FileContainsSuppliedContent()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = this.CreateFile("Target-File.txt").FullName;
+            string previousFileContent = this.GetFileContent(filePath);
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(content, this.GetFileContent(filePath));
+            Assert.AreNotEqual(previousFileContent, this.GetFileContent(filePath));
+        }
+
+        [Test]
+        public void WriteContentToFile_ContentIsNotNull_FilePathIsValidAndDoesNotExist_ResultIsTrue_FileContainsSuppliedContent()
+        {
+            // Arrange
+            string content = "Some Content";
+            string filePath = this.GetPath("Target-File.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.WriteContentToFile(content, filePath);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(content, this.GetFileContent(filePath));
+        }
+
+        #endregion
+
         #region utility methods
+
+        private string GetFileContent(string filePath)
+        {
+            return File.ReadAllText(filePath, this.encodingProvider.GetEncoding());
+        }
 
         private string GetPath(string relativeFilePath)
         {

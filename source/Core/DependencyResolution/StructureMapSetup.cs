@@ -22,6 +22,7 @@ namespace NuDeploy.Core.DependencyResolution
             ObjectFactory.Configure(
                 config =>
                     {
+                        config.For<IEncodingProvider>().Singleton().Use<DefaultFileEncodingProvider>();
                         config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
                         config.For<IActionLogger>().Singleton().Use<ActionLogger>();
 

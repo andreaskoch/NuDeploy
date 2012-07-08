@@ -7,9 +7,12 @@ namespace NuDeploy.Core.Common
     {
         private readonly IActionLogger logger;
 
-        public PhysicalFilesystemAccessor(IActionLogger logger)
+        private readonly IEncodingProvider encodingProvider;
+
+        public PhysicalFilesystemAccessor(IActionLogger logger, IEncodingProvider encodingProvider)
         {
             this.logger = logger;
+            this.encodingProvider = encodingProvider;
         }
 
         public bool FileExists(string filePath)
@@ -121,6 +124,60 @@ namespace NuDeploy.Core.Common
             catch (Exception exception)
             {
                 this.logger.Log("Cannot delete folder \"{0}\". {1}", folderPath, exception);
+            }
+
+            return false;
+        }
+
+        public string GetFileContent(string filePath)
+        {
+            if (!this.FileExists(filePath))
+            {
+                return null;
+            }
+
+            try
+            {
+                return File.ReadAllText(filePath, this.encodingProvider.GetEncoding());
+            }
+            catch (IOException fileAccessException)
+            {
+                this.logger.Log("Cannot read the contents of the file \"{0}\" because it is being written to by another process. {1}", filePath, fileAccessException);
+            }
+            catch (Exception generalException)
+            {
+                this.logger.Log("Cannot read the contents of the file \"{0}\". {1}", filePath, generalException);
+            }
+
+            return null;
+        }
+
+        public bool WriteContentToFile(string content, string filePath)
+        {
+            if (content == null)
+            {
+                this.logger.Log("The content you are trying to write to \"{0}\" is null.", filePath);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                this.logger.Log("For writing to a file you should supply a file path that is not null or empty.");
+                return false;
+            }
+
+            try
+            {
+                File.WriteAllText(filePath, content, this.encodingProvider.GetEncoding());
+                return true;
+            }
+            catch (IOException fileAccessException)
+            {
+                this.logger.Log("Cannot write content to \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
+            }
+            catch (Exception generalException)
+            {
+                this.logger.Log("Cannot write content to \"{0}\". {1}", filePath, generalException);
             }
 
             return false;
