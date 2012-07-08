@@ -39,13 +39,13 @@ namespace NuDeploy.Core.Common
         {
             if (string.IsNullOrWhiteSpace(targetFilePath))
             {
-                this.logger.Log("You cannot move a file if you don't specify a target path.");
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.MoveFilePathIsNullOrEmptyMessage);
                 return false;
             }
 
             if (!this.FileExists(sourceFilePath))
             {
-                this.logger.Log("Before moving a file please make sure that file exists (Source: {0}, Target: {1}).", sourceFilePath, targetFilePath);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.MoveFileSourceFileDoesNotExistMessageTemplate, sourceFilePath, targetFilePath);
                 return false;
             }
 
@@ -61,7 +61,7 @@ namespace NuDeploy.Core.Common
             }
             catch (Exception exception)
             {
-                this.logger.Log("Cannot move file \"{0}\" to \"{1}\". {2}", sourceFilePath, targetFilePath, exception);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.MoveFileExceptionMessageTemplate, sourceFilePath, targetFilePath, exception);
             }
 
             return false;
@@ -71,13 +71,13 @@ namespace NuDeploy.Core.Common
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                this.logger.Log("You cannot delete a file if you don't specify a file name or path.");
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFilePathIsNullOrEmptyMessage);
                 return false;
             }
 
             if (!this.FileExists(filePath))
             {
-                this.logger.Log("The file you are trying to delete does not exist ({0}).", filePath);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFileDoesNotExistMessageTemplate, filePath);
                 return false;
             }
 
@@ -88,11 +88,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot delete file \"{0}\" because it is being used. {1}", filePath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFileIOExceptionMessageTemplate, filePath, fileAccessException);
             }
             catch (Exception exception)
             {
-                this.logger.Log("Cannot delete file \"{0}\". {1}", filePath, exception);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFileExceptionMessageTemplate, filePath, exception);
             }
             
             return false;
@@ -102,13 +102,13 @@ namespace NuDeploy.Core.Common
         {
             if (string.IsNullOrWhiteSpace(folderPath))
             {
-                this.logger.Log("You cannot delete a folder if you don't specify a path.");
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderPathIsNullOrEmptyMessage);
                 return false;
             }
 
             if (!this.DirectoryExists(folderPath))
             {
-                this.logger.Log("The folder you are trying to delete does not exist ({0}).", folderPath);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderDoesNotExistMessageTemplate, folderPath);
                 return false;
             }
 
@@ -119,11 +119,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot delete folder \"{0}\" because one or more files in it are being used. {1}", folderPath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderIOExceptionMessageTemplate, folderPath, fileAccessException);
             }
             catch (Exception exception)
             {
-                this.logger.Log("Cannot delete folder \"{0}\". {1}", folderPath, exception);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderExceptionMessageTemplate, folderPath, exception);
             }
 
             return false;
@@ -131,8 +131,15 @@ namespace NuDeploy.Core.Common
 
         public string GetFileContent(string filePath)
         {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetFileContentPathIsNullOrEmptyMessage);
+                return null;
+            }
+
             if (!this.FileExists(filePath))
             {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetFileContentDoesNotExistMessageTemplate, filePath);
                 return null;
             }
 
@@ -142,11 +149,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot read the contents of the file \"{0}\" because it is being written to by another process. {1}", filePath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetFileContentIOExceptionMessageTemplate, filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot read the contents of the file \"{0}\". {1}", filePath, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetFileContentExceptionMessageTemplate, filePath, generalException);
             }
 
             return null;
@@ -154,8 +161,15 @@ namespace NuDeploy.Core.Common
 
         public TextReader GetTextReader(string filePath)
         {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextReaderPathIsNullOrEmptyMessage);
+                return null;
+            }
+
             if (!this.FileExists(filePath))
             {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextReaderDoesNotExistMessageTemplate);
                 return null;
             }
 
@@ -166,11 +180,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot create a TextReader for the file \"{0}\" because it is being written to by another process. {1}", filePath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextReaderIOExceptionMessageTemplate, filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot create a TextReader for the file \"{0}\". {1}", filePath, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextReaderExceptionMessageTemplate, filePath, generalException);
             }
 
             return null;
@@ -180,7 +194,7 @@ namespace NuDeploy.Core.Common
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                this.logger.Log("For writing to a file you should supply a file path that is not null or empty.");
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextWriterPathIsNullOrEmpty);
                 return null;
             }
 
@@ -191,11 +205,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot create a TextWriter for the file \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextWriterIOExceptionMessageTemplate, filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot create a TextWriter for the file \"{0}\". {1}", filePath, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetTextWriterExceptionMessageTemplate, filePath, generalException);
             }
 
             return null;
@@ -205,6 +219,7 @@ namespace NuDeploy.Core.Common
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetNewFileStreamPathIsNullOrEmpty);
                 return null;
             }
 
@@ -214,11 +229,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot open a stream for the file \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetNewFileStreamIOExceptionMessageTemplate, filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot open a stream for the file \"{0}\". {1}", filePath, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.GetNewFileStreamExceptionMessageTemplate, filePath, generalException);
             }
 
             return null;
@@ -228,13 +243,13 @@ namespace NuDeploy.Core.Common
         {
             if (content == null)
             {
-                this.logger.Log("The content you are trying to write to \"{0}\" is null.", filePath);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.WriteContentToFileContentIsNullMessageTemplate, filePath);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                this.logger.Log("For writing to a file you should supply a file path that is not null or empty.");
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.WriteContentToFilePathIsNullOrEmptyMessage);
                 return false;
             }
 
@@ -245,11 +260,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot write content to \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.WriteContentToFileIOExceptionMessageTemplate, filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot write content to \"{0}\". {1}", filePath, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.WriteContentToFileExceptionMessageTemplate, filePath, generalException);
             }
 
             return false;
