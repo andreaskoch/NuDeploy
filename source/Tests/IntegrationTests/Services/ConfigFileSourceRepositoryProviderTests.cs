@@ -20,8 +20,11 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
+
+            var logger = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(logger.Object, encodingProvider);
+
             this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor);
         }
 

@@ -2,6 +2,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using Moq;
+
 using Newtonsoft.Json;
 
 using NuDeploy.Core.Common;
@@ -22,8 +24,11 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
+
+            var logger = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(logger.Object, encodingProvider);
+
             this.packageConfigurationAccessor = new PackageConfigurationAccessor(applicationInformation, fileSystemAccessor);
         }
 

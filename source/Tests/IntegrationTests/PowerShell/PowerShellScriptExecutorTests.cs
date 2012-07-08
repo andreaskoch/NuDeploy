@@ -24,13 +24,14 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
-            var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
-            var actionLoggerMock = new Mock<IActionLogger>();
+            var logger = new Mock<IActionLogger>();
+            var encodingProvider = new DefaultFileEncodingProvider();
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(logger.Object, encodingProvider);
+
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
 
-            this.userInterface = new ConsoleUserInterface(consoleTextManipulation, actionLoggerMock.Object);
+            this.userInterface = new ConsoleUserInterface(consoleTextManipulation, logger.Object);
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
             PSHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 
