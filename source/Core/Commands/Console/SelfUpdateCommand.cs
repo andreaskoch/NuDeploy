@@ -66,9 +66,9 @@ namespace NuDeploy.Core.Commands.Console
         private void SelfUpdate(string exePath, SemanticVersion version)
         {
             string selfUpdateMessage = string.Format(
-                Resources.SelfUpdateCommand.SelfupdateMessageTemplate, 
-                NuDeployConstants.NuDeployCommandLinePackageId, 
-                NuDeployConstants.DefaultFeedUrl);
+                Resources.SelfUpdateCommand.SelfupdateMessageTemplate,
+                NuDeployConstants.NuDeployCommandLinePackageId,
+                string.Join(", ", this.packageRepositoryBrowser.RepositoryConfigurations.Select(r => r.Url)));
 
             this.userInterface.WriteLine(selfUpdateMessage);
 
@@ -121,7 +121,7 @@ namespace NuDeploy.Core.Commands.Console
 
         private void UpdateFile(string exePath, IPackageFile file)
         {
-            using (Stream fromStream = file.GetStream(), toStream = File.Create(exePath))
+            using (Stream fromStream = file.GetStream(), toStream = this.filesystemAccessor.GetNewFileStream(exePath))
             {
                 fromStream.CopyTo(toStream);
             }

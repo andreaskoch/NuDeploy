@@ -20,6 +20,8 @@ namespace NuDeploy.Core.Common
 
         TextWriter GetTextWriter(string filePath);
 
+        Stream GetNewFileStream(string filePath);
+
         bool WriteContentToFile(string content, string filePath);
     }
 }

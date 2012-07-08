@@ -1050,6 +1050,149 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #region GetNewFileStream
+
+        [Test]
+        public void GetNewFileStream_FilePathIsNull_ResultIsNull()
+        {
+            // Arrange
+            string filePath = null;
+
+            // Act
+            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(stream);
+        }
+
+        [Test]
+        public void GetNewFileStream_FilePathIsEmpty_ResultIsNull()
+        {
+            // Arrange
+            string filePath = string.Empty;
+
+            // Act
+            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(stream);
+        }
+
+        [Test]
+        public void GetNewFileStream_FilePathIsWhitespace_ResultIsNull()
+        {
+            // Arrange
+            string filePath = " ";
+
+            // Act
+            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(stream);
+        }
+
+        [Test]
+        public void GetNewFileStream_FileExists_ButIsBeingRead_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+            var reader = new StreamReader(filePath);
+
+            // Act
+            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(stream);
+            reader.Close();
+        }
+
+        [Test]
+        public void GetNewFileStream_FileExists_ButIsBeingWrittenTo_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+            var writer = new StreamWriter(filePath);
+
+            // Act
+            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(stream);
+            writer.Close();
+        }
+
+        [Test]
+        public void GetNewFileStream_FileDoesNotExist_ResultIsNotNull_FileIsCreated()
+        {
+            // Arrange
+            string filePath = this.GetPath("Non-Existing-File.txt");
+
+            // Act
+            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            {
+                // Assert
+                Assert.IsNotNull(stream);
+                Assert.IsTrue(File.Exists(filePath));
+            }
+        }
+
+        [Test]
+        public void GetNewFileStream_FileExists_ResultIsNotNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+
+            // Act
+            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            {
+                // Assert
+                Assert.IsNotNull(stream);                
+            }
+        }
+
+        [Test]
+        public void GetNewFileStream_FileExists_StreamReaderReturnsEmptyStringBecauseTheFileIsOverridden()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+            string fileContent = this.GetFileContent(filePath);
+
+            // Act
+            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            {
+                TextReader textReader = new StreamReader(stream);
+                string contentReadFromStream = textReader.ReadToEnd();
+
+                // Assert
+                Assert.IsNotNull(stream);
+                Assert.AreNotEqual(fileContent, contentReadFromStream);
+                Assert.IsNullOrEmpty(contentReadFromStream);
+            }
+        }
+
+        [Test]
+        public void GetNewFileStream_FileExists_StreamCanBeWrittenTo_OriginalFileContentIsCompletelyOverridden()
+        {
+            // Arrange
+            string filePath = this.CreateFile("Existing-File.txt").FullName;
+            string oldFileContent = this.GetFileContent(filePath);
+
+            // Act
+            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            {
+                TextWriter textWriter = new StreamWriter(stream);
+                textWriter.Write("New Content");
+                textWriter.Flush();
+            }
+
+            // Assert
+            string newFileContent = this.GetFileContent(filePath);
+            Assert.AreNotEqual(oldFileContent, newFileContent);
+            Assert.IsFalse(newFileContent.Contains(oldFileContent));
+        }
+
+        #endregion
+
         #region utility methods
 
         private string GetFileContent(string filePath)

@@ -115,7 +115,7 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Searching for the latest version of the Resources.SelfUpdateCommand.SelfupdateMessageTemplate &quot;{0}&quot; package at &quot;{1}&quot;..
+        ///   Looks up a localized string similar to Searching for the latest version of the &quot;{0}&quot; package at one of the currently configured repositories (in this order): {1}.
         /// </summary>
         internal static string SelfupdateMessageTemplate {
             get {

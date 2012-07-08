@@ -166,11 +166,11 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot read the contents of the file \"{0}\" because it is being written to by another process. {1}", filePath, fileAccessException);
+                this.logger.Log("Cannot create a TextReader for the file \"{0}\" because it is being written to by another process. {1}", filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot read the contents of the file \"{0}\". {1}", filePath, generalException);
+                this.logger.Log("Cannot create a TextReader for the file \"{0}\". {1}", filePath, generalException);
             }
 
             return null;
@@ -191,11 +191,34 @@ namespace NuDeploy.Core.Common
             }
             catch (IOException fileAccessException)
             {
-                this.logger.Log("Cannot write content to \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
+                this.logger.Log("Cannot create a TextWriter for the file \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
             }
             catch (Exception generalException)
             {
-                this.logger.Log("Cannot write content to \"{0}\". {1}", filePath, generalException);
+                this.logger.Log("Cannot create a TextWriter for the file \"{0}\". {1}", filePath, generalException);
+            }
+
+            return null;
+        }
+
+        public Stream GetNewFileStream(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return null;
+            }
+
+            try
+            {
+                return File.Create(filePath);
+            }
+            catch (IOException fileAccessException)
+            {
+                this.logger.Log("Cannot open a stream for the file \"{0}\" because the file is being used by another process. {1}", filePath, fileAccessException);
+            }
+            catch (Exception generalException)
+            {
+                this.logger.Log("Cannot open a stream for the file \"{0}\". {1}", filePath, generalException);
             }
 
             return null;

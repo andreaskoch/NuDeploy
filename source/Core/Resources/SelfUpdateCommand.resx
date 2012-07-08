@@ -136,7 +136,7 @@
     <value>Package was not found.</value>
   </data>
   <data name="SelfupdateMessageTemplate" xml:space="preserve">
-    <value>Searching for the latest version of the Resources.SelfUpdateCommand.SelfupdateMessageTemplate "{0}" package at "{1}".</value>
+    <value>Searching for the latest version of the "{0}" package at one of the currently configured repositories (in this order): {1}</value>
   </data>
   <data name="UpdateMessageTemplate" xml:space="preserve">
     <value>Updating {0} to {1}.</value>
