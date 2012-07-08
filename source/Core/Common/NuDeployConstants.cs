@@ -13,5 +13,7 @@ namespace NuDeploy.Core.Common
         public static readonly string NuDeployCommandLinePackageId = string.Format("{0}.CommandLine", ApplicationName);
 
         public static readonly string CommonCommandOptionNameForce = "Force";
+
+        public static readonly char MultiValueSeperator = ',';
     }
 }

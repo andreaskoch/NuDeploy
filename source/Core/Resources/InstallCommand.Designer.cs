@@ -79,11 +79,11 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the system settings transformtion profile that shall be applied to the system settings of your deployment package before the installation (optional parameter; e.g. &quot;PROD-A&quot;, &quot;PROD-B&quot;, &quot;PROD-C&quot;). The transformed file will be saved in the &quot;{0}&quot; file of your package..
+        ///   Looks up a localized string similar to The name(s) of the system settings transformtion profile(s) that shall be applied to the system settings of your deployment package before the installation (optional parameter; e.g. &quot;PROD-A&quot;, &quot;PROD-B&quot;, &quot;B-Instance,Server-1&quot;, ...). The transformed file will be saved in the &quot;{0}&quot; file of your package folder..
         /// </summary>
-        internal static string ArgumentDescriptionSystemSettingTransformationProfileTemplate {
+        internal static string ArgumentDescriptionSystemSettingTransformationProfilesTemplate {
             get {
-                return ResourceManager.GetString("ArgumentDescriptionSystemSettingTransformationProfileTemplate", resourceCulture);
+                return ResourceManager.GetString("ArgumentDescriptionSystemSettingTransformationProfilesTemplate", resourceCulture);
             }
         }
         
@@ -129,6 +129,15 @@ namespace NuDeploy.Core.Resources {
         internal static string CommandExampleDescription4 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install the package with the given package id while applying two system setting transformation before the installation: First the transformation profile which switches the databases to the B-Instances. And after that the profile which sets all server specific settings for &quot;Server 1&quot;..
+        /// </summary>
+        internal static string CommandExampleDescription5 {
+            get {
+                return ResourceManager.GetString("CommandExampleDescription5", resourceCulture);
             }
         }
         

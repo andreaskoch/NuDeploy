@@ -54,7 +54,7 @@ namespace NuDeploy.Core.Services
             this.powerShellHost = powerShellHost;
         }
 
-        public bool Install(string packageId, string deploymentType, bool forceInstallation, string systemSettingTransformationProfileName)
+        public bool Install(string packageId, string deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
         {
             // check package source configuration
             if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
@@ -166,25 +166,33 @@ namespace NuDeploy.Core.Services
                 }
 
                 // apply transformations on the system settings before installation
-                if (string.IsNullOrWhiteSpace(systemSettingTransformationProfileName) == false)
+                if (systemSettingTransformationProfileNames != null && systemSettingTransformationProfileNames.Length > 0)
                 {
-                    this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ApplyingSystemSettingsTransformationProfileMessageTemplate, systemSettingTransformationProfileName));
+                    string sourceFileFolder = Path.Combine(packageFolder, SystemSettingsFolder);
+                    string sourceFilePath = Path.Combine(sourceFileFolder, SystemSettingsFileName);
 
-                    string sourceFilePath = Path.Combine(packageFolder, SystemSettingsFolder, SystemSettingsFileName);
-
-                    string transformationFilename = string.Format(SystemSettingsTransformationFilenameTemplate, systemSettingTransformationProfileName);
-                    string transformationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, transformationFilename);
-
-                    string destinationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, TransformedSystemSettingsFileName);
-
-                    if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
+                    foreach (var systemSettingTransformationProfileName in systemSettingTransformationProfileNames)
                     {
-                        this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationSucceededMessage);
-                    }
-                    else
-                    {
-                        this.filesystemAccessor.DeleteFile(destinationFilePath);
-                        this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationFailedMessage);
+                        this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ApplyingSystemSettingsTransformationProfileMessageTemplate, systemSettingTransformationProfileName));
+
+                        string transformationFilename = string.Format(SystemSettingsTransformationFilenameTemplate, systemSettingTransformationProfileName);
+                        string transformationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, transformationFilename);
+                        string destinationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, TransformedSystemSettingsFileName);
+
+                        if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
+                        {
+                            this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationSucceededMessage);
+
+                            // make the transformed file the source for the next transformation
+                            sourceFilePath = destinationFilePath;
+                        }
+                        else
+                        {
+                            this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationFailedMessage);
+
+                            // abort the transformations
+                            break;
+                        }
                     }
 
                     return;

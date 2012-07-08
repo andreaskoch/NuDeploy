@@ -123,8 +123,8 @@
   <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
     <value>The id of the NuGet package to install (e.g. "NuDeploy.CommandLine").</value>
   </data>
-  <data name="ArgumentDescriptionSystemSettingTransformationProfileTemplate" xml:space="preserve">
-    <value>The name of the system settings transformtion profile that shall be applied to the system settings of your deployment package before the installation (optional parameter; e.g. "PROD-A", "PROD-B", "PROD-C"). The transformed file will be saved in the "{0}" file of your package.</value>
+  <data name="ArgumentDescriptionSystemSettingTransformationProfilesTemplate" xml:space="preserve">
+    <value>The name(s) of the system settings transformtion profile(s) that shall be applied to the system settings of your deployment package before the installation (optional parameter; e.g. "PROD-A", "PROD-B", "B-Instance,Server-1", ...). The transformed file will be saved in the "{0}" file of your package folder.</value>
   </data>
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Install the specified NuGet package.</value>
@@ -140,6 +140,9 @@
   </data>
   <data name="CommandExampleDescription4" xml:space="preserve">
     <value>Install the package with the given package id while applying the "PROD-A" system setting transformation before the installation (named parameters).</value>
+  </data>
+  <data name="CommandExampleDescription5" xml:space="preserve">
+    <value>Install the package with the given package id while applying two system setting transformation before the installation: First the transformation profile which switches the databases to the B-Instances. And after that the profile which sets all server specific settings for "Server 1".</value>
   </data>
   <data name="DeploymentTypeWasNotRecognizedMessageTemplate" xml:space="preserve">
     <value>The deployment type "{0}" is unknown. Please use one of these instead: {1}.</value>
