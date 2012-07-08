@@ -92,9 +92,12 @@ namespace NuDeploy.Core.Services
         {
             try
             {
-                var transformableDocument = new XmlTransformableDocument { PreserveWhitespace = true };
-                transformableDocument.Load(filePath);
-                return transformableDocument;
+                using (var textReader = this.filesystemAccessor.GetTextReader(filePath))
+                {
+                    var transformableDocument = new XmlTransformableDocument { PreserveWhitespace = true };
+                    transformableDocument.Load(textReader);
+                    return transformableDocument;
+                }
             }
             catch (XmlException xmlException)
             {
@@ -120,7 +123,8 @@ namespace NuDeploy.Core.Services
         {
             try
             {
-                return new XmlTransformation(filePath);
+                string transformationFileContent = this.filesystemAccessor.GetFileContent(filePath);
+                return new XmlTransformation(transformationFileContent, false, null);
             }
             catch (XmlException xmlException)
             {
@@ -161,7 +165,11 @@ namespace NuDeploy.Core.Services
                     this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.DestinationFileAlreadyExistsMessageTemplate, destinationFilePath));
                 }
 
-                transformedDocument.Save(destinationFilePath);
+                using (var textWriter = this.filesystemAccessor.GetTextWriter(destinationFilePath))
+                {
+                    transformedDocument.Save(textWriter);
+                }
+
                 return true;
             }
             catch (XmlException xmlException)

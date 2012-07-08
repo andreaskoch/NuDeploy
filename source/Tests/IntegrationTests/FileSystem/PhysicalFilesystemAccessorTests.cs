@@ -16,16 +16,13 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         private IFilesystemAccessor filesystemAccessor;
 
-        private Mock<IActionLogger> loggerMock;
-
         private IEncodingProvider encodingProvider;
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            this.loggerMock = new Mock<IActionLogger>();
             this.encodingProvider = new DefaultFileEncodingProvider();
-            this.filesystemAccessor = new PhysicalFilesystemAccessor(this.loggerMock.Object, encodingProvider);
+            this.filesystemAccessor = new PhysicalFilesystemAccessor(this.encodingProvider);
         }
 
         [SetUp]

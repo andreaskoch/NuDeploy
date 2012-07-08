@@ -186,6 +186,8 @@ namespace NuDeploy.Core.Services
                         this.filesystemAccessor.DeleteFile(destinationFilePath);
                         this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationFailedMessage);
                     }
+
+                    return;
                 }
 
                 // execute installation script

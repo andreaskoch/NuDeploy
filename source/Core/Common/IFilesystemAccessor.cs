@@ -1,4 +1,6 @@
-﻿namespace NuDeploy.Core.Common
+﻿using System.IO;
+
+namespace NuDeploy.Core.Common
 {
     public interface IFilesystemAccessor
     {
@@ -13,6 +15,10 @@
         bool DeleteFolder(string folderPath);
 
         string GetFileContent(string filePath);
+
+        TextReader GetTextReader(string filePath);
+
+        TextWriter GetTextWriter(string filePath);
 
         bool WriteContentToFile(string content, string filePath);
     }

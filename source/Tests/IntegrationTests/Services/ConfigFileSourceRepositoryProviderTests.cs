@@ -19,10 +19,9 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         [TestFixtureSetUp]
         public void Setup()
         {
-            var loggerMock = new Mock<IActionLogger>();
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(loggerMock.Object, encodingProvider);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
             this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor);
         }
 
