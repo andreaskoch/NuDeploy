@@ -79,7 +79,7 @@ namespace NuDeploy.Core.Services
 
             // check if package is already installed
             NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id).FirstOrDefault(p => p.IsInstalled);
-            if (packageInfoOfInstalledVersion != null)
+            if (packageInfoOfInstalledVersion != null && deploymentType.Equals("full", StringComparison.OrdinalIgnoreCase))
             {
                 if (forceInstallation == false)
                 {
@@ -194,8 +194,6 @@ namespace NuDeploy.Core.Services
                             break;
                         }
                     }
-
-                    return;
                 }
 
                 // execute installation script
