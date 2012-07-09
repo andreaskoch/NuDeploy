@@ -26,6 +26,12 @@ namespace NuDeploy.Core.Services
 
         public const string TransformedSystemSettingsFileName = SystemSettingsFileName + ".transformed";
 
+        public const string DeploymentTypeFull = "full";
+
+        public const string DeploymentTypeUpdate = "update";
+
+        public const string DeploymentTypeDefault = DeploymentTypeFull;
+
         private readonly ApplicationInformation applicationInformation;
 
         private readonly IFilesystemAccessor filesystemAccessor;
@@ -79,7 +85,7 @@ namespace NuDeploy.Core.Services
 
             // check if package is already installed
             NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id).FirstOrDefault(p => p.IsInstalled);
-            if (packageInfoOfInstalledVersion != null && deploymentType.Equals("full", StringComparison.OrdinalIgnoreCase))
+            if (packageInfoOfInstalledVersion != null && deploymentType.Equals(DeploymentTypeFull, StringComparison.OrdinalIgnoreCase))
             {
                 if (forceInstallation == false)
                 {

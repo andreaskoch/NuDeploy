@@ -15,17 +15,11 @@ namespace NuDeploy.Core.Commands.Console
 
         private const string ArgumentNameNugetDeploymentType = "DeploymentType";
 
-        private const string DeploymentTypeFull = "full";
-
-        private const string DeploymentTypeUpdate = "update";
-
         private const string ArgumentNameSystemSettingTransformationProfiles = "TransformationProfiles";
-
-        private const string DeploymentTypeDefault = DeploymentTypeFull;
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
 
-        private readonly string[] allowedDeploymentTypes = new[] { DeploymentTypeFull, DeploymentTypeUpdate };
+        private readonly string[] allowedDeploymentTypes = new[] { PackageInstaller.DeploymentTypeFull, PackageInstaller.DeploymentTypeUpdate };
 
         private readonly IUserInterface userInterface;
 
@@ -51,11 +45,11 @@ namespace NuDeploy.Core.Commands.Console
                             Resources.InstallCommand.CommandExampleDescription1
                         },
                         {
-                            string.Format("{0} {1} {2}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId, DeploymentTypeFull),
+                            string.Format("{0} {1} {2}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId, PackageInstaller.DeploymentTypeFull),
                             Resources.InstallCommand.CommandExampleDescription2
                         },
                         {
-                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameNugetDeploymentType, DeploymentTypeFull),
+                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameNugetDeploymentType, PackageInstaller.DeploymentTypeFull),
                             Resources.InstallCommand.CommandExampleDescription3
                         },
                         {
@@ -70,7 +64,7 @@ namespace NuDeploy.Core.Commands.Console
                 ArgumentDescriptions = new Dictionary<string, string>
                     {
                         { ArgumentNameNugetPackageId, Resources.InstallCommand.ArgumentDescriptionNugetPackageId },
-                        { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), DeploymentTypeDefault) },
+                        { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), PackageInstaller.DeploymentTypeDefault) },
                         { ArgumentNameSystemSettingTransformationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationProfilesTemplate, PackageInstaller.TransformedSystemSettingsFileName) }
                     }
             };
@@ -96,7 +90,7 @@ namespace NuDeploy.Core.Commands.Console
             string deploymentType = this.Arguments.ContainsKey(ArgumentNameNugetDeploymentType) ? this.Arguments[ArgumentNameNugetDeploymentType] : string.Empty;
             if (string.IsNullOrWhiteSpace(deploymentType))
             {
-                deploymentType = DeploymentTypeDefault;
+                deploymentType = PackageInstaller.DeploymentTypeDefault;
             }
 
             if (!this.allowedDeploymentTypes.Any(t => t.Equals(deploymentType, StringComparison.OrdinalIgnoreCase)))
