@@ -32,7 +32,7 @@
 		<Message Text="The Version is %(NugetPackageAssemblyIdentities.Version)" />
 	</Target>	
 
-    <Target Name="CreateNugetPackage" DependsOnTargets="GetVersion">
+    <Target Name="CreateNugetPackage" DependsOnTargets="GetVersion" Condition="$(Configuration)=='Release'">
         <Message Text="Creating a NuGet Package" />
 		
 		<Message Text="NuGetPackageId: $(NuGetPackageId)" />
