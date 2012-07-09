@@ -1,4 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Execution;
+
+using NuDeploy.Core.Common;
 
 namespace NuDeploy.Core.Commands.Console
 {
@@ -14,8 +23,15 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly string[] alternativeCommandNames = new[] { "pack" };
 
-        public PackageSolutionCommand()
+        private readonly IUserInterface userInterface;
+
+        private readonly IFilesystemAccessor filesystemAccessor;
+
+        public PackageSolutionCommand(IUserInterface userInterface, IFilesystemAccessor filesystemAccessor)
         {
+            this.userInterface = userInterface;
+            this.filesystemAccessor = filesystemAccessor;
+
             this.Attributes = new CommandAttributes
             {
                 CommandName = CommandName,
@@ -58,7 +74,36 @@ namespace NuDeploy.Core.Commands.Console
 
         public void Execute()
         {
-            throw new System.NotImplementedException();
+            // Solution Path Parameter
+            string solutionPath = this.Arguments.ContainsKey(ArgumentNameSolutionPath) ? this.Arguments[ArgumentNameSolutionPath] : string.Empty;
+            if (string.IsNullOrWhiteSpace(solutionPath))
+            {
+                this.userInterface.WriteLine(string.Format("You must specifiy a solution path."));
+                return;
+            }
+
+            if (this.filesystemAccessor.FileExists(solutionPath) == false)
+            {
+                this.userInterface.WriteLine(string.Format("You must specifiy an existing solution path."));
+                return;
+            }
+
+            var buildConfiguration = "DEV";
+            var platForm = "Any CPU";
+            var buildResultFolder = "C:\\temp";
+            string command = "msbuild.exe \"" + solutionPath + "\" /p:Configuration=" + buildConfiguration + " /p:Platform=\"" + platForm
+                             + "\" /p:IsAutoBuild=true /p:OutputPath=\"" + buildResultFolder + "\" /t:Rebuild";
+
+            var props = new Dictionary<string, string>();
+            props["Configuration"] = buildConfiguration;
+            props["Platform"] = platForm;
+            props["OutputPath"] = buildResultFolder;
+            var request = new BuildRequestData(solutionPath, props, null, new [] { "Build" }, null);
+            var parms = new BuildParameters();
+            // parms.Loggers = ...;
+
+            var result = BuildManager.DefaultBuildManager.Build(parms, request);
+            bool success = result.OverallResult == BuildResultCode.Success;
         }
     }
 }
