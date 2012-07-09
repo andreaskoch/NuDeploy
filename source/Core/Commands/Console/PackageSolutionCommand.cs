@@ -1,10 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
 
-using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 
 using NuDeploy.Core.Common;
@@ -20,6 +15,12 @@ namespace NuDeploy.Core.Commands.Console
         private const string ArgumentNameBuildConfiguration = "BuildConfiguration";
 
         private const string ArgumentNameMSBuildProperties = "MSBuildProperties";
+
+        private const string BuildTarget = "Rebuild";
+
+        private const string TargetPlatform = "Any CPU";
+
+        private const string BuildResultFolder = "C:\\temp";
 
         private readonly string[] alternativeCommandNames = new[] { "pack" };
 
@@ -88,22 +89,34 @@ namespace NuDeploy.Core.Commands.Console
                 return;
             }
 
-            var buildConfiguration = "DEV";
-            var platForm = "Any CPU";
-            var buildResultFolder = "C:\\temp";
-            string command = "msbuild.exe \"" + solutionPath + "\" /p:Configuration=" + buildConfiguration + " /p:Platform=\"" + platForm
-                             + "\" /p:IsAutoBuild=true /p:OutputPath=\"" + buildResultFolder + "\" /t:Rebuild";
+            // Build Configuration
+            string buildConfiguration = this.Arguments.ContainsKey(ArgumentNameBuildConfiguration) ? this.Arguments[ArgumentNameBuildConfiguration] : string.Empty;
+            if (string.IsNullOrWhiteSpace(buildConfiguration))
+            {
+                this.userInterface.WriteLine(string.Format("You must specify a build configuration."));
+                return;
+            }
 
-            var props = new Dictionary<string, string>();
-            props["Configuration"] = buildConfiguration;
-            props["Platform"] = platForm;
-            props["OutputPath"] = buildResultFolder;
-            var request = new BuildRequestData(solutionPath, props, null, new [] { "Build" }, null);
+            var buildProperties = new Dictionary<string, string>();
+            buildProperties["Configuration"] = buildConfiguration;
+            buildProperties["Platform"] = TargetPlatform;
+            buildProperties["OutputPath"] = BuildResultFolder;
+            buildProperties["IsAutoBuild"] = bool.TrueString;
+
+            var request = new BuildRequestData(solutionPath, buildProperties, null, new[] { BuildTarget }, null);
             var parms = new BuildParameters();
-            // parms.Loggers = ...;
 
-            var result = BuildManager.DefaultBuildManager.Build(parms, request);
-            bool success = result.OverallResult == BuildResultCode.Success;
+            BuildResult result = BuildManager.DefaultBuildManager.Build(parms, request);
+            bool buildWasSuccessful = result.OverallResult == BuildResultCode.Success;
+
+            if (buildWasSuccessful)
+            {
+                this.userInterface.WriteLine(string.Format("The solution \"{0}\" has been build successfully ({1}|{2}).", solutionPath, buildConfiguration, TargetPlatform));
+            }
+            else
+            {
+                this.userInterface.WriteLine(string.Format("Building the solution \"{0}\" failed ({1}|{2}).", solutionPath, buildConfiguration, TargetPlatform));
+            }
         }
     }
 }
