@@ -293,7 +293,7 @@ namespace NuDeploy.Core.Commands.Console
             // build package
             string packageBasePath = Path.GetFullPath(prepackagingFolder);
             string packageFolder = Path.GetFullPath(Path.Combine(this.applicationInformation.StartupFolder, "NuDeployPackages"));
-            string nugetPackageFilePath = Path.Combine(packageFolder, nuspecFileInfo.Name.Replace(".nuspec", ".nupkg"));
+            string nugetPackageFilePath = Path.Combine(packageFolder, nuspecFileInfo.Name.Replace(".nuspec", ".1.0.0.nupkg"));
             if (!this.filesystemAccessor.DirectoryExists(packageFolder))
             {
                 this.filesystemAccessor.CreateDirectory(packageFolder);
