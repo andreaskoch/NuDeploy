@@ -170,6 +170,19 @@ namespace NuDeploy.Core.Commands.Console
 
             this.filesystemAccessor.CreateDirectory(prepackagingFolder);
 
+            // NuSpec file
+            var nuspecFileSearchPattern = string.Format("*.{0}.nuspec", buildConfiguration);
+            var nuspecFile = Directory.GetFiles(buildFolderPath, nuspecFileSearchPattern, SearchOption.TopDirectoryOnly).First();
+            if (nuspecFile == null)
+            {
+                this.userInterface.WriteLine(string.Format("There was no NuSpec file found in your build folder. Without a NuSpec file we will not be able to create a NuGet package (Search Pattern: {0}, Folder: {1}).", nuspecFileSearchPattern, buildFolderPath));
+                return;
+            }
+
+            var nuspecFileInfo = new FileInfo(nuspecFile);
+            var nuspecFileTargetPath = Path.GetFullPath(Path.Combine(prepackagingFolder, nuspecFileInfo.Name));
+            File.Copy(nuspecFile, nuspecFileTargetPath);
+
             // deployment scripts
             string deploymentScriptNamespace = "NuDeploy.Core.Resources.DeploymentScripts.";
             Assembly coreAssembly = typeof(PackageSolutionCommand).Assembly;
