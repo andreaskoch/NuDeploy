@@ -216,67 +216,78 @@ namespace NuDeploy.Core.Commands.Console
             // websites
             var publishedWebsitesTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "websites"));
             var publishedWebsitesSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedWebsites"));
-
-            var publishedWebsiteDirectories = Directory.GetDirectories(publishedWebsitesSourceFolderPath, "*.Website.*", SearchOption.TopDirectoryOnly);
-            var publishedWebsiteFiles = publishedWebsiteDirectories.SelectMany(d => Directory.GetFiles(d, "*", SearchOption.AllDirectories));
-
-            foreach (var file in publishedWebsiteFiles)
+            if (this.filesystemAccessor.DirectoryExists(publishedWebsitesSourceFolderPath))
             {
-                string targetFileName = file.Replace(publishedWebsitesSourceFolderPath + "\\", string.Empty);
-                string targetFilePath = Path.Combine(publishedWebsitesTargetFolderPath, targetFileName);
+                var publishedWebsiteDirectories = Directory.GetDirectories(publishedWebsitesSourceFolderPath, "*.Website.*", SearchOption.TopDirectoryOnly);
+                var publishedWebsiteFiles = publishedWebsiteDirectories.SelectMany(d => Directory.GetFiles(d, "*", SearchOption.AllDirectories));
 
-                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+                foreach (var file in publishedWebsiteFiles)
+                {
+                    string targetFileName = file.Replace(publishedWebsitesSourceFolderPath + "\\", string.Empty);
+                    string targetFilePath = Path.Combine(publishedWebsitesTargetFolderPath, targetFileName);
 
-                File.Move(file, targetFilePath);
+                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                    File.Move(file, targetFilePath);
+                }                
             }
 
             // web applications
             var publishedWebapplicationsTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "webapplications"));
             var publishedWebapplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedWebsites"));
-            var publishedWebapplicationFiles = Directory.GetFiles(publishedWebapplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
-
-            foreach (var file in publishedWebapplicationFiles)
+            if (this.filesystemAccessor.DirectoryExists(publishedWebapplicationsSourceFolderPath))
             {
-                string targetFileName = file.Replace(publishedWebapplicationsSourceFolderPath + "\\", string.Empty);
-                string targetFilePath = Path.Combine(publishedWebapplicationsTargetFolderPath, targetFileName);
+                var publishedWebapplicationFiles = Directory.GetFiles(publishedWebapplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
 
-                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+                foreach (var file in publishedWebapplicationFiles)
+                {
+                    string targetFileName = file.Replace(publishedWebapplicationsSourceFolderPath + "\\", string.Empty);
+                    string targetFilePath = Path.Combine(publishedWebapplicationsTargetFolderPath, targetFileName);
 
-                File.Move(file, targetFilePath);
+                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                    File.Move(file, targetFilePath);
+                }                
             }
 
             // applications
             var publishedApplicationsTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "applications"));
             var publishedApplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedApplications"));
-            var publishedApplicationFiles = Directory.GetFiles(publishedApplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
-
-            foreach (var file in publishedApplicationFiles)
+            if (this.filesystemAccessor.DirectoryExists(publishedApplicationsSourceFolderPath))
             {
-                string targetFileName = file.Replace(publishedApplicationsSourceFolderPath + "\\", string.Empty);
-                string targetFilePath = Path.Combine(publishedApplicationsTargetFolderPath, targetFileName);
+                var publishedApplicationFiles = Directory.GetFiles(publishedApplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
 
-                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+                foreach (var file in publishedApplicationFiles)
+                {
+                    string targetFileName = file.Replace(publishedApplicationsSourceFolderPath + "\\", string.Empty);
+                    string targetFilePath = Path.Combine(publishedApplicationsTargetFolderPath, targetFileName);
 
-                File.Move(file, targetFilePath);
+                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                    File.Move(file, targetFilePath);
+                }                
             }
 
             // deployment package additions
             var deploymentPackageAdditionsTargetFolderPath = Path.GetFullPath(prepackagingFolder);
             var publishedDeploymentPackageAdditionsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "deploymentpackageadditions"));
-            var publishedDeploymentPackageAdditionFiles = Directory.GetFiles(publishedDeploymentPackageAdditionsSourceFolderPath, "*", SearchOption.AllDirectories);
-
-            foreach (var file in publishedDeploymentPackageAdditionFiles)
+            if (this.filesystemAccessor.DirectoryExists(publishedDeploymentPackageAdditionsSourceFolderPath))
             {
-                string targetFileName = file.Replace(publishedDeploymentPackageAdditionsSourceFolderPath + "\\", string.Empty);
-                string targetFilePath = Path.Combine(deploymentPackageAdditionsTargetFolderPath, targetFileName);
+                var publishedDeploymentPackageAdditionFiles = Directory.GetFiles(publishedDeploymentPackageAdditionsSourceFolderPath, "*", SearchOption.AllDirectories);
 
-                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+                foreach (var file in publishedDeploymentPackageAdditionFiles)
+                {
+                    string targetFileName = file.Replace(publishedDeploymentPackageAdditionsSourceFolderPath + "\\", string.Empty);
+                    string targetFilePath = Path.Combine(deploymentPackageAdditionsTargetFolderPath, targetFileName);
 
-                File.Move(file, targetFilePath);
+                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                    File.Move(file, targetFilePath);
+                }                
             }
 
             // build package
