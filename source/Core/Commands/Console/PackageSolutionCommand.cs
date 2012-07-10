@@ -193,8 +193,6 @@ namespace NuDeploy.Core.Commands.Console
 
             foreach (var resourceName in deploymentScriptResourceNames)
             {
-                this.userInterface.WriteLine(resourceName);
-
                 var fileNameFragments = resourceName.Replace(deploymentScriptNamespace, string.Empty).Split('.');
                 string fileName = Path.Combine(
                     string.Join(@"\", fileNameFragments.Take(fileNameFragments.Length - 2)),
