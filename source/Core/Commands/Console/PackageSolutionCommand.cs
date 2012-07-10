@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using Microsoft.Build.Execution;
 
@@ -167,6 +169,34 @@ namespace NuDeploy.Core.Commands.Console
             }
 
             this.filesystemAccessor.CreateDirectory(prepackagingFolder);
+
+            // deployment scripts
+            string deploymentScriptNamespace = "NuDeploy.Core.Resources.DeploymentScripts.";
+            Assembly coreAssembly = typeof(PackageSolutionCommand).Assembly;
+            string[] deploymentScriptResourceNames =
+                coreAssembly.GetManifestResourceNames().Where(r => r.StartsWith(deploymentScriptNamespace, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            foreach (var resourceName in deploymentScriptResourceNames)
+            {
+                this.userInterface.WriteLine(resourceName);
+
+                var fileNameFragments = resourceName.Replace(deploymentScriptNamespace, string.Empty).Split('.');
+                string fileName = Path.Combine(
+                    string.Join(@"\", fileNameFragments.Take(fileNameFragments.Length - 2)),
+                    string.Join(".", fileNameFragments.Skip(fileNameFragments.Length - 2).Take(2)));
+
+                string filePath = Path.GetFullPath(Path.Combine(prepackagingFolder, fileName));
+                string fileDirectory = new FileInfo(filePath).Directory.FullName;
+                this.filesystemAccessor.CreateDirectory(fileDirectory);
+
+                using (Stream resourceStream = coreAssembly.GetManifestResourceStream(resourceName))
+                {
+                    using (Stream fileStream = File.OpenWrite(filePath))
+                    {
+                        resourceStream.CopyTo(fileStream);
+                    }  
+                }
+            }
 
             // websites
             var publishedWebsitesTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "websites"));
