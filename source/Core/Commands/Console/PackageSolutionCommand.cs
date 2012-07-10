@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Microsoft.Build.Execution;
@@ -139,10 +140,99 @@ namespace NuDeploy.Core.Commands.Console
             bool buildWasSuccessful = result.OverallResult == BuildResultCode.Success;
 
             // evaluate build result
+            if (!buildWasSuccessful)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        "Building the solution \"{0}\" failed (Build Configuration: {1}, Platform: {2}).",
+                        solutionPath,
+                        buildConfiguration,
+                        BuildPropertyTargetPlatform));
+
+                return;
+            }
+
             this.userInterface.WriteLine(
-                buildWasSuccessful
-                    ? string.Format("The solution \"{0}\" has been build successfully (Build Configuration: {1}, Platform: {2}).", solutionPath, buildConfiguration, BuildPropertyTargetPlatform)
-                    : string.Format("Building the solution \"{0}\" failed (Build Configuration: {1}, Platform: {2}).", solutionPath, buildConfiguration, BuildPropertyTargetPlatform));
+                string.Format(
+                    "The solution \"{0}\" has been build successfully (Build Configuration: {1}, Platform: {2}).",
+                    solutionPath,
+                    buildConfiguration,
+                    BuildPropertyTargetPlatform));
+
+            // pre-packaging
+            var prepackagingFolder = Path.Combine(this.applicationInformation.StartupFolder, "NuDeployPrepackaging");
+            if (this.filesystemAccessor.DirectoryExists(prepackagingFolder))
+            {
+                this.filesystemAccessor.DeleteFolder(prepackagingFolder);
+            }
+
+            this.filesystemAccessor.CreateDirectory(prepackagingFolder);
+
+            // websites
+            var publishedWebsitesTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "websites"));
+            var publishedWebsitesSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedWebsites"));
+
+            var publishedWebsiteDirectories = Directory.GetDirectories(publishedWebsitesSourceFolderPath, "*.Website.*", SearchOption.TopDirectoryOnly);
+            var publishedWebsiteFiles = publishedWebsiteDirectories.SelectMany(d => Directory.GetFiles(d, "*", SearchOption.AllDirectories));
+
+            foreach (var file in publishedWebsiteFiles)
+            {
+                string targetFileName = file.Replace(publishedWebsitesSourceFolderPath + "\\", string.Empty);
+                string targetFilePath = Path.Combine(publishedWebsitesTargetFolderPath, targetFileName);
+
+                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                File.Move(file, targetFilePath);
+            }
+
+            // web applications
+            var publishedWebapplicationsTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "webapplications"));
+            var publishedWebapplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedWebsites"));
+            var publishedWebapplicationFiles = Directory.GetFiles(publishedWebapplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
+
+            foreach (var file in publishedWebapplicationFiles)
+            {
+                string targetFileName = file.Replace(publishedWebapplicationsSourceFolderPath + "\\", string.Empty);
+                string targetFilePath = Path.Combine(publishedWebapplicationsTargetFolderPath, targetFileName);
+
+                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                File.Move(file, targetFilePath);
+            }
+
+            // applications
+            var publishedApplicationsTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "applications"));
+            var publishedApplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedApplications"));
+            var publishedApplicationFiles = Directory.GetFiles(publishedApplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
+
+            foreach (var file in publishedApplicationFiles)
+            {
+                string targetFileName = file.Replace(publishedApplicationsSourceFolderPath + "\\", string.Empty);
+                string targetFilePath = Path.Combine(publishedApplicationsTargetFolderPath, targetFileName);
+
+                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                File.Move(file, targetFilePath);
+            }
+
+            // deployment package additions
+            var deploymentPackageAdditionsTargetFolderPath = Path.GetFullPath(prepackagingFolder);
+            var publishedDeploymentPackageAdditionsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "deploymentpackageadditions"));
+            var publishedDeploymentPackageAdditionFiles = Directory.GetFiles(publishedDeploymentPackageAdditionsSourceFolderPath, "*", SearchOption.AllDirectories);
+
+            foreach (var file in publishedDeploymentPackageAdditionFiles)
+            {
+                string targetFileName = file.Replace(publishedDeploymentPackageAdditionsSourceFolderPath + "\\", string.Empty);
+                string targetFilePath = Path.Combine(deploymentPackageAdditionsTargetFolderPath, targetFileName);
+
+                string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
+                this.filesystemAccessor.CreateDirectory(targetFileDirectory);
+
+                File.Move(file, targetFilePath);
+            }
         }
 
         private IEnumerable<KeyValuePair<string, string>> ParseBuildPropertiesArgument(string builProperties)
