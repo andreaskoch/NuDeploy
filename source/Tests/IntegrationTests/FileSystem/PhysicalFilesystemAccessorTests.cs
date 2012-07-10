@@ -1193,6 +1193,75 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #region CreateDirectory
+
+        [Test]
+        public void CreateDirectory_PathIsNull_ResultIsFalse()
+        {
+            // Arrange
+            string path = null;
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsEmpty_ResultIsFalse()
+        {
+            // Arrange
+            string path = string.Empty;
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsWhitespace_ResultIsFalse()
+        {
+            // Arrange
+            string path = " ";
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsExistingDirectory_ResultIsFalse()
+        {
+            // Arrange
+            string path = this.CreateDirectory("existing-directory").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsValid_DoesNotExistYet_ResultIsTrue()
+        {
+            // Arrange
+            string path = this.GetPath("new-directory");
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        #endregion
+
         #region utility methods
 
         private string GetFileContent(string filePath)

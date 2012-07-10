@@ -90,6 +90,16 @@ namespace NuDeploy.Tests.IntegrationTests.Common
         }
 
         [Test]
+        public void GetApplicationInformation_BuildFolderIsSet()
+        {
+            // Act
+            var result = ApplicationInformationProvider.GetApplicationInformation();
+
+            // Assert
+            Assert.IsNotNullOrEmpty(result.BuildFolder);
+        }
+
+        [Test]
         public void GetApplicationInformation_ExecutingUserIsSet()
         {
             // Act

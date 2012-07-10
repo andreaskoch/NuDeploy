@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Build.Execution;
 
@@ -16,21 +17,28 @@ namespace NuDeploy.Core.Commands.Console
 
         private const string ArgumentNameMSBuildProperties = "MSBuildProperties";
 
-        private const string BuildTarget = "Rebuild";
+        private const string BuildPropertyNameTargetPlatform = "Platform";
 
-        private const string TargetPlatform = "Any CPU";
+        private const string BuildPropertyNameOutputPath = "OutputPath";
 
-        private const string BuildResultFolder = "C:\\temp";
+        private const string BuildPropertyNameBuildConfiguration = "Configuration";
+
+        private const string BuildPropertyBuildTarget = "Rebuild";
+
+        private const string BuildPropertyTargetPlatform = "Any CPU";
 
         private readonly string[] alternativeCommandNames = new[] { "pack" };
 
         private readonly IUserInterface userInterface;
 
+        private readonly ApplicationInformation applicationInformation;
+
         private readonly IFilesystemAccessor filesystemAccessor;
 
-        public PackageSolutionCommand(IUserInterface userInterface, IFilesystemAccessor filesystemAccessor)
+        public PackageSolutionCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
             this.userInterface = userInterface;
+            this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
 
             this.Attributes = new CommandAttributes
@@ -93,30 +101,87 @@ namespace NuDeploy.Core.Commands.Console
             string buildConfiguration = this.Arguments.ContainsKey(ArgumentNameBuildConfiguration) ? this.Arguments[ArgumentNameBuildConfiguration] : string.Empty;
             if (string.IsNullOrWhiteSpace(buildConfiguration))
             {
-                this.userInterface.WriteLine(string.Format("You must specify a build configuration."));
+                this.userInterface.WriteLine(string.Format("You must specify a build configuration (e.g. Debug, Release)."));
                 return;
             }
 
-            var buildProperties = new Dictionary<string, string>();
-            buildProperties["Configuration"] = buildConfiguration;
-            buildProperties["Platform"] = TargetPlatform;
-            buildProperties["OutputPath"] = BuildResultFolder;
-            buildProperties["IsAutoBuild"] = bool.TrueString;
+            // MSBuild Properties
+            var buildPropertiesArgument = this.Arguments.ContainsKey(ArgumentNameMSBuildProperties) ? this.Arguments[ArgumentNameMSBuildProperties] : string.Empty;
+            var additionalBuildProperties = this.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
 
-            var request = new BuildRequestData(solutionPath, buildProperties, null, new[] { BuildTarget }, null);
+            // build folder
+            string buildFolderPath = this.GetBuildFolderPath();
+            if (!this.PrepareBuildFolder(buildFolderPath))
+            {
+                this.userInterface.WriteLine(string.Format("Could not prepare the build folder \"{0}\". Please check the folder and try again.", buildFolderPath));
+                return;
+            }
+
+            // build properties
+            var buildProperties = new Dictionary<string, string>
+                {
+                    { BuildPropertyNameBuildConfiguration, buildConfiguration },
+                    { BuildPropertyNameTargetPlatform, BuildPropertyTargetPlatform },
+                    { BuildPropertyNameOutputPath, buildFolderPath }
+                };
+
+            // add additional build properties
+            foreach (var additionalBuildProperty in additionalBuildProperties)
+            {
+                buildProperties[additionalBuildProperty.Key] = additionalBuildProperty.Value;
+            }
+
+            // build
+            var request = new BuildRequestData(solutionPath, buildProperties, null, new[] { BuildPropertyBuildTarget }, null);
             var parms = new BuildParameters();
 
             BuildResult result = BuildManager.DefaultBuildManager.Build(parms, request);
             bool buildWasSuccessful = result.OverallResult == BuildResultCode.Success;
 
-            if (buildWasSuccessful)
+            // evaluate build result
+            this.userInterface.WriteLine(
+                buildWasSuccessful
+                    ? string.Format("The solution \"{0}\" has been build successfully (Build Configuration: {1}, Platform: {2}).", solutionPath, buildConfiguration, BuildPropertyTargetPlatform)
+                    : string.Format("Building the solution \"{0}\" failed (Build Configuration: {1}, Platform: {2}).", solutionPath, buildConfiguration, BuildPropertyTargetPlatform));
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> ParseBuildPropertiesArgument(string builProperties)
+        {
+            var keyValuePairStrings = builProperties.Split(NuDeployConstants.MultiValueSeperator).Where(p => string.IsNullOrWhiteSpace(p) == false).Select(p => p.Trim());
+            foreach (var keyValuePairString in keyValuePairStrings)
             {
-                this.userInterface.WriteLine(string.Format("The solution \"{0}\" has been build successfully ({1}|{2}).", solutionPath, buildConfiguration, TargetPlatform));
+                var segments = keyValuePairString.Split('=');
+                if (segments.Count() == 2)
+                {
+                    string key = segments.First();
+                    string value = segments.Last();
+
+                    yield return new KeyValuePair<string, string>(key, value);
+                }
             }
-            else
+        }
+
+        private bool PrepareBuildFolder(string buildFolderPath)
+        {
+            // create folder if it does not exist
+            if (this.filesystemAccessor.DirectoryExists(buildFolderPath) == false)
             {
-                this.userInterface.WriteLine(string.Format("Building the solution \"{0}\" failed ({1}|{2}).", solutionPath, buildConfiguration, TargetPlatform));
+                return this.filesystemAccessor.CreateDirectory(buildFolderPath);
             }
+
+            // cleanup existing folder
+            if (this.filesystemAccessor.DeleteFolder(buildFolderPath))
+            {
+                return this.filesystemAccessor.CreateDirectory(buildFolderPath);
+            }
+
+            // build folder could not be cleaned
+            return false;
+        }
+
+        private string GetBuildFolderPath()
+        {
+            return this.applicationInformation.BuildFolder;
         }
     }
 }

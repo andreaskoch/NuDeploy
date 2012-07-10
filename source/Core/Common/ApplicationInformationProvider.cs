@@ -18,6 +18,7 @@ namespace NuDeploy.Core.Common
                     StartupFolder = Environment.CurrentDirectory,
                     ConfigurationFileFolder = Environment.CurrentDirectory,
                     LogFolder = Path.Combine(Environment.CurrentDirectory, "NuDeployLogs"),
+                    BuildFolder = Path.Combine(Environment.CurrentDirectory, "NuDeployBuilds"),
                     ExecutingUser =
                         new UserProperties
                             {

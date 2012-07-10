@@ -32,12 +32,13 @@ namespace NuDeploy.Tests.IntegrationTests
         public void Setup()
         {
 
+            var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
             var userInterfaceMock = new Mock<IUserInterface>();
             var actionLoggerMock = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
             var filesystemAccessor = new PhysicalFilesystemAccessor(actionLoggerMock.Object, encodingProvider);
 
-            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, filesystemAccessor);
+            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, applicationInformation, filesystemAccessor);
             this.commands = new List<ICommand> { this.packackageSolutionCommand };
 
             this.commandProvider = new NuDeployConsoleCommandProvider(this.commands);

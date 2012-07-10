@@ -23,5 +23,7 @@ namespace NuDeploy.Core.Common
         Stream GetNewFileStream(string filePath);
 
         bool WriteContentToFile(string content, string filePath);
+
+        bool CreateDirectory(string path);
     }
 }

@@ -16,6 +16,8 @@ namespace NuDeploy.Core.Common
 
         public string LogFolder { get; set; }
 
+        public string BuildFolder { get; set; }
+
         public UserProperties ExecutingUser { get; set; }
 
         public string MachineName { get; set; }

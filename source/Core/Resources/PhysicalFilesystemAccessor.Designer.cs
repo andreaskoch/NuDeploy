@@ -61,6 +61,33 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot create directory &quot;{0}&quot;. {1}.
+        /// </summary>
+        internal static string CreateDirectoryExceptionMessageTemplate {
+            get {
+                return ResourceManager.GetString("CreateDirectoryExceptionMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The directory you are trying to create does already exist: {0}.
+        /// </summary>
+        internal static string CreateDirectoryPathAlreadyExistsMessageTemplate {
+            get {
+                return ResourceManager.GetString("CreateDirectoryPathAlreadyExistsMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a directory if you don&apos;t specify a file path..
+        /// </summary>
+        internal static string CreateDirectoryPathIsNullOrEmptyMessage {
+            get {
+                return ResourceManager.GetString("CreateDirectoryPathIsNullOrEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file you are trying to delete does not exist ({0})..
         /// </summary>
         internal static string DeleteFileDoesNotExistMessageTemplate {

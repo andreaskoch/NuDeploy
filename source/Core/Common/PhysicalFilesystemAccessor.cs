@@ -269,5 +269,32 @@ namespace NuDeploy.Core.Common
 
             return false;
         }
+
+        public bool CreateDirectory(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryPathIsNullOrEmptyMessage);
+                return false;
+            }
+
+            if (this.DirectoryExists(path))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryPathAlreadyExistsMessageTemplate, path);
+                return false;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(path);
+                return true;
+            }
+            catch (Exception generalException)
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryExceptionMessageTemplate, path, generalException);
+            }
+
+            return false;
+        }
     }
 }
