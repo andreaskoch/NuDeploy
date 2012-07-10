@@ -8,6 +8,8 @@ using Microsoft.Build.Execution;
 
 using NuDeploy.Core.Common;
 
+using NuGet;
+
 namespace NuDeploy.Core.Commands.Console
 {
     public class PackageSolutionCommand : ICommand
@@ -275,6 +277,21 @@ namespace NuDeploy.Core.Commands.Console
                 this.filesystemAccessor.CreateDirectory(targetFileDirectory);
 
                 File.Move(file, targetFilePath);
+            }
+
+            // build package
+            string packageBasePath = Path.GetFullPath(prepackagingFolder);
+            string packageFolder = Path.GetFullPath(Path.Combine(this.applicationInformation.StartupFolder, "NuDeployPackages"));
+            string nugetPackageFilePath = Path.Combine(packageFolder, nuspecFileInfo.Name.Replace(".nuspec", ".nupkg"));
+            if (!this.filesystemAccessor.DirectoryExists(packageFolder))
+            {
+                this.filesystemAccessor.CreateDirectory(packageFolder);
+            }
+
+            var packageBuilder = new PackageBuilder(nuspecFileTargetPath, packageBasePath);
+            using (Stream stream = File.Create(nugetPackageFilePath))
+            {
+                packageBuilder.Save(stream);
             }
         }
 
