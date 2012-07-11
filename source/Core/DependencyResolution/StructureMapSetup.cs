@@ -48,6 +48,8 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IInstallationStatusProvider>().Use<InstallationStatusProvider>();
                         config.For<ISelfUpdateService>().Use<SelfUpdateService>();
 
+                        config.For<ISolutionBuilder>().Use<SolutionBuilder>();
+
                         config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
                         config.For<ICommandProvider>().Use<NuDeployConsoleCommandProvider>();
                     });

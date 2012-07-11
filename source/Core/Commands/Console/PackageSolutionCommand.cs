@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using Microsoft.Build.Execution;
-
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Services;
 
 using NuGet;
 
@@ -22,16 +21,6 @@ namespace NuDeploy.Core.Commands.Console
 
         private const string ArgumentNameMSBuildProperties = "MSBuildProperties";
 
-        private const string BuildPropertyNameTargetPlatform = "Platform";
-
-        private const string BuildPropertyNameOutputPath = "OutputPath";
-
-        private const string BuildPropertyNameBuildConfiguration = "Configuration";
-
-        private const string BuildPropertyBuildTarget = "Rebuild";
-
-        private const string BuildPropertyTargetPlatform = "Any CPU";
-
         private readonly string[] alternativeCommandNames = new[] { "pack" };
 
         private readonly IUserInterface userInterface;
@@ -40,11 +29,14 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
-        public PackageSolutionCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
+        private readonly ISolutionBuilder solutionBuilder;
+
+        public PackageSolutionCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, ISolutionBuilder solutionBuilder)
         {
             this.userInterface = userInterface;
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
+            this.solutionBuilder = solutionBuilder;
 
             this.Attributes = new CommandAttributes
             {
@@ -112,58 +104,21 @@ namespace NuDeploy.Core.Commands.Console
 
             // MSBuild Properties
             var buildPropertiesArgument = this.Arguments.ContainsKey(ArgumentNameMSBuildProperties) ? this.Arguments[ArgumentNameMSBuildProperties] : string.Empty;
-            var additionalBuildProperties = this.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
+            var buildProperties = this.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
 
-            // build folder
-            string buildFolderPath = this.GetBuildFolderPath();
-            if (!this.PrepareBuildFolder(buildFolderPath))
-            {
-                this.userInterface.WriteLine(string.Format("Could not prepare the build folder \"{0}\". Please check the folder and try again.", buildFolderPath));
-                return;
-            }
-
-            // build properties
-            var buildProperties = new Dictionary<string, string>
-                {
-                    { BuildPropertyNameBuildConfiguration, buildConfiguration },
-                    { BuildPropertyNameTargetPlatform, BuildPropertyTargetPlatform },
-                    { BuildPropertyNameOutputPath, buildFolderPath }
-                };
-
-            // add additional build properties
-            foreach (var additionalBuildProperty in additionalBuildProperties)
-            {
-                buildProperties[additionalBuildProperty.Key] = additionalBuildProperty.Value;
-            }
-
-            // build
-            var request = new BuildRequestData(solutionPath, buildProperties, null, new[] { BuildPropertyBuildTarget }, null);
-            var parms = new BuildParameters();
-
-            BuildResult result = BuildManager.DefaultBuildManager.Build(parms, request);
-            bool buildWasSuccessful = result.OverallResult == BuildResultCode.Success;
-
-            // evaluate build result
-            if (!buildWasSuccessful)
+            // Build the solution
+            if (!this.solutionBuilder.Build(solutionPath, buildConfiguration, buildProperties))
             {
                 this.userInterface.WriteLine(
-                    string.Format(
-                        "Building the solution \"{0}\" failed (Build Configuration: {1}, Platform: {2}).",
-                        solutionPath,
-                        buildConfiguration,
-                        BuildPropertyTargetPlatform));
+                    string.Format("Building the solution \"{0}\" for build configuration \"{1}\" failed.", solutionPath, buildConfiguration));
 
                 return;
             }
 
-            this.userInterface.WriteLine(
-                string.Format(
-                    "The solution \"{0}\" has been build successfully (Build Configuration: {1}, Platform: {2}).",
-                    solutionPath,
-                    buildConfiguration,
-                    BuildPropertyTargetPlatform));
+            this.userInterface.WriteLine(string.Format("The solution \"{0}\" has been build successfully for the build configuration \"{0}\".", solutionPath));
 
             // pre-packaging
+            var buildFolderPath = this.solutionBuilder.BuildFolder;
             var prepackagingFolder = Path.Combine(this.applicationInformation.StartupFolder, "NuDeployPrepackaging");
             if (this.filesystemAccessor.DirectoryExists(prepackagingFolder))
             {
@@ -318,29 +273,6 @@ namespace NuDeploy.Core.Commands.Console
                     yield return new KeyValuePair<string, string>(key, value);
                 }
             }
-        }
-
-        private bool PrepareBuildFolder(string buildFolderPath)
-        {
-            // create folder if it does not exist
-            if (this.filesystemAccessor.DirectoryExists(buildFolderPath) == false)
-            {
-                return this.filesystemAccessor.CreateDirectory(buildFolderPath);
-            }
-
-            // cleanup existing folder
-            if (this.filesystemAccessor.DeleteFolder(buildFolderPath))
-            {
-                return this.filesystemAccessor.CreateDirectory(buildFolderPath);
-            }
-
-            // build folder could not be cleaned
-            return false;
-        }
-
-        private string GetBuildFolderPath()
-        {
-            return this.applicationInformation.BuildFolder;
         }
     }
 }

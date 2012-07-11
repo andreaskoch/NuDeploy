@@ -6,6 +6,7 @@ using Moq;
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Commands.Console;
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Services;
 
 using NUnit.Framework;
 
@@ -37,8 +38,11 @@ namespace NuDeploy.Tests.IntegrationTests
             var actionLoggerMock = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
             var filesystemAccessor = new PhysicalFilesystemAccessor(actionLoggerMock.Object, encodingProvider);
+            var solutionBuilderMocker = new Mock<ISolutionBuilder>();
 
-            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, applicationInformation, filesystemAccessor);
+            this.packackageSolutionCommand = new PackageSolutionCommand(
+                userInterfaceMock.Object, applicationInformation, filesystemAccessor, solutionBuilderMocker.Object);
+
             this.commands = new List<ICommand> { this.packackageSolutionCommand };
 
             this.commandProvider = new NuDeployConsoleCommandProvider(this.commands);
