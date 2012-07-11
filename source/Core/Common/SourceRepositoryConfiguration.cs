@@ -21,12 +21,19 @@ namespace NuDeploy.Core.Common
 
         public override string ToString()
         {
-            return string.Format("{0} ({1})", this.Name, this.Url);
+            if (!string.IsNullOrWhiteSpace(this.Name))
+            {
+                return string.Format("{0} ({1})", this.Name, this.Url != null ? this.Url.ToString() : "url-not-set");
+            }
+
+            return typeof(SourceRepositoryConfiguration).Name;
         }
 
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode();
+            int hash = 37;
+            hash = (hash * 23) + this.ToString().GetHashCode();
+            return hash;
         }
 
         public override bool Equals(object obj)
