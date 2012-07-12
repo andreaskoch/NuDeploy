@@ -1,13 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Services;
-
-using NuGet;
+using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services.Packaging;
 
 namespace NuDeploy.Core.Commands.Console
 {
@@ -25,18 +21,12 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly IUserInterface userInterface;
 
-        private readonly ApplicationInformation applicationInformation;
+        private readonly ISolutionPackagingService solutionPackagingService;
 
-        private readonly IFilesystemAccessor filesystemAccessor;
-
-        private readonly ISolutionBuilder solutionBuilder;
-
-        public PackageSolutionCommand(IUserInterface userInterface, ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, ISolutionBuilder solutionBuilder)
+        public PackageSolutionCommand(IUserInterface userInterface, ISolutionPackagingService solutionPackagingService)
         {
             this.userInterface = userInterface;
-            this.applicationInformation = applicationInformation;
-            this.filesystemAccessor = filesystemAccessor;
-            this.solutionBuilder = solutionBuilder;
+            this.solutionPackagingService = solutionPackagingService;
 
             this.Attributes = new CommandAttributes
             {
@@ -88,12 +78,6 @@ namespace NuDeploy.Core.Commands.Console
                 return;
             }
 
-            if (this.filesystemAccessor.FileExists(solutionPath) == false)
-            {
-                this.userInterface.WriteLine(string.Format("You must specifiy an existing solution path."));
-                return;
-            }
-
             // Build Configuration
             string buildConfiguration = this.Arguments.ContainsKey(ArgumentNameBuildConfiguration) ? this.Arguments[ArgumentNameBuildConfiguration] : string.Empty;
             if (string.IsNullOrWhiteSpace(buildConfiguration))
@@ -106,157 +90,14 @@ namespace NuDeploy.Core.Commands.Console
             var buildPropertiesArgument = this.Arguments.ContainsKey(ArgumentNameMSBuildProperties) ? this.Arguments[ArgumentNameMSBuildProperties] : string.Empty;
             var buildProperties = this.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
 
-            // Build the solution
-            if (!this.solutionBuilder.Build(solutionPath, buildConfiguration, buildProperties))
-            {
-                this.userInterface.WriteLine(
-                    string.Format("Building the solution \"{0}\" for build configuration \"{1}\" failed.", solutionPath, buildConfiguration));
 
+            if (!this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties))
+            {
+                this.userInterface.WriteLine("Packaging failed.");
                 return;
             }
 
-            this.userInterface.WriteLine(string.Format("The solution \"{0}\" has been build successfully for the build configuration \"{0}\".", solutionPath));
-
-            // pre-packaging
-            var buildFolderPath = this.solutionBuilder.BuildFolder;
-            var prepackagingFolder = Path.Combine(this.applicationInformation.StartupFolder, "NuDeployPrepackaging");
-            if (this.filesystemAccessor.DirectoryExists(prepackagingFolder))
-            {
-                this.filesystemAccessor.DeleteFolder(prepackagingFolder);
-            }
-
-            this.filesystemAccessor.CreateDirectory(prepackagingFolder);
-
-            // NuSpec file
-            var nuspecFileSearchPattern = string.Format("*.{0}.nuspec", buildConfiguration);
-            var nuspecFile = Directory.GetFiles(buildFolderPath, nuspecFileSearchPattern, SearchOption.TopDirectoryOnly).First();
-            if (nuspecFile == null)
-            {
-                this.userInterface.WriteLine(string.Format("There was no NuSpec file found in your build folder. Without a NuSpec file we will not be able to create a NuGet package (Search Pattern: {0}, Folder: {1}).", nuspecFileSearchPattern, buildFolderPath));
-                return;
-            }
-
-            var nuspecFileInfo = new FileInfo(nuspecFile);
-            var nuspecFileTargetPath = Path.GetFullPath(Path.Combine(prepackagingFolder, nuspecFileInfo.Name));
-            File.Copy(nuspecFile, nuspecFileTargetPath);
-
-            // deployment scripts
-            string deploymentScriptNamespace = "NuDeploy.Core.Resources.DeploymentScripts.";
-            Assembly coreAssembly = typeof(PackageSolutionCommand).Assembly;
-            string[] deploymentScriptResourceNames =
-                coreAssembly.GetManifestResourceNames().Where(r => r.StartsWith(deploymentScriptNamespace, StringComparison.OrdinalIgnoreCase)).ToArray();
-
-            foreach (var resourceName in deploymentScriptResourceNames)
-            {
-                var fileNameFragments = resourceName.Replace(deploymentScriptNamespace, string.Empty).Split('.');
-                string fileName = Path.Combine(
-                    string.Join(@"\", fileNameFragments.Take(fileNameFragments.Length - 2)),
-                    string.Join(".", fileNameFragments.Skip(fileNameFragments.Length - 2).Take(2)));
-
-                string filePath = Path.GetFullPath(Path.Combine(prepackagingFolder, fileName));
-                string fileDirectory = new FileInfo(filePath).Directory.FullName;
-                this.filesystemAccessor.CreateDirectory(fileDirectory);
-
-                using (Stream resourceStream = coreAssembly.GetManifestResourceStream(resourceName))
-                {
-                    using (Stream fileStream = File.OpenWrite(filePath))
-                    {
-                        resourceStream.CopyTo(fileStream);
-                    }  
-                }
-            }
-
-            // websites
-            var publishedWebsitesTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "websites"));
-            var publishedWebsitesSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedWebsites"));
-            if (this.filesystemAccessor.DirectoryExists(publishedWebsitesSourceFolderPath))
-            {
-                var publishedWebsiteDirectories = Directory.GetDirectories(publishedWebsitesSourceFolderPath, "*.Website.*", SearchOption.TopDirectoryOnly);
-                var publishedWebsiteFiles = publishedWebsiteDirectories.SelectMany(d => Directory.GetFiles(d, "*", SearchOption.AllDirectories));
-
-                foreach (var file in publishedWebsiteFiles)
-                {
-                    string targetFileName = file.Replace(publishedWebsitesSourceFolderPath + "\\", string.Empty);
-                    string targetFilePath = Path.Combine(publishedWebsitesTargetFolderPath, targetFileName);
-
-                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
-
-                    File.Move(file, targetFilePath);
-                }                
-            }
-
-            // web applications
-            var publishedWebapplicationsTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "webapplications"));
-            var publishedWebapplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedWebsites"));
-            if (this.filesystemAccessor.DirectoryExists(publishedWebapplicationsSourceFolderPath))
-            {
-                var publishedWebapplicationFiles = Directory.GetFiles(publishedWebapplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
-
-                foreach (var file in publishedWebapplicationFiles)
-                {
-                    string targetFileName = file.Replace(publishedWebapplicationsSourceFolderPath + "\\", string.Empty);
-                    string targetFilePath = Path.Combine(publishedWebapplicationsTargetFolderPath, targetFileName);
-
-                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
-
-                    File.Move(file, targetFilePath);
-                }                
-            }
-
-            // applications
-            var publishedApplicationsTargetFolderPath = Path.GetFullPath(Path.Combine(prepackagingFolder, "content", "applications"));
-            var publishedApplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "_PublishedApplications"));
-            if (this.filesystemAccessor.DirectoryExists(publishedApplicationsSourceFolderPath))
-            {
-                var publishedApplicationFiles = Directory.GetFiles(publishedApplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
-
-                foreach (var file in publishedApplicationFiles)
-                {
-                    string targetFileName = file.Replace(publishedApplicationsSourceFolderPath + "\\", string.Empty);
-                    string targetFilePath = Path.Combine(publishedApplicationsTargetFolderPath, targetFileName);
-
-                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
-
-                    File.Move(file, targetFilePath);
-                }                
-            }
-
-            // deployment package additions
-            var deploymentPackageAdditionsTargetFolderPath = Path.GetFullPath(prepackagingFolder);
-            var publishedDeploymentPackageAdditionsSourceFolderPath = Path.GetFullPath(Path.Combine(buildFolderPath, "deploymentpackageadditions"));
-            if (this.filesystemAccessor.DirectoryExists(publishedDeploymentPackageAdditionsSourceFolderPath))
-            {
-                var publishedDeploymentPackageAdditionFiles = Directory.GetFiles(publishedDeploymentPackageAdditionsSourceFolderPath, "*", SearchOption.AllDirectories);
-
-                foreach (var file in publishedDeploymentPackageAdditionFiles)
-                {
-                    string targetFileName = file.Replace(publishedDeploymentPackageAdditionsSourceFolderPath + "\\", string.Empty);
-                    string targetFilePath = Path.Combine(deploymentPackageAdditionsTargetFolderPath, targetFileName);
-
-                    string targetFileDirectory = new FileInfo(targetFilePath).Directory.FullName;
-                    this.filesystemAccessor.CreateDirectory(targetFileDirectory);
-
-                    File.Move(file, targetFilePath);
-                }                
-            }
-
-            // build package
-            string packageBasePath = Path.GetFullPath(prepackagingFolder);
-            string packageFolder = Path.GetFullPath(Path.Combine(this.applicationInformation.StartupFolder, "NuDeployPackages"));
-            string nugetPackageFilePath = Path.Combine(packageFolder, nuspecFileInfo.Name.Replace(".nuspec", ".1.0.0.nupkg"));
-            if (!this.filesystemAccessor.DirectoryExists(packageFolder))
-            {
-                this.filesystemAccessor.CreateDirectory(packageFolder);
-            }
-
-            var packageBuilder = new PackageBuilder(nuspecFileTargetPath, packageBasePath);
-            using (Stream stream = File.Create(nugetPackageFilePath))
-            {
-                packageBuilder.Save(stream);
-            }
+            this.userInterface.WriteLine("Packaging succeeded.");
         }
 
         private IEnumerable<KeyValuePair<string, string>> ParseBuildPropertiesArgument(string builProperties)

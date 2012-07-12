@@ -8,7 +8,7 @@ using System.Management.Automation.Runspaces;
 using System.Text;
 using System.Threading;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.FilesystemAccess;
 
 namespace NuDeploy.Core.PowerShell
 {

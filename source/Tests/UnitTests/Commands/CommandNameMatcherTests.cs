@@ -4,6 +4,7 @@ using Moq;
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Commands.Console;
+using NuDeploy.Core.Services.Console;
 
 using NUnit.Framework;
 

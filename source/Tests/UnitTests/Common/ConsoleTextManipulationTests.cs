@@ -1,6 +1,6 @@
 ﻿using System;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.UserInterface.Console;
 
 using NUnit.Framework;
 

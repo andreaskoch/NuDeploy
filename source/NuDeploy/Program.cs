@@ -3,8 +3,11 @@ using System.Diagnostics;
 using System.Threading;
 
 using NuDeploy.Core.Commands.Console;
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.DependencyResolution;
+using NuDeploy.Core.Services.Console;
 
 using StructureMap;
 

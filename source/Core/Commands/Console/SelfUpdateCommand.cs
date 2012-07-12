@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-using NuDeploy.Core.Common;
-using NuDeploy.Core.Services;
+using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Services.Update;
 
 namespace NuDeploy.Core.Commands.Console
 {

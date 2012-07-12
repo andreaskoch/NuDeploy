@@ -7,7 +7,11 @@ using Moq;
 using Newtonsoft.Json;
 
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Services;
+using NuDeploy.Core.Common.FileEncoding;
+using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Services.Installation;
 
 using NUnit.Framework;
 

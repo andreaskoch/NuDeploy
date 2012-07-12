@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.FileEncoding;
 
 using NUnit.Framework;
 

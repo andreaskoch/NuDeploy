@@ -3,7 +3,9 @@ using System.IO;
 
 using Moq;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.FileEncoding;
+using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Common.Logging;
 
 using NUnit.Framework;
 

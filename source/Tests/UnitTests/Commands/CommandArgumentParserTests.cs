@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-using NuDeploy.Core.Commands.Console;
+using NuDeploy.Core.Services.Console;
 
 using NUnit.Framework;
 

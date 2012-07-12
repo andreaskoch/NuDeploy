@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Management.Automation.Host;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.Infrastructure;
 
 namespace NuDeploy.Core.PowerShell
 {

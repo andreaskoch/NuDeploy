@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services.Commands;
 
 using StructureMap;
 

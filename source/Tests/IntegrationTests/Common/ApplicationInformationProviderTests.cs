@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.Infrastructure;
 
 using NUnit.Framework;
 
@@ -97,6 +97,26 @@ namespace NuDeploy.Tests.IntegrationTests.Common
 
             // Assert
             Assert.IsNotNullOrEmpty(result.BuildFolder);
+        }
+
+        [Test]
+        public void GetApplicationInformation_PrePackagingFolderIsSet()
+        {
+            // Act
+            var result = ApplicationInformationProvider.GetApplicationInformation();
+
+            // Assert
+            Assert.IsNotNullOrEmpty(result.PrePackagingFolder);
+        }
+
+        [Test]
+        public void GetApplicationInformation_PackagingFolderIsSet()
+        {
+            // Act
+            var result = ApplicationInformationProvider.GetApplicationInformation();
+
+            // Assert
+            Assert.IsNotNullOrEmpty(result.PackagingFolder);
         }
 
         [Test]

@@ -5,8 +5,10 @@ using Moq;
 
 using NuDeploy.Core.Commands;
 using NuDeploy.Core.Commands.Console;
-using NuDeploy.Core.Common;
-using NuDeploy.Core.Services;
+using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services.Commands;
+using NuDeploy.Core.Services.Console;
+using NuDeploy.Core.Services.Packaging;
 
 using NUnit.Framework;
 
@@ -32,16 +34,10 @@ namespace NuDeploy.Tests.IntegrationTests
         [SetUp]
         public void Setup()
         {
-
-            var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
             var userInterfaceMock = new Mock<IUserInterface>();
-            var actionLoggerMock = new Mock<IActionLogger>();
-            var encodingProvider = new DefaultFileEncodingProvider();
-            var filesystemAccessor = new PhysicalFilesystemAccessor(actionLoggerMock.Object, encodingProvider);
-            var solutionBuilderMocker = new Mock<ISolutionBuilder>();
+            var solutionPackagingServiceMock = new Mock<ISolutionPackagingService>();
 
-            this.packackageSolutionCommand = new PackageSolutionCommand(
-                userInterfaceMock.Object, applicationInformation, filesystemAccessor, solutionBuilderMocker.Object);
+            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, solutionPackagingServiceMock.Object);
 
             this.commands = new List<ICommand> { this.packackageSolutionCommand };
 

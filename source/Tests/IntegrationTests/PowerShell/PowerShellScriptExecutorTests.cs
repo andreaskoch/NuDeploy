@@ -4,7 +4,12 @@ using System.Management.Automation.Host;
 
 using Moq;
 
-using NuDeploy.Core.Common;
+using NuDeploy.Core.Common.FileEncoding;
+using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Common.UserInterface.Console;
 using NuDeploy.Core.PowerShell;
 
 using NUnit.Framework;
