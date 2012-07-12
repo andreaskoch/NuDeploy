@@ -27,5 +27,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         bool CreateDirectory(string path);
 
         bool CopyFile(string sourceFilePath, string targetPath);
+
+        bool EnsurePathExists(string path);
     }
 }

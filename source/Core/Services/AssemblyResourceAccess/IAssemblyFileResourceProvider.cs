@@ -6,6 +6,6 @@ namespace NuDeploy.Core.Services.AssemblyResourceAccess
     {
         Assembly SourceAssembly { get;  }
 
-        AssemblyFileResourceInfo[] GetAllAssemblyResourceInfos();
+        AssemblyFileResourceInfo[] GetAllAssemblyResourceInfos(string baseNamespace);
     }
 }

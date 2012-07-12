@@ -23,16 +23,15 @@ namespace NuDeploy.Core.Services.AssemblyResourceAccess
             }
         }
 
-        public AssemblyFileResourceInfo[] GetAllAssemblyResourceInfos()
+        public AssemblyFileResourceInfo[] GetAllAssemblyResourceInfos(string baseNamespace)
         {
-            string assemblyNamespace = this.sourceAssembly.GetName().FullName;
-            string[] resourceNames = this.sourceAssembly.GetManifestResourceNames();
+            var resourceNames = this.sourceAssembly.GetManifestResourceNames().Where(r => r.StartsWith(baseNamespace));
 
             return
                 resourceNames.Select(
                     resourceName =>
                     new AssemblyFileResourceInfo(
-                        resourceName, this.assemblyResourceFilePathProvider.GetRelativeFilePath(assemblyNamespace, resourceName))).ToArray();
+                        resourceName, this.assemblyResourceFilePathProvider.GetRelativeFilePath(baseNamespace, resourceName))).ToArray();
         }
     }
 }

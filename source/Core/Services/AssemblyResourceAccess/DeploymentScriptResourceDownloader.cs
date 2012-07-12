@@ -1,6 +1,8 @@
 using System.IO;
 using System.Linq;
 
+using NuDeploy.Core.Common.FilesystemAccess;
+
 namespace NuDeploy.Core.Services.AssemblyResourceAccess
 {
     public class DeploymentScriptResourceDownloader : IDeploymentScriptResourceDownloader
@@ -9,22 +11,25 @@ namespace NuDeploy.Core.Services.AssemblyResourceAccess
 
         private readonly IAssemblyFileResourceProvider assemblyFileResourceProvider;
 
-        public DeploymentScriptResourceDownloader(IAssemblyFileResourceProvider assemblyFileResourceProvider)
+        private readonly IFilesystemAccessor filesystemAccessor;
+
+        public DeploymentScriptResourceDownloader(IAssemblyFileResourceProvider assemblyFileResourceProvider, IFilesystemAccessor filesystemAccessor)
         {
             this.assemblyFileResourceProvider = assemblyFileResourceProvider;
+            this.filesystemAccessor = filesystemAccessor;
         }
 
         public void Download(string targetFolder)
         {
             var assemblyResourceInfos =
-                this.assemblyFileResourceProvider.GetAllAssemblyResourceInfos().Where(r => r.ResourceName.StartsWith(DeploymentScriptNamespace));
+                this.assemblyFileResourceProvider.GetAllAssemblyResourceInfos(DeploymentScriptNamespace).Where(r => r.ResourceName.StartsWith(DeploymentScriptNamespace));
 
             foreach (var assemblyFileResourceInfo in assemblyResourceInfos)
             {
                 using (Stream resourceStream = this.assemblyFileResourceProvider.SourceAssembly.GetManifestResourceStream(assemblyFileResourceInfo.ResourceName))
                 {
                     string targetPath = Path.Combine(targetFolder, assemblyFileResourceInfo.ResourcePath);
-                    using (Stream fileStream = File.OpenWrite(targetPath))
+                    using (Stream fileStream = this.filesystemAccessor.GetNewFileStream(targetPath))
                     {
                         resourceStream.CopyTo(fileStream);
                     }

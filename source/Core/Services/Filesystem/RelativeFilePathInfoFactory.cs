@@ -6,7 +6,7 @@ namespace NuDeploy.Core.Services.Filesystem
         {
             if (absoluteFilePath.StartsWith(basePath))
             {
-                string relativePath = absoluteFilePath.Replace(basePath, string.Empty);
+                string relativePath = absoluteFilePath.Replace(basePath, string.Empty).TrimStart('\\');
                 return new RelativeFilePathInfo(absoluteFilePath, relativePath);
             }
 

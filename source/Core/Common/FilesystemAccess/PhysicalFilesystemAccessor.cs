@@ -228,6 +228,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
             try
             {
+                this.EnsurePathExists(filePath);
                 return File.Create(filePath);
             }
             catch (IOException fileAccessException)
@@ -309,12 +310,41 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
             try
             {
+                if (!this.EnsurePathExists(targetPath))
+                {
+                    return false;
+                }
+
                 File.Copy(sourceFilePath, targetPath, true);
                 return true;
             }
             catch (Exception generalException)
             {
                 this.logger.Log("Unable to copy file \"{0}\" to \"{1}\".", sourceFilePath, targetPath, generalException);
+            }
+
+            return false;
+        }
+
+        public bool EnsurePathExists(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            try
+            {
+                string parentDirectory = new FileInfo(path).Directory.FullName;
+                if (!this.DirectoryExists(parentDirectory))
+                {
+                    this.CreateDirectory(parentDirectory);
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
             }
 
             return false;
