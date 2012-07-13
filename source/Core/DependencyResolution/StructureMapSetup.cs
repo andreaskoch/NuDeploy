@@ -70,7 +70,6 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICleanupService>().Use<CleanupService>();
 
                         /* configuration */
-                        config.For<IBuildFolderPathProvider>().Use<BuildFolderPathProvider>();
                         config.For<IPackagingFolderPathProvider>().Use<PackagingFolderPathProvider>();
                         config.For<IPrePackagingFolderPathProvider>().Use<PrePackagingFolderPathProvider>();
                         config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
@@ -87,6 +86,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ISolutionPackagingService>().Use<SolutionPackagingService>();
 
                         /* build */
+                        config.For<IBuildFolderPathProvider>().Use<BuildFolderPathProvider>();
                         config.For<ISolutionBuilder>().Use<SolutionBuilder>();
                         config.For<IBuildResultFilePathProvider>().Use<ConventionBasedBuildResultFilePathProvider>();
 

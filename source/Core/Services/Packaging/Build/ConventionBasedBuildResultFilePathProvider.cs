@@ -2,7 +2,6 @@ using System.IO;
 using System.Linq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Services.Configuration;
 using NuDeploy.Core.Services.Filesystem;
 
 namespace NuDeploy.Core.Services.Packaging.Build

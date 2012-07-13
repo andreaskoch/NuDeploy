@@ -169,9 +169,7 @@
     <Compile Include="Services\Cleanup\ICleanupService.cs" />
     <Compile Include="Services\Commands\ICommandProvider.cs" />
     <Compile Include="Services\Commands\NuDeployConsoleCommandProvider.cs" />
-    <Compile Include="Services\Configuration\BuildFolderPathProvider.cs" />
     <Compile Include="Services\Configuration\ConfigFileSourceRepositoryProvider.cs" />
-    <Compile Include="Services\Configuration\IBuildFolderPathProvider.cs" />
     <Compile Include="Services\Configuration\IInstallationStatusProvider.cs" />
     <Compile Include="Services\Configuration\IPackagingFolderPathProvider.cs" />
     <Compile Include="Services\Configuration\IPrePackagingFolderPathProvider.cs" />
@@ -196,7 +194,9 @@
     <Compile Include="Services\Installation\Repositories\IPackageRepositoryBrowser.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryBrowser.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryFactory.cs" />
+    <Compile Include="Services\Packaging\Build\BuildFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Build\ConventionBasedBuildResultFilePathProvider.cs" />
+    <Compile Include="Services\Packaging\Build\IBuildFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\ISolutionBuilder.cs" />
     <Compile Include="Services\Packaging\Build\SolutionBuilder.cs" />

@@ -1,4 +1,4 @@
-namespace NuDeploy.Core.Services.Configuration
+namespace NuDeploy.Core.Services.Packaging.Build
 {
     public interface IBuildFolderPathProvider
     {
