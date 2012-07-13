@@ -39,6 +39,8 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             Directory.CreateDirectory(SampleFileFolder);
         }
 
+        #region file access
+        
         #region FileExists
 
         [Test]
@@ -114,101 +116,6 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
             // Act
             bool result = this.filesystemAccessor.FileExists(path);
-
-            // Assert
-            Assert.IsTrue(result);
-        }
-
-        #endregion
-
-        #region DirectoryExists
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsNull_ResultIsFalse()
-        {
-            // Arrange
-            string path = null;
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsEmpty_ResultIsFalse()
-        {
-            // Arrange
-            string path = string.Empty;
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsWhitespace_ResultIsFalse()
-        {
-            // Arrange
-            string path = " ";
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsAnExistingFile_ResultIsFalse()
-        {
-            // Arrange
-            var path = this.CreateFile("test-file.txt").FullName;
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsAnNonExistingFile_ResultIsFalse()
-        {
-            // Arrange
-            var path = "There-Is-No-Way-This-File-Can-Exist-salkfjaskjksad43242jf.txt";
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsNonExistingDirectory_ResultIsFalse()
-        {
-            // Arrange
-            var path = "NonExistingTestDirectory";
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DirectoryExists_SuppliedPathIsExistingDirectory_ResultIsTrue()
-        {
-            // Arrange
-            var path = this.CreateDirectory("TestDirectory").FullName;
-
-            // Act
-            bool result = this.filesystemAccessor.DirectoryExists(path);
 
             // Assert
             Assert.IsTrue(result);
@@ -500,107 +407,6 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             // Assert
             Assert.IsTrue(result);
             Assert.IsFalse(File.Exists(filePath));
-        }
-
-        #endregion
-
-        #region DeleteDirectory
-
-        [Test]
-        public void DeleteDirectory_FolderPathIsNull_ResultIsFalse()
-        {
-            // Arrange
-            string path = null;
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);            
-        }
-
-        [Test]
-        public void DeleteDirectory_FolderPathIsEmpty_ResultIsFalse()
-        {
-            // Arrange
-            string path = string.Empty;
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DeleteDirectory_FolderPathIsWhitespace_ResultIsFalse()
-        {
-            // Arrange
-            string path = " ";
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DeleteDirectory_FolderDoesNotExist_ResultIsFalse()
-        {
-            // Arrange
-            string path = this.GetPath("non-existing-folder");
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DeleteDirectory_FolderExistsButOneFileInItIsInUse_ResultIsFalse()
-        {
-            // Arrange
-            string path = this.CreateDirectory("new folder").FullName;
-            string filePath = this.CreateFile("new folder\\test-file.txt").FullName;
-            var streamReader = new StreamReader(filePath);
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-            streamReader.Close();
-        }
-
-        [Test]
-        public void DeleteDirectory_FolderExists_FolderIsEmpty_ResultIsTrue_FolderIsRemoved()
-        {
-            // Arrange
-            string path = this.CreateDirectory("new folder").FullName;
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsTrue(result);
-            Assert.IsFalse(Directory.Exists(path));
-        }
-
-        [Test]
-        public void DeleteDirectory_FolderExists_ContainsContent_ResultIsTrue_FolderIsRemoved()
-        {
-            // Arrange
-            string path = this.CreateDirectory("new folder").FullName;
-            this.CreateFile("new folder\\test-file.txt");
-
-            // Act
-            bool result = this.filesystemAccessor.DeleteDirectory(path);
-
-            // Assert
-            Assert.IsTrue(result);
-            Assert.IsFalse(Directory.Exists(path));
         }
 
         #endregion
@@ -1195,75 +1001,6 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
-        #region CreateDirectory
-
-        [Test]
-        public void CreateDirectory_PathIsNull_ResultIsFalse()
-        {
-            // Arrange
-            string path = null;
-
-            // Act
-            bool result = this.filesystemAccessor.CreateDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void CreateDirectory_PathIsEmpty_ResultIsFalse()
-        {
-            // Arrange
-            string path = string.Empty;
-
-            // Act
-            bool result = this.filesystemAccessor.CreateDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void CreateDirectory_PathIsWhitespace_ResultIsFalse()
-        {
-            // Arrange
-            string path = " ";
-
-            // Act
-            bool result = this.filesystemAccessor.CreateDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void CreateDirectory_PathIsExistingDirectory_ResultIsFalse()
-        {
-            // Arrange
-            string path = this.CreateDirectory("existing-directory").FullName;
-
-            // Act
-            bool result = this.filesystemAccessor.CreateDirectory(path);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void CreateDirectory_PathIsValid_DoesNotExistYet_ResultIsTrue()
-        {
-            // Arrange
-            string path = this.GetPath("new-directory");
-
-            // Act
-            bool result = this.filesystemAccessor.CreateDirectory(path);
-
-            // Assert
-            Assert.IsTrue(result);
-        }
-
-        #endregion
-
         #region CopyFile
 
         [TestCase(null)]
@@ -1460,6 +1197,275 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #endregion
+
+        #region directory access
+
+        #region DirectoryExists
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsNull_ResultIsFalse()
+        {
+            // Arrange
+            string path = null;
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsEmpty_ResultIsFalse()
+        {
+            // Arrange
+            string path = string.Empty;
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsWhitespace_ResultIsFalse()
+        {
+            // Arrange
+            string path = " ";
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsAnExistingFile_ResultIsFalse()
+        {
+            // Arrange
+            var path = this.CreateFile("test-file.txt").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsAnNonExistingFile_ResultIsFalse()
+        {
+            // Arrange
+            var path = "There-Is-No-Way-This-File-Can-Exist-salkfjaskjksad43242jf.txt";
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsNonExistingDirectory_ResultIsFalse()
+        {
+            // Arrange
+            var path = "NonExistingTestDirectory";
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DirectoryExists_SuppliedPathIsExistingDirectory_ResultIsTrue()
+        {
+            // Arrange
+            var path = this.CreateDirectory("TestDirectory").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.DirectoryExists(path);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        #endregion
+
+        #region DeleteDirectory
+
+        [Test]
+        public void DeleteDirectory_FolderPathIsNull_ResultIsFalse()
+        {
+            // Arrange
+            string path = null;
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DeleteDirectory_FolderPathIsEmpty_ResultIsFalse()
+        {
+            // Arrange
+            string path = string.Empty;
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DeleteDirectory_FolderPathIsWhitespace_ResultIsFalse()
+        {
+            // Arrange
+            string path = " ";
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DeleteDirectory_FolderDoesNotExist_ResultIsFalse()
+        {
+            // Arrange
+            string path = this.GetPath("non-existing-folder");
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void DeleteDirectory_FolderExistsButOneFileInItIsInUse_ResultIsFalse()
+        {
+            // Arrange
+            string path = this.CreateDirectory("new folder").FullName;
+            string filePath = this.CreateFile("new folder\\test-file.txt").FullName;
+            var streamReader = new StreamReader(filePath);
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+            streamReader.Close();
+        }
+
+        [Test]
+        public void DeleteDirectory_FolderExists_FolderIsEmpty_ResultIsTrue_FolderIsRemoved()
+        {
+            // Arrange
+            string path = this.CreateDirectory("new folder").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.IsFalse(Directory.Exists(path));
+        }
+
+        [Test]
+        public void DeleteDirectory_FolderExists_ContainsContent_ResultIsTrue_FolderIsRemoved()
+        {
+            // Arrange
+            string path = this.CreateDirectory("new folder").FullName;
+            this.CreateFile("new folder\\test-file.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.IsFalse(Directory.Exists(path));
+        }
+
+        #endregion
+
+        #region CreateDirectory
+
+        [Test]
+        public void CreateDirectory_PathIsNull_ResultIsFalse()
+        {
+            // Arrange
+            string path = null;
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsEmpty_ResultIsFalse()
+        {
+            // Arrange
+            string path = string.Empty;
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsWhitespace_ResultIsFalse()
+        {
+            // Arrange
+            string path = " ";
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsExistingDirectory_ResultIsFalse()
+        {
+            // Arrange
+            string path = this.CreateDirectory("existing-directory").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CreateDirectory_PathIsValid_DoesNotExistYet_ResultIsTrue()
+        {
+            // Arrange
+            string path = this.GetPath("new-directory");
+
+            // Act
+            bool result = this.filesystemAccessor.CreateDirectory(path);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        #endregion
+
         #region EnsureParentDirectoryExists
 
         [TestCase(null)]
@@ -1514,6 +1520,8 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             // Assert
             Assert.IsFalse(result);
         }
+
+        #endregion
 
         #endregion
 
