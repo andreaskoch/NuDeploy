@@ -169,10 +169,6 @@
     <Compile Include="Services\Cleanup\ICleanupService.cs" />
     <Compile Include="Services\Commands\ICommandProvider.cs" />
     <Compile Include="Services\Commands\NuDeployConsoleCommandProvider.cs" />
-    <Compile Include="Services\Configuration\IPackagingFolderPathProvider.cs" />
-    <Compile Include="Services\Configuration\IPrePackagingFolderPathProvider.cs" />
-    <Compile Include="Services\Configuration\PackagingFolderPathProvider.cs" />
-    <Compile Include="Services\Configuration\PrePackagingFolderPathProvider.cs" />
     <Compile Include="Services\Console\CommandArgumentNameMatcher.cs" />
     <Compile Include="Services\Console\CommandArgumentParser.cs" />
     <Compile Include="Services\Console\CommandLineArgumentInterpreter.cs" />
@@ -201,9 +197,13 @@
     <Compile Include="Services\Packaging\Build\ISolutionBuilder.cs" />
     <Compile Include="Services\Packaging\Build\SolutionBuilder.cs" />
     <Compile Include="Services\Packaging\ISolutionPackagingService.cs" />
+    <Compile Include="Services\Packaging\Nuget\IPackagingFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Nuget\IPackagingService.cs" />
+    <Compile Include="Services\Packaging\Nuget\PackagingFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Nuget\PackagingService.cs" />
+    <Compile Include="Services\Packaging\PrePackaging\IPrePackagingFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\PrePackaging\IPrepackagingService.cs" />
+    <Compile Include="Services\Packaging\PrePackaging\PrePackagingFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\PrePackaging\PrepackagingService.cs" />
     <Compile Include="Services\Packaging\SolutionPackagingService.cs" />
     <Compile Include="Services\Status\IInstallationStatusProvider.cs" />
