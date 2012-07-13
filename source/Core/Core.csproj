@@ -169,8 +169,6 @@
     <Compile Include="Services\Cleanup\ICleanupService.cs" />
     <Compile Include="Services\Commands\ICommandProvider.cs" />
     <Compile Include="Services\Commands\NuDeployConsoleCommandProvider.cs" />
-    <Compile Include="Services\Configuration\ConfigFileSourceRepositoryProvider.cs" />
-    <Compile Include="Services\Configuration\IInstallationStatusProvider.cs" />
     <Compile Include="Services\Configuration\IPackagingFolderPathProvider.cs" />
     <Compile Include="Services\Configuration\IPrePackagingFolderPathProvider.cs" />
     <Compile Include="Services\Configuration\PackagingFolderPathProvider.cs" />
@@ -191,7 +189,9 @@
     <Compile Include="Services\Installation\PackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\PackageInstaller.cs" />
     <Compile Include="Services\Installation\Repositories\CommandLineRepositoryFactory.cs" />
+    <Compile Include="Services\Installation\Repositories\ConfigFileSourceRepositoryProvider.cs" />
     <Compile Include="Services\Installation\Repositories\IPackageRepositoryBrowser.cs" />
+    <Compile Include="Services\Installation\Repositories\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryBrowser.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryFactory.cs" />
     <Compile Include="Services\Packaging\Build\BuildFolderPathProvider.cs" />
@@ -206,8 +206,8 @@
     <Compile Include="Services\Packaging\PrePackaging\IPrepackagingService.cs" />
     <Compile Include="Services\Packaging\PrePackaging\PrepackagingService.cs" />
     <Compile Include="Services\Packaging\SolutionPackagingService.cs" />
+    <Compile Include="Services\Status\IInstallationStatusProvider.cs" />
     <Compile Include="Services\Status\InstallationStatusProvider.cs" />
-    <Compile Include="Services\Status\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IConfigurationFileTransformer.cs" />
     <Compile Include="Services\Update\ISelfUpdateService.cs" />
