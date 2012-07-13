@@ -18,6 +18,8 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             this.encodingProvider = encodingProvider;
         }
 
+        #region file access
+
         public bool FileExists(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -26,16 +28,6 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             }
 
             return File.Exists(filePath);
-        }
-
-        public bool DirectoryExists(string directoryPath)
-        {
-            if (string.IsNullOrWhiteSpace(directoryPath))
-            {
-                return false;
-            }
-
-            return Directory.Exists(directoryPath);
         }
 
         public bool MoveFile(string sourceFilePath, string targetFilePath)
@@ -96,37 +88,6 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             catch (Exception exception)
             {
                 this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFileExceptionMessageTemplate, filePath, exception);
-            }
-            
-            return false;
-        }
-
-        public bool DeleteFolder(string folderPath)
-        {
-            if (string.IsNullOrWhiteSpace(folderPath))
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderPathIsNullOrEmptyMessage);
-                return false;
-            }
-
-            if (!this.DirectoryExists(folderPath))
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderDoesNotExistMessageTemplate, folderPath);
-                return false;
-            }
-
-            try
-            {
-                Directory.Delete(folderPath, true);
-                return true;
-            }
-            catch (IOException fileAccessException)
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderIOExceptionMessageTemplate, folderPath, fileAccessException);
-            }
-            catch (Exception exception)
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderExceptionMessageTemplate, folderPath, exception);
             }
 
             return false;
@@ -274,33 +235,6 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             return false;
         }
 
-        public bool CreateDirectory(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryPathIsNullOrEmptyMessage);
-                return false;
-            }
-
-            if (this.DirectoryExists(path))
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryPathAlreadyExistsMessageTemplate, path);
-                return false;
-            }
-
-            try
-            {
-                Directory.CreateDirectory(path);
-                return true;
-            }
-            catch (Exception generalException)
-            {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryExceptionMessageTemplate, path, generalException);
-            }
-
-            return false;
-        }
-
         public bool CopyFile(string sourceFilePath, string targetPath)
         {
             if (string.IsNullOrWhiteSpace(sourceFilePath))
@@ -343,6 +277,78 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             return false;
         }
 
+        #endregion
+
+        #region directory access
+
+        public bool DirectoryExists(string directoryPath)
+        {
+            if (string.IsNullOrWhiteSpace(directoryPath))
+            {
+                return false;
+            }
+
+            return Directory.Exists(directoryPath);
+        }
+
+        public bool DeleteFolder(string folderPath)
+        {
+            if (string.IsNullOrWhiteSpace(folderPath))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderPathIsNullOrEmptyMessage);
+                return false;
+            }
+
+            if (!this.DirectoryExists(folderPath))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderDoesNotExistMessageTemplate, folderPath);
+                return false;
+            }
+
+            try
+            {
+                Directory.Delete(folderPath, true);
+                return true;
+            }
+            catch (IOException fileAccessException)
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderIOExceptionMessageTemplate, folderPath, fileAccessException);
+            }
+            catch (Exception exception)
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.DeleteFolderExceptionMessageTemplate, folderPath, exception);
+            }
+
+            return false;
+        }
+
+        public bool CreateDirectory(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryPathIsNullOrEmptyMessage);
+                return false;
+            }
+
+            if (this.DirectoryExists(path))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryPathAlreadyExistsMessageTemplate, path);
+                return false;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(path);
+                return true;
+            }
+            catch (Exception generalException)
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CreateDirectoryExceptionMessageTemplate, path, generalException);
+            }
+
+            return false;
+        }
+
         public bool EnsurePathExists(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -371,5 +377,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
             return false;
         }
+
+        #endregion
     }
 }

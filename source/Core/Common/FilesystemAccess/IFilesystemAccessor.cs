@@ -4,6 +4,8 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 {
     public interface IFilesystemAccessor
     {
+        #region file access
+
         bool FileExists(string filePath);
 
         bool DirectoryExists(string directoryPath);
@@ -11,8 +13,6 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         bool MoveFile(string sourceFilePath, string targetFilePath);
 
         bool DeleteFile(string filePath);
-
-        bool DeleteFolder(string folderPath);
 
         string GetFileContent(string filePath);
 
@@ -24,10 +24,18 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
         bool WriteContentToFile(string content, string filePath);
 
-        bool CreateDirectory(string path);
-
         bool CopyFile(string sourceFilePath, string targetPath);
 
+        #endregion
+
+        #region directory access
+
+        bool DeleteFolder(string folderPath);
+
+        bool CreateDirectory(string path);
+
         bool EnsurePathExists(string path);
+
+        #endregion
     }
 }
