@@ -6,6 +6,7 @@ using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Configuration;
+using NuDeploy.Core.Services.Status;
 
 namespace NuDeploy.Core.Services.Cleanup
 {

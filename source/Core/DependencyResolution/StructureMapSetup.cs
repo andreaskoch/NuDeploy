@@ -72,12 +72,12 @@ namespace NuDeploy.Core.DependencyResolution
                         /* configuration */
                         config.For<IPackagingFolderPathProvider>().Use<PackagingFolderPathProvider>();
                         config.For<IPrePackagingFolderPathProvider>().Use<PrePackagingFolderPathProvider>();
-                        config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
 
                         /* file system */
                         config.For<IRelativeFilePathInfoFactory>().Use<RelativeFilePathInfoFactory>();
 
                         /* installation */
+                        config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
                         config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
                         config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
                         config.For<IPackageInstaller>().Use<PackageInstaller>();

@@ -13,6 +13,8 @@ using NuDeploy.Core.Services.Configuration;
 
 using NUnit.Framework;
 
+using NuDeploy.Core.Services.Installation.Repositories;
+
 namespace NuDeploy.Tests.IntegrationTests.Services
 {
     [TestFixture]

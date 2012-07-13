@@ -5,7 +5,6 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.Infrastructure;
-using NuDeploy.Core.Services.Configuration;
 using NuDeploy.Core.Services.Installation;
 
 using NuGet;

@@ -10,7 +10,7 @@ using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Services.Status;
 
-namespace NuDeploy.Core.Services.Configuration
+namespace NuDeploy.Core.Services.Installation.Repositories
 {
     public class ConfigFileSourceRepositoryProvider : ISourceRepositoryProvider
     {

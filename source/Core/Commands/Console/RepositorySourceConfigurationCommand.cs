@@ -4,6 +4,7 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services.Installation.Repositories;
 using NuDeploy.Core.Services.Status;
 
 namespace NuDeploy.Core.Commands.Console
