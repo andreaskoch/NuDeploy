@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Management.Automation.Host;
 
 namespace NuDeploy.Core.PowerShell

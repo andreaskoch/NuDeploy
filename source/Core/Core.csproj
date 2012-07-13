@@ -86,12 +86,6 @@
     <Compile Include="Common\UserInterface\Console\IConsoleTextManipulation.cs" />
     <Compile Include="Common\UserInterface\IUserInterface.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
-    <Compile Include="PowerShell\PipelineExecutor.cs" />
-    <Compile Include="PowerShell\NuDeployPowerShellUserInterface.cs" />
-    <Compile Include="PowerShell\NuDeployRawPowerShellUserInterface.cs" />
-    <Compile Include="PowerShell\IPowerShellScriptExecutor.cs" />
-    <Compile Include="PowerShell\PowerShellHost.cs" />
-    <Compile Include="PowerShell\PowerShellScriptExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\CleanupCommand.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -184,6 +178,12 @@
     <Compile Include="Services\Installation\IPackageInstaller.cs" />
     <Compile Include="Services\Installation\PackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\PackageInstaller.cs" />
+    <Compile Include="Services\Installation\PowerShell\IPowerShellScriptExecutor.cs" />
+    <Compile Include="Services\Installation\PowerShell\NuDeployPowerShellUserInterface.cs" />
+    <Compile Include="Services\Installation\PowerShell\NuDeployRawPowerShellUserInterface.cs" />
+    <Compile Include="Services\Installation\PowerShell\PipelineExecutor.cs" />
+    <Compile Include="Services\Installation\PowerShell\PowerShellHost.cs" />
+    <Compile Include="Services\Installation\PowerShell\PowerShellScriptExecutor.cs" />
     <Compile Include="Services\Installation\Repositories\CommandLineRepositoryFactory.cs" />
     <Compile Include="Services\Installation\Repositories\ConfigFileSourceRepositoryProvider.cs" />
     <Compile Include="Services\Installation\Repositories\IPackageRepositoryBrowser.cs" />

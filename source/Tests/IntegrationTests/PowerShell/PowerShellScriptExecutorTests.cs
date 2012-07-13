@@ -10,9 +10,10 @@ using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Common.UserInterface.Console;
-using NuDeploy.Core.PowerShell;
 
 using NUnit.Framework;
+
+using NuDeploy.Core.PowerShell;
 
 namespace NuDeploy.Tests.IntegrationTests.PowerShell
 {
