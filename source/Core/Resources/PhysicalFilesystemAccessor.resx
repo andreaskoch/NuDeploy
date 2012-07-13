@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CopyFileExceptionMessageTemplate" xml:space="preserve">
+    <value>Unable to copy file "{0}" to "{1}". {2}</value>
+  </data>
+  <data name="CopyFileIOExceptionMessageTemplate" xml:space="preserve">
+    <value>Unable to copy file "{0}" to "{1}", because either the source or the target file is being used by another process. {2}</value>
+  </data>
+  <data name="CopyFileSourceFileDoesNotExistMessageTemplate" xml:space="preserve">
+    <value>You cannot copy a file if the source file does not exist ({0}).</value>
+  </data>
+  <data name="CopyFileSourceFileIsNullOrEmpty" xml:space="preserve">
+    <value>You cannot copy a file if you don't specify a source file.</value>
+  </data>
+  <data name="CopyFileTargetFileIsNullOrEmpty" xml:space="preserve">
+    <value>You cannot copy a file if you don't specify a target file.</value>
+  </data>
   <data name="CreateDirectoryExceptionMessageTemplate" xml:space="preserve">
     <value>Cannot create directory "{0}". {1}</value>
   </data>
@@ -149,6 +164,12 @@
   </data>
   <data name="DeleteFolderPathIsNullOrEmptyMessage" xml:space="preserve">
     <value>You cannot delete a folder if you don't specify a path.</value>
+  </data>
+  <data name="EnsurePathExistsExceptionMessageTemplate" xml:space="preserve">
+    <value>Cannot create create path "{0}". {1}</value>
+  </data>
+  <data name="EnsurePathExistsPathIsNullOrEmpty" xml:space="preserve">
+    <value>You cannot call EnsurePathExists if you don't specify a path.</value>
   </data>
   <data name="GetFileContentDoesNotExistMessageTemplate" xml:space="preserve">
     <value>The file you are trying to get the content from does not exist ({0}).</value>

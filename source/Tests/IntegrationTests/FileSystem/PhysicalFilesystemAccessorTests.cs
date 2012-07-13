@@ -1264,6 +1264,259 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #region CopyFile
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void CopyFile_InvalidSourceFile_ResultIsFalse(string sourceFile)
+        {
+            // Arrange
+            string targetFile = this.GetPath("target-file.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CopyFile_SourceFileDoesNotExist_ResultIsFalse()
+        {
+            // Arrange
+            string sourceFile = this.GetPath("Non-existing-file.txt");
+            string targetFile = this.GetPath("target-file.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void CopyFile_InvalidTargetFile_ResultIsFalse(string targetFile)
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("source-file.txt").FullName;
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFilePathDoesNotExist_PathOfTargetFileIsCreated()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+
+            string targetPath = this.GetPath("some\\very\\nested\\folder");
+            string targetFileName = "file-in-non-existing-folder.txt";
+            string targetFile = string.Format("{0}\\{1}", targetPath, targetFileName);
+
+            // Act
+            this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsTrue(Directory.Exists(targetPath));
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFilePathDoesNotExist_FileIsCopied()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.GetPath("some\\very\\nested\\folder\\file-in-non-existing-folder.txt");
+
+            // Act
+            this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsTrue(File.Exists(targetFile));
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFileExist_TargetFileIsOverridden()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.CreateFile("existing-target-file.txt").FullName;
+
+            string sourceFileContent = this.GetFileContent(sourceFile);
+            string previousTargetFileContent = this.GetFileContent(targetFile);
+
+
+            // Act
+            this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            string newTargetFileContent = this.GetFileContent(targetFile);
+            Assert.IsTrue(File.Exists(targetFile));
+            Assert.AreNotEqual(previousTargetFileContent, newTargetFileContent);
+            Assert.AreEqual(sourceFileContent, newTargetFileContent);
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_SourceIsBeingRead_ResultIsTrue()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.GetPath("target-file.txt");
+            var reader = new StreamReader(sourceFile);
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsTrue(result);
+            reader.Close();
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_SourceIsBeingWrittenTo_ResultIsTrue()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.GetPath("target-file.txt");
+            var writer = new StreamWriter(sourceFile);
+            writer.Write("some text");
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsTrue(result);
+            writer.Close();
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFileExist_ButIsBeingRead_ResultIsFalse()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.CreateFile("existing-target-file.txt").FullName;
+            var reader = new StreamReader(targetFile);
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsFalse(result);
+            reader.Close();
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFileExist_ButIsWrittenTo_ResultIsFalse()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.CreateFile("existing-target-file.txt").FullName;
+            var writer = new StreamWriter(targetFile);
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsFalse(result);
+            writer.Close();
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFileIsValid_ResultIsTrue()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string targetFile = this.GetPath("target-file.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void CopyFile_SourceFileExist_TargetFileIsValid_ContentIsCopied()
+        {
+            // Arrange
+            string sourceFile = this.CreateFile("existing-file.txt").FullName;
+            string sourceContent = this.GetFileContent(sourceFile);
+
+            string targetFile = this.GetPath("target-file.txt");
+
+            // Act
+            this.filesystemAccessor.CopyFile(sourceFile, targetFile);
+
+            // Assert
+            string targetFileContent = this.GetFileContent(targetFile);
+            Assert.AreEqual(sourceContent, targetFileContent);
+        }
+
+        #endregion
+
+        #region EnsurePathExists
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void EnsurePathExists_PathIsInvalid_ResultIsFalse(string path)
+        {
+            // Act
+            bool result = this.filesystemAccessor.EnsurePathExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void EnsurePathExists_PathIsValid_ButDoesNotYetExist_ResultIsTrue()
+        {
+            // Arrange
+            string path = this.GetPath("some","very", "nested", "path", "file.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.EnsurePathExists(path);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void EnsurePathExists_PathIsValid_ButDoesNotYetExist_DirectoryIsCreated()
+        {
+            // Arrange
+            string directory = this.GetPath("some", "very", "nested", "path");
+            string path = Path.Combine(directory, "file.txt");
+
+            // Act
+            this.filesystemAccessor.EnsurePathExists(path);
+
+            // Assert
+            Assert.IsTrue(Directory.Exists(directory));
+        }
+
+        [Test]
+        public void EnsurePathExists_PathIsValid_ButDoesNotYetExist_ButCannotBeCreatedBecauseItIsToLong_ResultIsFalse()
+        {
+            // Arrange
+            string directory = this.GetPath(new string('s', 260));
+            string path = Path.Combine(directory, "file.txt");
+
+            // Act
+            bool result = this.filesystemAccessor.EnsurePathExists(path);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        #endregion
+
         #region utility methods
 
         private string GetFileContent(string filePath)
@@ -1271,9 +1524,9 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             return File.ReadAllText(filePath, this.encodingProvider.GetEncoding());
         }
 
-        private string GetPath(string relativeFilePath)
+        private string GetPath(params string[] relativeFilePath)
         {
-            string filePath = Path.Combine(Environment.CurrentDirectory, SampleFileFolder, relativeFilePath);
+            string filePath = Path.Combine(Environment.CurrentDirectory, SampleFileFolder, Path.Combine(relativeFilePath));
             return filePath;
         }
 

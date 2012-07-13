@@ -303,8 +303,21 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
         public bool CopyFile(string sourceFilePath, string targetPath)
         {
+            if (string.IsNullOrWhiteSpace(sourceFilePath))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CopyFileSourceFileIsNullOrEmpty);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(targetPath))
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CopyFileTargetFileIsNullOrEmpty);
+                return false;
+            }
+
             if (!this.FileExists(sourceFilePath))
             {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CopyFileSourceFileDoesNotExistMessageTemplate, sourceFilePath);
                 return false;
             }
 
@@ -318,9 +331,13 @@ namespace NuDeploy.Core.Common.FilesystemAccess
                 File.Copy(sourceFilePath, targetPath, true);
                 return true;
             }
+            catch (IOException fileAccessException)
+            {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CopyFileIOExceptionMessageTemplate, sourceFilePath, targetPath, fileAccessException);
+            }
             catch (Exception generalException)
             {
-                this.logger.Log("Unable to copy file \"{0}\" to \"{1}\".", sourceFilePath, targetPath, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.CopyFileExceptionMessageTemplate, sourceFilePath, targetPath, generalException);
             }
 
             return false;
@@ -330,21 +347,26 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         {
             if (string.IsNullOrWhiteSpace(path))
             {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.EnsurePathExistsPathIsNullOrEmpty);
                 return false;
             }
 
             try
             {
-                string parentDirectory = new FileInfo(path).Directory.FullName;
+                string parentDirectory = Directory.GetParent(path).FullName;
                 if (!this.DirectoryExists(parentDirectory))
                 {
-                    this.CreateDirectory(parentDirectory);
+                    if (!this.CreateDirectory(parentDirectory))
+                    {
+                        return false;
+                    }
                 }
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception generalException)
             {
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.EnsurePathExistsExceptionMessageTemplate, path, generalException);
             }
 
             return false;

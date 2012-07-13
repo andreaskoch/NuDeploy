@@ -61,6 +61,51 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to copy file &quot;{0}&quot; to &quot;{1}&quot;. {2}.
+        /// </summary>
+        internal static string CopyFileExceptionMessageTemplate {
+            get {
+                return ResourceManager.GetString("CopyFileExceptionMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to copy file &quot;{0}&quot; to &quot;{1}&quot;, because either the source or the target file is being used by another process. {2}.
+        /// </summary>
+        internal static string CopyFileIOExceptionMessageTemplate {
+            get {
+                return ResourceManager.GetString("CopyFileIOExceptionMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot copy a file if the source file does not exist ({0})..
+        /// </summary>
+        internal static string CopyFileSourceFileDoesNotExistMessageTemplate {
+            get {
+                return ResourceManager.GetString("CopyFileSourceFileDoesNotExistMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot copy a file if you don&apos;t specify a source file..
+        /// </summary>
+        internal static string CopyFileSourceFileIsNullOrEmpty {
+            get {
+                return ResourceManager.GetString("CopyFileSourceFileIsNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot copy a file if you don&apos;t specify a target file..
+        /// </summary>
+        internal static string CopyFileTargetFileIsNullOrEmpty {
+            get {
+                return ResourceManager.GetString("CopyFileTargetFileIsNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot create directory &quot;{0}&quot;. {1}.
         /// </summary>
         internal static string CreateDirectoryExceptionMessageTemplate {
@@ -156,6 +201,24 @@ namespace NuDeploy.Core.Resources {
         internal static string DeleteFolderPathIsNullOrEmptyMessage {
             get {
                 return ResourceManager.GetString("DeleteFolderPathIsNullOrEmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot create create path &quot;{0}&quot;. {1}.
+        /// </summary>
+        internal static string EnsurePathExistsExceptionMessageTemplate {
+            get {
+                return ResourceManager.GetString("EnsurePathExistsExceptionMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot call EnsurePathExists if you don&apos;t specify a path..
+        /// </summary>
+        internal static string EnsurePathExistsPathIsNullOrEmpty {
+            get {
+                return ResourceManager.GetString("EnsurePathExistsPathIsNullOrEmpty", resourceCulture);
             }
         }
         
