@@ -263,7 +263,7 @@ namespace NuDeploy.Core.Services.Installation
 
             // remove package files
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
-            this.filesystemAccessor.DeleteFolder(installedPackage.Folder);
+            this.filesystemAccessor.DeleteDirectory(installedPackage.Folder);
 
             return true;
         }

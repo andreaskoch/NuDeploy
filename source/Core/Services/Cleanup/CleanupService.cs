@@ -57,7 +57,7 @@ namespace NuDeploy.Core.Services.Cleanup
             foreach (NuDeployPackageInfo package in packages)
             {
                 this.userInterface.WriteLine(string.Format(Resources.CleanupService.DeleteMessageTemplate, package.Id, package.Version));
-                this.filesystemAccessor.DeleteFolder(package.Folder);
+                this.filesystemAccessor.DeleteDirectory(package.Folder);
             }
         }
     }

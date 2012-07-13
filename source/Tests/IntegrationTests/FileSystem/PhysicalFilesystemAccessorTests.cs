@@ -504,62 +504,62 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
-        #region DeleteFolder
+        #region DeleteDirectory
 
         [Test]
-        public void DeleteFolder_FolderPathIsNull_ResultIsFalse()
+        public void DeleteDirectory_FolderPathIsNull_ResultIsFalse()
         {
             // Arrange
             string path = null;
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsFalse(result);            
         }
 
         [Test]
-        public void DeleteFolder_FolderPathIsEmpty_ResultIsFalse()
+        public void DeleteDirectory_FolderPathIsEmpty_ResultIsFalse()
         {
             // Arrange
             string path = string.Empty;
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void DeleteFolder_FolderPathIsWhitespace_ResultIsFalse()
+        public void DeleteDirectory_FolderPathIsWhitespace_ResultIsFalse()
         {
             // Arrange
             string path = " ";
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void DeleteFolder_FolderDoesNotExist_ResultIsFalse()
+        public void DeleteDirectory_FolderDoesNotExist_ResultIsFalse()
         {
             // Arrange
             string path = this.GetPath("non-existing-folder");
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void DeleteFolder_FolderExistsButOneFileInItIsInUse_ResultIsFalse()
+        public void DeleteDirectory_FolderExistsButOneFileInItIsInUse_ResultIsFalse()
         {
             // Arrange
             string path = this.CreateDirectory("new folder").FullName;
@@ -567,7 +567,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             var streamReader = new StreamReader(filePath);
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsFalse(result);
@@ -575,13 +575,13 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void DeleteFolder_FolderExists_FolderIsEmpty_ResultIsTrue_FolderIsRemoved()
+        public void DeleteDirectory_FolderExists_FolderIsEmpty_ResultIsTrue_FolderIsRemoved()
         {
             // Arrange
             string path = this.CreateDirectory("new folder").FullName;
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsTrue(result);
@@ -589,14 +589,14 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void DeleteFolder_FolderExists_ContainsContent_ResultIsTrue_FolderIsRemoved()
+        public void DeleteDirectory_FolderExists_ContainsContent_ResultIsTrue_FolderIsRemoved()
         {
             // Arrange
             string path = this.CreateDirectory("new folder").FullName;
             this.CreateFile("new folder\\test-file.txt");
 
             // Act
-            bool result = this.filesystemAccessor.DeleteFolder(path);
+            bool result = this.filesystemAccessor.DeleteDirectory(path);
 
             // Assert
             Assert.IsTrue(result);
@@ -1460,7 +1460,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
-        #region EnsurePathExists
+        #region EnsureParentDirectoryExists
 
         [TestCase(null)]
         [TestCase("")]
@@ -1468,7 +1468,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         public void EnsurePathExists_PathIsInvalid_ResultIsFalse(string path)
         {
             // Act
-            bool result = this.filesystemAccessor.EnsurePathExists(path);
+            bool result = this.filesystemAccessor.EnsureParentDirectoryExists(path);
 
             // Assert
             Assert.IsFalse(result);
@@ -1481,7 +1481,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             string path = this.GetPath("some","very", "nested", "path", "file.txt");
 
             // Act
-            bool result = this.filesystemAccessor.EnsurePathExists(path);
+            bool result = this.filesystemAccessor.EnsureParentDirectoryExists(path);
 
             // Assert
             Assert.IsTrue(result);
@@ -1495,7 +1495,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             string path = Path.Combine(directory, "file.txt");
 
             // Act
-            this.filesystemAccessor.EnsurePathExists(path);
+            this.filesystemAccessor.EnsureParentDirectoryExists(path);
 
             // Assert
             Assert.IsTrue(Directory.Exists(directory));
@@ -1509,7 +1509,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             string path = Path.Combine(directory, "file.txt");
 
             // Act
-            bool result = this.filesystemAccessor.EnsurePathExists(path);
+            bool result = this.filesystemAccessor.EnsureParentDirectoryExists(path);
 
             // Assert
             Assert.IsFalse(result);

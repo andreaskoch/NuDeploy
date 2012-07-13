@@ -189,7 +189,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
             try
             {
-                this.EnsurePathExists(filePath);
+                this.EnsureParentDirectoryExists(filePath);
                 return File.Create(filePath);
             }
             catch (IOException fileAccessException)
@@ -257,7 +257,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
             try
             {
-                if (!this.EnsurePathExists(targetPath))
+                if (!this.EnsureParentDirectoryExists(targetPath))
                 {
                     return false;
                 }
@@ -291,7 +291,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             return Directory.Exists(directoryPath);
         }
 
-        public bool DeleteFolder(string folderPath)
+        public bool DeleteDirectory(string folderPath)
         {
             if (string.IsNullOrWhiteSpace(folderPath))
             {
@@ -349,17 +349,17 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             return false;
         }
 
-        public bool EnsurePathExists(string path)
+        public bool EnsureParentDirectoryExists(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(filePath))
             {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.EnsurePathExistsPathIsNullOrEmpty);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.EnsureParentDirectoryExistsPathIsNullOrEmpty);
                 return false;
             }
 
             try
             {
-                string parentDirectory = Directory.GetParent(path).FullName;
+                string parentDirectory = Directory.GetParent(filePath).FullName;
                 if (!this.DirectoryExists(parentDirectory))
                 {
                     if (!this.CreateDirectory(parentDirectory))
@@ -372,7 +372,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             }
             catch (Exception generalException)
             {
-                this.logger.Log(Resources.PhysicalFilesystemAccessor.EnsurePathExistsExceptionMessageTemplate, path, generalException);
+                this.logger.Log(Resources.PhysicalFilesystemAccessor.EnsureParentDirectoryExistsExceptionMessageTemplate, filePath, generalException);
             }
 
             return false;

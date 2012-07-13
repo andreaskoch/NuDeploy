@@ -207,18 +207,18 @@ namespace NuDeploy.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cannot create create path &quot;{0}&quot;. {1}.
         /// </summary>
-        internal static string EnsurePathExistsExceptionMessageTemplate {
+        internal static string EnsureParentDirectoryExistsExceptionMessageTemplate {
             get {
-                return ResourceManager.GetString("EnsurePathExistsExceptionMessageTemplate", resourceCulture);
+                return ResourceManager.GetString("EnsureParentDirectoryExistsExceptionMessageTemplate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot call EnsurePathExists if you don&apos;t specify a path..
+        ///   Looks up a localized string similar to You cannot call EnsureParentDirectoryExists if you don&apos;t specify a path..
         /// </summary>
-        internal static string EnsurePathExistsPathIsNullOrEmpty {
+        internal static string EnsureParentDirectoryExistsPathIsNullOrEmpty {
             get {
-                return ResourceManager.GetString("EnsurePathExistsPathIsNullOrEmpty", resourceCulture);
+                return ResourceManager.GetString("EnsureParentDirectoryExistsPathIsNullOrEmpty", resourceCulture);
             }
         }
         

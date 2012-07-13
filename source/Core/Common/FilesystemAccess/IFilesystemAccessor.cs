@@ -30,11 +30,11 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
         #region directory access
 
-        bool DeleteFolder(string folderPath);
+        bool DeleteDirectory(string folderPath);
 
         bool CreateDirectory(string path);
 
-        bool EnsurePathExists(string path);
+        bool EnsureParentDirectoryExists(string filePath);
 
         #endregion
     }

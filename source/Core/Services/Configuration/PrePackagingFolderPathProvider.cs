@@ -29,7 +29,7 @@ namespace NuDeploy.Core.Services.Configuration
             }
 
             // cleanup existing folder
-            if (this.filesystemAccessor.DeleteFolder(prePackagingFolder))
+            if (this.filesystemAccessor.DeleteDirectory(prePackagingFolder))
             {
                 this.filesystemAccessor.CreateDirectory(prePackagingFolder);
                 return prePackagingFolder;

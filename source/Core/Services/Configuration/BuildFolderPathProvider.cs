@@ -29,7 +29,7 @@ namespace NuDeploy.Core.Services.Configuration
             }
 
             // cleanup existing folder
-            if (this.filesystemAccessor.DeleteFolder(buildFolderPath))
+            if (this.filesystemAccessor.DeleteDirectory(buildFolderPath))
             {
                 this.filesystemAccessor.CreateDirectory(buildFolderPath);
                 return buildFolderPath;

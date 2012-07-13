@@ -165,11 +165,11 @@
   <data name="DeleteFolderPathIsNullOrEmptyMessage" xml:space="preserve">
     <value>You cannot delete a folder if you don't specify a path.</value>
   </data>
-  <data name="EnsurePathExistsExceptionMessageTemplate" xml:space="preserve">
+  <data name="EnsureParentDirectoryExistsExceptionMessageTemplate" xml:space="preserve">
     <value>Cannot create create path "{0}". {1}</value>
   </data>
-  <data name="EnsurePathExistsPathIsNullOrEmpty" xml:space="preserve">
-    <value>You cannot call EnsurePathExists if you don't specify a path.</value>
+  <data name="EnsureParentDirectoryExistsPathIsNullOrEmpty" xml:space="preserve">
+    <value>You cannot call EnsureParentDirectoryExists if you don't specify a path.</value>
   </data>
   <data name="GetFileContentDoesNotExistMessageTemplate" xml:space="preserve">
     <value>The file you are trying to get the content from does not exist ({0}).</value>
