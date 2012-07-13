@@ -3,7 +3,7 @@ using System.IO;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 
-namespace NuDeploy.Core.Services.Configuration
+namespace NuDeploy.Core.Services.Packaging.Configuration
 {
     public class PackagingFolderPathProvider : IPackagingFolderPathProvider
     {

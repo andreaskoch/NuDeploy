@@ -11,13 +11,13 @@ using NuDeploy.Core.PowerShell;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Cleanup;
 using NuDeploy.Core.Services.Commands;
-using NuDeploy.Core.Services.Configuration;
 using NuDeploy.Core.Services.Console;
 using NuDeploy.Core.Services.Filesystem;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.Repositories;
 using NuDeploy.Core.Services.Packaging;
 using NuDeploy.Core.Services.Packaging.Build;
+using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.Nuget;
 using NuDeploy.Core.Services.Packaging.PrePackaging;
 using NuDeploy.Core.Services.Status;
@@ -70,8 +70,6 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICleanupService>().Use<CleanupService>();
 
                         /* configuration */
-                        config.For<IPackagingFolderPathProvider>().Use<PackagingFolderPathProvider>();
-                        config.For<IPrePackagingFolderPathProvider>().Use<PrePackagingFolderPathProvider>();
 
                         /* file system */
                         config.For<IRelativeFilePathInfoFactory>().Use<RelativeFilePathInfoFactory>();
@@ -97,9 +95,11 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
 
                         /* nuget */
+                        config.For<IPackagingFolderPathProvider>().Use<PackagingFolderPathProvider>();
                         config.For<IPackagingService>().Use<PackagingService>();
 
                         /* pre-packaging */
+                        config.For<IPrePackagingFolderPathProvider>().Use<PrePackagingFolderPathProvider>();
                         config.For<IPrepackagingService>().Use<PrepackagingService>();
 
                         /* status */

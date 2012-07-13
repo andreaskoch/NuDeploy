@@ -2,8 +2,6 @@ using System.Collections.Generic;
 
 using Microsoft.Build.Execution;
 
-using NuDeploy.Core.Services.Configuration;
-
 namespace NuDeploy.Core.Services.Packaging.Build
 {
     public class SolutionBuilder : ISolutionBuilder

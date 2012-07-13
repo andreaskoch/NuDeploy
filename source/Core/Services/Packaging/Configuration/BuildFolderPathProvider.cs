@@ -2,8 +2,9 @@ using System.IO;
 
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Services.Packaging.Build;
 
-namespace NuDeploy.Core.Services.Packaging.Build
+namespace NuDeploy.Core.Services.Packaging.Configuration
 {
     public class BuildFolderPathProvider : IBuildFolderPathProvider
     {

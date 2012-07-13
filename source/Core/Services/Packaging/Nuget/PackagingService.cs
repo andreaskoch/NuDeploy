@@ -2,7 +2,7 @@ using System.IO;
 using System.Linq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Services.Configuration;
+using NuDeploy.Core.Services.Packaging.Configuration;
 
 using NuGet;
 
