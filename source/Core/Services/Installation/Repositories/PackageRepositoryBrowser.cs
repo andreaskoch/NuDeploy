@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Services.Status;
 
 using NuGet;
 
@@ -10,21 +10,24 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 {
     public class PackageRepositoryBrowser : IPackageRepositoryBrowser
     {
-        private readonly ISourceRepositoryProvider sourceRepositoryProvider;
-
-        private readonly IPackageRepositoryFactory packageRepositoryFactory;
-
         private readonly IPackageRepository[] repositories;
 
         private readonly SourceRepositoryConfiguration[] repositoryConfigurationConfigurations;
 
         public PackageRepositoryBrowser(ISourceRepositoryProvider sourceRepositoryProvider, IPackageRepositoryFactory packageRepositoryFactory)
         {
-            this.sourceRepositoryProvider = sourceRepositoryProvider;
-            this.packageRepositoryFactory = packageRepositoryFactory;
+            if (sourceRepositoryProvider == null)
+            {
+                throw new ArgumentNullException("sourceRepositoryProvider");
+            }
 
-            this.repositoryConfigurationConfigurations = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToArray();
-            this.repositories = this.repositoryConfigurationConfigurations.Select(r => this.packageRepositoryFactory.CreateRepository(r.Url.ToString())).ToArray();
+            if (packageRepositoryFactory == null)
+            {
+                throw new ArgumentNullException("packageRepositoryFactory");
+            }
+
+            this.repositoryConfigurationConfigurations = sourceRepositoryProvider.GetRepositoryConfigurations().ToArray();
+            this.repositories = this.repositoryConfigurationConfigurations.Select(r => packageRepositoryFactory.CreateRepository(r.Url.ToString())).ToArray();
         }
 
         public IEnumerable<SourceRepositoryConfiguration> RepositoryConfigurations

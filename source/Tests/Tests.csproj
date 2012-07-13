@@ -58,6 +58,7 @@
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
     <Compile Include="IntegrationTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
+    <Compile Include="IntegrationTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="IntegrationTests\Services\PackageConfigurationAccessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +74,8 @@
     <Compile Include="UnitTests\Common\ConsoleTextManipulationTests.cs" />
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
+    <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
+    <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

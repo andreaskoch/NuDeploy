@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services.Installation.Repositories;
@@ -19,16 +18,6 @@ namespace NuDeploy.Tests.IntegrationTests.Repositories
         public void Setup()
         {
             this.commandLineRepositoryFactory = new CommandLineRepositoryFactory();
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        [ExpectedException(typeof(ArgumentException))]
-        public void CreateRepository_PackageSourceParameterIsInvalid_ArgumentExceptionIsThrown(string packageSource)
-        {
-            // Act
-            this.commandLineRepositoryFactory.CreateRepository(packageSource);
         }
 
         [Test]
