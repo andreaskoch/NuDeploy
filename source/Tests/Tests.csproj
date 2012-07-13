@@ -39,6 +39,7 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NuGet.Core, Version=1.8.30423.9026, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -56,6 +57,7 @@
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
+    <Compile Include="IntegrationTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="IntegrationTests\Services\PackageConfigurationAccessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
