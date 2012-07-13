@@ -164,7 +164,7 @@
     <Compile Include="Services\AssemblyResourceAccess\DeploymentScriptResourceDownloader.cs" />
     <Compile Include="Services\AssemblyResourceAccess\IAssemblyFileResourceProvider.cs" />
     <Compile Include="Services\AssemblyResourceAccess\IAssemblyResourceFilePathProvider.cs" />
-    <Compile Include="Services\AssemblyResourceAccess\IDeploymentScriptResourceDownloader.cs" />
+    <Compile Include="Services\AssemblyResourceAccess\IAssemblyResourceDownloader.cs" />
     <Compile Include="Services\Cleanup\CleanupService.cs" />
     <Compile Include="Services\Cleanup\ICleanupService.cs" />
     <Compile Include="Services\Commands\ICommandProvider.cs" />

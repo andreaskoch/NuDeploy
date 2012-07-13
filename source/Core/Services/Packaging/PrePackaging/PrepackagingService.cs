@@ -17,16 +17,16 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
-        private readonly IDeploymentScriptResourceDownloader deploymentScriptResourceDownloader;
+        private readonly IAssemblyResourceDownloader assemblyResourceDownloader;
 
         private readonly IBuildResultFilePathProvider buildResultFilePathProvider;
 
         private readonly string prePackagingFolderPath;
 
-        public PrepackagingService(IFilesystemAccessor filesystemAccessor, IDeploymentScriptResourceDownloader deploymentScriptResourceDownloader, IBuildResultFilePathProvider buildResultFilePathProvider, IPrePackagingFolderPathProvider prePackagingFolderPathProvider)
+        public PrepackagingService(IFilesystemAccessor filesystemAccessor, IAssemblyResourceDownloader assemblyResourceDownloader, IBuildResultFilePathProvider buildResultFilePathProvider, IPrePackagingFolderPathProvider prePackagingFolderPathProvider)
         {
             this.filesystemAccessor = filesystemAccessor;
-            this.deploymentScriptResourceDownloader = deploymentScriptResourceDownloader;
+            this.assemblyResourceDownloader = assemblyResourceDownloader;
             this.buildResultFilePathProvider = buildResultFilePathProvider;
             this.prePackagingFolderPath = prePackagingFolderPathProvider.GetPrePackagingFolderPath();
         }
@@ -66,7 +66,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             }
 
             // deployment scripts
-            this.deploymentScriptResourceDownloader.Download(this.prePackagingFolderPath);
+            this.assemblyResourceDownloader.Download(this.prePackagingFolderPath);
 
             // web sites
             var websiteSourceFiles = this.buildResultFilePathProvider.GetWesbiteFilePaths();

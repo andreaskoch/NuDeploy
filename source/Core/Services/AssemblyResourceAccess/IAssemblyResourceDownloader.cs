@@ -1,6 +1,6 @@
 namespace NuDeploy.Core.Services.AssemblyResourceAccess
 {
-    public interface IDeploymentScriptResourceDownloader
+    public interface IAssemblyResourceDownloader
     {
         void Download(string targetFolder);
     }

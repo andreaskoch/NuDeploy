@@ -43,11 +43,16 @@ namespace NuDeploy.Core.Common
                 return false;
             }
 
-            var otherRepositoryConfiguration = obj as SourceRepositoryConfiguration;
-            if (otherRepositoryConfiguration != null)
+            var otherObj = obj as SourceRepositoryConfiguration;
+            if (otherObj != null)
             {
-                return this.Name.Equals(otherRepositoryConfiguration.Name, StringComparison.OrdinalIgnoreCase)
-                       && this.Url.Equals(otherRepositoryConfiguration.Url);
+                if (this.Name.Equals(otherObj.Name, StringComparison.OrdinalIgnoreCase)
+                       && this.Url.Equals(otherObj.Url))
+                {
+                    return true;
+                }
+
+                return this.Name == otherObj.Name && this.Url == otherObj.Url;
             }
 
             return false;

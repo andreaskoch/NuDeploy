@@ -13,6 +13,8 @@ namespace NuDeploy.Tests.UnitTests.Common
     [TestFixture]
     public class SourceRepositoryConfigurationTests
     {
+        #region IsValid
+
         [Test]
         public void IsValid_NameIsEmpty_ResultIsFalse()
         {
@@ -94,6 +96,10 @@ namespace NuDeploy.Tests.UnitTests.Common
             Assert.IsFalse(json.ToLower().Contains(isValidPropertyName.ToLower()));
         }
 
+        #endregion
+
+        #region serialization
+
         [Test]
         public void IsSerializable()
         {
@@ -122,6 +128,10 @@ namespace NuDeploy.Tests.UnitTests.Common
             Assert.AreEqual(repositoryConfiguration.Name, deserializedRepositoryConfiguration.Name);
             Assert.AreEqual(repositoryConfiguration.Url, deserializedRepositoryConfiguration.Url);
         }
+
+        #endregion
+
+        #region ToString
 
         [Test]
         public void ToString_ContainsRepositoryName()
@@ -174,6 +184,10 @@ namespace NuDeploy.Tests.UnitTests.Common
             // Assert
             Assert.IsTrue(result.Contains(repositoryConfiguration.Name));
         }
+
+        #endregion
+
+        #region Equals
 
         [Test]
         public void Equals_TwoIdenticalConfigurations_ResultIsTrue()
@@ -245,6 +259,10 @@ namespace NuDeploy.Tests.UnitTests.Common
             Assert.IsFalse(result);
         }
 
+        #endregion
+
+        #region GetHashCode
+
         [Test]
         public void GetHashCode_TwoIdenticalObjects_BothInitialized_HashCodesAreEqual()
         {
@@ -315,5 +333,7 @@ namespace NuDeploy.Tests.UnitTests.Common
                 hashCodes.Add(generatedHashCode, repositoryConfiguration);
             }
         }
+
+        #endregion
     }
 }

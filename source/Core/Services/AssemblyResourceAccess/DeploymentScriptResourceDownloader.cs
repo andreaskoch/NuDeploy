@@ -1,13 +1,13 @@
+using System;
 using System.IO;
-using System.Linq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
 
 namespace NuDeploy.Core.Services.AssemblyResourceAccess
 {
-    public class DeploymentScriptResourceDownloader : IDeploymentScriptResourceDownloader
+    public class DeploymentScriptResourceDownloader : IAssemblyResourceDownloader
     {
-        private const string DeploymentScriptNamespace = "NuDeploy.Core.Resources.DeploymentScripts.";
+        public const string DeploymentScriptNamespace = "NuDeploy.Core.Resources.DeploymentScripts";
 
         private readonly IAssemblyFileResourceProvider assemblyFileResourceProvider;
 
@@ -15,14 +15,28 @@ namespace NuDeploy.Core.Services.AssemblyResourceAccess
 
         public DeploymentScriptResourceDownloader(IAssemblyFileResourceProvider assemblyFileResourceProvider, IFilesystemAccessor filesystemAccessor)
         {
+            if (assemblyFileResourceProvider == null)
+            {
+                throw new ArgumentNullException("assemblyFileResourceProvider");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.assemblyFileResourceProvider = assemblyFileResourceProvider;
             this.filesystemAccessor = filesystemAccessor;
         }
 
         public void Download(string targetFolder)
         {
-            var assemblyResourceInfos =
-                this.assemblyFileResourceProvider.GetAllAssemblyResourceInfos(DeploymentScriptNamespace).Where(r => r.ResourceName.StartsWith(DeploymentScriptNamespace));
+            if (targetFolder == null)
+            {
+                throw new ArgumentNullException("targetFolder");
+            }
+
+            var assemblyResourceInfos = this.assemblyFileResourceProvider.GetAllAssemblyResourceInfos(DeploymentScriptNamespace);
 
             foreach (var assemblyFileResourceInfo in assemblyResourceInfos)
             {

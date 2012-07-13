@@ -64,7 +64,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<Assembly>().Use(typeof(ApplicationInformationProvider).Assembly);
                         config.For<IAssemblyResourceFilePathProvider>().Use<AssemblyResourceFilePathProvider>();
                         config.For<IAssemblyFileResourceProvider>().Use<AssemblyFileResourceProvider>();
-                        config.For<IDeploymentScriptResourceDownloader>().Use<DeploymentScriptResourceDownloader>();
+                        config.For<IAssemblyResourceDownloader>().Use<DeploymentScriptResourceDownloader>();
 
                         /* cleanup */
                         config.For<ICleanupService>().Use<CleanupService>();

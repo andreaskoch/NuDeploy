@@ -1,11 +1,12 @@
-using System.Reflection;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace NuDeploy.Core.Services.AssemblyResourceAccess
 {
     public interface IAssemblyFileResourceProvider
     {
-        Assembly SourceAssembly { get;  }
+        _Assembly SourceAssembly { get; }
 
-        AssemblyFileResourceInfo[] GetAllAssemblyResourceInfos(string baseNamespace);
+        IEnumerable<AssemblyFileResourceInfo> GetAllAssemblyResourceInfos(string baseNamespace);
     }
 }
