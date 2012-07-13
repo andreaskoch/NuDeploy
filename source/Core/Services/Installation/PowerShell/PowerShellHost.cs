@@ -4,7 +4,7 @@ using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common.Infrastructure;
 
-namespace NuDeploy.Core.PowerShell
+namespace NuDeploy.Core.Services.Installation.PowerShell
 {
     public class PowerShellHost : PSHost
     {

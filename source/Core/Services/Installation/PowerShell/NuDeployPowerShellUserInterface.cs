@@ -6,7 +6,7 @@ using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common.UserInterface;
 
-namespace NuDeploy.Core.PowerShell
+namespace NuDeploy.Core.Services.Installation.PowerShell
 {
     public class NuDeployPowerShellUserInterface : PSHostUserInterface
     {

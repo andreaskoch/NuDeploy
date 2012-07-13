@@ -1,4 +1,4 @@
-namespace NuDeploy.Core.PowerShell
+namespace NuDeploy.Core.Services.Installation.PowerShell
 {
     public interface IPowerShellScriptExecutor
     {

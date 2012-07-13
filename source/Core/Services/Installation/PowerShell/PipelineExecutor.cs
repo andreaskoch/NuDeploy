@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 
-namespace NuDeploy.Core.PowerShell
+namespace NuDeploy.Core.Services.Installation.PowerShell
 {
     public class PipelineExecutor
     {

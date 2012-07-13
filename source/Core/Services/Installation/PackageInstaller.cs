@@ -7,7 +7,7 @@ using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.UserInterface;
-using NuDeploy.Core.PowerShell;
+using NuDeploy.Core.Services.Installation.PowerShell;
 using NuDeploy.Core.Services.Installation.Repositories;
 using NuDeploy.Core.Services.Status;
 using NuDeploy.Core.Services.Transformation;

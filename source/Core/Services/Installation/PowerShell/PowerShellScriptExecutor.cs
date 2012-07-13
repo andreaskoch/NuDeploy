@@ -10,7 +10,7 @@ using System.Threading;
 
 using NuDeploy.Core.Common.FilesystemAccess;
 
-namespace NuDeploy.Core.PowerShell
+namespace NuDeploy.Core.Services.Installation.PowerShell
 {
     public class PowerShellScriptExecutor : IPowerShellScriptExecutor, IDisposable
     {

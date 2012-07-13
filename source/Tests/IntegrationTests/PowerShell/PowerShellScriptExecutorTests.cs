@@ -13,7 +13,7 @@ using NuDeploy.Core.Common.UserInterface.Console;
 
 using NUnit.Framework;
 
-using NuDeploy.Core.PowerShell;
+using NuDeploy.Core.Services.Installation.PowerShell;
 
 namespace NuDeploy.Tests.IntegrationTests.PowerShell
 {
