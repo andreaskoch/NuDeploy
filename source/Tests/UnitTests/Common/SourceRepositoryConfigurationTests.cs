@@ -259,6 +259,20 @@ namespace NuDeploy.Tests.UnitTests.Common
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void Equals_SuppliedObjectIsOfOtherType_ResultIsFalse()
+        {
+            // Arrange
+            var repositoryConfiguration1 = new SourceRepositoryConfiguration { Name = "Some Repository", Url = new Uri("http://example.com") };
+            object repositoryConfiguration2 = new object();
+
+            // Act
+            bool result = repositoryConfiguration1.Equals(repositoryConfiguration2);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
         #endregion
 
         #region GetHashCode
