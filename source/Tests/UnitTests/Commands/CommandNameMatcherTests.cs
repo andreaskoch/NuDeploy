@@ -380,5 +380,26 @@ namespace NuDeploy.Tests.UnitTests.Commands
             // Assert
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void IsMatch_SuppliedCommandNameDoesNotMatchTheNameOfTheCommand_IsNotAPartialMatch_ButMatchesTheAlternativeCommandNames_ResultIsTrue()
+        {
+            // Arrange
+            var command = new Mock<ICommand>();
+            command.Setup(c => c.Attributes).Returns(
+                new CommandAttributes
+                {
+                    CommandName = "update",
+                    AlternativeCommandNames = new[] { "refresh" }
+                });
+
+            string commandName = "refresh";
+
+            // Act
+            bool result = this.commandNameMatcher.IsMatch(command.Object, commandName);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
     }
 }
