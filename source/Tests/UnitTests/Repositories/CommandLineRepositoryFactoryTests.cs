@@ -16,7 +16,8 @@ namespace NuDeploy.Tests.UnitTests.Repositories
         [TestFixtureSetUp]
         public void Setup()
         {
-            this.commandLineRepositoryFactory = new CommandLineRepositoryFactory();
+            Func<Uri, IHttpClient> httpClientFactory = u => new RedirectedHttpClient(u);
+            this.commandLineRepositoryFactory = new CommandLineRepositoryFactory(httpClientFactory);
         }
 
         [TestCase(null)]

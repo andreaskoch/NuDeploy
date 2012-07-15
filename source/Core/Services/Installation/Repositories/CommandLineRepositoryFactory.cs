@@ -10,6 +10,11 @@ namespace NuDeploy.Core.Services.Installation.Repositories
     {
         public static readonly string UserAgent = NuDeployConstants.NuDeployCommandLinePackageId;
 
+        public CommandLineRepositoryFactory(Func<Uri, IHttpClient> httpClientFactory)
+            : base(httpClientFactory)
+        {
+        }
+
         public override IPackageRepository CreateRepository(string packageSource)
         {
             if (string.IsNullOrWhiteSpace(packageSource))

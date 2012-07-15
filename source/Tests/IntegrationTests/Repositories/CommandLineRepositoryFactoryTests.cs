@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Services.Installation.Repositories;
@@ -17,7 +18,8 @@ namespace NuDeploy.Tests.IntegrationTests.Repositories
         [TestFixtureSetUp]
         public void Setup()
         {
-            this.commandLineRepositoryFactory = new CommandLineRepositoryFactory();
+            Func<Uri, IHttpClient> httpClientFactory = u => new RedirectedHttpClient(u);
+            this.commandLineRepositoryFactory = new CommandLineRepositoryFactory(httpClientFactory);
         }
 
         [Test]

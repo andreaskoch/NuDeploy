@@ -23,7 +23,8 @@ namespace NuDeploy.Tests.IntegrationTests.Repositories
             sourceRepositoryProviderMock.Setup(r => r.GetRepositoryConfigurations()).Returns(
                 new[] { new SourceRepositoryConfiguration { Name = "Default Nuget Repository", Url = NuDeployConstants.DefaultFeedUrl } });
 
-            var packageRepositoryFactory = new CommandLineRepositoryFactory();
+            Func<Uri, IHttpClient> httpClientFactory = u => new RedirectedHttpClient(u);
+            var packageRepositoryFactory = new CommandLineRepositoryFactory(httpClientFactory);
 
             this.packageRepositoryBrowser = new PackageRepositoryBrowser(sourceRepositoryProviderMock.Object, packageRepositoryFactory);
         }

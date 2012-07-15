@@ -1,3 +1,4 @@
+using System;
 using System.Management.Automation.Host;
 using System.Reflection;
 
@@ -76,6 +77,7 @@ namespace NuDeploy.Core.DependencyResolution
 
                         /* installation */
                         config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
+                        config.For<Func<Uri, IHttpClient>>().Use(uri => new RedirectedHttpClient(uri));
                         config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
                         config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
                         config.For<IPackageInstaller>().Use<PackageInstaller>();

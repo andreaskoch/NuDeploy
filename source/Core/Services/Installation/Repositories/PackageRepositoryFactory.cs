@@ -6,24 +6,19 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 {
     public class PackageRepositoryFactory : IPackageRepositoryFactory
     {
-        private static readonly PackageRepositoryFactory DefaultPackageRepositoryInstance = new PackageRepositoryFactory();
+        private readonly Func<Uri, IHttpClient> httpClientFactory;
 
-        private static readonly Func<Uri, IHttpClient> DefaultHttpClientFactory = u => new RedirectedHttpClient(u);
-
-        private Func<Uri, IHttpClient> httpClientFactory;
-
-        public static PackageRepositoryFactory Default
+        public PackageRepositoryFactory(Func<Uri, IHttpClient> httpClientFactory)
         {
-            get
-            {
-                return DefaultPackageRepositoryInstance;
-            }
+            this.httpClientFactory = httpClientFactory;
         }
 
         public Func<Uri, IHttpClient> HttpClientFactory
         {
-            get { return this.httpClientFactory ?? DefaultHttpClientFactory; }
-            set { this.httpClientFactory = value; }
+            get
+            {
+                return this.httpClientFactory;
+            }
         }
 
         public virtual IPackageRepository CreateRepository(string packageSource)
@@ -41,7 +36,6 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 
             var client = this.HttpClientFactory(uri);
 
-            // Make sure we get resolve any fwlinks before creating the repository
             return new DataServicePackageRepository(client);
         }
     }
