@@ -12,7 +12,7 @@ namespace NuDeploy.Core.Services.Installation.Repositories
     {
         private readonly IPackageRepository[] repositories;
 
-        private readonly SourceRepositoryConfiguration[] repositoryConfigurationConfigurations;
+        private readonly SourceRepositoryConfiguration[] repositoryConfigurations;
 
         public PackageRepositoryBrowser(ISourceRepositoryProvider sourceRepositoryProvider, IPackageRepositoryFactory packageRepositoryFactory)
         {
@@ -26,20 +26,25 @@ namespace NuDeploy.Core.Services.Installation.Repositories
                 throw new ArgumentNullException("packageRepositoryFactory");
             }
 
-            this.repositoryConfigurationConfigurations = sourceRepositoryProvider.GetRepositoryConfigurations().ToArray();
-            this.repositories = this.repositoryConfigurationConfigurations.Select(r => packageRepositoryFactory.CreateRepository(r.Url.ToString())).ToArray();
+            this.repositoryConfigurations = sourceRepositoryProvider.GetRepositoryConfigurations().ToArray();
+            this.repositories = this.repositoryConfigurations.Select(r => packageRepositoryFactory.CreateRepository(r.Url.ToString())).ToArray();
         }
 
         public IEnumerable<SourceRepositoryConfiguration> RepositoryConfigurations
         {
             get
             {
-                return this.repositoryConfigurationConfigurations;
+                return this.repositoryConfigurations;
             }
         }
 
         public IPackage FindPackage(string packageId, out IPackageRepository packageRepository)
         {
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw new ArgumentException("packageId");
+            }
+
             foreach (var repository in this.repositories)
             {
                 var package = repository.FindPackage(packageId);
