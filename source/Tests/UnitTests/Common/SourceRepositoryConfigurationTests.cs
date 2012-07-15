@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Newtonsoft.Json;
@@ -98,7 +99,7 @@ namespace NuDeploy.Tests.UnitTests.Common
 
         #endregion
 
-        #region serialization
+        #region Serialization
 
         [Test]
         public void IsSerializable()
@@ -127,6 +128,20 @@ namespace NuDeploy.Tests.UnitTests.Common
             // Assert
             Assert.AreEqual(repositoryConfiguration.Name, deserializedRepositoryConfiguration.Name);
             Assert.AreEqual(repositoryConfiguration.Url, deserializedRepositoryConfiguration.Url);
+        }
+
+        [Test]
+        public void Serialization_IsValidPropertyIsNotSerialized()
+        {
+            // Arrange
+            var repositoryConfiguration = new SourceRepositoryConfiguration { Name = "Some Repository", Url = new Uri("http://example.com") };
+
+            // Act
+            string json = JsonConvert.SerializeObject(repositoryConfiguration);
+
+            // Assert
+            Assert.IsFalse(json.Contains("IsValid"));
+            Assert.IsFalse(json.Contains(repositoryConfiguration.IsValid.ToString(CultureInfo.InvariantCulture)));
         }
 
         #endregion

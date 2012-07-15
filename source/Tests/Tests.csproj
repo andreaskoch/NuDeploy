@@ -73,6 +73,7 @@
     <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
     <Compile Include="UnitTests\Common\ConsoleTextManipulationTests.cs" />
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
+    <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />

@@ -21,12 +21,19 @@ namespace NuDeploy.Core.Common
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}", this.Id, this.Version);
+            if (!string.IsNullOrWhiteSpace(this.Id))
+            {
+                return string.Format("{0} ({1})", this.Id, this.Version ?? "version-not-set");
+            }
+
+            return typeof(PackageInfo).Name;
         }
 
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode();
+            int hash = 37;
+            hash = (hash * 23) + this.ToString().GetHashCode();
+            return hash;
         }
 
         public override bool Equals(object obj)
@@ -36,11 +43,16 @@ namespace NuDeploy.Core.Common
                 return false;
             }
 
-            var otherPackage = obj as PackageInfo;
-            if (otherPackage != null)
+            var otherObj = obj as PackageInfo;
+            if (otherObj != null)
             {
-                return this.Id.Equals(otherPackage.Id, StringComparison.OrdinalIgnoreCase)
-                       && this.Version.Equals(otherPackage.Version, StringComparison.OrdinalIgnoreCase);
+                if (this.Id.Equals(otherObj.Id, StringComparison.OrdinalIgnoreCase)
+                       && this.Version.Equals(otherObj.Version, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                return this.Id == otherObj.Id && this.Version == otherObj.Version;
             }
 
             return false;
