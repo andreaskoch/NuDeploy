@@ -221,6 +221,20 @@ namespace NuDeploy.Tests.UnitTests.AssemblyFileResourceAccess
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void Equals_SuppliedObjectOfAnotherType_ResultIsFalse()
+        {
+            // Arrange
+            var assemblyFileResourceInfo1 = new AssemblyFileResourceInfo("Some Name", "Some\\Path");
+            object assemblyFileResourceInfo2 = new object();
+
+            // Act
+            bool result = assemblyFileResourceInfo1.Equals(assemblyFileResourceInfo2);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
         #endregion
 
         #region GetHashCode
