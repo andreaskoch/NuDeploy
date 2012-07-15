@@ -178,5 +178,22 @@ namespace NuDeploy.Tests.IntegrationTests.Services
             // Act
             this.sourceRepositoryProvider.DeleteRepositoryConfiguration(" ");
         }
+
+        [Test]
+        public void ResetRepositoryConfiguration()
+        {
+            // Arrange
+            var config = new SourceRepositoryConfiguration { Name = "Test Repo j32kl4jkl12j4kl32j4klj32", Url = new Uri("C:\\local-test-repo") };
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(config);
+            string fileContentBefore = File.ReadAllText(ConfigFileSourceRepositoryProvider.SourceRepositoryConfigurationFileName);
+
+            // Act
+            this.sourceRepositoryProvider.ResetRepositoryConfiguration();
+
+            // Assert
+            string fileContentAfter = File.ReadAllText(ConfigFileSourceRepositoryProvider.SourceRepositoryConfigurationFileName);
+            Assert.AreNotEqual(fileContentBefore, fileContentAfter);
+            Assert.IsFalse(this.sourceRepositoryProvider.GetRepositoryConfigurations().Any(c => c.Name.Equals(config.Name)));
+        }
     }
 }
