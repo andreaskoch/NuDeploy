@@ -1,10 +1,7 @@
 ﻿using System.IO;
 
-using Moq;
-
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 
 using NUnit.Framework;
@@ -23,11 +20,10 @@ namespace NuDeploy.Tests.IntegrationTests.AssemblyFileResourceAccess
         [TestFixtureSetUp] 
         public void Setup()
         {
-            var actionLogger = new Mock<IActionLogger>().Object;
             var encodingProvider = new DefaultFileEncodingProvider();
             var assemblyResourceFilePathProvider = new AssemblyResourceFilePathProvider();
             var sourceAssembly = typeof(AssemblyFileResourceProvider).Assembly;
-            var filesystemAccessor = new PhysicalFilesystemAccessor(actionLogger, encodingProvider);
+            var filesystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
             this.assemblyFileResourceProvider = new AssemblyFileResourceProvider(sourceAssembly, assemblyResourceFilePathProvider);
             this.deploymentScriptResourceDownloader = new DeploymentScriptResourceDownloader(this.assemblyFileResourceProvider, filesystemAccessor);

@@ -132,11 +132,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PackageSolutionCommand.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PhysicalFilesystemAccessor.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PhysicalFilesystemAccessor.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\RepositorySourceConfigurationCommand.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -280,10 +275,6 @@
     <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PackageSolutionCommand.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PhysicalFilesystemAccessor.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PhysicalFilesystemAccessor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\RepositorySourceConfigurationCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

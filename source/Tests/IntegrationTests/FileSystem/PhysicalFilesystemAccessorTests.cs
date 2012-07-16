@@ -1,11 +1,8 @@
 ﻿using System;
 using System.IO;
 
-using Moq;
-
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.Logging;
 
 using NUnit.Framework;
 
@@ -23,9 +20,8 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         [TestFixtureSetUp]
         public void Setup()
         {
-            var logger = new Mock<IActionLogger>();
             this.encodingProvider = new DefaultFileEncodingProvider();
-            this.filesystemAccessor = new PhysicalFilesystemAccessor(logger.Object, this.encodingProvider);
+            this.filesystemAccessor = new PhysicalFilesystemAccessor( this.encodingProvider);
         }
 
         [SetUp]

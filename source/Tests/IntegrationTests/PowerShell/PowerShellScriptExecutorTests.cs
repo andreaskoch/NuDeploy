@@ -10,10 +10,9 @@ using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Common.UserInterface.Console;
+using NuDeploy.Core.Services.Installation.PowerShell;
 
 using NUnit.Framework;
-
-using NuDeploy.Core.Services.Installation.PowerShell;
 
 namespace NuDeploy.Tests.IntegrationTests.PowerShell
 {
@@ -33,7 +32,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
 
             var logger = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(logger.Object, encodingProvider);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
             IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
 

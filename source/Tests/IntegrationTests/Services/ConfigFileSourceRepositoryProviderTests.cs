@@ -2,17 +2,13 @@ using System;
 using System.IO;
 using System.Linq;
 
-using Moq;
-
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
-using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Services.Installation.Repositories;
 
 using NUnit.Framework;
-
-using NuDeploy.Core.Services.Installation.Repositories;
 
 namespace NuDeploy.Tests.IntegrationTests.Services
 {
@@ -26,9 +22,8 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
-            var logger = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(logger.Object, encodingProvider);
+            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
             this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor);
         }
