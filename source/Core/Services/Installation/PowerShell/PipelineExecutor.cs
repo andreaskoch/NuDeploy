@@ -46,11 +46,6 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
             }
         }
 
-        public void Stop()
-        {
-            this.pipeline.Stop();
-        }
-
         private void ErrorDataReady(object sender, EventArgs e)
         {
             Collection<object> data = this.pipeline.Error.NonBlockingRead();
