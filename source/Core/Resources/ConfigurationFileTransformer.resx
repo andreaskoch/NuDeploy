@@ -147,6 +147,12 @@
   <data name="SourceFilePathDoesNotExistMessageTemplate" xml:space="preserve">
     <value>The specified source file "{0}" for the configuration file transformation was not found.</value>
   </data>
+  <data name="TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate" xml:space="preserve">
+    <value>Transformation failed because the source file "{0}" could not be read.</value>
+  </data>
+  <data name="TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate" xml:space="preserve">
+    <value>Transformation failed because the transformation file "{0}" could not be read.</value>
+  </data>
   <data name="TransformationFailedMessage" xml:space="preserve">
     <value>The configuration file transformation failed.</value>
   </data>

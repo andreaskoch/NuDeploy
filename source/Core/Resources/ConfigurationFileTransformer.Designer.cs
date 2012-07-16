@@ -151,6 +151,24 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transformation failed because the source file &quot;{0}&quot; could not be read..
+        /// </summary>
+        internal static string TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate {
+            get {
+                return ResourceManager.GetString("TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transformation failed because the transformation file &quot;{0}&quot; could not be read..
+        /// </summary>
+        internal static string TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate {
+            get {
+                return ResourceManager.GetString("TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The configuration file transformation failed..
         /// </summary>
         internal static string TransformationFailedMessage {

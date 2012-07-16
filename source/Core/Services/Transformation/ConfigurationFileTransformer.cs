@@ -78,8 +78,24 @@ namespace NuDeploy.Core.Services.Transformation
                     destinationFilePath));
 
             XmlTransformableDocument transformableDocument = this.GetSourceFile(sourceFilePath);
+            if (transformableDocument == null)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(Resources.ConfigurationFileTransformer.TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate, sourceFilePath));
 
-            bool transformationWasSuccessfull = this.GetTransformationFile(transformationFilePath).Apply(transformableDocument);
+                return false;
+            }
+
+            XmlTransformation transformationFile = this.GetTransformationFile(transformationFilePath);
+            if (transformationFile == null)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(Resources.ConfigurationFileTransformer.TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate, sourceFilePath));
+
+                return false;                
+            }
+
+            bool transformationWasSuccessfull = transformationFile.Apply(transformableDocument);
             if (transformationWasSuccessfull)
             {
                 if (this.SaveTransformedFile(transformableDocument, destinationFilePath))
@@ -93,7 +109,7 @@ namespace NuDeploy.Core.Services.Transformation
 
                     return true;
                 }
-            }
+            }                
 
             this.userInterface.WriteLine(Resources.ConfigurationFileTransformer.TransformationFailedMessage);
             return false;
