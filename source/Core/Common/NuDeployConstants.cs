@@ -15,5 +15,9 @@ namespace NuDeploy.Core.Common
         public static readonly string CommonCommandOptionNameForce = "Force";
 
         public static readonly char MultiValueSeperator = ',';
+
+        public const char NamespaceSeperator = '.';
+
+        public const string PathSeperator = @"\";
     }
 }
