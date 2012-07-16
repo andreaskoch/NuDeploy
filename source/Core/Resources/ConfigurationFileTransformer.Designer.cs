@@ -151,6 +151,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred during the XML transformation (Source: {0}, Tranformation: {1}, Destination: {2}). {3}.
+        /// </summary>
+        internal static string TransformationExceptionMessageTemplate {
+            get {
+                return ResourceManager.GetString("TransformationExceptionMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Transformation failed because the source file &quot;{0}&quot; could not be read..
         /// </summary>
         internal static string TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate {

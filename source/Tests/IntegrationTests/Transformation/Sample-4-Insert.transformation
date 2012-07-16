@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+  <SomeSetting>
+    <value name="inserted-key" attribute1="inserted-value1"  attribute2="inserted-value2" attribute3="inserted-value3" xdt:Transform="Insert" />
+  </SomeSetting>  
+
+</configuration>

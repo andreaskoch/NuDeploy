@@ -303,6 +303,47 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             Assert.IsTrue(destinationFileContent.ToString().Contains(uniqueString));
         }
 
+        [Test]
+        public void Transform_SourceFileIsValid_TransformationFileIsValid_DestinationPathIsCreated()
+        {
+            // Arrange
+            bool ensurePathExistsIsCalled = false;
+
+            string sourceFilePath = "source.config";
+            var transformationFilePath = "transform.config";
+            var destinationFilePath = Path.Combine("some", "very", "nested", "folder", "structure", "destination.config");
+
+            string sourceFileContent = "<configuration><appSettings><add key=\"Key1\" value=\"Not-Transformed\"/></appSettings></configuration>";
+            string transformationFileContent = "<configuration xmlns:xdt=\"http://schemas.microsoft.com/XML-Document-Transform\"><appSettings xdt:Transform=\"Replace\"><add key=\"Key1\" value=\"transformed\"/></appSettings></configuration>";
+
+            var userInterfaceMock = new Mock<IUserInterface>();
+            var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
+            filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
+            filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
+
+            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => this.GetStreamReaderForText(sourceFileContent));
+            filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Returns(transformationFileContent);
+
+            filesystemAccessorMock.Setup(f => f.EnsureParentDirectoryExists(destinationFilePath)).Returns(
+                () =>
+                    {
+                        ensurePathExistsIsCalled = true;
+                        return true;
+                    });
+
+            var destinationFileContent = new StringBuilder();
+            var stringWriter = new StringWriter(destinationFileContent);
+            filesystemAccessorMock.Setup(f => f.GetTextWriter(destinationFilePath)).Returns(stringWriter);
+
+            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+
+            // Act
+            configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+
+            // Assert
+            Assert.IsTrue(ensurePathExistsIsCalled);
+        }
+
         #endregion
 
         #region Utility Methods

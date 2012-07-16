@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+  <IIS>
+
+    <Sites>
+
+      <Site xdt:Locator="XPath(/configuration/IIS/Sites/Site[@Name='Site A'])">
+        <Bindings>
+          <Binding Protocol="http" IPAddress="TransformedIp-Site-A" xdt:Locator="Match(Protocol)" xdt:Transform="SetAttributes(IPAddress)" />
+        </Bindings>
+      </Site>
+
+      <Site xdt:Locator="XPath(/configuration/IIS/Sites/Site[@Name='Site B'])">
+        <Bindings>
+          <Binding Protocol="http" IPAddress="TransformedIp-Site-B" xdt:Locator="Match(Protocol)" xdt:Transform="SetAttributes(IPAddress)" />
+        </Bindings>
+      </Site>
+
+    </Sites>
+
+  </IIS>
+
+</configuration>

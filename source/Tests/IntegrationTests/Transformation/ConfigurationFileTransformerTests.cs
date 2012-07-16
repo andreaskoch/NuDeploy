@@ -44,6 +44,9 @@ namespace NuDeploy.Tests.IntegrationTests.Transformation
 
         [TestCase("Sample-1-SetAttribute.source", "Sample-1-SetAttribute.transformation", "SetSingleAttribute")]
         [TestCase("Sample-2-SetAttributes.source", "Sample-2-SetAttributes.transformation", "SetMultipleAttributes")]
+        [TestCase("Sample-3-Remove.source", "Sample-3-Remove.transformation", "Remove")]
+        [TestCase("Sample-4-Insert.source", "Sample-4-Insert.transformation", "Insert")]
+        [TestCase("Sample-5-XPath.source", "Sample-5-XPath.transformation", "XPath")]
         public void Transform_SetAttributes_ResultIsTrue_DestinationFileIsCreated(string sourceFileName, string transformationFileName, string destinationPreFix)
         {
             // Arrange
@@ -62,6 +65,96 @@ namespace NuDeploy.Tests.IntegrationTests.Transformation
             Assert.IsTrue(result);
             Assert.IsTrue(File.Exists(destinationFilePath));
             Assert.AreNotEqual(sourceFileContent, destinationFileContent);
+        }
+
+        [Test]
+        public void Transform_DestinationFileExist_ResultIsTrue_DestinationFileIsOverriden()
+        {
+            // Arrange
+            string sourceFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.source");
+            var transformationFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.transformation");
+            var destinationFilePath = this.GetTempFolderPath("destination.config");
+
+            string destinationFileContent = Guid.NewGuid().ToString();
+            File.WriteAllText(destinationFilePath, destinationFileContent);
+
+            // Act
+            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+
+            // Assert
+            string newDestinationFileContent = File.ReadAllText(destinationFilePath);
+            Assert.IsTrue(result);
+            Assert.AreNotEqual(destinationFileContent, newDestinationFileContent);
+        }
+
+        [Test]
+        public void Transform_TransformationFails_ResultIsFalse_DestinationFileIsNotCreated()
+        {
+            // Arrange
+            string sourceFilePath = this.GetSourceFilePath("Sample-6-Invalid-XPath.source");
+            var transformationFilePath = this.GetSourceFilePath("Sample-6-Invalid-XPath.transformation");
+            var destinationFilePath = this.GetTempFolderPath("destination.config");
+
+            // Act
+            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+
+            // Assert
+            Assert.IsFalse(result);
+            Assert.IsFalse(File.Exists(destinationFilePath));
+        }
+
+        [Test]
+        public void Transform_ResultIsTrue_DestinationFilePathIsCreated()
+        {
+            // Arrange
+            string sourceFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.source");
+            var transformationFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.transformation");
+            var destinationFilePath = this.GetTempFolderPath(Path.Combine("some", "very", "nested", "folder", "structure", "destination.config"));
+
+            // Act
+            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+
+            // Assert
+            Assert.IsTrue(result);
+            Assert.IsTrue(File.Exists(destinationFilePath));
+        }
+
+        [Test]
+        public void Transform_DestinationFileIsBeingRead_ResultIsFalse()
+        {
+            // Arrange
+            string sourceFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.source");
+            var transformationFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.transformation");
+            var destinationFilePath = this.GetTempFolderPath("destination.config");
+
+            File.WriteAllText(destinationFilePath, Guid.NewGuid().ToString());
+            var reader = new StreamReader(destinationFilePath);
+
+            // Act
+            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+
+            // Assert
+            reader.Close();
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Transform_DestinationFileIsBeingWrittenTo_ResultIsFalse()
+        {
+            // Arrange
+            string sourceFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.source");
+            var transformationFilePath = this.GetSourceFilePath("Sample-1-SetAttribute.transformation");
+            var destinationFilePath = this.GetTempFolderPath("destination.config");
+
+            File.WriteAllText(destinationFilePath, Guid.NewGuid().ToString());
+            var writer = new StreamWriter(destinationFilePath);
+
+            // Act
+            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+
+            // Assert
+            writer.Close();
+            Assert.IsFalse(result);
         }
 
         #endregion

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+
+  <IIS>
+
+    <Sites>
+
+      <Site Name="Site A">
+
+        <Bindings>
+          <Binding Protocol="http" IPAddress="10.0.0.10" Port="80" HostHeader="dev.example.com" />
+          <Binding Protocol="https" IPAddress="10.0.0.10" Port="443" HostHeader="dev.example.com" />
+        </Bindings>
+        
+      </Site>
+
+      <Site Name="Site B">
+
+        <Bindings>
+          <Binding Protocol="http" IPAddress="10.0.0.10" Port="80" HostHeader="dev.services.com" />
+          <Binding Protocol="https" IPAddress="10.0.0.10" Port="443" HostHeader="dev.services.com" />
+        </Bindings>
+
+      </Site>
+
+    </Sites>
+  </IIS>
+
+</configuration>

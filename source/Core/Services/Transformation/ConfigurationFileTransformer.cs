@@ -77,6 +77,7 @@ namespace NuDeploy.Core.Services.Transformation
                     transformationFilePath,
                     destinationFilePath));
 
+            // read source document
             XmlTransformableDocument transformableDocument = this.GetSourceFile(sourceFilePath);
             if (transformableDocument == null)
             {
@@ -86,6 +87,7 @@ namespace NuDeploy.Core.Services.Transformation
                 return false;
             }
 
+            // read transformation document
             XmlTransformation transformationFile = this.GetTransformationFile(transformationFilePath);
             if (transformationFile == null)
             {
@@ -95,21 +97,36 @@ namespace NuDeploy.Core.Services.Transformation
                 return false;                
             }
 
-            bool transformationWasSuccessfull = transformationFile.Apply(transformableDocument);
-            if (transformationWasSuccessfull)
+            // transform
+            try
             {
-                if (this.SaveTransformedFile(transformableDocument, destinationFilePath))
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            Resources.ConfigurationFileTransformer.TransformationSuccessMessageTemplate,
-                            sourceFilePath,
-                            transformationFilePath,
-                            destinationFilePath));
+                transformationFile.Apply(transformableDocument);
+            }
+            catch (Exception transformationException)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        Resources.ConfigurationFileTransformer.TransformationExceptionMessageTemplate,
+                        sourceFilePath,
+                        transformationFilePath,
+                        destinationFilePath,
+                        transformationException));
 
-                    return true;
-                }
-            }                
+                return false;
+            }
+
+            // save
+            if (this.SaveTransformedFile(transformableDocument, destinationFilePath))
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        Resources.ConfigurationFileTransformer.TransformationSuccessMessageTemplate,
+                        sourceFilePath,
+                        transformationFilePath,
+                        destinationFilePath));
+
+                return true;
+            }
 
             this.userInterface.WriteLine(Resources.ConfigurationFileTransformer.TransformationFailedMessage);
             return false;
@@ -192,6 +209,7 @@ namespace NuDeploy.Core.Services.Transformation
                     this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.DestinationFileAlreadyExistsMessageTemplate, destinationFilePath));
                 }
 
+                this.filesystemAccessor.EnsureParentDirectoryExists(destinationFilePath);
                 using (var textWriter = this.filesystemAccessor.GetTextWriter(destinationFilePath))
                 {
                     transformedDocument.Save(textWriter);

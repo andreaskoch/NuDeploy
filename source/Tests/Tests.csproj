@@ -112,11 +112,40 @@
     <None Include="IntegrationTests\PowerShell\TestScript-01-ReturnResults.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="IntegrationTests\Transformation\Sample-6-Invalid-XPath.source">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-6-Invalid-XPath.transformation">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-5-XPath.source">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-5-XPath.transformation">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-4-Insert.source">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-4-Insert.transformation">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-3-Remove.source">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-3-Remove.transformation">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="IntegrationTests\Transformation\Sample-2-SetAttributes.source">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="IntegrationTests\Transformation\Sample-2-SetAttributes.transformation">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="IntegrationTests\Transformation\Sample-1-SetAttribute.transformation">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
