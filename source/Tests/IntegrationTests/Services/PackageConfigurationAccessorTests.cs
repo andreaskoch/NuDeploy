@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -206,6 +207,17 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         #region AddOrUpdate
 
         [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddOrUpdate_PackageInfoIsNull_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            PackageInfo newPackage = null;
+
+            // Act
+            this.packageConfigurationAccessor.AddOrUpdate(newPackage);
+        }
+
+        [Test]
         public void AddOrUpdate_ConfigFileDoesNotExist_NewPackage_ResultContainsTheNewEntry()
         {
             // Arrange
@@ -340,6 +352,16 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         #endregion
 
         #region Remove
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Remove_PackageIdIsInvalid_ArgumentExceptionIsThrown(string packageId)
+        {
+            // Act
+            this.packageConfigurationAccessor.Remove(packageId);
+        }
 
         [Test]
         public void Remove_ConfigFileContainsThreeEntries_LastEntryIsRemoved_ResultContainsOnlyTwoEntries()

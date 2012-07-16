@@ -40,7 +40,7 @@ namespace NuDeploy.Core.Services.Installation
         {
             if (packageInfo == null)
             {
-                return;
+                throw new ArgumentNullException("packageInfo");
             }
 
             if (!packageInfo.IsValid)
@@ -76,7 +76,7 @@ namespace NuDeploy.Core.Services.Installation
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
-                return;
+                throw new ArgumentException("packageId");
             }
 
             var packages = this.Load().Where(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase) == false).ToArray();
