@@ -56,6 +56,7 @@
     <Compile Include="IntegrationTests\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
+    <Compile Include="IntegrationTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
     <Compile Include="IntegrationTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="IntegrationTests\Repositories\PackageRepositoryBrowserTests.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
+    <Compile Include="UnitTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryFactoryTests.cs" />

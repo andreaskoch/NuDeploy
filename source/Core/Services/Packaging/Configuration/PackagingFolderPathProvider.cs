@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -13,13 +14,23 @@ namespace NuDeploy.Core.Services.Packaging.Configuration
 
         public PackagingFolderPathProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
         }
 
         public string GetPackagingFolderPath()
         {
-            string packagingFolder = Path.GetFullPath(this.applicationInformation.PackagingFolder);
+            string packagingFolder = this.applicationInformation.PackagingFolder;
 
             if (!this.filesystemAccessor.DirectoryExists(packagingFolder))
             {
