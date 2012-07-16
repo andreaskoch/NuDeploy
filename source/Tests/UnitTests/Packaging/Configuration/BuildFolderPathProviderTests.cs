@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
 {
     [TestFixture]
-    public class PrePackagingFolderPathProviderTests
+    public class BuildFolderPathProviderTests
     {
         #region Constructor
 
@@ -23,7 +23,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
             IFilesystemAccessor filesystemAccessor = new Mock<IFilesystemAccessor>().Object;
 
             // Act
-            var result = new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessor);
+            var result = new BuildFolderPathProvider(applicationInformation, filesystemAccessor);
 
             // Arrange
             Assert.IsNotNull(result);
@@ -38,7 +38,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
             IFilesystemAccessor filesystemAccessor = new Mock<IFilesystemAccessor>().Object;
 
             // Act
-            new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessor);
+            new BuildFolderPathProvider(applicationInformation, filesystemAccessor);
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
             IFilesystemAccessor filesystemAccessor = null;
 
             // Act
-            new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessor);
+            new BuildFolderPathProvider(applicationInformation, filesystemAccessor);
         }
 
         #endregion
@@ -58,24 +58,24 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
         #region GetPackagingFolderPath
 
         [Test]
-        public void GetPrePackagingFolderPath_ResultEqulsFolderSpecifiedByTheApplicationInformationPrePackagingFolderProperty()
+        public void GetBuildFolderPath_ResultEqulsFolderSpecifiedByTheApplicationInformationPrePackagingFolderProperty()
         {
             // Arrange
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.DirectoryExists(It.IsAny<string>())).Returns(true);
 
-            var prePackagingFolderPathProvider = new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
+            var buildFolderPathProvider = new BuildFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
 
             // Act
-            var result = prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            var result = buildFolderPathProvider.GetBuildFolderPath();
 
             // Assert
-            Assert.AreEqual(applicationInformation.PrePackagingFolder, result);
+            Assert.AreEqual(applicationInformation.BuildFolder, result);
         }
 
         [Test]
-        public void GetPrePackagingFolderPath_DirectoryExistsIsCalled()
+        public void GetBuildFolderPath_DirectoryExistsIsCalled()
         {
             // Arrange
             bool directoryExistsGotCalled = false;
@@ -83,24 +83,24 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
-            filesystemAccessorMock.Setup(f => f.DirectoryExists(applicationInformation.PrePackagingFolder)).Returns(
+            filesystemAccessorMock.Setup(f => f.DirectoryExists(applicationInformation.BuildFolder)).Returns(
                 () =>
                     {
                         directoryExistsGotCalled = true;
                         return true;
                     });
 
-            var prePackagingFolderPathProvider = new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
+            var buildFolderPathProvider = new BuildFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
 
             // Act
-            prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            buildFolderPathProvider.GetBuildFolderPath();
 
             // Assert
             Assert.IsTrue(directoryExistsGotCalled);
         }
 
         [Test]
-        public void GetPrePackagingFolderPath_FolderIsCreatedIfItDoesNotExist()
+        public void GetBuildFolderPath_FolderIsCreatedIfItDoesNotExist()
         {
             // Arrange
             bool createDirectoryGotCalled = false;
@@ -108,25 +108,25 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
-            filesystemAccessorMock.Setup(f => f.DirectoryExists(applicationInformation.PrePackagingFolder)).Returns(false);
-            filesystemAccessorMock.Setup(f => f.CreateDirectory(applicationInformation.PrePackagingFolder)).Returns(
+            filesystemAccessorMock.Setup(f => f.DirectoryExists(applicationInformation.BuildFolder)).Returns(false);
+            filesystemAccessorMock.Setup(f => f.CreateDirectory(applicationInformation.BuildFolder)).Returns(
                 () =>
                     {
                         createDirectoryGotCalled = true;
                         return true;
                     });
 
-            var prePackagingFolderPathProvider = new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
+            var buildFolderPathProvider = new BuildFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
 
             // Act
-            prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            buildFolderPathProvider.GetBuildFolderPath();
 
             // Assert
             Assert.IsTrue(createDirectoryGotCalled);
         }
 
         [Test]
-        public void GetPrePackagingFolderPath_FolderExists_FolderIsDeletedAndThenCreated()
+        public void GetBuildFolderPath_FolderExists_FolderIsDeletedAndThenCreated()
         {
             // Arrange
             bool deleteDirectoryGotCalled = false;
@@ -135,24 +135,24 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Configuration
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
-            filesystemAccessorMock.Setup(f => f.DirectoryExists(applicationInformation.PrePackagingFolder)).Returns(true);
-            filesystemAccessorMock.Setup(f => f.DeleteDirectory(applicationInformation.PrePackagingFolder)).Returns(
+            filesystemAccessorMock.Setup(f => f.DirectoryExists(applicationInformation.BuildFolder)).Returns(true);
+            filesystemAccessorMock.Setup(f => f.DeleteDirectory(applicationInformation.BuildFolder)).Returns(
                 () =>
                 {
                     deleteDirectoryGotCalled = true;
                     return true;
                 });
-            filesystemAccessorMock.Setup(f => f.CreateDirectory(applicationInformation.PrePackagingFolder)).Returns(
+            filesystemAccessorMock.Setup(f => f.CreateDirectory(applicationInformation.BuildFolder)).Returns(
                 () =>
                 {
                     createDirectoryGotCalled = true;
                     return true;
                 });
 
-            var prePackagingFolderPathProvider = new PrePackagingFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
+            var buildFolderPathProvider = new BuildFolderPathProvider(applicationInformation, filesystemAccessorMock.Object);
 
             // Act
-            prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            buildFolderPathProvider.GetBuildFolderPath();
 
             // Assert
             Assert.IsTrue(deleteDirectoryGotCalled);

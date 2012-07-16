@@ -4,6 +4,7 @@ using System.IO;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 
 using NUnit.Framework;
@@ -11,26 +12,26 @@ using NUnit.Framework;
 namespace NuDeploy.Tests.IntegrationTests.Packaging.Configuration
 {
     [TestFixture]
-    public class PrePackagingFolderPathProviderTests
+    public class BuildFolderPathProviderTests
     {
         private ApplicationInformation applicationInformation;
 
         private IFilesystemAccessor fileSystemAccessor;
 
-        private IPrePackagingFolderPathProvider prePackagingFolderPathProvider;
+        private IBuildFolderPathProvider buildFolderPathProvider;
 
         [TestFixtureSetUp]
         public void Setup()
         {
             this.applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
             this.fileSystemAccessor = new PhysicalFilesystemAccessor(new DefaultFileEncodingProvider());
-            this.prePackagingFolderPathProvider = new PrePackagingFolderPathProvider(this.applicationInformation, this.fileSystemAccessor);
+            this.buildFolderPathProvider = new BuildFolderPathProvider(this.applicationInformation, this.fileSystemAccessor);
         }
 
         [SetUp]
         public void BeforeEachTest()
         {
-            string tempFolderPath = this.applicationInformation.PrePackagingFolder;
+            string tempFolderPath = this.applicationInformation.BuildFolder;
 
             if (Directory.Exists(tempFolderPath))
             {
@@ -38,29 +39,29 @@ namespace NuDeploy.Tests.IntegrationTests.Packaging.Configuration
             }
         }
 
-        #region GetPrePackagingFolderPath
+        #region GetBuildFolderPath
 
         [Test]
-        public void GetPrePackagingFolderPath_FolderDoesNotExist_FolderIsCreated()
+        public void GetBuildFolderPath_FolderDoesNotExist_FolderIsCreated()
         {
             // Act
-            var result = this.prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            var result = this.buildFolderPathProvider.GetBuildFolderPath();
 
             // Assert
             Assert.IsTrue(Directory.Exists(result));
         }
 
         [Test]
-        public void GetPrePackagingFolderPath_FolderExists_FolderIsDeletedAndRecreated()
+        public void GetBuildFolderPath_FolderExists_FolderIsDeletedAndRecreated()
         {
             // Arrange
-            var prePackagingFolderPath = this.prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            var buildFolderPath = this.buildFolderPathProvider.GetBuildFolderPath();
 
-            string tempFile = Path.Combine(prePackagingFolderPath, "temp.txt");
+            string tempFile = Path.Combine(buildFolderPath, "temp.txt");
             File.WriteAllText(tempFile, Guid.NewGuid().ToString());
 
             // Act
-            var result = this.prePackagingFolderPathProvider.GetPrePackagingFolderPath();
+            var result = this.buildFolderPathProvider.GetBuildFolderPath();
 
             // Assert
             Assert.IsTrue(Directory.Exists(result));

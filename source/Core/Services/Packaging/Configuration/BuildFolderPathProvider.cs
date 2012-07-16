@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -14,6 +15,16 @@ namespace NuDeploy.Core.Services.Packaging.Configuration
 
         public BuildFolderPathProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
         }
