@@ -21,7 +21,7 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         public void Setup()
         {
             this.encodingProvider = new DefaultFileEncodingProvider();
-            this.filesystemAccessor = new PhysicalFilesystemAccessor( this.encodingProvider);
+            this.filesystemAccessor = new PhysicalFilesystemAccessor(this.encodingProvider);
         }
 
         [SetUp]

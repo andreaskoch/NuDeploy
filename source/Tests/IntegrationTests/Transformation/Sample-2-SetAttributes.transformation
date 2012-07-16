@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+
+  <SomeSetting>
+    <value name="key" attribute1="value1-transformed"  attribute2="value2-transformed" xdt:Transform="SetAttributes(attribute1,attribute2)" xdt:Locator="Match(name)" />
+  </SomeSetting>  
+
+</configuration>

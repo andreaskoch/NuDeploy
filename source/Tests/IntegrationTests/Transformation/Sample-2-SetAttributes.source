@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+
+  <SomeSetting>
+    <value name="key" attribute1="value1"  attribute2="value2" attribute3="value3" />
+  </SomeSetting>
+
+</configuration>

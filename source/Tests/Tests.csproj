@@ -112,6 +112,18 @@
     <None Include="IntegrationTests\PowerShell\TestScript-01-ReturnResults.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="IntegrationTests\Transformation\Sample-2-SetAttributes.source">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-2-SetAttributes.transformation">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-1-SetAttribute.transformation">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\Sample-1-SetAttribute.source">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
