@@ -10,6 +10,11 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 
         public PackageRepositoryFactory(Func<Uri, IHttpClient> httpClientFactory)
         {
+            if (httpClientFactory == null)
+            {
+                throw new ArgumentNullException("httpClientFactory");
+            }
+
             this.httpClientFactory = httpClientFactory;
         }
 
@@ -23,9 +28,9 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 
         public virtual IPackageRepository CreateRepository(string packageSource)
         {
-            if (packageSource == null)
+            if (string.IsNullOrWhiteSpace(packageSource))
             {
-                throw new ArgumentNullException("packageSource");
+                throw new ArgumentException("packageSource");
             }
 
             var uri = new Uri(packageSource);
@@ -35,7 +40,6 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             }
 
             var client = this.HttpClientFactory(uri);
-
             return new DataServicePackageRepository(client);
         }
     }

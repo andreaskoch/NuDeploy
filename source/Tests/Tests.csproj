@@ -77,6 +77,7 @@
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
+    <Compile Include="UnitTests\Repositories\PackageRepositoryFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
