@@ -16,6 +16,16 @@ namespace NuDeploy.Core.Services.Transformation
 
         public ConfigurationFileTransformer(IUserInterface userInterface, IFilesystemAccessor filesystemAccessor)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.userInterface = userInterface;
             this.filesystemAccessor = filesystemAccessor;
         }
