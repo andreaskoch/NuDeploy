@@ -17,6 +17,8 @@ namespace NuDeploy.Tests.UnitTests.Common
             this.consoleTextManipulation = new ConsoleTextManipulation();
         }
 
+        #region WrapText
+
         [Test]
         public void WrapText_SingleLine_ResultEqualsInput()
         {
@@ -46,6 +48,68 @@ namespace NuDeploy.Tests.UnitTests.Common
             Assert.AreEqual(expectedResult, result);
         }
 
+        [Test]
+        public void WrapText_MultiLineWithoutWhitespace_ResultWrappedAtMaxLengthText()
+        {
+            // Arrange
+            string text = "LoremIpsumDolorSitAmetConseteturSadipscing";
+            int maxWidth = 20;
+
+            // Act
+            string result = this.consoleTextManipulation.WrapText(text, maxWidth);
+
+            // Assert
+            string expectedResult = "LoremIpsumDolorSitAm" + Environment.NewLine + "etConseteturSadipsci" + Environment.NewLine + "ng";
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WrapText_MultiLine_TextIsAlreadyWrappedProperly_ResultIsAsInput()
+        {
+            // Arrange
+            string text = "Lorem ipsum dolor sit amet" + Environment.NewLine + " consetetur sadipscing";
+            int maxWidth = 30;
+
+            // Act
+            string result = this.consoleTextManipulation.WrapText(text, maxWidth);
+
+            // Assert
+            Assert.AreEqual(text, result);
+        }
+
+        [Test]
+        public void WrapText_MultiLine_TextIsAlreadyWrapped_ButNotProperly_ResultIsWrappedProperly()
+        {
+            // Arrange
+            string text = "Lorem ipsum dolor sit amet" + Environment.NewLine + " consetetur sadipscing";
+            int maxWidth = 15;
+
+            // Act
+            string result = this.consoleTextManipulation.WrapText(text, maxWidth);
+
+            // Assert
+            string expectedResult = "Lorem ipsum" + Environment.NewLine + "dolor sit amet" + Environment.NewLine + " consetetur" + Environment.NewLine + "sadipscing";
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase(0)]
+        [TestCase(-10)]
+        public void WrapText_InvalidMaxWidth_TextIsReturnedAsIs(int maxWidth)
+        {
+            // Arrange
+            string text = "Lorem ipsum dolor sit amet consetetur sadipscing";
+
+            // Act
+            string result = this.consoleTextManipulation.WrapText(text, maxWidth);
+
+            // Assert
+            Assert.AreEqual(text, result);
+        }
+
+        #endregion
+
+        #region IndentText
+        
         [Test]
         public void IndentText_SingleLine_ResultIsTextWithWhitespaceAtTheBeginning()
         {
@@ -78,6 +142,10 @@ namespace NuDeploy.Tests.UnitTests.Common
             Assert.AreEqual(expectedResult, result);
         }
 
+        #endregion
+
+        #region WrapLongTextWithHangingIndentation
+
         [Test]
         public void WrapLongTextWithHangingIndentation_SingleLine_ResultIsLikeInput()
         {
@@ -109,5 +177,7 @@ namespace NuDeploy.Tests.UnitTests.Common
             string expectedResult = "Lorem ipsum dolor sit" + Environment.NewLine + indentationString + "amet consetetur sadipscing";
             Assert.AreEqual(expectedResult, result);
         }
+
+        #endregion
     }
 }
