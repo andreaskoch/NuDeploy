@@ -1,4 +1,4 @@
-using System.IO;
+using System;
 
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
@@ -13,13 +13,23 @@ namespace NuDeploy.Core.Services.Packaging.Configuration
 
         public PrePackagingFolderPathProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
         }
 
         public string GetPrePackagingFolderPath()
         {
-            string prePackagingFolder = Path.GetFullPath(this.applicationInformation.PrePackagingFolder);
+            string prePackagingFolder = this.applicationInformation.PrePackagingFolder;
 
             // create folder if it does not exist
             if (this.filesystemAccessor.DirectoryExists(prePackagingFolder) == false)
