@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 
 namespace NuDeploy.Core.Common.FilesystemAccess
@@ -29,6 +30,8 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         #endregion
 
         #region directory access
+
+        IEnumerable<DirectoryInfo> GetSubDirectories(string path);
 
         bool DeleteDirectory(string folderPath);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -1196,6 +1197,52 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         #endregion
 
         #region directory access
+
+        #region GetSubDirectories
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void GetSubDirectories_PathIsInvalid_EmptyListIsReturned(string path)
+        {
+            // Act
+            var result = this.filesystemAccessor.GetSubDirectories(path);
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public void GetSubDirectories_PathDoesNotExist_EmptyListIsReturned()
+        {
+            // Arrange
+            string path = this.GetPath("Non-Existing-Directory");
+
+            // Act
+            var result = this.filesystemAccessor.GetSubDirectories(path);
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public void GetSubDirectories_PathContainsThreeDirectories_ListOfThreeDirectoryInfoObjectsIsReturned()
+        {
+            // Arrange
+            string path = this.CreateDirectory("existing-directory").FullName;
+
+            this.CreateDirectory("existing-directory\\sub1");
+            this.CreateDirectory("existing-directory\\sub2");
+            this.CreateDirectory("existing-directory\\sub3");
+
+            // Act
+            var result = this.filesystemAccessor.GetSubDirectories(path);
+
+            // Assert
+            Assert.AreEqual(3, result.Count());
+        }
+
+        #endregion
 
         #region DirectoryExists
 

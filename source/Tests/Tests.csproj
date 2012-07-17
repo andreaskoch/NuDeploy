@@ -86,6 +86,7 @@
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryFactoryTests.cs" />
+    <Compile Include="UnitTests\Status\InstallationStatusProviderTests.cs" />
     <Compile Include="UnitTests\Transformation\ConfigurationFileTransformerTests.cs" />
   </ItemGroup>
   <ItemGroup>

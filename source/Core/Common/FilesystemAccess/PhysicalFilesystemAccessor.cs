@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using NuDeploy.Core.Common.FileEncoding;
 
@@ -217,6 +219,16 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         #endregion
 
         #region directory access
+
+        public IEnumerable<DirectoryInfo> GetSubDirectories(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !this.DirectoryExists(path))
+            {
+                return new DirectoryInfo[] { };
+            }
+
+            return Directory.GetDirectories(path).Select(d => new DirectoryInfo(d));
+        }
 
         public bool DirectoryExists(string directoryPath)
         {
