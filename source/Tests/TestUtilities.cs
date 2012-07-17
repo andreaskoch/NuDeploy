@@ -8,6 +8,6 @@ namespace NuDeploy.Tests
         public static StreamReader GetStreamReaderForText(string text)
         {
             return new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(text)));
-        }        
+        }
     }
 }

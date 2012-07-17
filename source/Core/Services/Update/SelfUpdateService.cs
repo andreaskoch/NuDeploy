@@ -14,6 +14,8 @@ namespace NuDeploy.Core.Services.Update
 {
     public class SelfUpdateService : ISelfUpdateService
     {
+        private const string BackupFileFileExtension = ".old";
+
         private readonly IUserInterface userInterface;
 
         private readonly ApplicationInformation applicationInformation;
@@ -24,15 +26,45 @@ namespace NuDeploy.Core.Services.Update
 
         public SelfUpdateService(IUserInterface userInterface, ApplicationInformation applicationInformation, IPackageRepositoryBrowser packageRepositoryBrowser, IFilesystemAccessor filesystemAccessor)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (packageRepositoryBrowser == null)
+            {
+                throw new ArgumentNullException("packageRepositoryBrowser");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.userInterface = userInterface;
             this.applicationInformation = applicationInformation;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
             this.filesystemAccessor = filesystemAccessor;
         }
 
-        public void SelfUpdate(string exePath, Version version)
+        public bool SelfUpdate(string exePath, Version version)
         {
-            var nugetVersion = new SemanticVersion(version);
+            if (string.IsNullOrWhiteSpace(exePath))
+            {
+                throw new ArgumentException("exePath");
+            }
+
+            if (version == null)
+            {
+                throw new ArgumentNullException("version");
+            }
+
+            var currentPackageVersion = new SemanticVersion(version);
 
             string selfUpdateMessage = string.Format(
                 Resources.SelfUpdateCommand.SelfupdateMessageTemplate,
@@ -43,26 +75,26 @@ namespace NuDeploy.Core.Services.Update
 
             // fetch package
             IPackageRepository packageRepository;
-            IPackage package = this.packageRepositoryBrowser.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId, out packageRepository);
-            if (package == null)
+            IPackage updatePackage = this.packageRepositoryBrowser.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId, out packageRepository);
+            if (updatePackage == null)
             {
                 this.userInterface.WriteLine(Resources.SelfUpdateCommand.PackageNotFound);
-                return;
+                return false;
             }
 
             // version check
             this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.CurrentVersionTemplate, this.applicationInformation.NameOfExecutable, version));
-            if (nugetVersion >= package.Version)
+            if (currentPackageVersion >= updatePackage.Version)
             {
                 this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.NoUpdateRequiredMessageTemplate, this.applicationInformation.NameOfExecutable));
-                return;
+                return false;
             }
 
             // update
-            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, package.Version));
+            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, updatePackage.Version));
 
             IPackageFile executable =
-                package.GetFiles().FirstOrDefault(
+                updatePackage.GetFiles().FirstOrDefault(
                     file =>
                         {
                             var fileName = Path.GetFileName(file.Path);
@@ -76,23 +108,45 @@ namespace NuDeploy.Core.Services.Update
                         Resources.SelfUpdateCommand.ExecutableNotFoundInPackageMessageTemplate,
                         NuDeployConstants.NuDeployCommandLinePackageId,
                         this.applicationInformation.NameOfExecutable));
+
+                return false;
             }
 
             // Get the exe path and move it to a temp file (NuGet.exe.old) so we can replace the running exe with the bits we got from the package repository
-            string renamedPath = exePath + ".old";
+            string renamedPath = exePath + BackupFileFileExtension;
             this.filesystemAccessor.MoveFile(exePath, renamedPath);
 
             // Update the file
-            this.UpdateFile(exePath, executable);
+            if (!this.UpdateFile(exePath, executable))
+            {
+                this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.UpdateFailedMessageTemplate, exePath));
+                return false;
+            }
 
             this.userInterface.WriteLine(Resources.SelfUpdateCommand.UpdateSuccessful);
+            return true;
         }
 
-        private void UpdateFile(string exePath, IPackageFile file)
+        private bool UpdateFile(string exePath, IPackageFile file)
         {
-            using (Stream fromStream = file.GetStream(), toStream = this.filesystemAccessor.GetWriteStream(exePath))
+            using (Stream fromStream = file.GetStream())
             {
-                fromStream.CopyTo(toStream);
+                if (fromStream == null)
+                {
+                    return false;
+                }
+
+                using (Stream toStream = this.filesystemAccessor.GetWriteStream(exePath))
+                {
+                    if (toStream == null)
+                    {
+                        return false;
+                    }
+
+                    fromStream.CopyTo(toStream);
+
+                    return true;
+                }
             }
         }
     }

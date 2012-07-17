@@ -124,6 +124,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updating the application &quot;{0}&quot; failed..
+        /// </summary>
+        internal static string UpdateFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("UpdateFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating {0} to {1}..
         /// </summary>
         internal static string UpdateMessageTemplate {
