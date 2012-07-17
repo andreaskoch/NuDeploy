@@ -90,7 +90,7 @@ namespace NuDeploy.Core.Services.Update
 
         private void UpdateFile(string exePath, IPackageFile file)
         {
-            using (Stream fromStream = file.GetStream(), toStream = this.filesystemAccessor.GetNewFileStream(exePath))
+            using (Stream fromStream = file.GetStream(), toStream = this.filesystemAccessor.GetWriteStream(exePath))
             {
                 fromStream.CopyTo(toStream);
             }

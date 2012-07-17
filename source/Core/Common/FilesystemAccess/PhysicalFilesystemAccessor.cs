@@ -142,7 +142,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             }
         }
 
-        public Stream GetNewFileStream(string filePath)
+        public Stream GetWriteStream(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
@@ -160,7 +160,7 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             }
         }
 
-        public Stream GetFileStream(string filePath)
+        public Stream GetReadStream(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {

@@ -43,7 +43,7 @@ namespace NuDeploy.Core.Services.AssemblyResourceAccess
                 using (Stream resourceStream = this.assemblyFileResourceProvider.SourceAssembly.GetManifestResourceStream(assemblyFileResourceInfo.ResourceName))
                 {
                     string targetPath = Path.Combine(targetFolder, assemblyFileResourceInfo.ResourcePath);
-                    using (Stream fileStream = this.filesystemAccessor.GetNewFileStream(targetPath))
+                    using (Stream fileStream = this.filesystemAccessor.GetWriteStream(targetPath))
                     {
                         resourceStream.CopyTo(fileStream);
                     }

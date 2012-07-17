@@ -64,7 +64,7 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
             }
 
             // Build package
-            using (Stream nuspecFileStream = this.filesystemAccessor.GetFileStream(nuspecFile.FullName))
+            using (Stream nuspecFileStream = this.filesystemAccessor.GetReadStream(nuspecFile.FullName))
             {
                 if (nuspecFileStream == null)
                 {
@@ -78,7 +78,7 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
                     string nugetPackageFileName = string.Format("{0}.{1}{2}", packageBuilder.Id, packageBuilder.Version, NuGetFileExtension);
                     string nugetPackageFilePath = Path.Combine(packageFolder, nugetPackageFileName);
 
-                    using (Stream outputStream = this.filesystemAccessor.GetNewFileStream(nugetPackageFilePath))
+                    using (Stream outputStream = this.filesystemAccessor.GetWriteStream(nugetPackageFilePath))
                     {
                         if (outputStream == null)
                         {

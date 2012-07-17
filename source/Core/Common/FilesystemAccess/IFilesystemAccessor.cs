@@ -21,9 +21,9 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
         TextWriter GetTextWriter(string filePath);
 
-        Stream GetNewFileStream(string filePath);
+        Stream GetWriteStream(string filePath);
 
-        Stream GetFileStream(string filePath);
+        Stream GetReadStream(string filePath);
 
         bool WriteContentToFile(string content, string filePath);
 

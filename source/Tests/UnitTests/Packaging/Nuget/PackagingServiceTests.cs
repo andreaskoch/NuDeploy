@@ -224,7 +224,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             filesystemAccessorMock.Setup(f => f.DirectoryExists(packagingFolderPath)).Returns(true);
 
             filesystemAccessorMock.Setup(f => f.GetFiles(prePackagingFolderPath)).Returns(new List<FileInfo> { new FileInfo(nuspecFilePath) });
-            filesystemAccessorMock.Setup(f => f.GetFileStream(nuspecFilePath)).Returns(nuspecFileStream);
+            filesystemAccessorMock.Setup(f => f.GetReadStream(nuspecFilePath)).Returns(nuspecFileStream);
 
             var packagingService = new PackagingService(prePackagingFolderPathProviderMock.Object, packagingFolderPathProviderMock.Object, filesystemAccessorMock.Object);
 
@@ -259,7 +259,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             filesystemAccessorMock.Setup(f => f.DirectoryExists(packagingFolderPath)).Returns(true);
 
             filesystemAccessorMock.Setup(f => f.GetFiles(prePackagingFolderPath)).Returns(new List<FileInfo> { new FileInfo(nuspecFilePath) });
-            filesystemAccessorMock.Setup(f => f.GetFileStream(nuspecFilePath)).Returns(nuspecFileStream);
+            filesystemAccessorMock.Setup(f => f.GetReadStream(nuspecFilePath)).Returns(nuspecFileStream);
 
             var packagingService = new PackagingService(prePackagingFolderPathProviderMock.Object, packagingFolderPathProviderMock.Object, filesystemAccessorMock.Object);
 
@@ -298,7 +298,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             filesystemAccessorMock.Setup(f => f.DirectoryExists(packagingFolderPath)).Returns(true);
 
             filesystemAccessorMock.Setup(f => f.GetFiles(prePackagingFolderPath)).Returns(new List<FileInfo> { new FileInfo(nuspecFilePath) });
-            filesystemAccessorMock.Setup(f => f.GetFileStream(nuspecFilePath)).Returns(nuspecFileStream);
+            filesystemAccessorMock.Setup(f => f.GetReadStream(nuspecFilePath)).Returns(nuspecFileStream);
 
             var packagingService = new PackagingService(prePackagingFolderPathProviderMock.Object, packagingFolderPathProviderMock.Object, filesystemAccessorMock.Object);
 
@@ -340,9 +340,9 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             filesystemAccessorMock.Setup(f => f.DirectoryExists(packagingFolderPath)).Returns(true);
 
             filesystemAccessorMock.Setup(f => f.GetFiles(prePackagingFolderPath)).Returns(new List<FileInfo> { new FileInfo(nuspecFilePath) });
-            filesystemAccessorMock.Setup(f => f.GetFileStream(nuspecFilePath)).Returns(nuspecFileStream);
+            filesystemAccessorMock.Setup(f => f.GetReadStream(nuspecFilePath)).Returns(nuspecFileStream);
 
-            filesystemAccessorMock.Setup(f => f.GetNewFileStream(It.IsAny<string>())).Returns(packageStream);
+            filesystemAccessorMock.Setup(f => f.GetWriteStream(It.IsAny<string>())).Returns(packageStream);
 
             var packagingService = new PackagingService(prePackagingFolderPathProviderMock.Object, packagingFolderPathProviderMock.Object, filesystemAccessorMock.Object);
 

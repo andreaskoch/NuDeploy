@@ -855,29 +855,29 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
-        #region GetNewFileStream
+        #region GetWriteStream
 
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public void GetNewFileStream_FilePathIsInvalid_ResultIsNull(string filePath)
+        public void GetWriteStream_FilePathIsInvalid_ResultIsNull(string filePath)
         {
             // Act
-            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+            var stream = this.filesystemAccessor.GetWriteStream(filePath);
 
             // Assert
             Assert.IsNull(stream);
         }
 
         [Test]
-        public void GetNewFileStream_FileExists_ButIsBeingRead_ResultIsNull()
+        public void GetWriteStream_FileExists_ButIsBeingRead_ResultIsNull()
         {
             // Arrange
             string filePath = this.CreateFile("Existing-File.txt").FullName;
             var reader = new StreamReader(filePath);
 
             // Act
-            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+            var stream = this.filesystemAccessor.GetWriteStream(filePath);
 
             // Assert
             Assert.IsNull(stream);
@@ -885,14 +885,14 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetNewFileStream_FileExists_ButIsBeingWrittenTo_ResultIsNull()
+        public void GetWriteStream_FileExists_ButIsBeingWrittenTo_ResultIsNull()
         {
             // Arrange
             string filePath = this.CreateFile("Existing-File.txt").FullName;
             var writer = new StreamWriter(filePath);
 
             // Act
-            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
+            var stream = this.filesystemAccessor.GetWriteStream(filePath);
 
             // Assert
             Assert.IsNull(stream);
@@ -900,13 +900,13 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetNewFileStream_FileDoesNotExist_ResultIsNotNull_FileIsCreated()
+        public void GetWriteStream_FileDoesNotExist_ResultIsNotNull_FileIsCreated()
         {
             // Arrange
             string filePath = this.GetPath("Non-Existing-File.txt");
 
             // Act
-            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            using (var stream = this.filesystemAccessor.GetWriteStream(filePath))
             {
                 // Assert
                 Assert.IsNotNull(stream);
@@ -915,13 +915,13 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetNewFileStream_FileExists_ResultIsNotNull()
+        public void GetWriteStream_FileExists_ResultIsNotNull()
         {
             // Arrange
             string filePath = this.CreateFile("Existing-File.txt").FullName;
 
             // Act
-            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            using (var stream = this.filesystemAccessor.GetWriteStream(filePath))
             {
                 // Assert
                 Assert.IsNotNull(stream);                
@@ -929,14 +929,14 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetNewFileStream_FileExists_StreamReaderReturnsEmptyStringBecauseTheFileIsOverridden()
+        public void GetWriteStream_FileExists_StreamReaderReturnsEmptyStringBecauseTheFileIsOverridden()
         {
             // Arrange
             string filePath = this.CreateFile("Existing-File.txt").FullName;
             string fileContent = this.GetFileContent(filePath);
 
             // Act
-            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            using (var stream = this.filesystemAccessor.GetWriteStream(filePath))
             {
                 TextReader textReader = new StreamReader(stream);
                 string contentReadFromStream = textReader.ReadToEnd();
@@ -949,14 +949,14 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetNewFileStream_FileExists_StreamCanBeWrittenTo_OriginalFileContentIsCompletelyOverridden()
+        public void GetWriteStream_FileExists_StreamCanBeWrittenTo_OriginalFileContentIsCompletelyOverridden()
         {
             // Arrange
             string filePath = this.CreateFile("Existing-File.txt").FullName;
             string oldFileContent = this.GetFileContent(filePath);
 
             // Act
-            using (var stream = this.filesystemAccessor.GetNewFileStream(filePath))
+            using (var stream = this.filesystemAccessor.GetWriteStream(filePath))
             {
                 TextWriter textWriter = new StreamWriter(stream);
                 textWriter.Write("New Content");
@@ -971,42 +971,42 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
-        #region GetFileStream
+        #region GetReadStream
 
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public void GetFileStream_FilePathIsInvalid_ResultIsNull(string filePath)
+        public void GetReadStream_FilePathIsInvalid_ResultIsNull(string filePath)
         {
             // Act
-            var result = this.filesystemAccessor.GetFileStream(filePath);
+            var result = this.filesystemAccessor.GetReadStream(filePath);
 
             // Assert
             Assert.IsNull(result);
         }
 
         [Test]
-        public void GetFileStream_FilePathDoesNotExist_ResultIsNull()
+        public void GetReadStream_FilePathDoesNotExist_ResultIsNull()
         {
             // Arrange
             string filePath = this.GetPath("non-existing-file.txt");
 
             // Act
-            var result = this.filesystemAccessor.GetFileStream(filePath);
+            var result = this.filesystemAccessor.GetReadStream(filePath);
 
             // Assert
             Assert.IsNull(result);
         }
 
         [Test]
-        public void GetFileStream_FilePathExistButIsBeingWrittenTo_ResultIsNull()
+        public void GetReadStream_FilePathExistButIsBeingWrittenTo_ResultIsNull()
         {
             // Arrange
             string filePath = this.CreateFile("existing-file.txt").FullName;
             var writer = new StreamWriter(filePath);
 
             // Act
-            var result = this.filesystemAccessor.GetFileStream(filePath);
+            var result = this.filesystemAccessor.GetReadStream(filePath);
 
             // Assert
             Assert.IsNull(result);
@@ -1014,14 +1014,14 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetFileStream_FilePathExistButIsBeingRead_ResultIsNull()
+        public void GetReadStream_FilePathExistButIsBeingRead_ResultIsNull()
         {
             // Arrange
             string filePath = this.CreateFile("existing-file.txt").FullName;
             var reader = new StreamReader(filePath);
 
             // Act
-            var result = this.filesystemAccessor.GetFileStream(filePath);
+            var result = this.filesystemAccessor.GetReadStream(filePath);
 
             // Assert
             Assert.IsNull(result);
@@ -1029,13 +1029,13 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         }
 
         [Test]
-        public void GetFileStream_FilePathExist_ResultIsNotNull()
+        public void GetReadStream_FilePathExist_ResultIsNotNull()
         {
             // Arrange
             string filePath = this.CreateFile("existing-file.txt").FullName;
 
             // Act
-            var result = this.filesystemAccessor.GetFileStream(filePath);
+            var result = this.filesystemAccessor.GetReadStream(filePath);
 
             // Assert
             Assert.IsNotNull(result);
