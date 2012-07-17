@@ -175,7 +175,7 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
-            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => this.GetStreamReaderForText(sourceFileContent));
+            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
 
             var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
 
@@ -226,7 +226,7 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
 
-            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => this.GetStreamReaderForText(sourceFileContent));
+            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
             filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Returns(transformationFileContent);
 
             var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
@@ -253,7 +253,7 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
 
-            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => this.GetStreamReaderForText(sourceFileContent));
+            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
             filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Throws(new IOException());
 
             var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
@@ -285,7 +285,7 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
 
-            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => this.GetStreamReaderForText(sourceFileContent));
+            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
             filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Returns(transformationFileContent);
 
             var destinationFileContent = new StringBuilder();
@@ -321,7 +321,7 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
 
-            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => this.GetStreamReaderForText(sourceFileContent));
+            filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
             filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Returns(transformationFileContent);
 
             filesystemAccessorMock.Setup(f => f.EnsureParentDirectoryExists(destinationFilePath)).Returns(
@@ -342,15 +342,6 @@ namespace NuDeploy.Tests.UnitTests.Transformation
 
             // Assert
             Assert.IsTrue(ensurePathExistsIsCalled);
-        }
-
-        #endregion
-
-        #region Utility Methods
-
-        private StreamReader GetStreamReaderForText(string text)
-        {
-            return new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(text)));
         }
 
         #endregion

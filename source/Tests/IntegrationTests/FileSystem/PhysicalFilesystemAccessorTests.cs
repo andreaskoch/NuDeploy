@@ -857,38 +857,11 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #region GetNewFileStream
 
-        [Test]
-        public void GetNewFileStream_FilePathIsNull_ResultIsNull()
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void GetNewFileStream_FilePathIsInvalid_ResultIsNull(string filePath)
         {
-            // Arrange
-            string filePath = null;
-
-            // Act
-            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
-
-            // Assert
-            Assert.IsNull(stream);
-        }
-
-        [Test]
-        public void GetNewFileStream_FilePathIsEmpty_ResultIsNull()
-        {
-            // Arrange
-            string filePath = string.Empty;
-
-            // Act
-            var stream = this.filesystemAccessor.GetNewFileStream(filePath);
-
-            // Assert
-            Assert.IsNull(stream);
-        }
-
-        [Test]
-        public void GetNewFileStream_FilePathIsWhitespace_ResultIsNull()
-        {
-            // Arrange
-            string filePath = " ";
-
             // Act
             var stream = this.filesystemAccessor.GetNewFileStream(filePath);
 
@@ -994,6 +967,22 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             string newFileContent = this.GetFileContent(filePath);
             Assert.AreNotEqual(oldFileContent, newFileContent);
             Assert.IsFalse(newFileContent.Contains(oldFileContent));
+        }
+
+        #endregion
+
+        #region GetFileStream
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void GetFileStream_FilePathIsInvalid_ResultIsNull(string filePath)
+        {
+            // Act
+            var result = this.filesystemAccessor.GetFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(result);
         }
 
         #endregion
@@ -1197,6 +1186,52 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
         #endregion
 
         #region directory access
+
+        #region GetFiles
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void GetFiles_PathIsInvalid_EmptyListIsReturned(string path)
+        {
+            // Act
+            var result = this.filesystemAccessor.GetFiles(path);
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public void GetFiles_PathDoesNotExist_EmptyListIsReturned()
+        {
+            // Arrange
+            string path = this.GetPath("Non-Existing-Directory");
+
+            // Act
+            var result = this.filesystemAccessor.GetFiles(path);
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public void GetFiles_PathContainsThreeFiles_ListOfThreeFileInfoObjectsIsReturned()
+        {
+            // Arrange
+            string path = this.CreateDirectory("existing-directory").FullName;
+
+            this.CreateFile("existing-directory\\file1.txt");
+            this.CreateFile("existing-directory\\file2.txt");
+            this.CreateFile("existing-directory\\file3.txt");
+
+            // Act
+            var result = this.filesystemAccessor.GetFiles(path);
+
+            // Assert
+            Assert.AreEqual(3, result.Count());
+        }
+
+        #endregion
 
         #region GetSubDirectories
 

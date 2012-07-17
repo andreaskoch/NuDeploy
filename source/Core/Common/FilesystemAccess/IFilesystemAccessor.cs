@@ -23,6 +23,8 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
         Stream GetNewFileStream(string filePath);
 
+        Stream GetFileStream(string filePath);
+
         bool WriteContentToFile(string content, string filePath);
 
         bool CopyFile(string sourceFilePath, string targetPath);
@@ -30,6 +32,8 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         #endregion
 
         #region directory access
+
+        IEnumerable<FileInfo> GetFiles(string path);
 
         IEnumerable<DirectoryInfo> GetSubDirectories(string path);
 

@@ -160,6 +160,23 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             }
         }
 
+        public Stream GetFileStream(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return null;
+            }
+
+            try
+            {
+                return File.Open(filePath, FileMode.Open, FileAccess.Read);
+            }
+            catch (Exception)
+            {
+                return null;
+            }            
+        }
+
         public bool WriteContentToFile(string content, string filePath)
         {
             if (content == null)
@@ -219,6 +236,16 @@ namespace NuDeploy.Core.Common.FilesystemAccess
         #endregion
 
         #region directory access
+
+        public IEnumerable<FileInfo> GetFiles(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !this.DirectoryExists(path))
+            {
+                return new FileInfo[] { };
+            }
+
+            return Directory.GetFiles(path).Select(filePath => new FileInfo(filePath));
+        }
 
         public IEnumerable<DirectoryInfo> GetSubDirectories(string path)
         {

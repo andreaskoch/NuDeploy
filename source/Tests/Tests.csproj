@@ -66,6 +66,7 @@
     <Compile Include="IntegrationTests\Services\PackageConfigurationAccessorTests.cs" />
     <Compile Include="IntegrationTests\Transformation\ConfigurationFileTransformerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtilities.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyFileResourceInfoTests.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyFileResourceProviderTests.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyResourceFilePathProviderTests.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="UnitTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
+    <Compile Include="UnitTests\Packaging\Nuget\PackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\SolutionPackagingServiceTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
