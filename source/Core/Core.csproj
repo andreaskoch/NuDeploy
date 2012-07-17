@@ -187,10 +187,10 @@
     <Compile Include="Services\Installation\Repositories\PackageRepositoryFactory.cs" />
     <Compile Include="Services\Packaging\Build\ConventionBasedBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildFolderPathProvider.cs" />
+    <Compile Include="Services\Packaging\Build\IBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\ISolutionBuilder.cs" />
     <Compile Include="Services\Packaging\Build\SolutionBuilder.cs" />
     <Compile Include="Services\Packaging\Configuration\BuildFolderPathProvider.cs" />
-    <Compile Include="Services\Packaging\Configuration\IBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Configuration\IPackagingFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Configuration\IPrePackagingFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Configuration\PackagingFolderPathProvider.cs" />
