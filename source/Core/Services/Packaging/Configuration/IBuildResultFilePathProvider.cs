@@ -4,7 +4,7 @@ namespace NuDeploy.Core.Services.Packaging.Configuration
 {
     public interface IBuildResultFilePathProvider
     {
-        RelativeFilePathInfo[] GetWesbiteFilePaths();
+        RelativeFilePathInfo[] GetWebsiteFilePaths();
 
         RelativeFilePathInfo[] GetWebApplicationFilePaths();
 

@@ -16,8 +16,12 @@ namespace NuDeploy.Core.Common
 
         public static readonly char MultiValueSeperator = ',';
 
-        public const char NamespaceSeperator = '.';
+        public static readonly char NamespaceSeperator = '.';
 
-        public const string PathSeperator = @"\";
+        public static readonly string PathSeperator = @"\";
+
+        public static readonly string NuSpecFileExtension = ".nuspec";
+
+        public static readonly string NuGetFileExtension = ".nupkg";
     }
 }

@@ -252,6 +252,16 @@ namespace NuDeploy.Core.Common.FilesystemAccess
             return Directory.GetFiles(path).Select(filePath => new FileInfo(filePath));
         }
 
+        public IEnumerable<FileInfo> GetAllFiles(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !this.DirectoryExists(path))
+            {
+                return new FileInfo[] { };
+            }
+
+            return Directory.GetFiles(path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath));
+        }
+
         public IEnumerable<DirectoryInfo> GetSubDirectories(string path)
         {
             if (string.IsNullOrWhiteSpace(path) || !this.DirectoryExists(path))

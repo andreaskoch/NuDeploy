@@ -81,6 +81,7 @@
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Filesystem\RelativeFilePathInfoFactoryTests.cs" />
+    <Compile Include="UnitTests\Packaging\Build\ConventionBasedBuildResultFilePathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />

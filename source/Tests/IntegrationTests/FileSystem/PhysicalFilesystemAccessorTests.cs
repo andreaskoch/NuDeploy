@@ -1290,6 +1290,54 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
 
         #endregion
 
+        #region GetAllFiles
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void GetAllFiles_PathIsInvalid_EmptyListIsReturned(string path)
+        {
+            // Act
+            var result = this.filesystemAccessor.GetAllFiles(path);
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public void GetAllFiles_PathDoesNotExist_EmptyListIsReturned()
+        {
+            // Arrange
+            string path = this.GetPath("Non-Existing-Directory");
+
+            // Act
+            var result = this.filesystemAccessor.GetAllFiles(path);
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+        }
+
+        [Test]
+        public void GetAllFiles_PathContainsThreeFilesInDifferentDirectories_ListOfThreeFileInfoObjectsIsReturned()
+        {
+            // Arrange
+            string path = this.CreateDirectory("existing-directory").FullName;
+            this.CreateDirectory("existing-directory\\sub1");
+            this.CreateDirectory("existing-directory\\sub2");
+
+            this.CreateFile("existing-directory\\file1.txt");
+            this.CreateFile("existing-directory\\Sub1\\file2.txt");
+            this.CreateFile("existing-directory\\Sub2\\file3.txt");
+
+            // Act
+            var result = this.filesystemAccessor.GetAllFiles(path);
+
+            // Assert
+            Assert.AreEqual(3, result.Count());
+        }
+
+        #endregion
+
         #region GetSubDirectories
 
         [TestCase(null)]

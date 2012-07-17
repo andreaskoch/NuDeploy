@@ -35,6 +35,8 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
         IEnumerable<FileInfo> GetFiles(string path);
 
+        IEnumerable<FileInfo> GetAllFiles(string path);
+
         IEnumerable<DirectoryInfo> GetSubDirectories(string path);
 
         bool DeleteDirectory(string folderPath);

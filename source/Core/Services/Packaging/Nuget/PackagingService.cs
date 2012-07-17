@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Services.Packaging.Configuration;
 
@@ -11,10 +12,6 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
 {
     public class PackagingService : IPackagingService
     {
-        private const string NuSpecFileExtension = ".nuspec";
-
-        private const string NuGetFileExtension = ".nupkg";
-
         private readonly IFilesystemAccessor filesystemAccessor;
 
         private readonly string prePackagingFolderPath;
@@ -57,7 +54,7 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
             // Locate NuSpec file
             FileInfo nuspecFile =
                 this.filesystemAccessor.GetFiles(packageBasePath).FirstOrDefault(
-                    f => f.Extension.Equals(NuSpecFileExtension, StringComparison.OrdinalIgnoreCase));
+                    f => f.Extension.Equals(NuDeployConstants.NuSpecFileExtension, StringComparison.OrdinalIgnoreCase));
             if (nuspecFile == null)
             {
                 return false;
@@ -75,7 +72,7 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
                 {
                     var packageBuilder = new PackageBuilder(nuspecFileStream, packageBasePath);
 
-                    string nugetPackageFileName = string.Format("{0}.{1}{2}", packageBuilder.Id, packageBuilder.Version, NuGetFileExtension);
+                    string nugetPackageFileName = string.Format("{0}.{1}{2}", packageBuilder.Id, packageBuilder.Version, NuDeployConstants.NuGetFileExtension);
                     string nugetPackageFilePath = Path.Combine(packageFolder, nugetPackageFileName);
 
                     using (Stream outputStream = this.filesystemAccessor.GetWriteStream(nugetPackageFilePath))

@@ -331,7 +331,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetWesbiteFilePaths()).Returns(relativeFilePathInfos);
+            buildResultFilePathProvider.Setup(b => b.GetWebsiteFilePaths()).Returns(relativeFilePathInfos);
 
             var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
             prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);

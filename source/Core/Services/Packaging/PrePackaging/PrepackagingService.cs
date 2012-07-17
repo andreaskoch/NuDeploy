@@ -98,7 +98,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             this.assemblyResourceDownloader.Download(this.prePackagingFolderPath);
 
             // web sites
-            var websiteSourceFiles = this.buildResultFilePathProvider.GetWesbiteFilePaths();
+            var websiteSourceFiles = this.buildResultFilePathProvider.GetWebsiteFilePaths();
             foreach (var sourceFile in websiteSourceFiles)
             {
                 string sourcePath = sourceFile.AbsoluteFilePath;

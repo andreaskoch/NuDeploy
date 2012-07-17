@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Linq;
 
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Services.Filesystem;
 using NuDeploy.Core.Services.Packaging.Configuration;
@@ -9,13 +11,13 @@ namespace NuDeploy.Core.Services.Packaging.Build
 {
     public class ConventionBasedBuildResultFilePathProvider : IBuildResultFilePathProvider
     {
-        private const string FolderNameDeploymentPackageAdditions = "deploymentpackageadditions";
+        public const string FolderNameDeploymentPackageAdditions = "deploymentpackageadditions";
 
-        private const string FolderNamePublishedApplications = "_PublishedApplications";
+        public const string FolderNamePublishedApplications = "_PublishedApplications";
 
-        private const string FolderNamePublishedWebsites = "_PublishedWebsites";
+        public const string FolderNamePublishedWebsites = "_PublishedWebsites";
 
-        private const string NuspecFilenamePattern = "*.{0}.nuspec";
+        public const string WebsiteFolderFragmentIdentifier = "Website";
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
@@ -25,24 +27,43 @@ namespace NuDeploy.Core.Services.Packaging.Build
 
         public ConventionBasedBuildResultFilePathProvider(IFilesystemAccessor filesystemAccessor, IBuildFolderPathProvider buildFolderPathProvider, IRelativeFilePathInfoFactory relativeFilePathInfoFactory)
         {
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
+            if (buildFolderPathProvider == null)
+            {
+                throw new ArgumentNullException("buildFolderPathProvider");
+            }
+
+            if (relativeFilePathInfoFactory == null)
+            {
+                throw new ArgumentNullException("relativeFilePathInfoFactory");
+            }
+
             this.filesystemAccessor = filesystemAccessor;
             this.buildFolder = buildFolderPathProvider.GetBuildFolderPath();
             this.relativeFilePathInfoFactory = relativeFilePathInfoFactory;
         }
 
-        public RelativeFilePathInfo[] GetWesbiteFilePaths()
+        public RelativeFilePathInfo[] GetWebsiteFilePaths()
         {
-            var publishedWebapplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(this.buildFolder, FolderNamePublishedWebsites));
+            var publishedWebapplicationsSourceFolderPath = Path.Combine(this.buildFolder, FolderNamePublishedWebsites);
             if (this.filesystemAccessor.DirectoryExists(publishedWebapplicationsSourceFolderPath))
             {
+                // get all directories which contain the term website
                 var publishedWebsiteDirectories =
-                    Directory.GetFiles(publishedWebapplicationsSourceFolderPath, "*", SearchOption.TopDirectoryOnly).Where(
-                        filePath => filePath.Contains(".Website"));
+                    this.filesystemAccessor.GetSubDirectories(publishedWebapplicationsSourceFolderPath).Where(dir => dir.Name.ToLower().Contains(WebsiteFolderFragmentIdentifier.ToLower()));
 
+                // get all files within these directories
                 var publishedWebsiteFiles =
-                    publishedWebsiteDirectories.SelectMany(websiteDirectory => Directory.GetFiles(websiteDirectory, "*", SearchOption.AllDirectories));
+                    publishedWebsiteDirectories.SelectMany(websiteDirectory => this.filesystemAccessor.GetAllFiles(websiteDirectory.FullName));
 
-                return publishedWebsiteFiles.Select(f => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(f, publishedWebapplicationsSourceFolderPath)).ToArray();
+                return
+                    publishedWebsiteFiles.Select(
+                        fileInfo => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(fileInfo.FullName, publishedWebapplicationsSourceFolderPath)).
+                        ToArray();
             }
 
             return new RelativeFilePathInfo[] { };
@@ -50,17 +71,19 @@ namespace NuDeploy.Core.Services.Packaging.Build
 
         public RelativeFilePathInfo[] GetWebApplicationFilePaths()
         {
-            var publishedWebapplicationsSourceFolderPath = Path.GetFullPath(Path.Combine(this.buildFolder, FolderNamePublishedWebsites));
+            var publishedWebapplicationsSourceFolderPath = Path.Combine(this.buildFolder, FolderNamePublishedWebsites);
             if (this.filesystemAccessor.DirectoryExists(publishedWebapplicationsSourceFolderPath))
             {
                 var publishedWebapplicationDirectories =
-                    Directory.GetFiles(publishedWebapplicationsSourceFolderPath, "*", SearchOption.TopDirectoryOnly).Where(
-                        filePath => filePath.Contains(".Website") == false);
+                    this.filesystemAccessor.GetSubDirectories(publishedWebapplicationsSourceFolderPath).Where(dir => !dir.Name.ToLower().Contains(WebsiteFolderFragmentIdentifier.ToLower()));
 
                 var publishedWebapplicationFiles =
-                    publishedWebapplicationDirectories.SelectMany(websiteDirectory => Directory.GetFiles(websiteDirectory, "*", SearchOption.AllDirectories));
+                    publishedWebapplicationDirectories.SelectMany(directoryInfo => this.filesystemAccessor.GetAllFiles(directoryInfo.FullName));
 
-                return publishedWebapplicationFiles.Select(f => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(f, publishedWebapplicationsSourceFolderPath)).ToArray();
+                return
+                    publishedWebapplicationFiles.Select(
+                        fileInfo => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(fileInfo.FullName, publishedWebapplicationsSourceFolderPath)).
+                        ToArray();
             }
 
             return new RelativeFilePathInfo[] { };
@@ -71,9 +94,11 @@ namespace NuDeploy.Core.Services.Packaging.Build
             var publishedApplicationsSourceFolderPath = Path.Combine(this.buildFolder, FolderNamePublishedApplications);
             if (this.filesystemAccessor.DirectoryExists(publishedApplicationsSourceFolderPath))
             {
-                var publishedApplicationFiles = Directory.GetFiles(publishedApplicationsSourceFolderPath, "*", SearchOption.AllDirectories);
+                var publishedApplicationFiles = this.filesystemAccessor.GetAllFiles(publishedApplicationsSourceFolderPath);
 
-                return publishedApplicationFiles.Select(f => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(f, publishedApplicationsSourceFolderPath)).ToArray();
+                return
+                    publishedApplicationFiles.Select(
+                        fileInfo => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(fileInfo.FullName, publishedApplicationsSourceFolderPath)).ToArray();
             }
 
             return new RelativeFilePathInfo[] { };
@@ -84,9 +109,13 @@ namespace NuDeploy.Core.Services.Packaging.Build
             var publishedDeploymentPackageAdditionsSourceFolderPath = Path.Combine(this.buildFolder, FolderNameDeploymentPackageAdditions);
             if (this.filesystemAccessor.DirectoryExists(publishedDeploymentPackageAdditionsSourceFolderPath))
             {
-                var publishedDeploymentPackageAdditionFiles = Directory.GetFiles(publishedDeploymentPackageAdditionsSourceFolderPath, "*", SearchOption.AllDirectories);
+                var publishedDeploymentPackageAdditionFiles = this.filesystemAccessor.GetAllFiles(publishedDeploymentPackageAdditionsSourceFolderPath);
 
-                return publishedDeploymentPackageAdditionFiles.Select(f => this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(f, publishedDeploymentPackageAdditionsSourceFolderPath)).ToArray();
+                return
+                    publishedDeploymentPackageAdditionFiles.Select(
+                        fileInfo =>
+                        this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(fileInfo.FullName, publishedDeploymentPackageAdditionsSourceFolderPath)).
+                        ToArray();
             }
 
             return new RelativeFilePathInfo[] { };
@@ -95,10 +124,24 @@ namespace NuDeploy.Core.Services.Packaging.Build
         public RelativeFilePathInfo GetNuspecFilePath(string buildConfiguration)
         {
             var nuspecSourceFolderPath = this.buildFolder;
-            var nuspecFileSearchPattern = string.Format(NuspecFilenamePattern, buildConfiguration);
-            var nuspecFilePath = Directory.GetFiles(nuspecSourceFolderPath, nuspecFileSearchPattern, SearchOption.TopDirectoryOnly).First();
 
-            return this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(nuspecFilePath, nuspecSourceFolderPath);
+            var nuspecFiles =
+                this.filesystemAccessor.GetFiles(nuspecSourceFolderPath).Where(
+                    f => f.Extension.Equals(NuDeployConstants.NuSpecFileExtension, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            var buildConfigurationSpecificNuspecFileExtension = string.Format(".{0}{1}", buildConfiguration, NuDeployConstants.NuSpecFileExtension);
+
+            var nuspecFile =
+                nuspecFiles.FirstOrDefault(
+                    specFile => specFile.Name.EndsWith(buildConfigurationSpecificNuspecFileExtension, StringComparison.OrdinalIgnoreCase))
+                ?? nuspecFiles.FirstOrDefault();
+
+            if (nuspecFile == null)
+            {
+                return null;
+            }
+
+            return this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(nuspecFile.FullName, nuspecSourceFolderPath);
         }
     }
 }
