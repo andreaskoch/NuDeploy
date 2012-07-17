@@ -1,6 +1,6 @@
 using System;
 using System.Management.Automation.Host;
-using System.Reflection;
+using System.Runtime.InteropServices;
 
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -62,7 +62,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
 
                         /* assembly resource access */
-                        config.For<Assembly>().Use(typeof(ApplicationInformationProvider).Assembly);
+                        config.For<_Assembly>().Use(typeof(ApplicationInformationProvider).Assembly);
                         config.For<IAssemblyResourceFilePathProvider>().Use<AssemblyResourceFilePathProvider>();
                         config.For<IAssemblyFileResourceProvider>().Use<AssemblyFileResourceProvider>();
                         config.For<IAssemblyResourceDownloader>().Use<DeploymentScriptResourceDownloader>();
