@@ -167,11 +167,16 @@ namespace NuDeploy.Core.Common.FilesystemAccess
                 return null;
             }
 
+            if (!this.FileExists(filePath))
+            {
+                return null;
+            }
+
             try
             {
                 return File.Open(filePath, FileMode.Open, FileAccess.Read);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 return null;
             }            

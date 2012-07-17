@@ -985,6 +985,63 @@ namespace NuDeploy.Tests.IntegrationTests.FileSystem
             Assert.IsNull(result);
         }
 
+        [Test]
+        public void GetFileStream_FilePathDoesNotExist_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.GetPath("non-existing-file.txt");
+
+            // Act
+            var result = this.filesystemAccessor.GetFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetFileStream_FilePathExistButIsBeingWrittenTo_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("existing-file.txt").FullName;
+            var writer = new StreamWriter(filePath);
+
+            // Act
+            var result = this.filesystemAccessor.GetFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+            writer.Close();
+        }
+
+        [Test]
+        public void GetFileStream_FilePathExistButIsBeingRead_ResultIsNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("existing-file.txt").FullName;
+            var reader = new StreamReader(filePath);
+
+            // Act
+            var result = this.filesystemAccessor.GetFileStream(filePath);
+
+            // Assert
+            Assert.IsNull(result);
+            reader.Close();
+        }
+
+        [Test]
+        public void GetFileStream_FilePathExist_ResultIsNotNull()
+        {
+            // Arrange
+            string filePath = this.CreateFile("existing-file.txt").FullName;
+
+            // Act
+            var result = this.filesystemAccessor.GetFileStream(filePath);
+
+            // Assert
+            Assert.IsNotNull(result);
+            result.Close();
+        }
+
         #endregion
 
         #region CopyFile
