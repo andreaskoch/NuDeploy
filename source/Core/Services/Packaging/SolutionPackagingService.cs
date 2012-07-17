@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using NuDeploy.Core.Services.Packaging.Build;
@@ -16,6 +17,21 @@ namespace NuDeploy.Core.Services.Packaging
 
         public SolutionPackagingService(ISolutionBuilder solutionBuilder, IPrepackagingService prepackagingService, IPackagingService packagingService)
         {
+            if (solutionBuilder == null)
+            {
+                throw new ArgumentNullException("solutionBuilder");
+            }
+
+            if (prepackagingService == null)
+            {
+                throw new ArgumentNullException("prepackagingService");
+            }
+
+            if (packagingService == null)
+            {
+                throw new ArgumentNullException("packagingService");
+            }
+
             this.solutionBuilder = solutionBuilder;
             this.prepackagingService = prepackagingService;
             this.packagingService = packagingService;
@@ -23,6 +39,21 @@ namespace NuDeploy.Core.Services.Packaging
 
         public bool PackageSolution(string solutionPath, string buildConfiguration, IEnumerable<KeyValuePair<string, string>> buildProperties)
         {
+            if (string.IsNullOrWhiteSpace(solutionPath))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(buildConfiguration))
+            {
+                return false;
+            }
+
+            if (buildProperties == null)
+            {
+                return false;
+            }
+
             // Build the solution
             if (!this.solutionBuilder.Build(solutionPath, buildConfiguration, buildProperties))
             {
