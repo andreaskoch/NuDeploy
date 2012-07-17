@@ -1,6 +1,6 @@
 using NuDeploy.Core.Services.Filesystem;
 
-namespace NuDeploy.Core.Services.Packaging.Configuration
+namespace NuDeploy.Core.Services.Packaging.Build
 {
     public interface IBuildResultFilePathProvider
     {

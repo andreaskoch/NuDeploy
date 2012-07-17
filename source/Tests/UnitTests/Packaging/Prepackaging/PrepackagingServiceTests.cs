@@ -6,6 +6,7 @@ using Moq;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Filesystem;
+using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.PrePackaging;
 

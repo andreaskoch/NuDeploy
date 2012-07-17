@@ -3,6 +3,7 @@ using System.IO;
 
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
+using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 
 namespace NuDeploy.Core.Services.Packaging.PrePackaging
