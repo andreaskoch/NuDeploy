@@ -43,6 +43,7 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -55,6 +56,7 @@
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
     <Compile Include="IntegrationTests\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
+    <Compile Include="IntegrationTests\DependencyResolution\StructureMapSetupTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
