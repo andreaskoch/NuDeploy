@@ -85,6 +85,7 @@
     <Compile Include="UnitTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Nuget\PackagingServiceTests.cs" />
+    <Compile Include="UnitTests\Packaging\Prepackaging\PrepackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\SolutionPackagingServiceTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -8,11 +9,11 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
 {
     public class PrepackagingService : IPrepackagingService
     {
-        private const string TargetFolderNameWebsites = "websites";
+        public const string TargetFolderNameWebsites = "websites";
 
-        private const string TargetFolderNameWebApplications = "webapplications";
+        public const string TargetFolderNameWebApplications = "webapplications";
 
-        private const string TargetFolderNameApplications = "applications";
+        public const string TargetFolderNameApplications = "applications";
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
@@ -24,6 +25,26 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
 
         public PrepackagingService(IFilesystemAccessor filesystemAccessor, IAssemblyResourceDownloader assemblyResourceDownloader, IBuildResultFilePathProvider buildResultFilePathProvider, IPrePackagingFolderPathProvider prePackagingFolderPathProvider)
         {
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
+            if (assemblyResourceDownloader == null)
+            {
+                throw new ArgumentNullException("assemblyResourceDownloader");
+            }
+
+            if (buildResultFilePathProvider == null)
+            {
+                throw new ArgumentNullException("buildResultFilePathProvider");
+            }
+
+            if (prePackagingFolderPathProvider == null)
+            {
+                throw new ArgumentNullException("prePackagingFolderPathProvider");
+            }
+
             this.filesystemAccessor = filesystemAccessor;
             this.assemblyResourceDownloader = assemblyResourceDownloader;
             this.buildResultFilePathProvider = buildResultFilePathProvider;
@@ -32,16 +53,25 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
 
         public bool Prepackage(string buildConfiguration)
         {
+            if (string.IsNullOrWhiteSpace(buildConfiguration))
+            {
+                throw new ArgumentException("buildConfiguration");
+            }
+
+            if (!this.filesystemAccessor.DirectoryExists(this.prePackagingFolderPath))
+            {
+                return false;
+            }
+
             try
             {
                 this.CopyFilesToPrePackagingFolder(buildConfiguration);
                 return true;
             }
-            catch
+            catch (Exception prepackageException)
             {
+                return false;
             }
-
-            return false;
         }
 
         private void CopyFilesToPrePackagingFolder(string buildConfiguration)
@@ -86,7 +116,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             }
 
             // applications
-            var applicationSourceFiles = this.buildResultFilePathProvider.GetWebApplicationFilePaths();
+            var applicationSourceFiles = this.buildResultFilePathProvider.GetApplicationFilePaths();
             foreach (var sourceFile in applicationSourceFiles)
             {
                 string sourcePath = sourceFile.AbsoluteFilePath;
