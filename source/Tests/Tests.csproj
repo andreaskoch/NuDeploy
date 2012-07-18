@@ -73,6 +73,7 @@
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyFileResourceProviderTests.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyResourceFilePathProviderTests.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
+    <Compile Include="UnitTests\Cleanup\CleanupServiceTests.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentNameMatcherTests.cs" />
     <Compile Include="UnitTests\Commands\CommandArgumentParserTests.cs" />
     <Compile Include="UnitTests\Commands\CommandLineArgumentInterpreterTests.cs" />

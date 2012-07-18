@@ -19,26 +19,47 @@ namespace NuDeploy.Core.Services.Cleanup
 
         public CleanupService(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IFilesystemAccessor filesystemAccessor)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (installationStatusProvider == null)
+            {
+                throw new ArgumentNullException("installationStatusProvider");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
             this.filesystemAccessor = filesystemAccessor;
         }
 
-        public void Cleanup()
+        public bool Cleanup()
         {
             var packages = this.installationStatusProvider.GetPackageInfo().Where(p => p.IsInstalled == false).ToList();
 
             if (packages.Count == 0)
             {
                 this.userInterface.WriteLine(Resources.CleanupService.NoApplicablePackagesForCleanupFound);
-                return;
+                return false;
             }
 
-            this.DeletePackages(packages);            
+            this.DeletePackages(packages);
+            return true;
         }
 
-        public void Cleanup(string packageId)
+        public bool Cleanup(string packageId)
         {
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw new ArgumentException("packageId");
+            }
+
             var packages =
                 this.installationStatusProvider.GetPackageInfo().Where(
                     p => p.IsInstalled == false && p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -46,10 +67,11 @@ namespace NuDeploy.Core.Services.Cleanup
             if (packages.Count == 0)
             {
                 this.userInterface.WriteLine(string.Format(Resources.CleanupService.NoApplicableVersionForPackageCleanupFoundTemplate, packageId));
-                return;
+                return false;
             }
 
             this.DeletePackages(packages);
+            return true;
         }
 
         private void DeletePackages(IEnumerable<NuDeployPackageInfo> packages)

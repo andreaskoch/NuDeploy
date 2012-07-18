@@ -2,8 +2,8 @@ namespace NuDeploy.Core.Services.Cleanup
 {
     public interface ICleanupService
     {
-        void Cleanup();
+        bool Cleanup();
 
-        void Cleanup(string packageId);
+        bool Cleanup(string packageId);
     }
 }
