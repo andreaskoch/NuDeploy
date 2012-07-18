@@ -62,6 +62,7 @@
     <Compile Include="IntegrationTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
+    <Compile Include="IntegrationTests\PowerShell\PowerShellSessionFactoryTests.cs" />
     <Compile Include="IntegrationTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="IntegrationTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
@@ -84,6 +85,9 @@
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Filesystem\RelativeFilePathInfoFactoryTests.cs" />
+    <Compile Include="UnitTests\Installation\PackageInstallerTests.cs" />
+    <Compile Include="UnitTests\Installation\PowerShellExecutorTests.cs" />
+    <Compile Include="UnitTests\Installation\PowerShellSessionFactoryTests.cs" />
     <Compile Include="UnitTests\Packaging\Build\ConventionBasedBuildResultFilePathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />

@@ -19,7 +19,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
     [TestFixture]
     public class PowerShellScriptExecutorTests
     {
-        private IPowerShellScriptExecutor powerShellScriptExecutor;
+        private IPowerShellSession powerShellSession;
 
         private PSHostUserInterface powerShellUserInterface;
 
@@ -38,9 +38,9 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
 
             this.userInterface = new ConsoleUserInterface(consoleTextManipulation, logger.Object);
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
-            PSHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
+            IPowerShellHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 
-            this.powerShellScriptExecutor = new PowerShellScriptExecutor(powerShellHost, fileSystemAccessor);
+            this.powerShellSession = new PowerShellSession(powerShellHost, fileSystemAccessor);
         }
 
         #region ExecuteCommand
@@ -52,7 +52,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = string.Empty;
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.IsTrue(string.IsNullOrWhiteSpace(result));
@@ -63,7 +63,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         public void ExecuteCommand_ScriptIsNull_ArgumentNullExceptionIsThrown()
         {
             // Act
-            this.powerShellScriptExecutor.ExecuteCommand(null);
+            this.powerShellSession.ExecuteCommand(null);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = "get-executionpolicy";
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual("RemoteSigned", result.Trim());
@@ -86,7 +86,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = "$ErrorActionPreference";
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual("Continue", result.Trim());
@@ -99,7 +99,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = "$VerbosePreference";
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual("SilentlyContinue", result.Trim());
@@ -112,7 +112,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = "(get-location).Path";
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual(Environment.CurrentDirectory, result.Trim());
@@ -126,7 +126,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = string.Format("Write-Host \"{0}\"", message);
 
             // Act
-            var result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            var result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual(string.Empty, result.Trim());
@@ -139,7 +139,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = string.Format("& '{0}'", GetRelativeScriptPath("TestScript-01-ReturnResults.ps1"));
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual("TestScript-01-ReturnResults.ps1", result.Trim());
@@ -152,7 +152,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string script = string.Format("& '{0}'", GetAbsoluteScriptPath("TestScript-01-ReturnResults.ps1"));
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteCommand(script);
+            string result = this.powerShellSession.ExecuteCommand(script);
 
             // Assert
             Assert.AreEqual("TestScript-01-ReturnResults.ps1", result.Trim());
@@ -170,7 +170,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = null;
 
             // Act
-            this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            this.powerShellSession.ExecuteScript(scriptPath);
         }
 
         [Test]
@@ -181,7 +181,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = string.Empty;
 
             // Act
-            this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            this.powerShellSession.ExecuteScript(scriptPath);
         }
 
         [Test]
@@ -192,7 +192,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = " ";
 
             // Act
-            this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            this.powerShellSession.ExecuteScript(scriptPath);
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetRelativeScriptPath("Non-Existent-Script.ps1");
 
             // Act
-            this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            this.powerShellSession.ExecuteScript(scriptPath);
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetRelativeScriptPath("TestScript-01-ReturnResults.ps1");
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            string result = this.powerShellSession.ExecuteScript(scriptPath);
 
             // Assert
             Assert.AreEqual("TestScript-01-ReturnResults.ps1", result.Trim());
@@ -225,7 +225,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetAbsoluteScriptPath("TestScript-01-ReturnResults.ps1");
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            string result = this.powerShellSession.ExecuteScript(scriptPath);
 
             // Assert
             Assert.AreEqual("TestScript-01-ReturnResults.ps1", result.Trim());
@@ -241,7 +241,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetAbsoluteScriptPath("TestScript-02-RequiredParameter-Echo-Test.ps1");
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath, parameters);
+            string result = this.powerShellSession.ExecuteScript(scriptPath, parameters);
 
             // Assert
             Assert.AreEqual(parameterValue, result.Trim());
@@ -258,7 +258,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetAbsoluteScriptPath("TestScript-02-RequiredParameter-Echo-Test.ps1");
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath, parameters);
+            string result = this.powerShellSession.ExecuteScript(scriptPath, parameters);
 
             // Assert
             Assert.AreEqual(parameterValue, result.Trim());
@@ -271,7 +271,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetAbsoluteScriptPath("TestScript-03-CallAnotherScript.ps1");
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            string result = this.powerShellSession.ExecuteScript(scriptPath);
 
             // Assert
             Assert.AreEqual("TestScript-03-AnotherScript.ps1", result.Trim());
@@ -284,7 +284,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetAbsoluteScriptPath("TestScript-04-InputRequired.ps1");
 
             // Act
-            var result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            var result = this.powerShellSession.ExecuteScript(scriptPath);
 
             // Assert
             Assert.IsTrue(string.IsNullOrWhiteSpace(result));
@@ -297,7 +297,7 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
             string scriptPath = GetAbsoluteScriptPath("TestScript-05-ImportModule-IIS.ps1");
 
             // Act
-            string result = this.powerShellScriptExecutor.ExecuteScript(scriptPath);
+            string result = this.powerShellSession.ExecuteScript(scriptPath);
 
             // Assert
             Assert.AreEqual("IIS:\\", result.Trim());

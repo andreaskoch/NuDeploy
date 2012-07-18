@@ -57,9 +57,10 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IConsoleTextManipulation>().Use<ConsoleTextManipulation>();
 
                         /* powershell */
-                        config.For<PSHost>().Use<PowerShellHost>();
+                        config.For<IPowerShellHost>().Use<PowerShellHost>();
                         config.For<PSHostUserInterface>().Use<NuDeployPowerShellUserInterface>();
-                        config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
+                        config.For<IPowerShellExecutor>().Use<PowerShellExecutor>();
+                        config.For<IPowerShellSessionFactory>().Use<PowerShellSessionFactory>();
 
                         /* assembly resource access */
                         config.For<_Assembly>().Use(typeof(ApplicationInformationProvider).Assembly);
@@ -81,6 +82,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
                         config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
                         config.For<IPackageInstaller>().Use<PackageInstaller>();
+                        config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
 
                         /* packaging */
                         config.For<ISolutionPackagingService>().Use<SolutionPackagingService>();

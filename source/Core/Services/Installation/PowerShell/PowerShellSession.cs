@@ -12,9 +12,9 @@ using NuDeploy.Core.Common.FilesystemAccess;
 
 namespace NuDeploy.Core.Services.Installation.PowerShell
 {
-    public class PowerShellScriptExecutor : IPowerShellScriptExecutor, IDisposable
+    public class PowerShellSession : IPowerShellSession
     {
-        private readonly PSHost powerShellHost;
+        private readonly IPowerShellHost powerShellHost;
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
@@ -26,14 +26,14 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
 
         private PipelineExecutor pipelineExecutor;
 
-        public PowerShellScriptExecutor(PSHost powerShellHost, IFilesystemAccessor filesystemAccessor)
+        public PowerShellSession(IPowerShellHost powerShellHost, IFilesystemAccessor filesystemAccessor)
         {
             this.powerShellHost = powerShellHost;
             this.filesystemAccessor = filesystemAccessor;
             this.pipelineOutput = new StringBuilder();
 
             Environment.SetEnvironmentVariable("PSExecutionPolicyPreference", "RemoteSigned", EnvironmentVariableTarget.Process);
-            this.runspace = RunspaceFactory.CreateRunspace(this.powerShellHost);
+            this.runspace = RunspaceFactory.CreateRunspace(this.powerShellHost as PSHost);
             this.runspace.Open();
 
             this.powerShell = System.Management.Automation.PowerShell.Create();

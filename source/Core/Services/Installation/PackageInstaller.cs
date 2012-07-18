@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Management.Automation.Host;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -52,10 +51,50 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly IConfigurationFileTransformer configurationFileTransformer;
 
-        private readonly PSHost powerShellHost;
+        private readonly IPowerShellExecutor powerShellExecutor;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, PSHost powerShellHost)
+        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, IPowerShellExecutor powerShellExecutor)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (installationStatusProvider == null)
+            {
+                throw new ArgumentNullException("installationStatusProvider");
+            }
+
+            if (packageConfigurationAccessor == null)
+            {
+                throw new ArgumentNullException("packageConfigurationAccessor");
+            }
+
+            if (packageRepositoryBrowser == null)
+            {
+                throw new ArgumentNullException("packageRepositoryBrowser");
+            }
+
+            if (configurationFileTransformer == null)
+            {
+                throw new ArgumentNullException("configurationFileTransformer");
+            }
+
+            if (powerShellExecutor == null)
+            {
+                throw new ArgumentNullException("powerShellExecutor");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
             this.userInterface = userInterface;
@@ -63,7 +102,7 @@ namespace NuDeploy.Core.Services.Installation
             this.packageConfigurationAccessor = packageConfigurationAccessor;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
             this.configurationFileTransformer = configurationFileTransformer;
-            this.powerShellHost = powerShellHost;
+            this.powerShellExecutor = powerShellExecutor;
         }
 
         public bool Install(string packageId, string deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
@@ -213,7 +252,7 @@ namespace NuDeploy.Core.Services.Installation
 
                 string scriptParameter = string.Format("-{0} {1}", InstallPowerShellScriptDeploymentTypeParameterName, deploymentType);
                 this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath, scriptParameter));
-                this.ExecuteScriptInNewPowerShellHost(installScriptPath, scriptParameter);
+                this.powerShellExecutor.ExecuteScript(installScriptPath, scriptParameter);
 
                 // update package configuration
                 this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.AddingPackageToConfigurationMessageTemplate, package.Id, package.Id));
@@ -229,6 +268,11 @@ namespace NuDeploy.Core.Services.Installation
 
         public bool Uninstall(string packageId, SemanticVersion version = null)
         {
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw new ArgumentException("packageId");
+            }
+
             // check if package is installed
             NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId).FirstOrDefault(p => p.IsInstalled);
             if (installedPackage == null)
@@ -237,7 +281,7 @@ namespace NuDeploy.Core.Services.Installation
                 return false;
             }
 
-            // remove the package
+            // find the uninstall script
             string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
             if (this.filesystemAccessor.FileExists(uninstallScriptPath) == false)
             {
@@ -255,7 +299,7 @@ namespace NuDeploy.Core.Services.Installation
             // uninstall
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptMessageTemplate, uninstallScriptPath));
-            this.ExecuteScriptInNewPowerShellHost(uninstallScriptPath);
+            this.powerShellExecutor.ExecuteScript(uninstallScriptPath);
 
             // update package configuration
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.RemovingPackageFromConfigurationMessageTemplate, installedPackage.Id, installedPackage.Id));
@@ -266,24 +310,6 @@ namespace NuDeploy.Core.Services.Installation
             this.filesystemAccessor.DeleteDirectory(installedPackage.Folder);
 
             return true;
-        }
-
-        private void ExecuteScriptInNewPowerShellHost(string scriptPath, params string[] parameters)
-        {
-            if (string.IsNullOrWhiteSpace(scriptPath))
-            {
-                throw new ArgumentException("scriptPath");
-            }
-
-            if (this.filesystemAccessor.FileExists(scriptPath) == false)
-            {
-                throw new FileNotFoundException(Resources.Exceptions.PowerShellScriptNotFound, scriptPath);
-            }
-
-            using (var powerShellScriptExecutor = new PowerShellScriptExecutor(this.powerShellHost, this.filesystemAccessor))
-            {
-                powerShellScriptExecutor.ExecuteScript(scriptPath, parameters);
-            }
         }
     }
 }

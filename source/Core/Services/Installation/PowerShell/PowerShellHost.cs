@@ -6,7 +6,7 @@ using NuDeploy.Core.Common.Infrastructure;
 
 namespace NuDeploy.Core.Services.Installation.PowerShell
 {
-    public class PowerShellHost : PSHost
+    public class PowerShellHost : PSHost, IPowerShellHost
     {
         private readonly PSHostUserInterface userInterface;
 

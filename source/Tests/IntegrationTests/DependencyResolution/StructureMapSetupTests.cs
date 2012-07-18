@@ -15,6 +15,7 @@ using NuDeploy.Core.Services.Commands;
 using NuDeploy.Core.Services.Console;
 using NuDeploy.Core.Services.Filesystem;
 using NuDeploy.Core.Services.Installation;
+using NuDeploy.Core.Services.Installation.PowerShell;
 using NuDeploy.Core.Services.Installation.Repositories;
 using NuDeploy.Core.Services.Packaging;
 using NuDeploy.Core.Services.Packaging.Build;
@@ -48,7 +49,9 @@ namespace NuDeploy.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(IFilesystemAccessor))]
         [TestCase(typeof(IUserInterface))]
         [TestCase(typeof(IConsoleTextManipulation))]
-        [TestCase(typeof(PSHost))]
+        [TestCase(typeof(IPowerShellSessionFactory))]
+        [TestCase(typeof(IPowerShellExecutor))]
+        [TestCase(typeof(IPowerShellHost))]
         [TestCase(typeof(PSHostUserInterface))]
         [TestCase(typeof(IPackageRepositoryFactory))]
         [TestCase(typeof(_Assembly))]

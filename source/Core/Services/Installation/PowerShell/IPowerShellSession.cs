@@ -1,6 +1,8 @@
+using System;
+
 namespace NuDeploy.Core.Services.Installation.PowerShell
 {
-    public interface IPowerShellScriptExecutor
+    public interface IPowerShellSession : IDisposable
     {
         string ExecuteCommand(string scriptText);
 
