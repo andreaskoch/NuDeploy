@@ -27,7 +27,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
@@ -48,7 +48,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             InstallationStatusCommand installationStatus = null;
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
@@ -84,7 +84,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             UninstallCommand uninstall = null;
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
@@ -102,7 +102,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             CleanupCommand cleanup = null;
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
@@ -120,7 +120,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             PackageSolutionCommand package = null;
@@ -138,7 +138,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
@@ -156,7 +156,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
@@ -174,7 +174,7 @@ namespace NuDeploy.Tests.UnitTests.Commands
         {
             // Arrange
             var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);

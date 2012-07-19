@@ -64,6 +64,7 @@ namespace NuDeploy.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(Func<Uri, IHttpClient>))]
         [TestCase(typeof(IPackageRepositoryBrowser))]
         [TestCase(typeof(IPackageConfigurationAccessor))]
+        [TestCase(typeof(IDeploymentTypeParser))]
         [TestCase(typeof(IPackageInstaller))]
         [TestCase(typeof(ISolutionPackagingService))]
         [TestCase(typeof(IBuildFolderPathProvider))]

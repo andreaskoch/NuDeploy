@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Moq;
 
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.UserInterface;
@@ -246,6 +248,82 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
                 null);
+        }
+
+        #endregion
+
+        #region Install
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Install_PackageIdParameterIsInvalid_ArgumentExceptionIsThrown(string packageId)
+        {
+            // Arrange
+            DeploymentType deploymentType = DeploymentType.Full;
+            bool forceInstallation = false;
+            var systemSettingTransformationProfileNames = new string[] { };
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+        }
+
+        [Test]
+        public void Install_NoRepositoriesConfigured_ResultIsFalse()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            DeploymentType deploymentType = DeploymentType.Full;
+            bool forceInstallation = false;
+            var systemSettingTransformationProfileNames = new string[] { };
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>();
+            packageRepositoryBrowser.Setup(p => p.RepositoryConfigurations).Returns(sourceRepositoryConfigurations);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         #endregion

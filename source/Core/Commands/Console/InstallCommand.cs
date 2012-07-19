@@ -20,16 +20,19 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
 
-        private readonly string[] allowedDeploymentTypes = new[] { PackageInstaller.DeploymentTypeFull, PackageInstaller.DeploymentTypeUpdate };
+        private readonly string[] allowedDeploymentTypes = Enum.GetValues(typeof(DeploymentType)).Cast<string>().ToArray();
 
         private readonly IUserInterface userInterface;
 
         private readonly IPackageInstaller packageInstaller;
 
-        public InstallCommand(IUserInterface userInterface, IPackageInstaller packageInstaller)
+        private readonly IDeploymentTypeParser deploymentTypeParser;
+
+        public InstallCommand(IUserInterface userInterface, IPackageInstaller packageInstaller, IDeploymentTypeParser deploymentTypeParser)
         {
             this.userInterface = userInterface;
             this.packageInstaller = packageInstaller;
+            this.deploymentTypeParser = deploymentTypeParser;
 
             this.Attributes = new CommandAttributes
             {
@@ -46,11 +49,11 @@ namespace NuDeploy.Core.Commands.Console
                             Resources.InstallCommand.CommandExampleDescription1
                         },
                         {
-                            string.Format("{0} {1} {2}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId, PackageInstaller.DeploymentTypeFull),
+                            string.Format("{0} {1} {2}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId, DeploymentType.Full),
                             Resources.InstallCommand.CommandExampleDescription2
                         },
                         {
-                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameNugetDeploymentType, PackageInstaller.DeploymentTypeFull),
+                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameNugetDeploymentType, DeploymentType.Full),
                             Resources.InstallCommand.CommandExampleDescription3
                         },
                         {
@@ -65,7 +68,7 @@ namespace NuDeploy.Core.Commands.Console
                 ArgumentDescriptions = new Dictionary<string, string>
                     {
                         { ArgumentNameNugetPackageId, Resources.InstallCommand.ArgumentDescriptionNugetPackageId },
-                        { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), PackageInstaller.DeploymentTypeDefault) },
+                        { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), DeploymentType.Full) },
                         { ArgumentNameSystemSettingTransformationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationProfilesTemplate, PackageInstaller.TransformedSystemSettingsFileName) }
                     }
             };
@@ -88,20 +91,8 @@ namespace NuDeploy.Core.Commands.Console
             }
 
             // deployment type
-            string deploymentType = this.Arguments.ContainsKey(ArgumentNameNugetDeploymentType) ? this.Arguments[ArgumentNameNugetDeploymentType] : string.Empty;
-            if (string.IsNullOrWhiteSpace(deploymentType))
-            {
-                deploymentType = PackageInstaller.DeploymentTypeDefault;
-            }
-
-            if (!this.allowedDeploymentTypes.Any(t => t.Equals(deploymentType, StringComparison.OrdinalIgnoreCase)))
-            {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.InstallCommand.DeploymentTypeWasNotRecognizedMessageTemplate, deploymentType, string.Join(", ", this.allowedDeploymentTypes)));
-
-                return;
-            }
+            string deploymentTypeString = this.Arguments.ContainsKey(ArgumentNameNugetDeploymentType) ? this.Arguments[ArgumentNameNugetDeploymentType] : string.Empty;
+            DeploymentType deploymentType = this.deploymentTypeParser.GetDeploymentType(deploymentTypeString);
 
             // system settings transformation names
             string transformationProfileNamesArgument = this.Arguments.ContainsKey(ArgumentNameSystemSettingTransformationProfiles) ? this.Arguments[ArgumentNameSystemSettingTransformationProfiles] : string.Empty;

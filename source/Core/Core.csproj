@@ -169,6 +169,9 @@
     <Compile Include="Services\Filesystem\IRelativeFilePathInfoFactory.cs" />
     <Compile Include="Services\Filesystem\RelativeFilePathInfo.cs" />
     <Compile Include="Services\Filesystem\RelativeFilePathInfoFactory.cs" />
+    <Compile Include="Services\Installation\DeploymentTypeParser.cs" />
+    <Compile Include="Services\Installation\DeploymentType.cs" />
+    <Compile Include="Services\Installation\IDeploymentTypeParser.cs" />
     <Compile Include="Services\Installation\IPackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\IPackageInstaller.cs" />
     <Compile Include="Services\Installation\PackageConfigurationAccessor.cs" />

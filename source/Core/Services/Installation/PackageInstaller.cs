@@ -31,12 +31,6 @@ namespace NuDeploy.Core.Services.Installation
 
         public const string TransformedSystemSettingsFileName = SystemSettingsFileName + ".transformed";
 
-        public const string DeploymentTypeFull = "full";
-
-        public const string DeploymentTypeUpdate = "update";
-
-        public const string DeploymentTypeDefault = DeploymentTypeFull;
-
         private readonly ApplicationInformation applicationInformation;
 
         private readonly IFilesystemAccessor filesystemAccessor;
@@ -105,8 +99,13 @@ namespace NuDeploy.Core.Services.Installation
             this.powerShellExecutor = powerShellExecutor;
         }
 
-        public bool Install(string packageId, string deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
+        public bool Install(string packageId, DeploymentType deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
         {
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw new ArgumentException("packageId");
+            }
+
             // check package source configuration
             if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
             {
@@ -130,7 +129,7 @@ namespace NuDeploy.Core.Services.Installation
 
             // check if package is already installed
             NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id).FirstOrDefault(p => p.IsInstalled);
-            if (packageInfoOfInstalledVersion != null && deploymentType.Equals(DeploymentTypeFull, StringComparison.OrdinalIgnoreCase))
+            if (packageInfoOfInstalledVersion != null && deploymentType == DeploymentType.Full)
             {
                 if (forceInstallation == false)
                 {

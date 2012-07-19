@@ -77,6 +77,7 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IRelativeFilePathInfoFactory>().Use<RelativeFilePathInfoFactory>();
 
                         /* installation */
+                        config.For<IDeploymentTypeParser>().Use<DeploymentTypeParser>();
                         config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
                         config.For<Func<Uri, IHttpClient>>().Use(uri => new RedirectedHttpClient(uri));
                         config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
