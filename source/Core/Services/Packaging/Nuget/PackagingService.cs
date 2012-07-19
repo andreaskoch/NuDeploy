@@ -61,36 +61,35 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
             }
 
             // Build package
-            using (Stream nuspecFileStream = this.filesystemAccessor.GetReadStream(nuspecFile.FullName))
+            try
             {
+                Stream nuspecFileStream = this.filesystemAccessor.GetReadStream(nuspecFile.FullName);
                 if (nuspecFileStream == null)
                 {
                     return false;
                 }
 
-                try
+                var packageBuilder = new PackageBuilder(nuspecFileStream, packageBasePath);
+                nuspecFileStream.Close();
+
+                string nugetPackageFileName = string.Format("{0}.{1}{2}", packageBuilder.Id, packageBuilder.Version, NuDeployConstants.NuGetFileExtension);
+                string nugetPackageFilePath = Path.Combine(packageFolder, nugetPackageFileName);
+
+                using (Stream outputStream = this.filesystemAccessor.GetWriteStream(nugetPackageFilePath))
                 {
-                    var packageBuilder = new PackageBuilder(nuspecFileStream, packageBasePath);
-
-                    string nugetPackageFileName = string.Format("{0}.{1}{2}", packageBuilder.Id, packageBuilder.Version, NuDeployConstants.NuGetFileExtension);
-                    string nugetPackageFilePath = Path.Combine(packageFolder, nugetPackageFileName);
-
-                    using (Stream outputStream = this.filesystemAccessor.GetWriteStream(nugetPackageFilePath))
+                    if (outputStream == null)
                     {
-                        if (outputStream == null)
-                        {
-                            return false;
-                        }
-
-                        packageBuilder.Save(outputStream);
+                        return false;
                     }
 
-                    return true;
+                    packageBuilder.Save(outputStream);
                 }
-                catch (Exception packageBuilderException)
-                {
-                    return false;
-                }
+
+                return true;
+            }
+            catch (Exception packageBuilderException)
+            {
+                return false;
             }
         }
     }
