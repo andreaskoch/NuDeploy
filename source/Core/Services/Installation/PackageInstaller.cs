@@ -134,8 +134,7 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // check if install/update is required
-            bool installationWillBeExecuted = this.installationLogicProvider.IsInstallRequired(packageId, package.Version, forceInstallation);
-            if (!installationWillBeExecuted)
+            if (this.installationLogicProvider.IsInstallRequired(packageId, package.Version, forceInstallation) == false)
             {
                 return false;
             }
