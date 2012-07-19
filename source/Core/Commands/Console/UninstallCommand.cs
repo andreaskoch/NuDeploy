@@ -16,12 +16,12 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly IUserInterface userInterface;
 
-        private readonly IPackageInstaller packageInstaller;
+        private readonly IPackageUninstaller packageUninstaller;
 
-        public UninstallCommand(IUserInterface userInterface, IPackageInstaller packageInstaller)
+        public UninstallCommand(IUserInterface userInterface, IPackageUninstaller packageUninstaller)
         {
             this.userInterface = userInterface;
-            this.packageInstaller = packageInstaller;
+            this.packageUninstaller = packageUninstaller;
 
             this.Attributes = new CommandAttributes
             {
@@ -61,7 +61,7 @@ namespace NuDeploy.Core.Commands.Console
                 return;
             }
 
-            this.packageInstaller.Uninstall(packageId, null);
+            this.packageUninstaller.Uninstall(packageId, null);
         }
     }
 }

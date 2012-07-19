@@ -174,8 +174,10 @@
     <Compile Include="Services\Installation\IDeploymentTypeParser.cs" />
     <Compile Include="Services\Installation\IPackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\IPackageInstaller.cs" />
+    <Compile Include="Services\Installation\IPackageUninstaller.cs" />
     <Compile Include="Services\Installation\PackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\PackageInstaller.cs" />
+    <Compile Include="Services\Installation\PackageUninstaller.cs" />
     <Compile Include="Services\Installation\PowerShell\IPowerShellExecutor.cs" />
     <Compile Include="Services\Installation\PowerShell\IPowerShellHost.cs" />
     <Compile Include="Services\Installation\PowerShell\IPowerShellSession.cs" />
@@ -209,7 +211,9 @@
     <Compile Include="Services\Packaging\PrePackaging\IPrepackagingService.cs" />
     <Compile Include="Services\Packaging\PrePackaging\PrepackagingService.cs" />
     <Compile Include="Services\Packaging\SolutionPackagingService.cs" />
+    <Compile Include="Services\Status\IInstallationLogicProvider.cs" />
     <Compile Include="Services\Status\IInstallationStatusProvider.cs" />
+    <Compile Include="Services\Status\InstallationLogicProvider.cs" />
     <Compile Include="Services\Status\InstallationStatusProvider.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IConfigurationFileTransformer.cs" />

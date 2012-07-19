@@ -29,22 +29,24 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
 
             // Assert
             Assert.IsNotNull(packageInstaller);
@@ -57,22 +59,24 @@ namespace NuDeploy.Tests.UnitTests.Installation
             // Arrange
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 null,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
         }
 
         [Test]
@@ -82,22 +86,24 @@ namespace NuDeploy.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 applicationInformation,
                 null,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
         }
 
         [Test]
@@ -107,47 +113,24 @@ namespace NuDeploy.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 null,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_InstallationStatusProviderParametersIsNotSet_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            // Act
-            new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                null,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
         }
 
         [Test]
@@ -158,21 +141,23 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 null,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
         }
 
         [Test]
@@ -183,21 +168,23 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 null,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
         }
 
         [Test]
@@ -208,21 +195,23 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 null,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
         }
 
         [Test]
@@ -233,20 +222,76 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             // Act
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
+                null,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_InstallationLogicProviderParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
+
+            // Act
+            new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object,
+                null,
+                packageUninstaller.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PackageUninstallerParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+
+            // Act
+            new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
                 null);
         }
 
@@ -268,21 +313,23 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
 
             // Act
             packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -300,11 +347,12 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>();
             packageRepositoryBrowser.Setup(p => p.RepositoryConfigurations).Returns(sourceRepositoryConfigurations);
@@ -313,276 +361,18 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 applicationInformation,
                 filesystemAccessor.Object,
                 userInterface.Object,
-                installationStatusProvider.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 configurationFileTransformer.Object,
-                powerShellExecutor.Object);
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
 
             // Assert
             Assert.IsFalse(result);
-        }
-
-        #endregion
-
-        #region Uninstall
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Uninstall_PackageIdIsInvalid_ArgumentExceptionIsThrown(string packageId)
-        {
-            // Arrange
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            packageInstaller.Uninstall(packageId);
-        }
-
-        [Test]
-        public void Uninstall_PackageIsNotInstalled_ResultIsFalse()
-        {
-            // Arrange
-            string packageId = "Package.A";
-
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            bool result = packageInstaller.Uninstall(packageId);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void Uninstall_UninstallScriptIsNotFound_ResultIsFalse()
-        {
-            // Arrange
-            string packageId = "Package.A";
-
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var package = TestUtilities.GetPackage(packageId, true);
-            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
-
-            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(false);
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            bool result = packageInstaller.Uninstall(packageId);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void Uninstall_ExecutingUninstallScriptFails_ResultIsFalse()
-        {
-            // Arrange
-            string packageId = "Package.A";
-
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var package = TestUtilities.GetPackage(packageId, true);
-            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
-
-            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(false);
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            bool result = packageInstaller.Uninstall(packageId);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void Uninstall_ExecutingUninstallScriptSucceeds_PackageIsRemovedFromConfiguration()
-        {
-            // Arrange
-            string packageId = "Package.A";
-
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var package = TestUtilities.GetPackage(packageId, true);
-            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
-
-            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            packageInstaller.Uninstall(packageId);
-
-            // Assert
-            packageConfigurationAccessor.Verify(p => p.Remove(packageId), Times.Once());
-        }
-
-        [Test]
-        public void Uninstall_ExecutingUninstallScriptSucceeds_PackageDirectoryIsRemoved()
-        {
-            // Arrange
-            string packageId = "Package.A";
-
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var package = TestUtilities.GetPackage(packageId, true);
-            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
-
-            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            packageInstaller.Uninstall(packageId);
-
-            // Assert
-            filesystemAccessor.Verify(f => f.DeleteDirectory(package.Folder), Times.Once());
-        }
-
-        [Test]
-        public void Uninstall_ExecutingUninstallScriptSucceeds_ResultIsTrue()
-        {
-            // Arrange
-            string packageId = "Package.A";
-
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-
-            var package = TestUtilities.GetPackage(packageId, true);
-            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
-
-            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
-
-            var packageInstaller = new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
-                userInterface.Object,
-                installationStatusProvider.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                configurationFileTransformer.Object,
-                powerShellExecutor.Object);
-
-            // Act
-            bool result = packageInstaller.Uninstall(packageId);
-
-            // Assert
-            Assert.IsTrue(result);
         }
 
         #endregion

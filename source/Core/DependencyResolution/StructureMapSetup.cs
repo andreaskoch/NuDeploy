@@ -77,12 +77,14 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IRelativeFilePathInfoFactory>().Use<RelativeFilePathInfoFactory>();
 
                         /* installation */
+                        config.For<IInstallationLogicProvider>().Use<InstallationLogicProvider>();
                         config.For<IDeploymentTypeParser>().Use<DeploymentTypeParser>();
                         config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
                         config.For<Func<Uri, IHttpClient>>().Use(uri => new RedirectedHttpClient(uri));
                         config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
                         config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();
                         config.For<IPackageInstaller>().Use<PackageInstaller>();
+                        config.For<IPackageUninstaller>().Use<PackageUninstaller>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
 
                         /* packaging */

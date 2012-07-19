@@ -21,8 +21,6 @@ namespace NuDeploy.Core.Services.Installation
 
         public const string InstallPowerShellScriptDeploymentTypeParameterName = "DeploymentType";
 
-        public const string UninstallPowerShellScriptName = "Remove.ps1";
-
         public const string SystemSettingsFileName = "systemsettings.xml";
 
         public const string SystemSettingsFolder = "tools";
@@ -37,8 +35,6 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly IUserInterface userInterface;
 
-        private readonly IInstallationStatusProvider installationStatusProvider;
-
         private readonly IPackageConfigurationAccessor packageConfigurationAccessor;
 
         private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
@@ -47,7 +43,11 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly IPowerShellExecutor powerShellExecutor;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, IPowerShellExecutor powerShellExecutor)
+        private readonly IInstallationLogicProvider installationLogicProvider;
+
+        private readonly IPackageUninstaller packageUninstaller;
+
+        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, IPowerShellExecutor powerShellExecutor, IInstallationLogicProvider installationLogicProvider, IPackageUninstaller packageUninstaller)
         {
             if (applicationInformation == null)
             {
@@ -62,11 +62,6 @@ namespace NuDeploy.Core.Services.Installation
             if (userInterface == null)
             {
                 throw new ArgumentNullException("userInterface");
-            }
-
-            if (installationStatusProvider == null)
-            {
-                throw new ArgumentNullException("installationStatusProvider");
             }
 
             if (packageConfigurationAccessor == null)
@@ -89,14 +84,25 @@ namespace NuDeploy.Core.Services.Installation
                 throw new ArgumentNullException("powerShellExecutor");
             }
 
+            if (installationLogicProvider == null)
+            {
+                throw new ArgumentNullException("installationLogicProvider");
+            }
+
+            if (packageUninstaller == null)
+            {
+                throw new ArgumentNullException("packageUninstaller");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
             this.userInterface = userInterface;
-            this.installationStatusProvider = installationStatusProvider;
             this.packageConfigurationAccessor = packageConfigurationAccessor;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
             this.configurationFileTransformer = configurationFileTransformer;
             this.powerShellExecutor = powerShellExecutor;
+            this.installationLogicProvider = installationLogicProvider;
+            this.packageUninstaller = packageUninstaller;
         }
 
         public bool Install(string packageId, DeploymentType deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
@@ -113,7 +119,7 @@ namespace NuDeploy.Core.Services.Installation
                 return false;
             }
 
-            // fetch package
+            // fetch package from repository
             IPackageRepository packageRepository;
             IPackage package = this.packageRepositoryBrowser.FindPackage(packageId, out packageRepository);
             if (package == null)
@@ -127,68 +133,29 @@ namespace NuDeploy.Core.Services.Installation
                 return false;
             }
 
-            // check if package is already installed
-            NuDeployPackageInfo packageInfoOfInstalledVersion = this.installationStatusProvider.GetPackageInfo(package.Id).FirstOrDefault(p => p.IsInstalled);
-            if (packageInfoOfInstalledVersion != null && deploymentType == DeploymentType.Full)
+            // check if install/update is required
+            bool installationWillBeExecuted = this.installationLogicProvider.IsInstallRequired(packageId, package.Version, forceInstallation);
+            if (!installationWillBeExecuted)
             {
-                if (forceInstallation == false)
-                {
-                    if (package.Version == packageInfoOfInstalledVersion.Version)
-                    {
-                        this.userInterface.WriteLine(
-                            string.Format(
-                                Resources.PackageInstaller.LatestVersionAlreadyInstalledMessageTemplate,
-                                packageInfoOfInstalledVersion.Id,
-                                packageInfoOfInstalledVersion.Version));
+                return false;
+            }
 
-                        return false;
-                    }
+            // uninstall previous version (if required)
+            if (this.installationLogicProvider.IsUninstallRequired(packageId, package.Version, deploymentType, forceInstallation))
+            {
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.RemovingPreviousVersionMessageTemplate, package.Id));
 
-                    if (package.Version < packageInfoOfInstalledVersion.Version)
-                    {
-                        this.userInterface.WriteLine(
-                            string.Format(
-                                Resources.PackageInstaller.NewerVersionAlreadyInstalledMessageTemplate,
-                                packageInfoOfInstalledVersion.Id,
-                                packageInfoOfInstalledVersion.Version,
-                                NuDeployConstants.CommonCommandOptionNameForce));
+                bool uninstallSucceeded = this.packageUninstaller.Uninstall(package.Id, null);
 
-                        return false;
-                    }
-                }
-
-                /* installed version is older and must be removed */
                 this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.PackageInstaller.RemovingPreviousVersionMessageTemplate,
-                        packageInfoOfInstalledVersion.Id,
-                        packageInfoOfInstalledVersion.Folder));
+                        uninstallSucceeded
+                        ? string.Format(Resources.PackageInstaller.PackageSuccessfullyRemovedMessageTemplate, package.Id)
+                        : string.Format(Resources.PackageInstaller.PackageRemovalFailedMessageTemplate, package.Id));
 
-                bool uninstallResult = this.Uninstall(packageInfoOfInstalledVersion.Id, packageInfoOfInstalledVersion.Version);
-                if (uninstallResult)
+                if (!uninstallSucceeded && !forceInstallation)
                 {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            Resources.PackageInstaller.PackageSuccessfullyRemovedMessageTemplate,
-                            packageInfoOfInstalledVersion.Id,
-                            packageInfoOfInstalledVersion.Version));
-                }
-                else
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            Resources.PackageInstaller.PackageRemovalFailedMessageTemplate,
-                            packageInfoOfInstalledVersion.Id,
-                            packageInfoOfInstalledVersion.Version));
-
-                    if (forceInstallation == false)
-                    {
-                        this.userInterface.WriteLine(
-                            string.Format(
-                                Resources.PackageInstaller.PackageRemovalFailedForceHintMessageTemplate, NuDeployConstants.CommonCommandOptionNameForce));
-
-                        return false;
-                    }
+                    // abort installation
+                    return false;
                 }
             }
 
@@ -261,56 +228,6 @@ namespace NuDeploy.Core.Services.Installation
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingInstallationMessageTemplate, package.Id, package.Version));
             packageManager.InstallPackage(package, false, true);
             this.userInterface.WriteLine(Resources.PackageInstaller.InstallationFinishedMessage);
-
-            return true;
-        }
-
-        public bool Uninstall(string packageId, SemanticVersion version = null)
-        {
-            if (string.IsNullOrWhiteSpace(packageId))
-            {
-                throw new ArgumentException("packageId");
-            }
-
-            // check if package is installed
-            NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId).FirstOrDefault(p => p.IsInstalled);
-            if (installedPackage == null)
-            {
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageIsNotInstalledMessageTemplate, packageId));
-                return false;
-            }
-
-            // find the uninstall script
-            string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
-            if (this.filesystemAccessor.FileExists(uninstallScriptPath) == false)
-            {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.PackageInstaller.UninstallScriptNotFoundMessageTemplate,
-                        UninstallPowerShellScriptName,
-                        installedPackage.Id,
-                        installedPackage.Version,
-                        installedPackage.Folder));
-
-                return false;
-            }
-
-            // uninstall
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptMessageTemplate, uninstallScriptPath));
-            if (!this.powerShellExecutor.ExecuteScript(uninstallScriptPath))
-            {
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath));
-                return false;
-            }
-
-            // update package configuration
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.RemovingPackageFromConfigurationMessageTemplate, installedPackage.Id, installedPackage.Id));
-            this.packageConfigurationAccessor.Remove(installedPackage.Id);
-
-            // remove package files
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
-            this.filesystemAccessor.DeleteDirectory(installedPackage.Folder);
 
             return true;
         }

@@ -144,17 +144,11 @@
   <data name="PackageNotFoundMessageTemplate" xml:space="preserve">
     <value>Package "{0}" was not found at "{1}". Please check your spelling or your package source configuration.</value>
   </data>
-  <data name="PackageRemovalFailedForceHintMessageTemplate" xml:space="preserve">
-    <value>Please make sure the package has been removed properly before installing a new version or use the -{0} option if you still want to install the new version.</value>
-  </data>
   <data name="PackageRemovalFailedMessageTemplate" xml:space="preserve">
-    <value>The removal of the the previous version of {0} (Version: {1}) failed.</value>
-  </data>
-  <data name="PackageSuccessfullyRemovedMessageTemplate" xml:space="preserve">
-    <value>{0} (Version: {1}) has been successfully removed.</value>
+    <value>The removal of the the previous version of "{0}" failed.</value>
   </data>
   <data name="RemovingPreviousVersionMessageTemplate" xml:space="preserve">
-    <value>Removing previous version of {0} from folder {1}.</value>
+    <value>Removing previous version of "{0}".</value>
   </data>
   <data name="StartingInstallationMessageTemplate" xml:space="preserve">
     <value>Starting installation of package "{0}" (Version: {1}).</value>
@@ -194,5 +188,8 @@
   </data>
   <data name="ExecutingUninstallScriptFailedMessageTemplate" xml:space="preserve">
     <value>Executing the uninstall script "{0}" failed.</value>
+  </data>
+  <data name="PackageSuccessfullyRemovedMessageTemplate" xml:space="preserve">
+    <value>"{0}" has been successfully removed.</value>
   </data>
 </root>
