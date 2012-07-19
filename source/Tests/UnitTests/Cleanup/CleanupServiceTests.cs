@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using Moq;
@@ -10,8 +9,6 @@ using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Cleanup;
 using NuDeploy.Core.Services.Status;
-
-using NuGet;
 
 using NUnit.Framework;
 
@@ -106,9 +103,9 @@ namespace NuDeploy.Tests.UnitTests.Cleanup
 
             var packages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.A", true),
-                    this.GetPackage("Package.B", true),
-                    this.GetPackage("Package.C", true),
+                    TestUtilities.GetPackage("Package.A", true),
+                    TestUtilities.GetPackage("Package.B", true),
+                    TestUtilities.GetPackage("Package.C", true),
                 };
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
@@ -131,13 +128,13 @@ namespace NuDeploy.Tests.UnitTests.Cleanup
 
             var installedPackages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.A", true)
+                    TestUtilities.GetPackage("Package.A", true)
                 };
 
             var legacyPackages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.B", false),
-                    this.GetPackage("Package.C", false),
+                    TestUtilities.GetPackage("Package.B", false),
+                    TestUtilities.GetPackage("Package.C", false),
                 };
 
             var packages = installedPackages.Union(legacyPackages).ToList();
@@ -219,9 +216,9 @@ namespace NuDeploy.Tests.UnitTests.Cleanup
 
             var packages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.A", true),
-                    this.GetPackage("Package.B", true),
-                    this.GetPackage("Package.C", true),
+                    TestUtilities.GetPackage("Package.A", true),
+                    TestUtilities.GetPackage("Package.B", true),
+                    TestUtilities.GetPackage("Package.C", true),
                 };
 
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
@@ -247,9 +244,9 @@ namespace NuDeploy.Tests.UnitTests.Cleanup
 
             var packages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.A", true, 1),
-                    this.GetPackage("Package.A", true, 2),
-                    this.GetPackage("Package.A", true, 3),
+                    TestUtilities.GetPackage("Package.A", true, 1),
+                    TestUtilities.GetPackage("Package.A", true, 2),
+                    TestUtilities.GetPackage("Package.A", true, 3),
                 };
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
@@ -274,13 +271,13 @@ namespace NuDeploy.Tests.UnitTests.Cleanup
 
             var installedPackages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.A", true, 9)
+                    TestUtilities.GetPackage("Package.A", true, 9)
                 };
 
             var legacyPackages = new List<NuDeployPackageInfo>
                 {
-                    this.GetPackage("Package.A", false, 8),
-                    this.GetPackage("Package.A", false, 7),
+                    TestUtilities.GetPackage("Package.A", false, 8),
+                    TestUtilities.GetPackage("Package.A", false, 7),
                 };
 
             var packages = installedPackages.Union(legacyPackages).ToList();
@@ -306,19 +303,6 @@ namespace NuDeploy.Tests.UnitTests.Cleanup
             }
 
             Assert.IsTrue(result);
-        }
-
-        #endregion
-
-        #region utility methods
-
-        private NuDeployPackageInfo GetPackage(string id, bool isInstalled, int revision = 0)
-        {
-            var version = new SemanticVersion(1, 0, 0, revision);
-            string folderName = string.Format("{0}.{1}", id, version);
-            string folderPath = Path.Combine(Environment.CurrentDirectory, folderName);
-
-            return new NuDeployPackageInfo { Id = id, IsInstalled = isInstalled, Folder = folderPath, Version = version };
         }
 
         #endregion

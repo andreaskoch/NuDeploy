@@ -106,6 +106,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Executing the uninstall script &quot;{0}&quot; failed..
+        /// </summary>
+        internal static string ExecutingUninstallScriptFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("ExecutingUninstallScriptFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Executing uninstall script &quot;{0}&quot;..
         /// </summary>
         internal static string ExecutingUninstallScriptMessageTemplate {

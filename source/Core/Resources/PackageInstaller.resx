@@ -192,4 +192,7 @@
   <data name="SystemSettingTransformationSucceededMessage" xml:space="preserve">
     <value>Tranformation succeeded.</value>
   </data>
+  <data name="ExecutingUninstallScriptFailedMessageTemplate" xml:space="preserve">
+    <value>Executing the uninstall script "{0}" failed.</value>
+  </data>
 </root>

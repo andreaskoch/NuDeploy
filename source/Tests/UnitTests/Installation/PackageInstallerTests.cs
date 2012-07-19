@@ -314,6 +314,199 @@ namespace NuDeploy.Tests.UnitTests.Installation
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void Uninstall_UninstallScriptIsNotFound_ResultIsFalse()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(false);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            bool result = packageInstaller.Uninstall(packageId);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Uninstall_ExecutingUninstallScriptFails_ResultIsFalse()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(false);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            bool result = packageInstaller.Uninstall(packageId);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Uninstall_ExecutingUninstallScriptSucceeds_PackageIsRemovedFromConfiguration()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            packageInstaller.Uninstall(packageId);
+
+            // Assert
+            packageConfigurationAccessor.Verify(p => p.Remove(packageId), Times.Once());
+        }
+
+        [Test]
+        public void Uninstall_ExecutingUninstallScriptSucceeds_PackageDirectoryIsRemoved()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            packageInstaller.Uninstall(packageId);
+
+            // Assert
+            filesystemAccessor.Verify(f => f.DeleteDirectory(package.Folder), Times.Once());
+        }
+
+        [Test]
+        public void Uninstall_ExecutingUninstallScriptSucceeds_ResultIsTrue()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageInstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                configurationFileTransformer.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            bool result = packageInstaller.Uninstall(packageId);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
         #endregion
     }
 }

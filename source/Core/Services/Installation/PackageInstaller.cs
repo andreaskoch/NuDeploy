@@ -299,7 +299,11 @@ namespace NuDeploy.Core.Services.Installation
             // uninstall
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptMessageTemplate, uninstallScriptPath));
-            this.powerShellExecutor.ExecuteScript(uninstallScriptPath);
+            if (!this.powerShellExecutor.ExecuteScript(uninstallScriptPath))
+            {
+                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath));
+                return false;
+            }
 
             // update package configuration
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.RemovingPackageFromConfigurationMessageTemplate, installedPackage.Id, installedPackage.Id));
