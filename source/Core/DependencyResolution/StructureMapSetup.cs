@@ -86,6 +86,8 @@ namespace NuDeploy.Core.DependencyResolution
                         config.For<IPackageInstaller>().Use<PackageInstaller>();
                         config.For<IPackageUninstaller>().Use<PackageUninstaller>();
                         config.For<IPackageRepositoryFactory>().Use<CommandLineRepositoryFactory>();
+                        config.For<IPackageConfigurationTransformationService>().Use<PackageConfigurationTransformationService>();
+                        config.For<INugetPackageExtractor>().Use<NugetPackageExtractor>();
 
                         /* packaging */
                         config.For<ISolutionPackagingService>().Use<SolutionPackagingService>();

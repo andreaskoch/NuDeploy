@@ -38,25 +38,14 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             }
         }
 
-        public IPackage FindPackage(string packageId, out IPackageRepository packageRepository)
+        public IPackage FindPackage(string packageId)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 throw new ArgumentException("packageId");
             }
 
-            foreach (var repository in this.repositories)
-            {
-                var package = repository.FindPackage(packageId);
-                if (package != null)
-                {
-                    packageRepository = repository;
-                    return package;
-                }
-            }
-
-            packageRepository = null;
-            return null;
+            return this.repositories.Select(repository => repository.FindPackage(packageId)).FirstOrDefault(package => package != null);
         }
     }
 }

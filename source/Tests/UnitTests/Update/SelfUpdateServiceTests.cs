@@ -173,8 +173,7 @@ namespace NuDeploy.Tests.UnitTests.Update
             var packageMock = new Mock<IPackage>();
             packageMock.Setup(p => p.Version).Returns(new SemanticVersion(1, 0, 0, 0));
 
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>(), out packageRepository)).Returns(packageMock.Object);
+            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>())).Returns(packageMock.Object);
 
             var selfUpdateService = new SelfUpdateService(
                 userInterface.Object, applicationInformation, packageRepositoryBrowser.Object, filesystemAccessor.Object);
@@ -205,8 +204,7 @@ namespace NuDeploy.Tests.UnitTests.Update
             packageMock.Setup(p => p.Version).Returns(new SemanticVersion(2, 0, 0, 0));
             packageMock.Setup(p => p.GetFiles()).Returns(new List<IPackageFile> { packageFileMock.Object });
 
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>(), out packageRepository)).Returns(packageMock.Object);
+            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>())).Returns(packageMock.Object);
 
             var selfUpdateService = new SelfUpdateService(
                 userInterface.Object, applicationInformation, packageRepositoryBrowser.Object, filesystemAccessor.Object);
@@ -237,8 +235,7 @@ namespace NuDeploy.Tests.UnitTests.Update
             packageMock.Setup(p => p.Version).Returns(new SemanticVersion(2, 0, 0, 0));
             packageMock.Setup(p => p.GetFiles()).Returns(new List<IPackageFile> { packageFileMock.Object });
 
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>(), out packageRepository)).Returns(packageMock.Object);
+            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>())).Returns(packageMock.Object);
 
             var selfUpdateService = new SelfUpdateService(
                 userInterface.Object, applicationInformation, packageRepositoryBrowser.Object, filesystemAccessor.Object);
@@ -272,8 +269,7 @@ namespace NuDeploy.Tests.UnitTests.Update
             packageMock.Setup(p => p.Version).Returns(new SemanticVersion(2, 0, 0, 0));
             packageMock.Setup(p => p.GetFiles()).Returns(new List<IPackageFile> { packageFileMock.Object });
 
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>(), out packageRepository)).Returns(packageMock.Object);
+            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>())).Returns(packageMock.Object);
 
             var selfUpdateService = new SelfUpdateService(
                 userInterface.Object, applicationInformation, packageRepositoryBrowser.Object, filesystemAccessor.Object);
@@ -308,8 +304,7 @@ namespace NuDeploy.Tests.UnitTests.Update
             packageMock.Setup(p => p.Version).Returns(new SemanticVersion(2, 0, 0, 0));
             packageMock.Setup(p => p.GetFiles()).Returns(new List<IPackageFile> { packageFileMock.Object });
 
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>(), out packageRepository)).Returns(packageMock.Object);
+            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>())).Returns(packageMock.Object);
 
             Stream targetStream = null;
             filesystemAccessor.Setup(f => f.GetWriteStream(exePath)).Returns(targetStream);
@@ -350,8 +345,7 @@ namespace NuDeploy.Tests.UnitTests.Update
             var targetStream = new MemoryStream();
             filesystemAccessor.Setup(f => f.GetWriteStream(exePath)).Returns(targetStream);
 
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>(), out packageRepository)).Returns(packageMock.Object);
+            packageRepositoryBrowser.Setup(p => p.FindPackage(It.IsAny<string>())).Returns(packageMock.Object);
 
             var selfUpdateService = new SelfUpdateService(
                 userInterface.Object, applicationInformation, packageRepositoryBrowser.Object, filesystemAccessor.Object);

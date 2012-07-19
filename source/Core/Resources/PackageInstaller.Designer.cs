@@ -70,15 +70,6 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applying transformations to the system settings of your deployment package using the &quot;{0}&quot; profile..
-        /// </summary>
-        internal static string ApplyingSystemSettingsTransformationProfileMessageTemplate {
-            get {
-                return ResourceManager.GetString("ApplyingSystemSettingsTransformationProfileMessageTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Deleting package folder &quot;{0}&quot;..
         /// </summary>
         internal static string DeletingPackageFolderMessageTemplate {
@@ -255,24 +246,6 @@ namespace NuDeploy.Core.Resources {
         internal static string StartingUninstallMessageTemplate {
             get {
                 return ResourceManager.GetString("StartingUninstallMessageTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tranformation failed..
-        /// </summary>
-        internal static string SystemSettingTransformationFailedMessage {
-            get {
-                return ResourceManager.GetString("SystemSettingTransformationFailedMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tranformation succeeded..
-        /// </summary>
-        internal static string SystemSettingTransformationSucceededMessage {
-            get {
-                return ResourceManager.GetString("SystemSettingTransformationSucceededMessage", resourceCulture);
             }
         }
         

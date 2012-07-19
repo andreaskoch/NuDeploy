@@ -177,15 +177,6 @@
   <data name="RemovingPackageFromConfigurationMessageTemplate" xml:space="preserve">
     <value>Removing package "{0}" Version({1}) from the package configuration.</value>
   </data>
-  <data name="ApplyingSystemSettingsTransformationProfileMessageTemplate" xml:space="preserve">
-    <value>Applying transformations to the system settings of your deployment package using the "{0}" profile.</value>
-  </data>
-  <data name="SystemSettingTransformationFailedMessage" xml:space="preserve">
-    <value>Tranformation failed.</value>
-  </data>
-  <data name="SystemSettingTransformationSucceededMessage" xml:space="preserve">
-    <value>Tranformation succeeded.</value>
-  </data>
   <data name="ExecutingUninstallScriptFailedMessageTemplate" xml:space="preserve">
     <value>Executing the uninstall script "{0}" failed.</value>
   </data>

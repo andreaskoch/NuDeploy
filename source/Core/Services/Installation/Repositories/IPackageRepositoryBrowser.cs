@@ -10,6 +10,6 @@ namespace NuDeploy.Core.Services.Installation.Repositories
     {
         IEnumerable<SourceRepositoryConfiguration> RepositoryConfigurations { get; }
 
-        IPackage FindPackage(string packageId, out IPackageRepository packageRepository);
+        IPackage FindPackage(string packageId);
     }
 }

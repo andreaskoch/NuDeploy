@@ -74,8 +74,7 @@ namespace NuDeploy.Core.Services.Update
             this.userInterface.WriteLine(selfUpdateMessage);
 
             // fetch package
-            IPackageRepository packageRepository;
-            IPackage updatePackage = this.packageRepositoryBrowser.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId, out packageRepository);
+            IPackage updatePackage = this.packageRepositoryBrowser.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
             if (updatePackage == null)
             {
                 this.userInterface.WriteLine(Resources.SelfUpdateCommand.PackageNotFound);

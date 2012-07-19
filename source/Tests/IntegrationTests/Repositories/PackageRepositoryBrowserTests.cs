@@ -35,48 +35,40 @@ namespace NuDeploy.Tests.IntegrationTests.Repositories
         [TestCase("Newtonsoft.Json")]
         public void FindPackage_PackageIdIsAvailableInRepository_ResultIsNotNull_PackageRepositoryIsNotNull(string packageId)
         {
-            // Arrange
-            IPackageRepository packageRepository;
-
             // Act
-            IPackage result = this.packageRepositoryBrowser.FindPackage(packageId, out packageRepository);
+            IPackage result = this.packageRepositoryBrowser.FindPackage(packageId);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(packageRepository);
         }
 
         [Test]
-        public void FindPackage_PackageIdIsNotAvailableInRepository_ResultIsNull_PackageRepositoryIsNull()
+        public void FindPackage_PackageIdIsNotAvailableInRepository_ResultIsNull()
         {
             // Arrange
             string packageId = "Some-Non-Existing-Package-Id-312312312312";
-            IPackageRepository packageRepository;
 
             // Act
-            IPackage result = this.packageRepositoryBrowser.FindPackage(packageId, out packageRepository);
+            IPackage result = this.packageRepositoryBrowser.FindPackage(packageId);
 
             // Assert
             Assert.IsNull(result);
-            Assert.IsNull(packageRepository);
         }
 
         [Test]
-        public void FindPackage_FirstPackageIsFound_SecondPackageNot_ResultIsNull_PackageRepositoryIsNull()
+        public void FindPackage_FirstPackageIsFound_SecondPackageNot_ResultIsNull()
         {
             // Arrange
             string existingPackageId = "jQuery";
             string nonExistingPackageId = "Some-Non-Existing-Package-Id-312312312312";
 
-            IPackageRepository packageRepository;
-            this.packageRepositoryBrowser.FindPackage(existingPackageId, out packageRepository);
+            this.packageRepositoryBrowser.FindPackage(existingPackageId);
 
             // Act
-            IPackage result = this.packageRepositoryBrowser.FindPackage(nonExistingPackageId, out packageRepository);
+            IPackage result = this.packageRepositoryBrowser.FindPackage(nonExistingPackageId);
 
             // Assert
             Assert.IsNull(result);
-            Assert.IsNull(packageRepository);
         }
     }
 }

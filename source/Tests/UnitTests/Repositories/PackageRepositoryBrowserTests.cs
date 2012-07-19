@@ -164,12 +164,11 @@ namespace NuDeploy.Tests.UnitTests.Repositories
             var packageRepositoryBrowser = new PackageRepositoryBrowser(sourceRepositoryProviderMock.Object, packageRepositoryFactoryMock.Object);
 
             // Act
-            IPackageRepository packageRepository;
-            packageRepositoryBrowser.FindPackage(packageId, out packageRepository);
+            packageRepositoryBrowser.FindPackage(packageId);
         }
 
         [Test]
-        public void FindPackage_PackageIdIsValid_NoRepositoriesAreConfigured_ResultIsNull_PackageRepositoryIsNull()
+        public void FindPackage_PackageIdIsValid_NoRepositoriesAreConfigured_ResultIsNull()
         {
             // Arrange
             var sourceRepositoryProviderMock = new Mock<ISourceRepositoryProvider>();
@@ -181,12 +180,10 @@ namespace NuDeploy.Tests.UnitTests.Repositories
             var packageRepositoryBrowser = new PackageRepositoryBrowser(sourceRepositoryProviderMock.Object, packageRepositoryFactoryMock.Object);
 
             // Act
-            IPackageRepository packageRepository;
-            IPackage result = packageRepositoryBrowser.FindPackage("package", out packageRepository);
+            IPackage result = packageRepositoryBrowser.FindPackage("package");
 
             // Assert
             Assert.IsNull(result);
-            Assert.IsNull(packageRepository);
         }
 
         #endregion

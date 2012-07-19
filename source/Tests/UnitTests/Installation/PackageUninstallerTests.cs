@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Moq;
 
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation;
@@ -38,6 +40,101 @@ namespace NuDeploy.Tests.UnitTests.Installation
 
             // Assert
             Assert.IsNotNull(packageUninstaller);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_UserInterfaceParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            // Act
+            new PackageUninstaller(
+                null,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                filesystemAccessor.Object,
+                powerShellExecutor.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_InstallationStatusProviderParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            // Act
+            new PackageUninstaller(
+                userInterface.Object,
+                null,
+                packageConfigurationAccessor.Object,
+                filesystemAccessor.Object,
+                powerShellExecutor.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PackageConfigurationAccessorParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            // Act
+            new PackageUninstaller(
+                userInterface.Object,
+                installationStatusProvider.Object,
+                null,
+                filesystemAccessor.Object,
+                powerShellExecutor.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_FilesystemAccessorParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            // Act
+            new PackageUninstaller(
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                null,
+                powerShellExecutor.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PowerShellExecutorParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+
+            // Act
+            new PackageUninstaller(
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                filesystemAccessor.Object,
+                null);
         }
 
         #endregion
@@ -82,6 +179,42 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var packageUninstaller = new PackageUninstaller(
+                userInterface.Object,
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                filesystemAccessor.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            bool result = packageUninstaller.Uninstall(packageId, version);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Uninstall_UninstallSpecificVersion_ResultIsFalse()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            SemanticVersion version = TestUtilities.GetPackage(packageId, true, 3).Version;
+
+            var userInterface = new Mock<IUserInterface>();
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var packages = new List<NuDeployPackageInfo>
+                {
+                    TestUtilities.GetPackage(packageId, false, 1),
+                    TestUtilities.GetPackage(packageId, false, 2),
+                    TestUtilities.GetPackage(packageId, true, 3)
+                };
+
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(packages);
 
             var packageUninstaller = new PackageUninstaller(
                 userInterface.Object,

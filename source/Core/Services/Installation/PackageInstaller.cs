@@ -21,14 +21,6 @@ namespace NuDeploy.Core.Services.Installation
 
         public const string InstallPowerShellScriptDeploymentTypeParameterName = "DeploymentType";
 
-        public const string SystemSettingsFileName = "systemsettings.xml";
-
-        public const string SystemSettingsFolder = "tools";
-
-        public const string SystemSettingsTransformationFilenameTemplate = "systemsettings.transformation.{0}.xml";
-
-        public const string TransformedSystemSettingsFileName = SystemSettingsFileName + ".transformed";
-
         private readonly ApplicationInformation applicationInformation;
 
         private readonly IFilesystemAccessor filesystemAccessor;
@@ -39,15 +31,17 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly IPackageRepositoryBrowser packageRepositoryBrowser;
 
-        private readonly IConfigurationFileTransformer configurationFileTransformer;
-
         private readonly IPowerShellExecutor powerShellExecutor;
 
         private readonly IInstallationLogicProvider installationLogicProvider;
 
         private readonly IPackageUninstaller packageUninstaller;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IConfigurationFileTransformer configurationFileTransformer, IPowerShellExecutor powerShellExecutor, IInstallationLogicProvider installationLogicProvider, IPackageUninstaller packageUninstaller)
+        private readonly INugetPackageExtractor nugetPackageExtractor;
+
+        private readonly IPackageConfigurationTransformationService packageConfigurationTransformationService;
+
+        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IPowerShellExecutor powerShellExecutor, IInstallationLogicProvider installationLogicProvider, IPackageUninstaller packageUninstaller, INugetPackageExtractor nugetPackageExtractor, IPackageConfigurationTransformationService packageConfigurationTransformationService)
         {
             if (applicationInformation == null)
             {
@@ -74,11 +68,6 @@ namespace NuDeploy.Core.Services.Installation
                 throw new ArgumentNullException("packageRepositoryBrowser");
             }
 
-            if (configurationFileTransformer == null)
-            {
-                throw new ArgumentNullException("configurationFileTransformer");
-            }
-
             if (powerShellExecutor == null)
             {
                 throw new ArgumentNullException("powerShellExecutor");
@@ -94,15 +83,26 @@ namespace NuDeploy.Core.Services.Installation
                 throw new ArgumentNullException("packageUninstaller");
             }
 
+            if (nugetPackageExtractor == null)
+            {
+                throw new ArgumentNullException("nugetPackageExtractor");
+            }
+
+            if (packageConfigurationTransformationService == null)
+            {
+                throw new ArgumentNullException("packageConfigurationTransformationService");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
             this.userInterface = userInterface;
             this.packageConfigurationAccessor = packageConfigurationAccessor;
             this.packageRepositoryBrowser = packageRepositoryBrowser;
-            this.configurationFileTransformer = configurationFileTransformer;
             this.powerShellExecutor = powerShellExecutor;
             this.installationLogicProvider = installationLogicProvider;
             this.packageUninstaller = packageUninstaller;
+            this.nugetPackageExtractor = nugetPackageExtractor;
+            this.packageConfigurationTransformationService = packageConfigurationTransformationService;
         }
 
         public bool Install(string packageId, DeploymentType deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
@@ -120,8 +120,7 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // fetch package from repository
-            IPackageRepository packageRepository;
-            IPackage package = this.packageRepositoryBrowser.FindPackage(packageId, out packageRepository);
+            IPackage package = this.packageRepositoryBrowser.FindPackage(packageId);
             if (package == null)
             {
                 this.userInterface.WriteLine(
@@ -158,75 +157,47 @@ namespace NuDeploy.Core.Services.Installation
                 }
             }
 
-            var packageManager = new PackageManager(packageRepository, this.applicationInformation.StartupFolder);
-            packageManager.PackageInstalling +=
-                (sender, args) =>
-                this.userInterface.WriteLine(
-                    string.Format(Resources.PackageInstaller.DownloadingPackageMessageTemplate, args.Package.Id, args.Package.Version, args.InstallPath));
-
-            packageManager.PackageInstalled += (sender, args) =>
+            // extract the package
+            NuDeployPackageInfo extractedPackage = this.nugetPackageExtractor.Extract(package, this.applicationInformation.StartupFolder);
+            if (extractedPackage == null)
             {
-                string packageFolder = args.InstallPath;
-                string installScriptPath = Path.Combine(packageFolder, InstallPowerShellScriptName);
+                return false;
+            }
 
+            // apply system setting transformation
+            if (!this.packageConfigurationTransformationService.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames))
+            {
+                return false;
+            }
+
+            // execute installation script
+            string scriptParameter = string.Format("-{0} {1}", InstallPowerShellScriptDeploymentTypeParameterName, deploymentType);
+            string installScriptPath = Path.Combine(extractedPackage.Folder, InstallPowerShellScriptName);
+
+            if (!this.filesystemAccessor.FileExists(installScriptPath))
+            {
                 this.userInterface.WriteLine(
-                    string.Format(Resources.PackageInstaller.PackageDownloadedMessageTemplate, args.Package.Id, args.Package.Version, packageFolder));
+                    string.Format(
+                        Resources.PackageInstaller.InstallScriptNotFoundMessageTemplate,
+                        installScriptPath,
+                        extractedPackage.Id,
+                        extractedPackage.Version,
+                        extractedPackage.Folder));
 
-                if (this.filesystemAccessor.FileExists(installScriptPath) == false)
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(
-                            Resources.PackageInstaller.InstallScriptNotFoundMessageTemplate, installScriptPath, package.Id, package.Version, packageFolder));
+                return false;
+            }
 
-                    return;
-                }
+            this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath, scriptParameter));
 
-                // apply transformations on the system settings before installation
-                if (systemSettingTransformationProfileNames != null && systemSettingTransformationProfileNames.Length > 0)
-                {
-                    string sourceFileFolder = Path.Combine(packageFolder, SystemSettingsFolder);
-                    string sourceFilePath = Path.Combine(sourceFileFolder, SystemSettingsFileName);
+            if (!this.powerShellExecutor.ExecuteScript(installScriptPath, scriptParameter))
+            {
+                return false;
+            }
 
-                    foreach (var systemSettingTransformationProfileName in systemSettingTransformationProfileNames)
-                    {
-                        this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ApplyingSystemSettingsTransformationProfileMessageTemplate, systemSettingTransformationProfileName));
-
-                        string transformationFilename = string.Format(SystemSettingsTransformationFilenameTemplate, systemSettingTransformationProfileName);
-                        string transformationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, transformationFilename);
-                        string destinationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, TransformedSystemSettingsFileName);
-
-                        if (this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
-                        {
-                            this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationSucceededMessage);
-
-                            // make the transformed file the source for the next transformation
-                            sourceFilePath = destinationFilePath;
-                        }
-                        else
-                        {
-                            this.userInterface.WriteLine(Resources.PackageInstaller.SystemSettingTransformationFailedMessage);
-
-                            // abort the transformations
-                            break;
-                        }
-                    }
-                }
-
-                // execute installation script
-                this.userInterface.WriteLine(Resources.PackageInstaller.StartingInstallationPowerShellScriptExecutionMessageTemplate);
-
-                string scriptParameter = string.Format("-{0} {1}", InstallPowerShellScriptDeploymentTypeParameterName, deploymentType);
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingInstallScriptMessageTemplate, installScriptPath, scriptParameter));
-                this.powerShellExecutor.ExecuteScript(installScriptPath, scriptParameter);
-
-                // update package configuration
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.AddingPackageToConfigurationMessageTemplate, package.Id, package.Id));
-                this.packageConfigurationAccessor.AddOrUpdate(new PackageInfo { Id = package.Id, Version = package.Version.ToString() });
-            };
-
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingInstallationMessageTemplate, package.Id, package.Version));
-            packageManager.InstallPackage(package, false, true);
-            this.userInterface.WriteLine(Resources.PackageInstaller.InstallationFinishedMessage);
+            // update package configuration
+            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.AddingPackageToConfigurationMessageTemplate, package.Id, package.Id));
+            this.packageConfigurationAccessor.AddOrUpdate(new PackageInfo { Id = package.Id, Version = package.Version.ToString() });
 
             return true;
         }

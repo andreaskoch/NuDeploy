@@ -86,6 +86,7 @@
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Filesystem\RelativeFilePathInfoFactoryTests.cs" />
     <Compile Include="UnitTests\Installation\DeploymentTypeParserTests.cs" />
+    <Compile Include="UnitTests\Installation\NugetPackageExtractorTests.cs" />
     <Compile Include="UnitTests\Installation\PackageInstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PackageUninstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PowerShellExecutorTests.cs" />

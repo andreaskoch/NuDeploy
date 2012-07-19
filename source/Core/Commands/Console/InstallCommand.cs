@@ -5,6 +5,7 @@ using System.Linq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation;
+using NuDeploy.Core.Services.Transformation;
 
 namespace NuDeploy.Core.Commands.Console
 {
@@ -69,7 +70,7 @@ namespace NuDeploy.Core.Commands.Console
                     {
                         { ArgumentNameNugetPackageId, Resources.InstallCommand.ArgumentDescriptionNugetPackageId },
                         { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), DeploymentType.Full) },
-                        { ArgumentNameSystemSettingTransformationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationProfilesTemplate, PackageInstaller.TransformedSystemSettingsFileName) }
+                        { ArgumentNameSystemSettingTransformationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationProfilesTemplate, PackageConfigurationTransformationService.TransformedSystemSettingsFileName) }
                     }
             };
 

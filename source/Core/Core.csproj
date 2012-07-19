@@ -172,9 +172,11 @@
     <Compile Include="Services\Installation\DeploymentTypeParser.cs" />
     <Compile Include="Services\Installation\DeploymentType.cs" />
     <Compile Include="Services\Installation\IDeploymentTypeParser.cs" />
+    <Compile Include="Services\Installation\INugetPackageExtractor.cs" />
     <Compile Include="Services\Installation\IPackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\IPackageInstaller.cs" />
     <Compile Include="Services\Installation\IPackageUninstaller.cs" />
+    <Compile Include="Services\Installation\NugetPackageExtractor.cs" />
     <Compile Include="Services\Installation\PackageConfigurationAccessor.cs" />
     <Compile Include="Services\Installation\PackageInstaller.cs" />
     <Compile Include="Services\Installation\PackageUninstaller.cs" />
@@ -217,6 +219,8 @@
     <Compile Include="Services\Status\InstallationStatusProvider.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IConfigurationFileTransformer.cs" />
+    <Compile Include="Services\Transformation\IPackageConfigurationTransformationService.cs" />
+    <Compile Include="Services\Transformation\PackageConfigurationTransformationService.cs" />
     <Compile Include="Services\Update\ISelfUpdateService.cs" />
     <Compile Include="Services\Update\SelfUpdateService.cs" />
   </ItemGroup>
