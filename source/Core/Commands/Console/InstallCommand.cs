@@ -20,7 +20,7 @@ namespace NuDeploy.Core.Commands.Console
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
 
-        private readonly string[] allowedDeploymentTypes = Enum.GetValues(typeof(DeploymentType)).Cast<string>().ToArray();
+        private readonly string[] allowedDeploymentTypes = Enum.GetValues(typeof(DeploymentType)).Cast<DeploymentType>().Select(d => d.ToString()).ToArray();
 
         private readonly IUserInterface userInterface;
 
