@@ -73,6 +73,7 @@ namespace CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(IBuildFolderPathProvider))]
         [TestCase(typeof(ISolutionBuilder))]
         [TestCase(typeof(IBuildResultFilePathProvider))]
+        [TestCase(typeof(IBuildPropertyProvider))]
         [TestCase(typeof(ICommandArgumentNameMatcher))]
         [TestCase(typeof(ICommandArgumentParser))]
         [TestCase(typeof(ICommandLineArgumentInterpreter))]

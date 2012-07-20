@@ -96,6 +96,7 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IBuildFolderPathProvider>().Use<BuildFolderPathProvider>();
                         config.For<ISolutionBuilder>().Use<SolutionBuilder>();
                         config.For<IBuildResultFilePathProvider>().Use<ConventionBasedBuildResultFilePathProvider>();
+                        config.For<IBuildPropertyProvider>().Use<BuildPropertyProvider>();
 
                         /* console services */
                         config.For<ICommandArgumentNameMatcher>().Use<CommandArgumentNameMatcher>();

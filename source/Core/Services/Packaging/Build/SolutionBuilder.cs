@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Build.Execution;
 
@@ -6,41 +8,58 @@ namespace NuDeploy.Core.Services.Packaging.Build
 {
     public class SolutionBuilder : ISolutionBuilder
     {
-        private const string BuildPropertyNameTargetPlatform = "Platform";
-
-        private const string BuildPropertyNameOutputPath = "OutputPath";
-
-        private const string BuildPropertyNameBuildConfiguration = "Configuration";
-
         private const string DefaultBuildTarget = "Rebuild";
 
         private const string DefaultTargetPlatform = "Any CPU";
 
         private readonly string buildFolder;
 
-        public SolutionBuilder(IBuildFolderPathProvider buildFolderPathProvider)
-        {
-            this.buildFolder = buildFolderPathProvider.GetBuildFolderPath();
-        }
+        private readonly IBuildPropertyProvider buildPropertyProvider;
 
-        public bool Build(string solutionPath, string buildConfiguration, IEnumerable<KeyValuePair<string, string>> buildProperties)
+        public SolutionBuilder(IBuildFolderPathProvider buildFolderPathProvider, IBuildPropertyProvider buildPropertyProvider)
         {
-            // prepare build parameters
-            var buildParameters = new Dictionary<string, string>
-                {
-                    { BuildPropertyNameBuildConfiguration, buildConfiguration },
-                    { BuildPropertyNameTargetPlatform, DefaultTargetPlatform },
-                    { BuildPropertyNameOutputPath, this.buildFolder }
-                };
-
-            foreach (var buildProperty in buildProperties)
+            if (buildFolderPathProvider == null)
             {
-                buildParameters[buildProperty.Key] = buildProperty.Value;
+                throw new ArgumentNullException("buildFolderPathProvider");
             }
 
-            var request = new BuildRequestData(solutionPath, buildParameters, null, new[] { DefaultBuildTarget }, null);
-            var parms = new BuildParameters();
-            BuildResult result = BuildManager.DefaultBuildManager.Build(parms, request);
+            if (buildPropertyProvider == null)
+            {
+                throw new ArgumentNullException("buildPropertyProvider");
+            }
+
+            this.buildFolder = buildFolderPathProvider.GetBuildFolderPath();
+            this.buildPropertyProvider = buildPropertyProvider;
+        }
+
+        public bool Build(string solutionPath, string buildConfiguration, IEnumerable<KeyValuePair<string, string>> additionalBuildProperties)
+        {
+            if (string.IsNullOrWhiteSpace(solutionPath))
+            {
+                throw new ArgumentException("solutionPath");
+            }
+
+            if (string.IsNullOrWhiteSpace(buildConfiguration))
+            {
+                throw new ArgumentException("buildConfiguration");
+            }
+
+            if (additionalBuildProperties == null)
+            {
+                throw new ArgumentNullException("additionalBuildProperties");
+            }
+
+            // prepare build parameters
+            var buildProperties = this.buildPropertyProvider.GetBuildProperties(
+                buildConfiguration, DefaultTargetPlatform, this.buildFolder, additionalBuildProperties.ToList());
+
+            // prepare build request
+            var buildRequestData = new BuildRequestData(solutionPath, buildProperties, null, new[] { DefaultBuildTarget }, null);
+            var buildParameters = new BuildParameters();
+            
+            // build
+            BuildResult result = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequestData);
+
             return result.OverallResult == BuildResultCode.Success;
         }
     }

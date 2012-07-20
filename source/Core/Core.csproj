@@ -145,8 +145,10 @@
     <Compile Include="Services\Installation\Status\IInstallationStatusProvider.cs" />
     <Compile Include="Services\Installation\Status\InstallationLogicProvider.cs" />
     <Compile Include="Services\Installation\Status\InstallationStatusProvider.cs" />
+    <Compile Include="Services\Packaging\Build\BuildPropertyProvider.cs" />
     <Compile Include="Services\Packaging\Build\ConventionBasedBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildFolderPathProvider.cs" />
+    <Compile Include="Services\Packaging\Build\IBuildPropertyProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\ISolutionBuilder.cs" />
     <Compile Include="Services\Packaging\Build\SolutionBuilder.cs" />
