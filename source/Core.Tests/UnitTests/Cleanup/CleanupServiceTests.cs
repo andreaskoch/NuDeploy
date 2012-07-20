@@ -8,9 +8,10 @@ using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Cleanup;
-using NuDeploy.Core.Services.Status;
 
 using NUnit.Framework;
+
+using NuDeploy.Core.Services.Installation.Status;
 
 namespace NuDeploy.Tests.UnitTests.Cleanup
 {

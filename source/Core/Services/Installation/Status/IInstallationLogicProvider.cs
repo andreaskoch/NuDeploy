@@ -1,8 +1,6 @@
-using NuDeploy.Core.Services.Installation;
-
 using NuGet;
 
-namespace NuDeploy.Core.Services.Status
+namespace NuDeploy.Core.Services.Installation.Status
 {
     public interface IInstallationLogicProvider
     {

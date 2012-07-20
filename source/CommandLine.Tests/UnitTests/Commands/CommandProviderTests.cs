@@ -12,8 +12,8 @@ using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Cleanup;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.Repositories;
+using NuDeploy.Core.Services.Installation.Status;
 using NuDeploy.Core.Services.Packaging;
-using NuDeploy.Core.Services.Status;
 using NuDeploy.Core.Services.Update;
 
 namespace CommandLine.Tests.UnitTests.Commands

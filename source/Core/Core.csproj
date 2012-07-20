@@ -141,6 +141,10 @@
     <Compile Include="Services\Installation\Repositories\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryBrowser.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryFactory.cs" />
+    <Compile Include="Services\Installation\Status\IInstallationLogicProvider.cs" />
+    <Compile Include="Services\Installation\Status\IInstallationStatusProvider.cs" />
+    <Compile Include="Services\Installation\Status\InstallationLogicProvider.cs" />
+    <Compile Include="Services\Installation\Status\InstallationStatusProvider.cs" />
     <Compile Include="Services\Packaging\Build\ConventionBasedBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildFolderPathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildResultFilePathProvider.cs" />
@@ -157,10 +161,6 @@
     <Compile Include="Services\Packaging\PrePackaging\IPrepackagingService.cs" />
     <Compile Include="Services\Packaging\PrePackaging\PrepackagingService.cs" />
     <Compile Include="Services\Packaging\SolutionPackagingService.cs" />
-    <Compile Include="Services\Status\IInstallationLogicProvider.cs" />
-    <Compile Include="Services\Status\IInstallationStatusProvider.cs" />
-    <Compile Include="Services\Status\InstallationLogicProvider.cs" />
-    <Compile Include="Services\Status\InstallationStatusProvider.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IPackageConfigurationTransformationService.cs" />

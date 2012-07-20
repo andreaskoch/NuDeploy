@@ -6,11 +6,10 @@ using System.Linq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
-using NuDeploy.Core.Services.Installation;
 
 using NuGet;
 
-namespace NuDeploy.Core.Services.Status
+namespace NuDeploy.Core.Services.Installation.Status
 {
     public class InstallationStatusProvider : IInstallationStatusProvider
     {

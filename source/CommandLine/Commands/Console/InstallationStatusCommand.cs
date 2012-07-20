@@ -3,7 +3,7 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
-using NuDeploy.Core.Services.Status;
+using NuDeploy.Core.Services.Installation.Status;
 
 namespace NuDeploy.CommandLine.Commands.Console
 {

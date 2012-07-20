@@ -2,11 +2,10 @@ using System;
 using System.Linq;
 
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Services.Installation;
 
 using NuGet;
 
-namespace NuDeploy.Core.Services.Status
+namespace NuDeploy.Core.Services.Installation.Status
 {
     public class InstallationLogicProvider : IInstallationLogicProvider
     {
@@ -14,6 +13,11 @@ namespace NuDeploy.Core.Services.Status
 
         public InstallationLogicProvider(IInstallationStatusProvider installationStatusProvider)
         {
+            if (installationStatusProvider == null)
+            {
+                throw new ArgumentNullException("installationStatusProvider");
+            }
+
             this.installationStatusProvider = installationStatusProvider;
         }
 

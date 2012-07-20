@@ -8,7 +8,7 @@ using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation.PowerShell;
 using NuDeploy.Core.Services.Installation.Repositories;
-using NuDeploy.Core.Services.Status;
+using NuDeploy.Core.Services.Installation.Status;
 using NuDeploy.Core.Services.Transformation;
 
 using NuGet;

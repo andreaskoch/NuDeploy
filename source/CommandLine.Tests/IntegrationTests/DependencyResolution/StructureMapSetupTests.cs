@@ -17,12 +17,12 @@ using NuDeploy.Core.Services.Filesystem;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.PowerShell;
 using NuDeploy.Core.Services.Installation.Repositories;
+using NuDeploy.Core.Services.Installation.Status;
 using NuDeploy.Core.Services.Packaging;
 using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.Nuget;
 using NuDeploy.Core.Services.Packaging.PrePackaging;
-using NuDeploy.Core.Services.Status;
 using NuDeploy.Core.Services.Transformation;
 using NuDeploy.Core.Services.Update;
 

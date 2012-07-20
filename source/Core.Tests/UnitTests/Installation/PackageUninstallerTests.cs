@@ -8,7 +8,7 @@ using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.PowerShell;
-using NuDeploy.Core.Services.Status;
+using NuDeploy.Core.Services.Installation.Status;
 
 using NuGet;
 
