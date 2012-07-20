@@ -67,7 +67,7 @@ namespace NuDeploy.Core.Services.Update
             var currentPackageVersion = new SemanticVersion(version);
 
             string selfUpdateMessage = string.Format(
-                Resources.SelfUpdateCommand.SelfupdateMessageTemplate,
+                Resources.SelfUpdateService.SelfupdateMessageTemplate,
                 NuDeployConstants.NuDeployCommandLinePackageId,
                 string.Join(", ", this.packageRepositoryBrowser.RepositoryConfigurations.Select(r => r.Url)));
 
@@ -77,20 +77,20 @@ namespace NuDeploy.Core.Services.Update
             IPackage updatePackage = this.packageRepositoryBrowser.FindPackage(NuDeployConstants.NuDeployCommandLinePackageId);
             if (updatePackage == null)
             {
-                this.userInterface.WriteLine(Resources.SelfUpdateCommand.PackageNotFound);
+                this.userInterface.WriteLine(Resources.SelfUpdateService.PackageNotFound);
                 return false;
             }
 
             // version check
-            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.CurrentVersionTemplate, this.applicationInformation.NameOfExecutable, version));
+            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateService.CurrentVersionTemplate, this.applicationInformation.NameOfExecutable, version));
             if (currentPackageVersion >= updatePackage.Version)
             {
-                this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.NoUpdateRequiredMessageTemplate, this.applicationInformation.NameOfExecutable));
+                this.userInterface.WriteLine(string.Format(Resources.SelfUpdateService.NoUpdateRequiredMessageTemplate, this.applicationInformation.NameOfExecutable));
                 return false;
             }
 
             // update
-            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, updatePackage.Version));
+            this.userInterface.WriteLine(string.Format(Resources.SelfUpdateService.UpdateMessageTemplate, this.applicationInformation.NameOfExecutable, updatePackage.Version));
 
             IPackageFile executable =
                 updatePackage.GetFiles().FirstOrDefault(
@@ -104,7 +104,7 @@ namespace NuDeploy.Core.Services.Update
             {
                 this.userInterface.WriteLine(
                     string.Format(
-                        Resources.SelfUpdateCommand.ExecutableNotFoundInPackageMessageTemplate,
+                        Resources.SelfUpdateService.ExecutableNotFoundInPackageMessageTemplate,
                         NuDeployConstants.NuDeployCommandLinePackageId,
                         this.applicationInformation.NameOfExecutable));
 
@@ -118,11 +118,11 @@ namespace NuDeploy.Core.Services.Update
             // Update the file
             if (!this.UpdateFile(exePath, executable))
             {
-                this.userInterface.WriteLine(string.Format(Resources.SelfUpdateCommand.UpdateFailedMessageTemplate, exePath));
+                this.userInterface.WriteLine(string.Format(Resources.SelfUpdateService.UpdateFailedMessageTemplate, exePath));
                 return false;
             }
 
-            this.userInterface.WriteLine(Resources.SelfUpdateCommand.UpdateSuccessful);
+            this.userInterface.WriteLine(Resources.SelfUpdateService.UpdateSuccessful);
             return true;
         }
 

@@ -87,7 +87,7 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
 
                 return true;
             }
-            catch (Exception packageBuilderException)
+            catch (Exception)
             {
                 return false;
             }

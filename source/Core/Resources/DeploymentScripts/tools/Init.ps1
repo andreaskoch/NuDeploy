@@ -1,2 +1,2 @@
-﻿# Init
+# Init
 "Executing Init.ps1"

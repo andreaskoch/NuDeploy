@@ -69,7 +69,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
                 this.CopyFilesToPrePackagingFolder(buildConfiguration);
                 return true;
             }
-            catch (Exception prepackageException)
+            catch (Exception)
             {
                 return false;
             }

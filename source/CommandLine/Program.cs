@@ -2,16 +2,16 @@
 using System.Diagnostics;
 using System.Threading;
 
-using NuDeploy.Core.Commands.Console;
+using NuDeploy.CommandLine.Commands.Console;
+using NuDeploy.CommandLine.DependencyResolution;
+using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
-using NuDeploy.Core.DependencyResolution;
-using NuDeploy.Core.Services.Console;
 
 using StructureMap;
 
-namespace NuDeploy
+namespace NuDeploy.CommandLine
 {
     public class Program
     {
@@ -29,7 +29,7 @@ namespace NuDeploy
             {
                 if (!mutex.WaitOne(0, false))
                 {
-                    Console.WriteLine("There is already another instance of this application running. Please try again later.");
+                    Console.WriteLine(Resources.Application.AnotherInstanceIsAlreadyRunning);
                     return 0;
                 }
 

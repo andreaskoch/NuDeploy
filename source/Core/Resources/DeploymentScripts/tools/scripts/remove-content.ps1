@@ -1,4 +1,4 @@
-﻿"Executing remove-content.ps1"
+"Executing remove-content.ps1"
 
 # Global Variables
 $currentDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path

@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 
-using NuDeploy.Core.DependencyResolution;
-
 namespace NuDeploy.Core.Common.Infrastructure
 {
     public static class ApplicationInformationProvider
@@ -14,7 +12,7 @@ namespace NuDeploy.Core.Common.Infrastructure
                 {
                     ApplicationName = NuDeployConstants.ApplicationName,
                     NameOfExecutable = NuDeployConstants.ExecutableName,
-                    ApplicationVersion = Assembly.GetAssembly(typeof(StructureMapSetup)).GetName().Version,
+                    ApplicationVersion = Assembly.GetAssembly(typeof(ApplicationInformationProvider)).GetName().Version,
                     StartupFolder = Environment.CurrentDirectory,
                     ConfigurationFileFolder = Environment.CurrentDirectory,
                     LogFolder = Path.Combine(Environment.CurrentDirectory, "NuDeployLogs"),

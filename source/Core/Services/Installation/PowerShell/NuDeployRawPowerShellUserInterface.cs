@@ -9,12 +9,12 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return System.Console.BackgroundColor;
+                return Console.BackgroundColor;
             }
 
             set
             {
-                System.Console.BackgroundColor = value;
+                Console.BackgroundColor = value;
             }
         }
 
@@ -27,7 +27,7 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
 
             set
             {
-                System.Console.SetBufferSize(value.Width, value.Height);
+                Console.SetBufferSize(value.Width, value.Height);
             }
         }
 
@@ -35,13 +35,13 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return new Coordinates(System.Console.CursorLeft, System.Console.CursorTop);
+                return new Coordinates(Console.CursorLeft, Console.CursorTop);
             }
 
             set
             {
-                System.Console.CursorTop = value.Y;
-                System.Console.CursorLeft = value.X;
+                Console.CursorTop = value.Y;
+                Console.CursorLeft = value.X;
             }
         }
 
@@ -49,12 +49,12 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return System.Console.CursorSize;
+                return Console.CursorSize;
             }
 
             set
             {
-                System.Console.CursorSize = value;
+                Console.CursorSize = value;
             }
         }
 
@@ -62,12 +62,12 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return System.Console.ForegroundColor;
+                return Console.ForegroundColor;
             }
 
             set
             {
-                System.Console.ForegroundColor = value;
+                Console.ForegroundColor = value;
             }
         }
 
@@ -75,7 +75,7 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return System.Console.KeyAvailable;
+                return Console.KeyAvailable;
             }
         }
 
@@ -83,7 +83,7 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return new Size(System.Console.LargestWindowWidth, System.Console.LargestWindowHeight);
+                return new Size(Console.LargestWindowWidth, Console.LargestWindowHeight);
             }
         }
 
@@ -91,7 +91,7 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return new Size(System.Console.LargestWindowWidth, System.Console.LargestWindowHeight);
+                return new Size(Console.LargestWindowWidth, Console.LargestWindowHeight);
             }
         }
 
@@ -99,12 +99,12 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return new Coordinates(System.Console.WindowLeft, System.Console.WindowTop);
+                return new Coordinates(Console.WindowLeft, Console.WindowTop);
             }
 
             set
             {
-                System.Console.SetWindowPosition(value.X, value.Y);
+                Console.SetWindowPosition(value.X, value.Y);
             }
         }
 
@@ -112,12 +112,12 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return new Size(System.Console.WindowWidth, System.Console.WindowHeight);
+                return new Size(Console.WindowWidth, Console.WindowHeight);
             }
 
             set
             {
-                System.Console.SetWindowSize(value.Width, value.Height);
+                Console.SetWindowSize(value.Width, value.Height);
             }
         }
 
@@ -125,12 +125,12 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
         {
             get
             {
-                return System.Console.Title;
+                return Console.Title;
             }
 
             set
             {
-                System.Console.Title = value;
+                Console.Title = value;
             }
         }
 

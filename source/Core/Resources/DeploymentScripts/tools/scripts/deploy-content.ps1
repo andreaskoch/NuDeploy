@@ -1,4 +1,4 @@
-﻿"Executing deploy-content.ps1"
+"Executing deploy-content.ps1"
 
 # Global Variables
 $currentDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path

@@ -8,7 +8,7 @@
     <ProjectGuid>{33BA3C35-F4E2-483B-B114-79E0D7D78B91}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuDeploy</RootNamespace>
+    <RootNamespace>NuDeploy.CommandLine</RootNamespace>
     <AssemblyName>NuDeploy</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -52,18 +52,86 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NuGet.Core, Version=1.8.30423.9026, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\CommandAttributes.cs" />
+    <Compile Include="Commands\Console\CleanupCommand.cs" />
+    <Compile Include="Commands\Console\HelpCommand.cs" />
+    <Compile Include="Commands\Console\InstallationStatusCommand.cs" />
+    <Compile Include="Commands\Console\InstallCommand.cs" />
+    <Compile Include="Commands\Console\PackageSolutionCommand.cs" />
+    <Compile Include="Commands\Console\RepositorySourceConfigurationCommand.cs" />
+    <Compile Include="Commands\Console\SelfUpdateCommand.cs" />
+    <Compile Include="Commands\Console\UninstallCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ICommandProvider.cs" />
+    <Compile Include="Commands\ConsoleCommandProvider.cs" />
+    <Compile Include="DependencyResolution\StructureMapSetup.cs" />
+    <Compile Include="Infrastructure\Console\CommandArgumentNameMatcher.cs" />
+    <Compile Include="Infrastructure\Console\CommandArgumentParser.cs" />
+    <Compile Include="Infrastructure\Console\CommandLineArgumentInterpreter.cs" />
+    <Compile Include="Infrastructure\Console\CommandNameMatcher.cs" />
+    <Compile Include="Infrastructure\Console\ICommandArgumentNameMatcher.cs" />
+    <Compile Include="Infrastructure\Console\ICommandArgumentParser.cs" />
+    <Compile Include="Infrastructure\Console\ICommandLineArgumentInterpreter.cs" />
+    <Compile Include="Infrastructure\Console\ICommandNameMatcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Application.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Application.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\CleanupCommand.Designer.cs">
+      <DependentUpon>CleanupCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\HelpCommand.Designer.cs">
+      <DependentUpon>HelpCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\InstallationStatusCommand.Designer.cs">
+      <DependentUpon>InstallationStatusCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\InstallCommand.Designer.cs">
+      <DependentUpon>InstallCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\PackageSolutionCommand.Designer.cs">
+      <DependentUpon>PackageSolutionCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\RepositorySourceConfigurationCommand.Designer.cs">
+      <DependentUpon>RepositorySourceConfigurationCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\SelfUpdateCommand.Designer.cs">
+      <DependentUpon>SelfUpdateCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\UninstallCommand.Designer.cs">
+      <DependentUpon>UninstallCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
@@ -72,6 +140,38 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Application.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\HelpCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HelpCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstallationStatusCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InstallationStatusCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InstallCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InstallCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackageSolutionCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\RepositorySourceConfigurationCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RepositorySourceConfigurationCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SelfUpdateCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SelfUpdateCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UninstallCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UninstallCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +196,13 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CleanupCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CleanupCommand.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Target Name="MergeExecutable">
     <PropertyGroup>
       <ILMergeExe>$(SolutionDir)\tools\ILMerge\ILMerge.exe</ILMergeExe>
@@ -106,24 +213,20 @@
       <ILMergeLogFilePath>$(ILMergeOutputFolder)\ilmerge.msbuild.log</ILMergeLogFilePath>
       <FrameworkPath>$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0</FrameworkPath>
     </PropertyGroup>
-	
     <ItemGroup>
       <ILMergeItems Include="$(OutputPath)\*.dll;$(OutputPath)\*.exe" />
     </ItemGroup>
-	
     <Delete Files="$(ILMergeOutputFilePath)" Condition="Exists($(ILMergeOutputFilePath))" />
-	
     <!-- ILMerge does not yet support .NET 4.0  http://nitoprograms.blogspot.com/2010/09/using-ilmerge-with-net-40-andor-rx.html /targetplatform:v4,"%ProgramFiles%\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" -->
     <Error Condition="!Exists('$(FrameworkPath)')" Text="Could not find 4.0 reference assemblies in $(FrameworkPath)" />
     <Exec Command="&quot;$(ILMergeExe)&quot; /targetplatform:&quot;v4, $(FrameworkPath)&quot; /internalize:&quot;$(ILMergeInternalizeIgnoreFile)&quot; /target:exe /out:&quot;$(ILMergeOutputFilePath)&quot; /log:&quot;$(ILMergeLogFilePath)&quot; /allowDup NuDeploy.exe Microsoft.Web.Publishing.Tasks.dll Newtonsoft.Json.dll StructureMap.dll NuGet.Core.dll NuDeploy.Core.dll" WorkingDirectory="$(OutputPath)" />
-  </Target>  
-  
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-	<CallTarget Targets="MergeExecutable" />
+    <CallTarget Targets="MergeExecutable" />
     <MSBuild Projects="$(SolutionDir)\Build\Package.targets" />
   </Target>
 </Project>

@@ -1,4 +1,4 @@
-﻿"Executing remove-filesystem-links.ps1"
+"Executing remove-filesystem-links.ps1"
 
 # Global Variables
 $currentDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path

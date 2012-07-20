@@ -1,2 +1,2 @@
-﻿# Pre-Deploy
+# Pre-Deploy
 "Executing PreDeploy.ps1"

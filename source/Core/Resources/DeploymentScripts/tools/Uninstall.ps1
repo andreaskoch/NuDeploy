@@ -1,4 +1,4 @@
-﻿# Uninstall this package
+# Uninstall this package
 "Executing Uninstall.ps1"
 
 $toolsDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path

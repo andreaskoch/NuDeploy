@@ -1,4 +1,4 @@
-﻿# Remove
+# Remove
 "Executing Remove.ps1"
 
 $packageDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path

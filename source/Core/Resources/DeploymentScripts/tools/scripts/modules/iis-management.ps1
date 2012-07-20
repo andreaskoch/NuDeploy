@@ -1,4 +1,4 @@
-﻿Import-Module WebAdministration
+Import-Module WebAdministration
 
 Function AppPool-Exists
 { 

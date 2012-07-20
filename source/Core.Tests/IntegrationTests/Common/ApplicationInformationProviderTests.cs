@@ -1,8 +1,8 @@
-﻿using System.IO;
-
-using NuDeploy.Core.Common.Infrastructure;
+using System.IO;
 
 using NUnit.Framework;
+
+using NuDeploy.Core.Common.Infrastructure;
 
 namespace NuDeploy.Tests.IntegrationTests.Common
 {

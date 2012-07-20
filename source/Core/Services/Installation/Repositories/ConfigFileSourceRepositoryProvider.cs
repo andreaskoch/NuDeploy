@@ -15,6 +15,8 @@ namespace NuDeploy.Core.Services.Installation.Repositories
     {
         public const string SourceRepositoryConfigurationFileName = "NuDeploy.Sources.config";
 
+        public const string DefaultRepositoryName = "Default Repository";
+
         private readonly ApplicationInformation applicationInformation;
 
         private readonly IFilesystemAccessor filesystemAccessor;
@@ -83,7 +85,7 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 
         private void CreateDefaultConfiguration()
         {
-            var defaultSources = new[] { new SourceRepositoryConfiguration { Name = Resources.RepositorySourceConfigurationCommand.DefaultRepositoryName, Url = NuDeployConstants.DefaultFeedUrl } };
+            var defaultSources = new[] { new SourceRepositoryConfiguration { Name = DefaultRepositoryName, Url = NuDeployConstants.DefaultFeedUrl } };
             this.Save(defaultSources);
         }
 

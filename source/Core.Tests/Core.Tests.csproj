@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BE899664-4A8E-488D-A689-D56CBFEA8554}</ProjectGuid>
@@ -15,7 +15,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -54,9 +54,7 @@
     </Compile>
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\AssemblyFileResourceProviderTests.cs" />
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
-    <Compile Include="IntegrationTests\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
-    <Compile Include="IntegrationTests\DependencyResolution\StructureMapSetupTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
@@ -75,11 +73,6 @@
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyResourceFilePathProviderTests.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
     <Compile Include="UnitTests\Cleanup\CleanupServiceTests.cs" />
-    <Compile Include="UnitTests\Commands\CommandArgumentNameMatcherTests.cs" />
-    <Compile Include="UnitTests\Commands\CommandArgumentParserTests.cs" />
-    <Compile Include="UnitTests\Commands\CommandLineArgumentInterpreterTests.cs" />
-    <Compile Include="UnitTests\Commands\CommandNameMatcherTests.cs" />
-    <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
     <Compile Include="UnitTests\Common\ConsoleTextManipulationTests.cs" />
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
