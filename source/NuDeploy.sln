@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{F8556D09-5A6D-457F-9F74-416F59C393E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuDeploy", "CommandLine\CommandLine.csproj", "{33BA3C35-F4E2-483B-B114-79E0D7D78B91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\CommandLine.csproj", "{33BA3C35-F4E2-483B-B114-79E0D7D78B91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Core.Tests\Core.Tests.csproj", "{BE899664-4A8E-488D-A689-D56CBFEA8554}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{BE899664-4A8E-488D-A689-D56CBFEA8554}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402823D9-F3BF-4E0D-B880-BE8A6B1C90B0}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuDeploy.CommandLine.nuspec = NuDeploy.CommandLine.nuspec
 		Build\Package.targets = Build\Package.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.Tests", "CommandLine.Tests\CommandLine.Tests.csproj", "{E61A65E1-9999-4336-909D-AC7BE37E3974}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{9A5275FA-D828-4198-AF5D-6F21B8E091D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,8 +36,16 @@ Global
 		{BE899664-4A8E-488D-A689-D56CBFEA8554}.Debug|x64.Build.0 = Debug|Any CPU
 		{BE899664-4A8E-488D-A689-D56CBFEA8554}.Release|x64.ActiveCfg = Release|Any CPU
 		{BE899664-4A8E-488D-A689-D56CBFEA8554}.Release|x64.Build.0 = Release|Any CPU
+		{E61A65E1-9999-4336-909D-AC7BE37E3974}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E61A65E1-9999-4336-909D-AC7BE37E3974}.Debug|x64.Build.0 = Debug|Any CPU
+		{E61A65E1-9999-4336-909D-AC7BE37E3974}.Release|x64.ActiveCfg = Release|Any CPU
+		{E61A65E1-9999-4336-909D-AC7BE37E3974}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E61A65E1-9999-4336-909D-AC7BE37E3974} = {9A5275FA-D828-4198-AF5D-6F21B8E091D7}
+		{BE899664-4A8E-488D-A689-D56CBFEA8554} = {9A5275FA-D828-4198-AF5D-6F21B8E091D7}
 	EndGlobalSection
 EndGlobal
