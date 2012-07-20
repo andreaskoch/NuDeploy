@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{F8556D09-5A6D-457F-9F74-416F59C393E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuDeploy", "NuDeploy\NuDeploy.csproj", "{33BA3C35-F4E2-483B-B114-79E0D7D78B91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuDeploy", "CommandLine\NuDeploy.csproj", "{33BA3C35-F4E2-483B-B114-79E0D7D78B91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{BE899664-4A8E-488D-A689-D56CBFEA8554}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Core.Tests\Tests.csproj", "{BE899664-4A8E-488D-A689-D56CBFEA8554}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402823D9-F3BF-4E0D-B880-BE8A6B1C90B0}"
 	ProjectSection(SolutionItems) = preProject
