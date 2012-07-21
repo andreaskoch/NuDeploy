@@ -73,7 +73,6 @@
     <Compile Include="UnitTests\AssemblyFileResourceAccess\AssemblyResourceFilePathProviderTests.cs" />
     <Compile Include="UnitTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
     <Compile Include="UnitTests\Cleanup\CleanupServiceTests.cs" />
-    <Compile Include="UnitTests\Common\ConsoleTextManipulationTests.cs" />
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
