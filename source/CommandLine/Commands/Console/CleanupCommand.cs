@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,9 +9,9 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class CleanupCommand : ICommand
     {
-        private const string CommandName = "cleanup";
+        public const string CommandName = "cleanup";
 
-        private const string ArgumentNameNugetPackageId = "NugetPackageId";
+        public const string ArgumentNameNugetPackageId = "NugetPackageId";
 
         private readonly string[] alternativeCommandNames = new[] { "purge" };
 
@@ -20,6 +21,16 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public CleanupCommand(IUserInterface userInterface, ICleanupService cleanupService)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (cleanupService == null)
+            {
+                throw new ArgumentNullException("cleanupService");
+            }
+
             this.userInterface = userInterface;
             this.cleanupService = cleanupService;
 

@@ -55,6 +55,8 @@
     <Compile Include="UnitTests\Commands\CommandLineArgumentInterpreterTests.cs" />
     <Compile Include="UnitTests\Commands\CommandNameMatcherTests.cs" />
     <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
+    <Compile Include="UnitTests\Commands\CommandTestUtilities.cs" />
+    <Compile Include="UnitTests\Commands\Console\CleanupCommandTests.cs" />
     <Compile Include="UnitTests\UserInterface\ConsoleTextManipulationTests.cs" />
   </ItemGroup>
   <ItemGroup>
