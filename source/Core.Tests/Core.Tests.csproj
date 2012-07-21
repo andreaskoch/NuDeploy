@@ -99,6 +99,7 @@
     <Compile Include="UnitTests\Status\InstallationLogicProviderTests.cs" />
     <Compile Include="UnitTests\Status\InstallationStatusProviderTests.cs" />
     <Compile Include="UnitTests\Transformation\ConfigurationFileTransformerTests.cs" />
+    <Compile Include="UnitTests\Transformation\PackageConfigurationTransformationServiceTests.cs" />
     <Compile Include="UnitTests\Update\SelfUpdateServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>

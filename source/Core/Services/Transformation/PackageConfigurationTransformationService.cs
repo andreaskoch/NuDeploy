@@ -29,7 +29,7 @@ namespace NuDeploy.Core.Services.Transformation
         {
             if (string.IsNullOrWhiteSpace(packageFolder))
             {
-                throw new ArgumentNullException("packageFolder");
+                throw new ArgumentException("packageFolder");
             }
 
             if (systemSettingTransformationProfileNames == null)
