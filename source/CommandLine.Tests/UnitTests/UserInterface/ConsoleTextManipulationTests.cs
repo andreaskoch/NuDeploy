@@ -1,8 +1,10 @@
 using System;
 
+using NuDeploy.CommandLine.UserInterface;
+
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Common
+namespace CommandLine.Tests.UnitTests.UserInterface
 {
     [TestFixture]
     public class ConsoleTextManipulationTests

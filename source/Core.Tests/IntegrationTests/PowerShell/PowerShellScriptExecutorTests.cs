@@ -7,7 +7,6 @@ using Moq;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
-using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation.PowerShell;
 
@@ -29,13 +28,10 @@ namespace NuDeploy.Tests.IntegrationTests.PowerShell
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
-            var logger = new Mock<IActionLogger>();
             var encodingProvider = new DefaultFileEncodingProvider();
             var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
-            IConsoleTextManipulation consoleTextManipulation = new ConsoleTextManipulation();
-
-            this.userInterface = new ConsoleUserInterface(consoleTextManipulation, logger.Object);
+            this.userInterface = new Mock<IUserInterface>().Object;
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
             IPowerShellHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 
