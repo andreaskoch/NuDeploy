@@ -86,6 +86,7 @@ namespace CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(IPackageConfigurationTransformationService))]
         [TestCase(typeof(IConfigurationFileTransformer))]
         [TestCase(typeof(ISelfUpdateService))]
+        [TestCase(typeof(IHelpProvider))]
         [TestCase(typeof(ICommandProvider))]
         public void CanInstantiate_Interface(Type interfaceType)
         {

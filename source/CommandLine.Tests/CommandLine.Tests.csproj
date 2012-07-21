@@ -57,6 +57,8 @@
     <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
     <Compile Include="UnitTests\Commands\CommandTestUtilities.cs" />
     <Compile Include="UnitTests\Commands\Console\CleanupCommandTests.cs" />
+    <Compile Include="UnitTests\Commands\Console\HelpCommandTests.cs" />
+    <Compile Include="UnitTests\Commands\HelpProviderTests.cs" />
     <Compile Include="UnitTests\UserInterface\ConsoleTextManipulationTests.cs" />
   </ItemGroup>
   <ItemGroup>

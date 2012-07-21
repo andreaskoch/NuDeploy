@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using Moq;
 
-using NUnit.Framework;
-
 using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common.Infrastructure;
@@ -15,6 +13,8 @@ using NuDeploy.Core.Services.Installation.Repositories;
 using NuDeploy.Core.Services.Installation.Status;
 using NuDeploy.Core.Services.Packaging;
 using NuDeploy.Core.Services.Update;
+
+using NUnit.Framework;
 
 namespace CommandLine.Tests.UnitTests.Commands
 {
@@ -30,12 +30,11 @@ namespace CommandLine.Tests.UnitTests.Commands
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            var result = new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, help, configureSources, selfUpdate);
+            var result = new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate);
 
             // Assert
             Assert.IsNotNull(result);
@@ -50,12 +49,11 @@ namespace CommandLine.Tests.UnitTests.Commands
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            new ConsoleCommandProvider(null, install, uninstall, cleanup, package, help, configureSources, selfUpdate);
+            new ConsoleCommandProvider(null, install, uninstall, cleanup, package, configureSources, selfUpdate);
         }
 
         [Test]
@@ -67,12 +65,11 @@ namespace CommandLine.Tests.UnitTests.Commands
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, null, uninstall, cleanup, package, help, configureSources, selfUpdate);
+            new ConsoleCommandProvider(installationStatus, null, uninstall, cleanup, package, configureSources, selfUpdate);
         }
 
         [Test]
@@ -84,12 +81,11 @@ namespace CommandLine.Tests.UnitTests.Commands
             var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, null, cleanup, package, help, configureSources, selfUpdate);
+            new ConsoleCommandProvider(installationStatus, install, null, cleanup, package, configureSources, selfUpdate);
         }
 
         [Test]
@@ -101,12 +97,11 @@ namespace CommandLine.Tests.UnitTests.Commands
             var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, null, package, help, configureSources, selfUpdate);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, null, package, configureSources, selfUpdate);
         }
 
         [Test]
@@ -118,30 +113,11 @@ namespace CommandLine.Tests.UnitTests.Commands
             var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, null, help, configureSources, selfUpdate);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_HelpCommandIsNull_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
-            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
-            var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
-            var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
-            var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            HelpCommand help = null;
-            var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
-            var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
-
-            // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, help, configureSources, selfUpdate);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, null, configureSources, selfUpdate);
         }
 
         [Test]
@@ -154,11 +130,10 @@ namespace CommandLine.Tests.UnitTests.Commands
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, help, null, selfUpdate);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, null, selfUpdate);
         }
 
         [Test]
@@ -171,11 +146,10 @@ namespace CommandLine.Tests.UnitTests.Commands
             var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object);
-            var help = new HelpCommand(new Mock<IUserInterface>().Object, new ApplicationInformation());
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<ISourceRepositoryProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, help, configureSources, null);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, null);
         }
 
         [Test]

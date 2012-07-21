@@ -121,6 +121,7 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         /* update */
                         config.For<ISelfUpdateService>().Use<SelfUpdateService>();
 
+                        config.For<IHelpProvider>().Use<HelpProvider>();
                         config.For<ICommandProvider>().Use<ConsoleCommandProvider>();
                     });
         }

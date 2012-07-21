@@ -2,31 +2,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using NuDeploy.Core.Common.Infrastructure;
-using NuDeploy.Core.Common.UserInterface;
-
-using StructureMap;
-
 namespace NuDeploy.CommandLine.Commands.Console
 {
     public class HelpCommand : ICommand
     {
-        private const string CommandName = "help";
+        public const string CommandName = "help";
 
-        private const string ArgumentNameCommandName = "CommandName";
+        public const string ArgumentNameCommandName = "CommandName";
 
         private readonly string[] alternativeCommandNames = new[] { "?" };
 
-        private readonly IUserInterface userInterface;
+        private readonly IHelpProvider helpProvider;
 
-        private readonly ApplicationInformation applicationInformation;
+        private readonly ICommandProvider commandProvider;
 
         private IList<ICommand> availableCommands;
 
-        public HelpCommand(IUserInterface userInterface, ApplicationInformation applicationInformation)
+        public HelpCommand(IHelpProvider helpProvider, ICommandProvider commandProvider)
         {
-            this.userInterface = userInterface;
-            this.applicationInformation = applicationInformation;
+            if (helpProvider == null)
+            {
+                throw new ArgumentNullException("helpProvider");
+            }
+
+            if (commandProvider == null)
+            {
+                throw new ArgumentNullException("commandProvider");
+            }
+
+            this.helpProvider = helpProvider;
+            this.commandProvider = commandProvider;
 
             this.Attributes = new CommandAttributes
                 {
@@ -66,8 +71,8 @@ namespace NuDeploy.CommandLine.Commands.Console
             {
                 if (this.availableCommands == null)
                 {
-                    var commandProvider = ObjectFactory.GetInstance<ICommandProvider>();
-                    this.availableCommands = commandProvider.GetAvailableCommands();
+                    this.availableCommands = this.commandProvider.GetAvailableCommands();
+                    this.availableCommands.Add(this);
                 }
 
                 return this.availableCommands;
@@ -76,118 +81,23 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public void Execute()
         {
-            if (this.Arguments.Count > 0 && string.IsNullOrWhiteSpace(this.Arguments.Values.First()) == false)
+            string commandName = this.Arguments.Values.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(commandName) == false)
             {
-                string commandName = this.Arguments.Values.First().Trim();
                 ICommand matchedCommand =
-                    this.AvailableCommands.First(
+                    this.AvailableCommands.FirstOrDefault(
                         c =>
                         c.Attributes.CommandName.Equals(commandName, StringComparison.OrdinalIgnoreCase)
-                        || Enumerable.Any(c.Attributes.AlternativeCommandNames, a => a.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
+                        || c.Attributes.AlternativeCommandNames.Any(a => a.Equals(commandName, StringComparison.OrdinalIgnoreCase)));
 
                 if (matchedCommand != null)
                 {
-                    this.CommandHelp(matchedCommand);
+                    this.helpProvider.ShowHelp(matchedCommand);
                     return;
-                }
+                }                
             }
 
-            this.Overview();
-        }
-
-        private void CommandHelp(ICommand command)
-        {
-            // command name
-            string commandNameText = this.applicationInformation.NameOfExecutable + " " + command.Attributes.CommandName;
-            this.userInterface.WriteLine(commandNameText);
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // command description
-            this.userInterface.WriteLine(command.Attributes.Description);
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // command usage
-            string usageLabel = Resources.HelpCommand.UsageLabel + ":";
-            string usageText = this.applicationInformation.NameOfExecutable + " " + command.Attributes.Usage;
-            this.userInterface.ShowLabelValuePair(usageLabel, usageText, distanceBetweenLabelAndValue: 2);
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // examples
-            string examplesLabel = Resources.HelpCommand.ExamplesLabel + ":";
-            this.userInterface.WriteLine(examplesLabel);
-
-            foreach (KeyValuePair<string, string> pair in command.Attributes.Examples)
-            {
-                this.userInterface.WriteLine(string.Empty);
-
-                string commandText = string.Format("> {0} {1}", this.applicationInformation.NameOfExecutable, pair.Key);
-                string description = pair.Value;
-
-                this.userInterface.ShowIndented(description, 3);
-
-                this.userInterface.WriteLine(string.Empty);
-                this.userInterface.ShowIndented(commandText, 6);
-            }
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // options
-            if (command.Attributes.ArgumentDescriptions.Count > 0)
-            {
-                string optionsLabel = Resources.HelpCommand.OptionsLabel + ":";
-                this.userInterface.WriteLine(optionsLabel);
-                this.userInterface.WriteLine(string.Empty);
-
-                var formattedOptions =
-                    Enumerable.Select(command.Attributes.ArgumentDescriptions, pair => new KeyValuePair<string, string>("-" + pair.Key, pair.Value)).ToDictionary(
-                        pair => pair.Key, pair => pair.Value);
-
-                this.userInterface.ShowKeyValueStore(formattedOptions, 4, 3);
-
-                this.userInterface.WriteLine(string.Empty);                
-            }
-        }
-
-        private void Overview()
-        {
-            // version
-            this.userInterface.WriteLine(string.Format("{0} ({1})", this.applicationInformation.ApplicationName, this.applicationInformation.ApplicationVersion));
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // usage
-            string usageLabel = Resources.HelpCommand.UsageLabel + ":" + Environment.NewLine;
-            this.userInterface.WriteLine(usageLabel);
-
-            string usageText = string.Format(Resources.HelpCommand.UsagePattern, this.applicationInformation.NameOfExecutable);
-            this.userInterface.ShowIndented(usageText, 4);
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // help
-            string helpLabel = Resources.HelpCommand.HelpLabel + ":" + Environment.NewLine;
-            this.userInterface.WriteLine(helpLabel);
-
-            string helpText = string.Format(Resources.HelpCommand.HelpPattern, this.applicationInformation.NameOfExecutable);
-            this.userInterface.ShowIndented(helpText, 4);
-
-            this.userInterface.WriteLine(string.Empty);
-
-            // available commands
-            string availableCommandsLabel = Resources.HelpCommand.AvailableCommandsLabel + ":";
-            this.userInterface.WriteLine(availableCommandsLabel);
-            this.userInterface.WriteLine(string.Empty);
-
-            // display command name and description
-            this.userInterface.ShowKeyValueStore(
-                this.AvailableCommands.ToDictionary(g => g.Attributes.CommandName, v => v.Attributes.Description),
-                distanceBetweenColumns: 4,
-                indentation: 2);
-
-            this.userInterface.WriteLine(string.Empty);
+            this.helpProvider.ShowHelpOverview(this.AvailableCommands);
         }
     }
 }

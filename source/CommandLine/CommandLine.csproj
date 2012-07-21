@@ -73,9 +73,11 @@
     <Compile Include="Commands\Console\RepositorySourceConfigurationCommand.cs" />
     <Compile Include="Commands\Console\SelfUpdateCommand.cs" />
     <Compile Include="Commands\Console\UninstallCommand.cs" />
+    <Compile Include="Commands\HelpProvider.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandProvider.cs" />
     <Compile Include="Commands\ConsoleCommandProvider.cs" />
+    <Compile Include="Commands\IHelpProvider.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="Infrastructure\Console\CommandArgumentNameMatcher.cs" />
     <Compile Include="Infrastructure\Console\CommandArgumentParser.cs" />
