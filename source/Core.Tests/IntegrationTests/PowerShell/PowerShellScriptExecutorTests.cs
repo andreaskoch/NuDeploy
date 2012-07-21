@@ -9,7 +9,6 @@ using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
-using NuDeploy.Core.Common.UserInterface.Console;
 using NuDeploy.Core.Services.Installation.PowerShell;
 
 using NUnit.Framework;

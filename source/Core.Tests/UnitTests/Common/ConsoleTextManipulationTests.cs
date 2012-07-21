@@ -1,7 +1,5 @@
 ﻿using System;
 
-using NuDeploy.Core.Common.UserInterface.Console;
-
 using NUnit.Framework;
 
 namespace NuDeploy.Tests.UnitTests.Common
