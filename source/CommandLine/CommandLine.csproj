@@ -132,6 +132,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="UserInterface\ConsoleTextManipulation.cs" />
+    <Compile Include="UserInterface\ConsoleUserInterface.cs" />
+    <Compile Include="UserInterface\IConsoleTextManipulation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

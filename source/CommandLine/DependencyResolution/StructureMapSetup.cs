@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 
 using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Infrastructure.Console;
+using NuDeploy.CommandLine.UserInterface;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
-using NuDeploy.Core.Common.UserInterface.Console;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Cleanup;
 using NuDeploy.Core.Services.Filesystem;

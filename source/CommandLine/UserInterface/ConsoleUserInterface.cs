@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 
 using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.UserInterface;
 
-namespace NuDeploy.Core.Common.UserInterface.Console
+namespace NuDeploy.CommandLine.UserInterface
 {
     public class ConsoleUserInterface : IUserInterface
     {
@@ -25,7 +26,7 @@ namespace NuDeploy.Core.Common.UserInterface.Console
             {
                 try
                 {
-                    return System.Console.WindowWidth;
+                    return Console.WindowWidth;
                 }
                 catch (IOException)
                 {
@@ -35,7 +36,7 @@ namespace NuDeploy.Core.Common.UserInterface.Console
 
             set
             {
-                System.Console.WindowWidth = value;
+                Console.WindowWidth = value;
             }
         }
 
@@ -43,7 +44,7 @@ namespace NuDeploy.Core.Common.UserInterface.Console
         {
             this.logger.Log("Requesting input from user.");
 
-            string input = System.Console.ReadLine();
+            string input = Console.ReadLine();
 
             this.logger.Log("User entered {0}", input);
             return input;
@@ -52,13 +53,13 @@ namespace NuDeploy.Core.Common.UserInterface.Console
         public void ShowIndented(string text, int marginLeft)
         {       
             string indentedText = this.textManipulation.IndentText(text, this.WindowWidth, marginLeft);
-            System.Console.WriteLine(indentedText);
+            Console.WriteLine(indentedText);
             this.logger.Log(text);
         }
 
         public void Write(string text)
         {
-            System.Console.Write(text);
+            Console.Write(text);
             this.logger.Log(text);
         }
 
@@ -66,7 +67,7 @@ namespace NuDeploy.Core.Common.UserInterface.Console
         {
             string wrappedText = this.textManipulation.WrapText(text, this.WindowWidth);
 
-            System.Console.WriteLine(wrappedText);
+            Console.WriteLine(wrappedText);
             this.logger.Log(text);
         }
 
@@ -93,7 +94,7 @@ namespace NuDeploy.Core.Common.UserInterface.Console
 
                 string text = string.Concat(keyColumnText, valueColumnText);
 
-                System.Console.Write(text + Environment.NewLine);
+                Console.Write(text + Environment.NewLine);
                 this.logger.Log(text);
             }
         }

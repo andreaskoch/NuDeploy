@@ -1,4 +1,4 @@
-namespace NuDeploy.Core.Common.UserInterface.Console
+namespace NuDeploy.CommandLine.UserInterface
 {
     public interface IConsoleTextManipulation
     {

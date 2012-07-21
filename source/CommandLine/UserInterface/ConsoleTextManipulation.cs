@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NuDeploy.Core.Common.UserInterface.Console
+namespace NuDeploy.CommandLine.UserInterface
 {
     public class ConsoleTextManipulation : IConsoleTextManipulation
     {
