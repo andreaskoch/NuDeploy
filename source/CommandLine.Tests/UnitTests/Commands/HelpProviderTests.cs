@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Moq;
 
@@ -16,38 +14,12 @@ namespace CommandLine.Tests.UnitTests.Commands
     [TestFixture]
     public class HelpProviderTests
     {
-        private Mock<IUserInterface> loggingUserInterface;
-
-        private StringBuilder output = new StringBuilder();
+        private LoggingUserInterface loggingUserInterface;
 
         [SetUp]
         public void BeforeEachTest()
         {
-            this.output = new StringBuilder();
-            this.loggingUserInterface = new Mock<IUserInterface>();
-
-            this.loggingUserInterface.Setup(u => u.Write(It.IsAny<string>())).Callback((string text) => this.output.Append(text));
-
-            this.loggingUserInterface.Setup(u => u.WriteLine(It.IsAny<string>())).Callback((string text) => this.output.AppendLine(text));
-
-            this.loggingUserInterface.Setup(u => u.ShowIndented(It.IsAny<string>(), It.IsAny<int>())).Callback((string text, int indent) => this.output.AppendLine(text));
-
-            this.loggingUserInterface.Setup(u => u.ShowKeyValueStore(It.IsAny<IDictionary<string, string>>(), It.IsAny<int>())).Callback(
-                (IDictionary<string, string> keyValueStore, int distanceBetweenColumns) =>
-                {
-                    var flatList = keyValueStore.Select(pair => pair.Key + " " + pair.Value).ToList();
-                    this.output.AppendLine(string.Join(Environment.NewLine, flatList));
-                });
-
-            this.loggingUserInterface.Setup(u => u.ShowKeyValueStore(It.IsAny<IDictionary<string, string>>(), It.IsAny<int>(), It.IsAny<int>())).Callback(
-                (IDictionary<string, string> keyValueStore, int distanceBetweenColumns, int indentation) =>
-                    {
-                        var flatList = keyValueStore.Select(pair => pair.Key + " " + pair.Value).ToList();
-                        this.output.AppendLine(string.Join(Environment.NewLine, flatList));
-                    });
-
-            this.loggingUserInterface.Setup(u => u.ShowLabelValuePair(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Callback(
-                (string label, string value, int distanceBetweenLabelAndValue) => this.output.AppendLine(label + " " + value));
+            this.loggingUserInterface = new LoggingUserInterface();
         }
 
         #region constructor
@@ -116,13 +88,13 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation();
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelp(command);
 
             // Assert
-            Assert.IsTrue(this.output.ToString().Contains(command.Attributes.CommandName));
+            Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(command.Attributes.CommandName));
         }
 
         [Test]
@@ -133,13 +105,13 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation();
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelp(command);
 
             // Assert
-            Assert.IsTrue(this.output.ToString().Contains(command.Attributes.Description));
+            Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(command.Attributes.Description));
         }
 
         [Test]
@@ -150,7 +122,7 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation();
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelp(command);
@@ -158,8 +130,8 @@ namespace CommandLine.Tests.UnitTests.Commands
             // Assert
             foreach (var example in command.Attributes.Examples)
             {
-                Assert.IsTrue(this.output.ToString().Contains(example.Key));
-                Assert.IsTrue(this.output.ToString().Contains(example.Value));
+                Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(example.Key));
+                Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(example.Value));
             }
         }
 
@@ -171,7 +143,7 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation();
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelp(command);
@@ -179,8 +151,8 @@ namespace CommandLine.Tests.UnitTests.Commands
             // Assert
             foreach (var argumentDescription in command.Attributes.ArgumentDescriptions)
             {
-                Assert.IsTrue(this.output.ToString().Contains(argumentDescription.Key));
-                Assert.IsTrue(this.output.ToString().Contains(argumentDescription.Value));
+                Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(argumentDescription.Key));
+                Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(argumentDescription.Value));
             }
         }
 
@@ -212,13 +184,13 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation { ApplicationName = "App Name" };
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelpOverview(commands);
 
             // Assert
-            Assert.IsTrue(this.output.ToString().Contains(applicationInformation.ApplicationName));
+            Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(applicationInformation.ApplicationName));
         }
 
         [Test]
@@ -229,13 +201,13 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation { ApplicationVersion = new Version(3, 1, 4, 1) };
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelpOverview(commands);
 
             // Assert
-            Assert.IsTrue(this.output.ToString().Contains(applicationInformation.ApplicationVersion.ToString()));
+            Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(applicationInformation.ApplicationVersion.ToString()));
         }
 
         [Test]
@@ -246,13 +218,13 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation { NameOfExecutable = "AppName.exe" };
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelpOverview(commands);
 
             // Assert
-            Assert.IsTrue(this.output.ToString().Contains(applicationInformation.NameOfExecutable));
+            Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(applicationInformation.NameOfExecutable));
         }
 
         [Test]
@@ -264,7 +236,7 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation { NameOfExecutable = "AppName.exe" };
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelpOverview(commands);
@@ -272,7 +244,7 @@ namespace CommandLine.Tests.UnitTests.Commands
             // Assert
             foreach (var command in commands)
             {
-                Assert.IsTrue(this.output.ToString().Contains(command.Attributes.CommandName));
+                Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(command.Attributes.CommandName));
             }
         }
 
@@ -284,7 +256,7 @@ namespace CommandLine.Tests.UnitTests.Commands
 
             var applicationInformation = new ApplicationInformation { NameOfExecutable = "AppName.exe" };
 
-            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.Object);
+            var helpProvider = new HelpProvider(applicationInformation, this.loggingUserInterface.UserInterface);
 
             // Act
             helpProvider.ShowHelpOverview(commands);
@@ -292,7 +264,7 @@ namespace CommandLine.Tests.UnitTests.Commands
             // Assert
             foreach (var command in commands)
             {
-                Assert.IsTrue(this.output.ToString().Contains(command.Attributes.Description));
+                Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.Contains(command.Attributes.Description));
             }
         }
 

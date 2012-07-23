@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +10,9 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class InstallationStatusCommand : ICommand
     {
-        private const string CommandName = "status";
+        public const string CommandName = "status";
 
-        private const string ArgumentNameNugetPackageId = "NugetPackageId";
+        public const string ArgumentNameNugetPackageId = "NugetPackageId";
 
         private readonly string[] alternativeCommandNames = new[] { "installationstatus" };
 
@@ -21,6 +22,16 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public InstallationStatusCommand(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (installationStatusProvider == null)
+            {
+                throw new ArgumentNullException("installationStatusProvider");
+            }
+
             this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
 
@@ -59,7 +70,7 @@ namespace NuDeploy.CommandLine.Commands.Console
         public void Execute()
         {
             // package id
-            string packageId = this.Arguments.Values.FirstOrDefault();
+            string packageId = this.Arguments.ContainsKey(ArgumentNameNugetPackageId) ? this.Arguments[ArgumentNameNugetPackageId] : string.Empty;
 
             // retrieve packages
             IList<NuDeployPackageInfo> packages = string.IsNullOrWhiteSpace(packageId)
