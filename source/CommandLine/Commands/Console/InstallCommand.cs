@@ -11,13 +11,13 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class InstallCommand : ICommand
     {
-        private const string CommandName = "install";
+        public const string CommandName = "install";
 
-        private const string ArgumentNameNugetPackageId = "NugetPackageId";
+        public const string ArgumentNameNugetPackageId = "NugetPackageId";
 
-        private const string ArgumentNameNugetDeploymentType = "DeploymentType";
+        public const string ArgumentNameNugetDeploymentType = "DeploymentType";
 
-        private const string ArgumentNameSystemSettingTransformationProfiles = "TransformationProfiles";
+        public const string ArgumentNameSystemSettingTransformationProfiles = "TransformationProfiles";
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
 
@@ -31,6 +31,21 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public InstallCommand(IUserInterface userInterface, IPackageInstaller packageInstaller, IDeploymentTypeParser deploymentTypeParser)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (packageInstaller == null)
+            {
+                throw new ArgumentNullException("packageInstaller");
+            }
+
+            if (deploymentTypeParser == null)
+            {
+                throw new ArgumentNullException("deploymentTypeParser");
+            }
+
             this.userInterface = userInterface;
             this.packageInstaller = packageInstaller;
             this.deploymentTypeParser = deploymentTypeParser;
@@ -84,7 +99,7 @@ namespace NuDeploy.CommandLine.Commands.Console
         public void Execute()
         {
             // package id (required parameter)
-            string packageId = this.Arguments.Values.FirstOrDefault();
+            string packageId = this.Arguments.ContainsKey(ArgumentNameNugetPackageId) ? this.Arguments[ArgumentNameNugetPackageId] : string.Empty;
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 this.userInterface.WriteLine(Resources.InstallCommand.NoPackageIdSpecifiedMessage);
@@ -97,7 +112,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
             // system settings transformation names
             string transformationProfileNamesArgument = this.Arguments.ContainsKey(ArgumentNameSystemSettingTransformationProfiles) ? this.Arguments[ArgumentNameSystemSettingTransformationProfiles] : string.Empty;
-            string[] systemSettingTransformationProfileNames = null;
+            var systemSettingTransformationProfileNames = new string[] { };
             if (!string.IsNullOrWhiteSpace(transformationProfileNamesArgument))
             {
                 systemSettingTransformationProfileNames =
