@@ -159,15 +159,18 @@ Function CreateOrUpdate-ScheduledTask
 		[string]$EndTime,
         
         [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$Interval = "1"
+		[string]$Interval = "1",
+
+		[Parameter(Position=10, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$StartDate
 	)
 	
 	if ((Exists-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation) -eq $true)
 	{
 		Remove-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation
 	}
-	
-	Create-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -TaskRun $TaskRun -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -Schedule $Schedule -StartTime $StartTime -EndTime $EndTime -Interval $Interval
+
+	Create-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -TaskRun $TaskRun -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -Schedule $Schedule -StartTime $StartTime -EndTime $EndTime -Interval $Interval -StartDate $StartDate
 }
 
 Function Create-ScheduledTask
@@ -201,9 +204,49 @@ Function Create-ScheduledTask
 		[string]$EndTime,
         
         [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$Interval = "1"
+		[string]$Interval = "1",
+		
+		[Parameter(Position=10, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$StartDate
 	)
 	$taskLocationAndName = Join-Path $TaskLocation $TaskName
-	$Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+	
+	# Case insensitive by default; different tasks require different sets of parameters
+	switch ($Schedule) 
+    { 
+        "Daily" 
+                {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                } 
+        "Hourly" 
+                {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                } 
+        "Minute" 
+                {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                } 
+        "Once" 
+                {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /st $StartTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                } 
+        "Weekly" 
+                {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                } 
+        "Monthly" 
+                {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                } 
+        default {
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                }
+    }
+
+	if ($StartDate)
+	{
+		$Command += " /sd `"$StartDate`""
+	}
+
 	Invoke-Expression $Command
 }

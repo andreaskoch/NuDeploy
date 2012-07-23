@@ -232,7 +232,15 @@ if ($systemsettings.Settings.BatchJobs -and $systemsettings.Settings.BatchJobs.J
 	foreach($batchJob in $systemsettings.Settings.BatchJobs.Job) 
 	{
 		"Creating batch job $($batchJob.Name)"
-		CreateOrUpdate-ScheduledTask -ComputerName localhost -TaskName $batchJob.Name -TaskLocation $batchJob.Location -TaskRun $batchJob.ProgramPath -RunAsUser $batchJob.Username -RunAsUserPassword $batchJob.Password -Schedule $batchJob.Schedule.Type -Interval $batchJob.Schedule.RecurInterval -StartTime $batchJob.Schedule.StartTime -EndTime $batchJob.Schedule.EndTime
+		if($batchJob.Schedule.StartDate)
+		{
+			CreateOrUpdate-ScheduledTask -ComputerName localhost -TaskName $batchJob.Name -TaskLocation $batchJob.Location -TaskRun $batchJob.ProgramPath -RunAsUser $batchJob.Username -RunAsUserPassword $batchJob.Password -Schedule $batchJob.Schedule.Type -Interval $batchJob.Schedule.RecurInterval -StartTime $batchJob.Schedule.StartTime -EndTime $batchJob.Schedule.EndTime -StartDate $batchJob.Schedule.StartDate
+		}
+		else
+		{
+			CreateOrUpdate-ScheduledTask -ComputerName localhost -TaskName $batchJob.Name -TaskLocation $batchJob.Location -TaskRun $batchJob.ProgramPath -RunAsUser $batchJob.Username -RunAsUserPassword $batchJob.Password -Schedule $batchJob.Schedule.Type -Interval $batchJob.Schedule.RecurInterval -StartTime $batchJob.Schedule.StartTime -EndTime $batchJob.Schedule.EndTime
+		}
+
 	}
 }
 
