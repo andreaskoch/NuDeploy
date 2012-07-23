@@ -103,6 +103,7 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<ICommandArgumentParser>().Use<CommandArgumentParser>();
                         config.For<ICommandLineArgumentInterpreter>().Use<CommandLineArgumentInterpreter>();
                         config.For<ICommandNameMatcher>().Use<CommandNameMatcher>();
+                        config.For<IBuildPropertyParser>().Use<BuildPropertyParser>();
 
                         /* nuget */
                         config.For<IPackagingFolderPathProvider>().Use<PackagingFolderPathProvider>();

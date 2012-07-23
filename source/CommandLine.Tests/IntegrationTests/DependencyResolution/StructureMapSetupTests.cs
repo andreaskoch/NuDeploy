@@ -78,6 +78,7 @@ namespace CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(ICommandArgumentParser))]
         [TestCase(typeof(ICommandLineArgumentInterpreter))]
         [TestCase(typeof(ICommandNameMatcher))]
+        [TestCase(typeof(IBuildPropertyParser))]
         [TestCase(typeof(IPackagingFolderPathProvider))]
         [TestCase(typeof(IPackagingService))]
         [TestCase(typeof(IPrePackagingFolderPathProvider))]

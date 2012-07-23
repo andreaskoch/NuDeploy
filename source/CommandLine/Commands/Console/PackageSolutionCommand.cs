@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Packaging;
 
@@ -9,13 +9,13 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class PackageSolutionCommand : ICommand
     {
-        private const string CommandName = "package";
+        public const string CommandName = "package";
 
-        private const string ArgumentNameSolutionPath = "SolutionPath";
+        public const string ArgumentNameSolutionPath = "SolutionPath";
 
-        private const string ArgumentNameBuildConfiguration = "BuildConfiguration";
+        public const string ArgumentNameBuildConfiguration = "BuildConfiguration";
 
-        private const string ArgumentNameMSBuildProperties = "MSBuildProperties";
+        public const string ArgumentNameMSBuildProperties = "MSBuildProperties";
 
         private readonly string[] alternativeCommandNames = new[] { "pack" };
 
@@ -23,10 +23,28 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         private readonly ISolutionPackagingService solutionPackagingService;
 
-        public PackageSolutionCommand(IUserInterface userInterface, ISolutionPackagingService solutionPackagingService)
+        private readonly IBuildPropertyParser buildPropertyParser;
+
+        public PackageSolutionCommand(IUserInterface userInterface, ISolutionPackagingService solutionPackagingService, IBuildPropertyParser buildPropertyParser)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (solutionPackagingService == null)
+            {
+                throw new ArgumentNullException("solutionPackagingService");
+            }
+
+            if (buildPropertyParser == null)
+            {
+                throw new ArgumentNullException("buildPropertyParser");
+            }
+
             this.userInterface = userInterface;
             this.solutionPackagingService = solutionPackagingService;
+            this.buildPropertyParser = buildPropertyParser;
 
             this.Attributes = new CommandAttributes
             {
@@ -74,7 +92,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             string solutionPath = this.Arguments.ContainsKey(ArgumentNameSolutionPath) ? this.Arguments[ArgumentNameSolutionPath] : string.Empty;
             if (string.IsNullOrWhiteSpace(solutionPath))
             {
-                this.userInterface.WriteLine(string.Format("You must specifiy a solution path."));
+                this.userInterface.WriteLine(string.Format(Resources.PackageSolutionCommand.SolutionPathArgumentNotSetMessage));
                 return;
             }
 
@@ -82,38 +100,26 @@ namespace NuDeploy.CommandLine.Commands.Console
             string buildConfiguration = this.Arguments.ContainsKey(ArgumentNameBuildConfiguration) ? this.Arguments[ArgumentNameBuildConfiguration] : string.Empty;
             if (string.IsNullOrWhiteSpace(buildConfiguration))
             {
-                this.userInterface.WriteLine(string.Format("You must specify a build configuration (e.g. Debug, Release)."));
+                this.userInterface.WriteLine(string.Format(Resources.PackageSolutionCommand.BuildConfigurationArgumentNotSetMessage));
                 return;
             }
 
             // MSBuild Properties
             var buildPropertiesArgument = this.Arguments.ContainsKey(ArgumentNameMSBuildProperties) ? this.Arguments[ArgumentNameMSBuildProperties] : string.Empty;
-            var buildProperties = this.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
+            var buildProperties = new List<KeyValuePair<string, string>>();
+            if (!string.IsNullOrWhiteSpace(buildPropertiesArgument))
+            {
+                buildProperties = this.buildPropertyParser.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
+            }
 
-
+            // Package solution
             if (!this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties))
             {
-                this.userInterface.WriteLine("Packaging failed.");
+                this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingFailureMessage);
                 return;
             }
 
-            this.userInterface.WriteLine("Packaging succeeded.");
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> ParseBuildPropertiesArgument(string builProperties)
-        {
-            var keyValuePairStrings = builProperties.Split(NuDeployConstants.MultiValueSeperator).Where(p => string.IsNullOrWhiteSpace(p) == false).Select(p => p.Trim());
-            foreach (var keyValuePairString in keyValuePairStrings)
-            {
-                var segments = keyValuePairString.Split('=');
-                if (segments.Count() == 2)
-                {
-                    string key = segments.First();
-                    string value = segments.Last();
-
-                    yield return new KeyValuePair<string, string>(key, value);
-                }
-            }
+            this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingSuccessMessage);
         }
     }
 }

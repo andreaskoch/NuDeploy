@@ -88,6 +88,15 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must specify a build configuration (e.g. Debug, Release)..
+        /// </summary>
+        internal static string BuildConfigurationArgumentNotSetMessage {
+            get {
+                return ResourceManager.GetString("BuildConfigurationArgumentNotSetMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creates a nuget package from the given solution and pushes it to the specified nuget repository..
         /// </summary>
         internal static string CommandDescriptionText {
@@ -102,6 +111,33 @@ namespace NuDeploy.CommandLine.Resources {
         internal static string CommandExampleDescription1 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packaging failed..
+        /// </summary>
+        internal static string PackagingFailureMessage {
+            get {
+                return ResourceManager.GetString("PackagingFailureMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packaging succeeded..
+        /// </summary>
+        internal static string PackagingSuccessMessage {
+            get {
+                return ResourceManager.GetString("PackagingSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must specifiy a solution path..
+        /// </summary>
+        internal static string SolutionPathArgumentNotSetMessage {
+            get {
+                return ResourceManager.GetString("SolutionPathArgumentNotSetMessage", resourceCulture);
             }
         }
     }

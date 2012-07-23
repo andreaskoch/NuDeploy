@@ -64,6 +64,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\BuildPropertyParser.cs" />
     <Compile Include="Commands\CommandAttributes.cs" />
     <Compile Include="Commands\Console\CleanupCommand.cs" />
     <Compile Include="Commands\Console\HelpCommand.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Commands\Console\SelfUpdateCommand.cs" />
     <Compile Include="Commands\Console\UninstallCommand.cs" />
     <Compile Include="Commands\HelpProvider.cs" />
+    <Compile Include="Commands\IBuildPropertyParser.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandProvider.cs" />
     <Compile Include="Commands\ConsoleCommandProvider.cs" />

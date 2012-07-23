@@ -35,8 +35,9 @@ namespace CommandLine.Tests.IntegrationTests
         {
             var userInterfaceMock = new Mock<IUserInterface>();
             var solutionPackagingServiceMock = new Mock<ISolutionPackagingService>();
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
 
-            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, solutionPackagingServiceMock.Object);
+            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, solutionPackagingServiceMock.Object, buildPropertyParser.Object);
 
             this.commands = new List<ICommand> { this.packackageSolutionCommand };
 
