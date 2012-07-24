@@ -129,4 +129,10 @@
   <data name="NoPackageIdSpecifiedMessage" xml:space="preserve">
     <value>No package id specified.</value>
   </data>
+  <data name="UninstallFailedMessageTemplate" xml:space="preserve">
+    <value>Uninstall of package "{0}" failed.</value>
+  </data>
+  <data name="UninstallSucceededMessageTemplate" xml:space="preserve">
+    <value>Package "{0}" has been successfully uninstalled.</value>
+  </data>
 </root>

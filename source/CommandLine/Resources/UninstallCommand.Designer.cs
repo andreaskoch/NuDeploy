@@ -95,5 +95,23 @@ namespace NuDeploy.CommandLine.Resources {
                 return ResourceManager.GetString("NoPackageIdSpecifiedMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall of package &quot;{0}&quot; failed..
+        /// </summary>
+        internal static string UninstallFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("UninstallFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package &quot;{0}&quot; has been successfully uninstalled..
+        /// </summary>
+        internal static string UninstallSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("UninstallSucceededMessageTemplate", resourceCulture);
+            }
+        }
     }
 }

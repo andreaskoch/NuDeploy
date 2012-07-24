@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,9 +9,9 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class UninstallCommand : ICommand
     {
-        private const string CommandName = "uninstall";
+        public const string CommandName = "uninstall";
 
-        private const string ArgumentNameNugetPackageId = "NugetPackageId";
+        public const string ArgumentNameNugetPackageId = "NugetPackageId";
 
         private readonly string[] alternativeCommandNames = new[] { "remove" };
 
@@ -20,6 +21,16 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public UninstallCommand(IUserInterface userInterface, IPackageUninstaller packageUninstaller)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (packageUninstaller == null)
+            {
+                throw new ArgumentNullException("packageUninstaller");
+            }
+
             this.userInterface = userInterface;
             this.packageUninstaller = packageUninstaller;
 
@@ -61,7 +72,13 @@ namespace NuDeploy.CommandLine.Commands.Console
                 return;
             }
 
-            this.packageUninstaller.Uninstall(packageId, null);
+            if (!this.packageUninstaller.Uninstall(packageId, null))
+            {
+                this.userInterface.WriteLine(string.Format(Resources.UninstallCommand.UninstallFailedMessageTemplate, packageId));
+                return;
+            }
+
+            this.userInterface.WriteLine(string.Format(Resources.UninstallCommand.UninstallSucceededMessageTemplate, packageId));
         }
     }
 }

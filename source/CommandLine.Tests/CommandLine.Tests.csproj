@@ -63,6 +63,7 @@
     <Compile Include="UnitTests\Commands\Console\InstallationStatusCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\InstallCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\PackageSolutionCommandTests.cs" />
+    <Compile Include="UnitTests\Commands\Console\UninstallCommandTests.cs" />
     <Compile Include="UnitTests\Commands\HelpProviderTests.cs" />
     <Compile Include="UnitTests\UserInterface\ConsoleTextManipulationTests.cs" />
   </ItemGroup>
