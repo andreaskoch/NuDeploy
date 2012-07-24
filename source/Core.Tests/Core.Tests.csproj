@@ -92,8 +92,10 @@
     <Compile Include="UnitTests\Packaging\Prepackaging\PrepackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\SolutionPackagingServiceTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
+    <Compile Include="UnitTests\Repositories\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryFactoryTests.cs" />
+    <Compile Include="UnitTests\Repositories\SourceRepositoryConfigurationFactoryTests.cs" />
     <Compile Include="UnitTests\Status\InstallationLogicProviderTests.cs" />
     <Compile Include="UnitTests\Status\InstallationStatusProviderTests.cs" />
     <Compile Include="UnitTests\Transformation\ConfigurationFileTransformerTests.cs" />

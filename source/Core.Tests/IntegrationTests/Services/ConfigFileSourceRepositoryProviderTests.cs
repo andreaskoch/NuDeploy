@@ -24,8 +24,9 @@ namespace NuDeploy.Tests.IntegrationTests.Services
 
             var encodingProvider = new DefaultFileEncodingProvider();
             var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
+            var sourceRepositoryConfigurationFactory = new SourceRepositoryConfigurationFactory();
 
-            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor);
+            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor, sourceRepositoryConfigurationFactory);
         }
 
         [SetUp]
@@ -46,22 +47,17 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void SaveRepository_ParameterIsNull_ArgumentNullExceptionIsThrown()
-        {
-            // Act
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(null);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void SaveRepository_SuppliedRepositoryIsInvalid_ArgumentExceptionIsThrown()
+        public void SaveRepository_SuppliedRepositoryIsInvalid_ResultIsFalse()
         {
             // Arrange
-            var repository = new SourceRepositoryConfiguration { Name = string.Empty, Url = new Uri("http://sample-url.com") };
+            string repositoryName = string.Empty;
+            string repositoryUrl = "http://sample-url.com";
 
             // Act
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository);
+            bool result = this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         [Test]
@@ -71,7 +67,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services
             var repository = this.sourceRepositoryProvider.GetRepositoryConfigurations().First();
 
             // Act
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository);
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository.Name, repository.Url.ToString());
 
             // Assert
             var result = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
@@ -83,12 +79,11 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void SaveRepository_SuppliedRepositoryIsNewEntry_ResultContainsTheSuppliedRepository()
         {
             // Arrange
-            string repositoryName = "Test Repository";
-            Uri repositoryUrl = new Uri("http://sample-url.com");
-            var repository = new SourceRepositoryConfiguration { Name = repositoryName, Url = repositoryUrl };
+            var repositoryName = "Test Repository";
+            var repositoryUrl = "http://sample-url.com";
 
             // Act
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository);
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
 
             // Assert
             var results = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
@@ -101,23 +96,20 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void SaveRepository_TwoRepositoriesWithTheSameName_OnlyTheLastRepositoryIsSaved()
         {
             // Arrange
-            string repositoryName = "Test Repository";
-            Uri repository1Url = new Uri("http://sample-url.com/1");
-            Uri repository2Url = new Uri("http://sample-url.com/2");
-
-            var repository1 = new SourceRepositoryConfiguration { Name = repositoryName, Url = repository1Url };
-            var repository2 = new SourceRepositoryConfiguration { Name = repositoryName, Url = repository2Url };
+            var repositoryName = "Test Repository";
+            var repository1Url = "http://sample-url.com/1";
+            var repository2Url = "http://sample-url.com/2";
 
             // Act
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository1);
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository2);
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repository1Url);
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repository2Url);
 
             // Assert
             var results = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
             var savedRepo = results.FirstOrDefault(r => r.Name.Equals(repositoryName));
 
             Assert.IsNotNull(savedRepo);
-            Assert.AreEqual(repository2Url, savedRepo.Url);
+            Assert.AreEqual(repository2Url, savedRepo.Url.ToString());
         }
 
         [Test]
@@ -179,7 +171,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         {
             // Arrange
             var config = new SourceRepositoryConfiguration { Name = "Test Repo j32kl4jkl12j4kl32j4klj32", Url = new Uri("C:\\local-test-repo") };
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(config);
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(config.Name, config.Url.ToString());
             string fileContentBefore = File.ReadAllText(ConfigFileSourceRepositoryProvider.SourceRepositoryConfigurationFileName);
 
             // Act

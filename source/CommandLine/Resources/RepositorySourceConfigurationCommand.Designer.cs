@@ -133,20 +133,38 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The repository &quot;{0}&quot; could not be removed from your configuration..
+        /// </summary>
+        internal static string DeleteSourceRepositoryConfigurationFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("DeleteSourceRepositoryConfigurationFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must specify the name of the repository you want to delete from your configuration..
+        /// </summary>
+        internal static string DeleteSourceRepositoryConfigurationNoRepositoryNameSuppliedMessage {
+            get {
+                return ResourceManager.GetString("DeleteSourceRepositoryConfigurationNoRepositoryNameSuppliedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The repository &quot;{0}&quot; has been removed from your configuration successfully..
+        /// </summary>
+        internal static string DeleteSourceRepositoryConfigurationSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("DeleteSourceRepositoryConfigurationSucceededMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must use one of these actions: {0}..
         /// </summary>
         internal static string InvalidActionNameMessageTemplate {
             get {
                 return ResourceManager.GetString("InvalidActionNameMessageTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid repository URL..
-        /// </summary>
-        internal static string InvalidRespositoryUrlMessageTemplate {
-            get {
-                return ResourceManager.GetString("InvalidRespositoryUrlMessageTemplate", resourceCulture);
             }
         }
         
@@ -160,6 +178,15 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have currently no source repositories configured..
+        /// </summary>
+        internal static string ListSourceRepositoryConfigurationsNoRepositoriesConfiguredMessage {
+            get {
+                return ResourceManager.GetString("ListSourceRepositoryConfigurationsNoRepositoriesConfiguredMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset the the source repository configuration to the default..
         /// </summary>
         internal static string ResetCommandExampleDescription {
@@ -169,11 +196,47 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resetting your repository configuration failed..
+        /// </summary>
+        internal static string ResetSourceRepositoryConfigurationFailedMessage {
+            get {
+                return ResourceManager.GetString("ResetSourceRepositoryConfigurationFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You repository configuration has been reset successfully..
+        /// </summary>
+        internal static string ResetSourceRepositoryConfigurationSuccessMessage {
+            get {
+                return ResourceManager.GetString("ResetSourceRepositoryConfigurationSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some Repository.
         /// </summary>
         internal static string SampleRepositoryName {
             get {
                 return ResourceManager.GetString("SampleRepositoryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving the repository with the name &quot;{0}&quot; and the URI &quot;{1}&quot; failed..
+        /// </summary>
+        internal static string SaveSourceRepositoryConfigurationFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("SaveSourceRepositoryConfigurationFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The repository with the name &quot;{0}&quot; and the URI &quot;{1}&quot; has been successfully saved..
+        /// </summary>
+        internal static string SaveSourceRepositoryConfigurationSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("SaveSourceRepositoryConfigurationSucceededMessageTemplate", resourceCulture);
             }
         }
         

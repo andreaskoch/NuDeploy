@@ -21,12 +21,30 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
+        private readonly ISourceRepositoryConfigurationFactory sourceRepositoryConfigurationFactory;
+
         private readonly string sourceConfigurationFilePath;
 
-        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
+        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, ISourceRepositoryConfigurationFactory sourceRepositoryConfigurationFactory)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (filesystemAccessor == null)
+            {
+                throw new ArgumentNullException("filesystemAccessor");
+            }
+
+            if (sourceRepositoryConfigurationFactory == null)
+            {
+                throw new ArgumentNullException("sourceRepositoryConfigurationFactory");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
+            this.sourceRepositoryConfigurationFactory = sourceRepositoryConfigurationFactory;
             this.sourceConfigurationFilePath = this.GetSourceConfigurationFilePath();
         }
 
@@ -35,16 +53,12 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             return this.Load();
         }
 
-        public void SaveRepositoryConfiguration(SourceRepositoryConfiguration sourceRepositoryConfiguration)
+        public bool SaveRepositoryConfiguration(string repositoryName, string repositoryUrl)
         {
+            var sourceRepositoryConfiguration = this.sourceRepositoryConfigurationFactory.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl);
             if (sourceRepositoryConfiguration == null)
             {
-                throw new ArgumentNullException("sourceRepositoryConfiguration");
-            }
-
-            if (!sourceRepositoryConfiguration.IsValid)
-            {
-                throw new ArgumentException(Resources.Exceptions.SourceRepositoryConfigurationInvalid, "sourceRepositoryConfiguration");
+                return false;
             }
 
             // get existing repositoriesConfiguration
@@ -61,11 +75,10 @@ namespace NuDeploy.Core.Services.Installation.Repositories
                 repositories[existingKey] = sourceRepositoryConfiguration;
             }
 
-            // save
-            this.Save(repositories.Values.ToArray());
+            return this.Save(repositories.Values.ToArray());
         }
 
-        public void DeleteRepositoryConfiguration(string repositoryName)
+        public bool DeleteRepositoryConfiguration(string repositoryName)
         {
             if (string.IsNullOrWhiteSpace(repositoryName))
             {
@@ -73,20 +86,18 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             }
 
             var repositories = this.Load().Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false);
-
-            // save
-            this.Save(repositories.ToArray());
+            return this.Save(repositories.ToArray());
         }
 
-        public void ResetRepositoryConfiguration()
+        public bool ResetRepositoryConfiguration()
         {
-            this.CreateDefaultConfiguration();
+            return this.CreateDefaultConfiguration();
         }
 
-        private void CreateDefaultConfiguration()
+        private bool CreateDefaultConfiguration()
         {
             var defaultSources = new[] { new SourceRepositoryConfiguration { Name = DefaultRepositoryName, Url = NuDeployConstants.DefaultFeedUrl } };
-            this.Save(defaultSources);
+            return this.Save(defaultSources);
         }
 
         private IEnumerable<SourceRepositoryConfiguration> Load()
@@ -100,10 +111,11 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             return JsonConvert.DeserializeObject<SourceRepositoryConfiguration[]>(json);
         }
 
-        private void Save(SourceRepositoryConfiguration[] repositoriesConfiguration)
+        private bool Save(SourceRepositoryConfiguration[] repositoriesConfiguration)
         {
             string json = JsonConvert.SerializeObject(repositoriesConfiguration);
             this.filesystemAccessor.WriteContentToFile(json, this.sourceConfigurationFilePath);
+            return true;
         }
 
         private string GetSourceConfigurationFilePath()

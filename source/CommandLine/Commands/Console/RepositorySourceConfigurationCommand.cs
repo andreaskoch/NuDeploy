@@ -10,33 +10,43 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class RepositorySourceConfigurationCommand : ICommand
     {
-        private const string CommandName = "sources";
+        public const string CommandName = "sources";
 
-        private const string ArgumentNameAction = "Action";
+        public const string ArgumentNameAction = "Action";
 
-        private const string ArgumentNameRepositoryName = "Name";
+        public const string ArgumentNameRepositoryName = "Name";
 
-        private const string ArgumentNameRepositoryUrl = "Url";
+        public const string ArgumentNameRepositoryUrl = "Url";
 
-        private const string ActionAdd = "add";
+        private readonly string[] alternativeCommandNames = new[] { "reps", "repositories", "repoconfigs" };
 
-        private const string ActionDelete = "delete";
-
-        private const string ActionReset = "reset";
-
-        private const string ActionList = "list";
-
-        private readonly string[] alternativeCommandNames = new[] { "repositoryconfiguration", "repoconfig", "repositorysourceconfig", "repositorysourceconfiguration" };
-
-        private readonly string[] allowedActions = new[] { ActionAdd, ActionDelete, ActionReset, ActionList };
+        private readonly string[] allowedActions = Enum.GetValues(typeof(RepositoryConfigurationCommandAction)).Cast<RepositoryConfigurationCommandAction>().Select(d => d.ToString()).ToArray();
 
         private readonly IUserInterface userInterface;
 
+        private readonly IRepositoryConfigurationCommandActionParser repositoryConfigurationCommandActionParser;
+
         private readonly ISourceRepositoryProvider sourceRepositoryProvider;
 
-        public RepositorySourceConfigurationCommand(IUserInterface userInterface, ISourceRepositoryProvider sourceRepositoryProvider)
+        public RepositorySourceConfigurationCommand(IUserInterface userInterface, IRepositoryConfigurationCommandActionParser repositoryConfigurationCommandActionParser, ISourceRepositoryProvider sourceRepositoryProvider)
         {
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (repositoryConfigurationCommandActionParser == null)
+            {
+                throw new ArgumentNullException("repositoryConfigurationCommandActionParser");
+            }
+
+            if (sourceRepositoryProvider == null)
+            {
+                throw new ArgumentNullException("sourceRepositoryProvider");
+            }
+
             this.userInterface = userInterface;
+            this.repositoryConfigurationCommandActionParser = repositoryConfigurationCommandActionParser;
             this.sourceRepositoryProvider = sourceRepositoryProvider;
 
             this.Attributes = new CommandAttributes
@@ -53,7 +63,12 @@ namespace NuDeploy.CommandLine.Commands.Console
                         new Dictionary<string, string>
                             {
                                 {
-                                    string.Format("{0} {1} \"{2}\" \"{3}\"", CommandName, ActionAdd, Resources.RepositorySourceConfigurationCommand.SampleRepositoryName, NuDeployConstants.DefaultFeedUrl),
+                                    string.Format(
+                                        "{0} {1} \"{2}\" \"{3}\"",
+                                        CommandName,
+                                        RepositoryConfigurationCommandAction.Add,
+                                        Resources.RepositorySourceConfigurationCommand.SampleRepositoryName,
+                                        NuDeployConstants.DefaultFeedUrl),
                                     Resources.RepositorySourceConfigurationCommand.AddCommandExampleDescriptionNamedArguments
                                     },
                                 {
@@ -61,7 +76,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                                         "{0} -{1}={2} -{3}=\"{4}\" -{5}=\"{6}\"",
                                         CommandName,
                                         ArgumentNameAction,
-                                        ActionAdd,
+                                        RepositoryConfigurationCommandAction.Add,
                                         ArgumentNameRepositoryName,
                                         Resources.RepositorySourceConfigurationCommand.SampleRepositoryName,
                                         ArgumentNameRepositoryUrl,
@@ -69,15 +84,20 @@ namespace NuDeploy.CommandLine.Commands.Console
                                     Resources.RepositorySourceConfigurationCommand.AddCommandExampleDescriptionNamedArguments
                                     },
                                 {
-                                    string.Format("{0} {1} \"{2}\"", CommandName, ActionDelete, Resources.RepositorySourceConfigurationCommand.SampleRepositoryName),
+                                    string.Format(
+                                        "{0} {1} \"{2}\"",
+                                        CommandName,
+                                        RepositoryConfigurationCommandAction.Delete,
+                                        Resources.RepositorySourceConfigurationCommand.SampleRepositoryName),
                                     Resources.RepositorySourceConfigurationCommand.DeleteCommandExampleDescriptionPositionalArguments
                                     },
                                 {
-                                    string.Format("{0} {1}", CommandName, ActionReset),
+                                    string.Format("{0} {1}", CommandName, RepositoryConfigurationCommandAction.Reset),
                                     Resources.RepositorySourceConfigurationCommand.ResetCommandExampleDescription
                                     },
                                 {
-                                    string.Format("{0} {1}", CommandName, ActionList), Resources.RepositorySourceConfigurationCommand.ListCommandExampleDescription
+                                    string.Format("{0} {1}", CommandName, RepositoryConfigurationCommandAction.List),
+                                    Resources.RepositorySourceConfigurationCommand.ListCommandExampleDescription
                                     }
                             },
                     ArgumentDescriptions =
@@ -104,70 +124,120 @@ namespace NuDeploy.CommandLine.Commands.Console
         public void Execute()
         {
             // identify the action (required parameter)
-            string suppliedActionName = this.Arguments.Values.FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(suppliedActionName) || this.allowedActions.Any(a => a.Equals(suppliedActionName, StringComparison.OrdinalIgnoreCase)) == false)
-            {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.allowedActions)));
+            string suppliedActionName = this.Arguments.ContainsKey(ArgumentNameAction) ? this.Arguments[ArgumentNameAction] : string.Empty;
+            var action = this.repositoryConfigurationCommandActionParser.ParseAction(suppliedActionName);
 
-                return;
-            }
-
-            if (suppliedActionName.Equals(ActionAdd, StringComparison.OrdinalIgnoreCase))
+            switch (action)
             {
-                // add
-                if (this.Arguments.Count != 3)
+                case RepositoryConfigurationCommandAction.Unrecognized:
                 {
                     this.userInterface.WriteLine(
-                        string.Format(string.Format(Resources.RepositorySourceConfigurationCommand.AddCommandInvalidArgumentCountMessageTemplate, ActionAdd, 2)));
+                        string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.allowedActions)));
 
-                    return;
+                    break;
                 }
 
-                string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName] ?? this.Arguments.Values.Skip(1).Take(1).FirstOrDefault();
-                string repositoryUrlString = this.Arguments[ArgumentNameRepositoryUrl] ?? this.Arguments.Values.Skip(2).Take(1).FirstOrDefault();
-
-                Uri sourceRepositoryUri;
-                if (Uri.TryCreate(repositoryUrlString, UriKind.Absolute, out sourceRepositoryUri) == false)
+                case RepositoryConfigurationCommandAction.Add:
                 {
+                    if (!this.Arguments.ContainsKey(ArgumentNameRepositoryName) || !this.Arguments.ContainsKey(ArgumentNameRepositoryUrl))
+                    {
+                        // abort
+                        this.userInterface.WriteLine(
+                            string.Format(string.Format(Resources.RepositorySourceConfigurationCommand.AddCommandInvalidArgumentCountMessageTemplate, RepositoryConfigurationCommandAction.Add, 2)));
+
+                        return;
+                    }
+
+                    string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName];
+                    string repositoryUrlString = this.Arguments[ArgumentNameRepositoryUrl];
+                    if (!this.sourceRepositoryProvider.SaveRepositoryConfiguration(sourceRepositoryName, repositoryUrlString))
+                    {
+                        // failure
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                Resources.RepositorySourceConfigurationCommand.SaveSourceRepositoryConfigurationFailedMessageTemplate,
+                                sourceRepositoryName,
+                                repositoryUrlString));
+
+                        return;
+                    }
+
+                    // success
                     this.userInterface.WriteLine(
-                        string.Format(Resources.RepositorySourceConfigurationCommand.InvalidRespositoryUrlMessageTemplate, repositoryUrlString));
+                        string.Format(
+                            Resources.RepositorySourceConfigurationCommand.SaveSourceRepositoryConfigurationSucceededMessageTemplate,
+                            sourceRepositoryName,
+                            repositoryUrlString));
 
-                    return;
+                    break;
                 }
 
-                var repositoryConfiguration = new SourceRepositoryConfiguration { Name = sourceRepositoryName, Url = sourceRepositoryUri };
-                this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryConfiguration);
-            }
-            else if (suppliedActionName.Equals(ActionDelete, StringComparison.OrdinalIgnoreCase))
-            {
-                // delete
-                string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName] ?? this.Arguments.Values.Skip(1).Take(1).FirstOrDefault();
-                this.sourceRepositoryProvider.DeleteRepositoryConfiguration(sourceRepositoryName);
-            }
-            else if (suppliedActionName.Equals(ActionList, StringComparison.OrdinalIgnoreCase))
-            {
-                // list
-                var repositoryConfigurations = this.sourceRepositoryProvider.GetRepositoryConfigurations();
-
-                var dataToDisplay = new Dictionary<string, string>
+                case RepositoryConfigurationCommandAction.Delete:
                 {
-                    { Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn1, Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn2 },
-                    { new string('-', Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn1.Length + 3), new string('-', Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn2.Length + 3) },
-                    { string.Empty, string.Empty },
-                };
+                    if (!this.Arguments.ContainsKey(ArgumentNameRepositoryName))
+                    {
+                        // abort
+                        this.userInterface.WriteLine(
+                            string.Format(Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationNoRepositoryNameSuppliedMessage));
 
-                foreach (var repositoryConfiguration in repositoryConfigurations)
-                {
-                    dataToDisplay.Add(repositoryConfiguration.Name, repositoryConfiguration.Url.ToString());
+                        return;
+                    }
+
+                    string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName] ?? this.Arguments.Values.Skip(1).Take(1).FirstOrDefault();
+                    if (!this.sourceRepositoryProvider.DeleteRepositoryConfiguration(sourceRepositoryName))
+                    {
+                        // failure
+                        this.userInterface.WriteLine(
+                            string.Format(
+                                Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationFailedMessageTemplate, sourceRepositoryName));
+
+                        return;
+                    }
+
+                    // success
+                    this.userInterface.WriteLine(
+                        string.Format(
+                            Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationSucceededMessageTemplate, sourceRepositoryName));
+
+                    break;
                 }
 
-                this.userInterface.ShowKeyValueStore(dataToDisplay, 4);
-            }
-            else if (suppliedActionName.Equals(ActionReset, StringComparison.OrdinalIgnoreCase))
-            {
-                // reset
-                this.sourceRepositoryProvider.ResetRepositoryConfiguration();
+                case RepositoryConfigurationCommandAction.List:
+                {
+                    var repositoryConfigurations = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
+                    if (repositoryConfigurations.Count == 0)
+                    {
+                        this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ListSourceRepositoryConfigurationsNoRepositoriesConfiguredMessage);
+                        return;
+                    }
+
+                    var dataToDisplay = new Dictionary<string, string>
+                    {
+                        { Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn1, Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn2 },
+                        { new string('-', Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn1.Length + 3), new string('-', Resources.RepositorySourceConfigurationCommand.SourceRepositoryConfigurationTableHeadlineColumn2.Length + 3) },
+                        { string.Empty, string.Empty },
+                    };
+
+                    foreach (var repositoryConfiguration in repositoryConfigurations)
+                    {
+                        dataToDisplay.Add(repositoryConfiguration.Name, repositoryConfiguration.Url.ToString());
+                    }
+
+                    this.userInterface.ShowKeyValueStore(dataToDisplay, 4);
+                    break;
+                }
+
+                case RepositoryConfigurationCommandAction.Reset:
+                {
+                    if (!this.sourceRepositoryProvider.ResetRepositoryConfiguration())
+                    {
+                        this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ResetSourceRepositoryConfigurationFailedMessage);
+                        return;
+                    }
+
+                    this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ResetSourceRepositoryConfigurationSuccessMessage);
+                    break;
+                }
             }
         }
     }

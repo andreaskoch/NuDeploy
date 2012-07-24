@@ -135,9 +135,11 @@
     <Compile Include="Services\Installation\Repositories\CommandLineRepositoryFactory.cs" />
     <Compile Include="Services\Installation\Repositories\ConfigFileSourceRepositoryProvider.cs" />
     <Compile Include="Services\Installation\Repositories\IPackageRepositoryBrowser.cs" />
+    <Compile Include="Services\Installation\Repositories\ISourceRepositoryConfigurationFactory.cs" />
     <Compile Include="Services\Installation\Repositories\ISourceRepositoryProvider.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryBrowser.cs" />
     <Compile Include="Services\Installation\Repositories\PackageRepositoryFactory.cs" />
+    <Compile Include="Services\Installation\Repositories\SourceRepositoryConfigurationFactory.cs" />
     <Compile Include="Services\Installation\Status\IInstallationLogicProvider.cs" />
     <Compile Include="Services\Installation\Status\IInstallationStatusProvider.cs" />
     <Compile Include="Services\Installation\Status\InstallationLogicProvider.cs" />

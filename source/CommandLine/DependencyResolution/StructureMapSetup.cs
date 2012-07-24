@@ -79,7 +79,9 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         /* installation */
                         config.For<IInstallationLogicProvider>().Use<InstallationLogicProvider>();
                         config.For<IDeploymentTypeParser>().Use<DeploymentTypeParser>();
+                        config.For<IRepositoryConfigurationCommandActionParser>().Use<RepositoryConfigurationCommandActionParser>();
                         config.For<ISourceRepositoryProvider>().Use<ConfigFileSourceRepositoryProvider>();
+                        config.For<ISourceRepositoryConfigurationFactory>().Use<SourceRepositoryConfigurationFactory>();
                         config.For<Func<Uri, IHttpClient>>().Use(uri => new RedirectedHttpClient(uri));
                         config.For<IPackageRepositoryBrowser>().Use<PackageRepositoryBrowser>();
                         config.For<IPackageConfigurationAccessor>().Use<PackageConfigurationAccessor>();

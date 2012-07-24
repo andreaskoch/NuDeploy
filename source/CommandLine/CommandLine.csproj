@@ -80,6 +80,9 @@
     <Compile Include="Commands\ICommandProvider.cs" />
     <Compile Include="Commands\ConsoleCommandProvider.cs" />
     <Compile Include="Commands\IHelpProvider.cs" />
+    <Compile Include="Commands\IRepositoryConfigurationCommandActionParser.cs" />
+    <Compile Include="Commands\RepositoryConfigurationCommandAction.cs" />
+    <Compile Include="Commands\RepositoryConfigurationCommandActionParser.cs" />
     <Compile Include="DependencyResolution\StructureMapSetup.cs" />
     <Compile Include="Infrastructure\Console\CommandArgumentNameMatcher.cs" />
     <Compile Include="Infrastructure\Console\CommandArgumentParser.cs" />
