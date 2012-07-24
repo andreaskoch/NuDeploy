@@ -10,11 +10,11 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
 {
     public class PrepackagingService : IPrepackagingService
     {
-        public const string TargetFolderNameWebsites = "websites";
+        public const string TargetFolderNameWebsites = "content\\websites";
 
-        public const string TargetFolderNameWebApplications = "webapplications";
+        public const string TargetFolderNameWebApplications = "content\\webapplications";
 
-        public const string TargetFolderNameApplications = "applications";
+        public const string TargetFolderNameApplications = "content\\applications";
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
