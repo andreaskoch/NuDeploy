@@ -184,7 +184,7 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.Sites -and $s
 			foreach($virtualDirectory in $site.VirtualDirectories.VirtualDirectory)
 			{
 				"Adding virtual directory $($virtualDirectory.Name) to site $($site.Name)"
-				CreateOrUpdate-VirtualDirectory -WebsiteName $site.Name -VirtualDirectoryName $virtualDirectory.Name -Path $virtualDirectory.Path
+				CreateOrUpdate-VirtualDirectory -WebsiteName $site.Name -VirtualDirectoryName $virtualDirectory.Name -Path $virtualDirectory.Path -Username $virtualDirectory.Username -Password $virtualDirectory.Password
 			}
 		}
 		
@@ -202,7 +202,7 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.Sites -and $s
 					foreach($virtualDirectory in $webApplication.VirtualDirectories.VirtualDirectory)
 					{
 						"Adding virtual directory $($virtualDirectory.Name) to site $($site.Name)"
-						CreateOrUpdate-VirtualDirectory -WebsiteName $site.Name -ApplicationName $webApplication.Name -VirtualDirectoryName $virtualDirectory.Name -Path $virtualDirectory.Path
+						CreateOrUpdate-VirtualDirectory -WebsiteName $site.Name -ApplicationName $webApplication.Name -VirtualDirectoryName $virtualDirectory.Name -Path $virtualDirectory.Path -Username $virtualDirectory.Username -Password $virtualDirectory.Password
 					}
 				}
 			}

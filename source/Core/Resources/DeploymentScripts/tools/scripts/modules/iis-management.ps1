@@ -491,21 +491,44 @@ Function CreateOrUpdate-VirtualDirectory
 		[string]$path,
 		
 		[Parameter(Mandatory=$False, ValueFromPipeline=$True)]
-		[string]$applicationName		
+		[string]$applicationName,
+
+		[Parameter(Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$username=$null,
+
+		[Parameter(Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$password
 	)
 
 	try {
-		
+		$credentialsNeedToBeSet = (($username -and $username -ne "") -and ($password -and $password -ne ""))
+		$appcmdPath = Join-Path $env:windir "System32\inetsrv\appcmd.exe"
+
 		if ((VirtualDirectory-Exists -WebsiteName $websiteName -ApplicationName $applicationName -VirtualDirectoryName $virtualDirectoryName) -eq $true)
 		{
 			Remove-VirtualDirectory -WebsiteName $websiteName -ApplicationName $applicationName -VirtualDirectoryName $virtualDirectoryName
 		}
 	
-		if ($applicationName) {
+		if ($applicationName)
+		{
 			New-WebVirtualDirectory -Site $websiteName -Application $applicationName -Name $virtualDirectoryName -PhysicalPath $path
+
+			if ($credentialsNeedToBeSet -eq $true)
+			{
+				$Command = "$appcmdPath set vdir /vdir.Name:`"$websiteName/$applicationName/$virtualDirectoryName`" /userName:`"$username`" /password:`"$password`""
+				Invoke-Expression $Command
+			}
+
 		} else {
 			New-WebVirtualDirectory -Site $websiteName -Name $virtualDirectoryName -PhysicalPath $path
+
+			if ($credentialsNeedToBeSet -eq $true)
+			{
+				$Command = "$appcmdPath set vdir /vdir.Name:`"$websiteName/$virtualDirectoryName`" /userName:`"$username`" /password:`"$password`""
+				Invoke-Expression $Command
+			}
 		}
+
 		return $true
 	} catch {
 		return $false
