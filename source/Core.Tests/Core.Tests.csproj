@@ -64,6 +64,7 @@
     <Compile Include="IntegrationTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="IntegrationTests\Services\PackageConfigurationAccessorTests.cs" />
+    <Compile Include="IntegrationTests\Transformation\ConfigFiles\ConfigurationFileTransformationServiceTests.cs" />
     <Compile Include="IntegrationTests\Transformation\ConfigurationFileTransformerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestUtilities.cs" />
@@ -126,6 +127,51 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="IntegrationTests\PowerShell\TestScript-01-ReturnResults.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.INT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.UAT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.DEV.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.PROD.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.DEV.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.INT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.PROD.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.UAT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\websites\someWebsite\Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\websites\someWebsite\Web.DEV.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\websites\someWebsite\Web.INT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\websites\someWebsite\Web.PROD.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\websites\someWebsite\Web.UAT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="IntegrationTests\Transformation\Sample-6-Invalid-XPath.source">
