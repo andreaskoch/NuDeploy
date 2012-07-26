@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArgumentDescriptionBuildConfigurationProfilesTemplate" xml:space="preserve">
+    <value>The name(s) of the app.config and web.config transformtion(s) that shall be applied to the configuration files of your websites, web applications and applications (e.g. "PROD-A", "PROD-B").</value>
+  </data>
   <data name="ArgumentDescriptionDeploymentTypeTemplate" xml:space="preserve">
     <value>The deployment type: {0} (default: {1}).</value>
   </data>
@@ -130,19 +133,7 @@
     <value>Install the specified NuGet package.</value>
   </data>
   <data name="CommandExampleDescription1" xml:space="preserve">
-    <value>Install the application/package with the given package id (e.g. "NuDeploy.CommandLine").</value>
-  </data>
-  <data name="CommandExampleDescription2" xml:space="preserve">
-    <value>Install the package with the given package id using the supplied deployment type (positional parameters).</value>
-  </data>
-  <data name="CommandExampleDescription3" xml:space="preserve">
-    <value>Install the package with the given package id using the supplied deployment type (named parameters).</value>
-  </data>
-  <data name="CommandExampleDescription4" xml:space="preserve">
-    <value>Install the package with the given package id while applying the "PROD-A" system setting transformation before the installation (named parameters).</value>
-  </data>
-  <data name="CommandExampleDescription5" xml:space="preserve">
-    <value>Install the package with the given package id while applying two system setting transformation before the installation: First the transformation profile which switches the databases to the B-Instances. And after that the profile which sets all server specific settings for "Server 1".</value>
+    <value>If you want to install a package you must supply these parameters (one after another): Package Id, Deployment Type, Systemsetting Transformations, Configfile Transformations</value>
   </data>
   <data name="DeploymentTypeWasNotRecognizedMessageTemplate" xml:space="preserve">
     <value>The deployment type "{0}" is unknown. Please use one of these instead: {1}.</value>

@@ -61,6 +61,15 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The name(s) of the app.config and web.config transformtion(s) that shall be applied to the configuration files of your websites, web applications and applications (e.g. &quot;PROD-A&quot;, &quot;PROD-B&quot;)..
+        /// </summary>
+        internal static string ArgumentDescriptionBuildConfigurationProfilesTemplate {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionBuildConfigurationProfilesTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The deployment type: {0} (default: {1})..
         /// </summary>
         internal static string ArgumentDescriptionDeploymentTypeTemplate {
@@ -97,47 +106,11 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install the application/package with the given package id (e.g. &quot;NuDeploy.CommandLine&quot;)..
+        ///   Looks up a localized string similar to If you want to install a package you must supply these parameters (one after another): Package Id, Deployment Type, Systemsetting Transformations, Configfile Transformations.
         /// </summary>
         internal static string CommandExampleDescription1 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install the package with the given package id using the supplied deployment type (positional parameters)..
-        /// </summary>
-        internal static string CommandExampleDescription2 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install the package with the given package id using the supplied deployment type (named parameters)..
-        /// </summary>
-        internal static string CommandExampleDescription3 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install the package with the given package id while applying the &quot;PROD-A&quot; system setting transformation before the installation (named parameters)..
-        /// </summary>
-        internal static string CommandExampleDescription4 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install the package with the given package id while applying two system setting transformation before the installation: First the transformation profile which switches the databases to the B-Instances. And after that the profile which sets all server specific settings for &quot;Server 1&quot;..
-        /// </summary>
-        internal static string CommandExampleDescription5 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription5", resourceCulture);
             }
         }
         

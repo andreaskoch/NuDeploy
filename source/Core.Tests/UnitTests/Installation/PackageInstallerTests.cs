@@ -413,6 +413,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -440,7 +441,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
         }
 
         [Test]
@@ -452,6 +453,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.NotRecognized;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -479,7 +481,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
         }
 
         [Test]
@@ -493,6 +495,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
 
             string[] systemSettingTransformationProfileNames = null;
 
+            var buildConfigurationProfiles = new string[] { };
+
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var userInterface = new Mock<IUserInterface>();
@@ -519,7 +523,48 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Install_BuildConfigurationProfilesParameterIsNull_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            DeploymentType deploymentType = DeploymentType.Full;
+            bool forceInstallation = false;
+            string[] systemSettingTransformationProfileNames = new string[] { };
+
+            string[] buildConfigurationProfiles = null;
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
+            var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
+            var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object,
+                nugetPackageExtractor.Object,
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
+
+            // Act
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
         }
 
         [Test]
@@ -530,6 +575,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -561,7 +607,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -575,6 +621,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -613,7 +660,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -627,6 +674,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -667,7 +715,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -681,6 +729,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
+
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -724,7 +774,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -741,6 +791,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             bool forceInstallation = true;
 
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -784,7 +835,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             nugetPackageExtractor.Verify(e => e.Extract(package.Object, It.IsAny<string>()), Times.Once());
@@ -798,6 +849,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -844,7 +896,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -858,6 +910,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -907,7 +960,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -921,6 +974,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -971,7 +1025,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -985,6 +1039,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -1036,7 +1091,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -1050,6 +1105,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -1102,7 +1158,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsFalse(result);
@@ -1116,6 +1172,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -1169,7 +1226,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             packageConfigurationAccessor.Verify(p => p.AddOrUpdate(It.IsAny<PackageInfo>()), Times.Once());
@@ -1183,6 +1240,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             DeploymentType deploymentType = DeploymentType.Full;
             bool forceInstallation = false;
             var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -1236,7 +1294,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
             Assert.IsTrue(result);

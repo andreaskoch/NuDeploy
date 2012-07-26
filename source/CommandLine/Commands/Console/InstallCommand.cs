@@ -17,7 +17,9 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public const string ArgumentNameNugetDeploymentType = "DeploymentType";
 
-        public const string ArgumentNameSystemSettingTransformationProfiles = "TransformationProfiles";
+        public const string ArgumentNameSystemSettingTransformationProfiles = "SystemSettingProfiles";
+
+        public const string ArgumentNameBuildConfigurationProfiles = "BuildConfigurationProfiles";
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
 
@@ -54,38 +56,23 @@ namespace NuDeploy.CommandLine.Commands.Console
             {
                 CommandName = CommandName,
                 AlternativeCommandNames = this.alternativeCommandNames,
-                RequiredArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType, ArgumentNameSystemSettingTransformationProfiles },
-                PositionalArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType, ArgumentNameSystemSettingTransformationProfiles },
+                RequiredArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType, ArgumentNameSystemSettingTransformationProfiles, ArgumentNameBuildConfigurationProfiles },
+                PositionalArguments = new[] { ArgumentNameNugetPackageId, ArgumentNameNugetDeploymentType, ArgumentNameSystemSettingTransformationProfiles, ArgumentNameBuildConfigurationProfiles },
                 Description = Resources.InstallCommand.CommandDescriptionText,
                 Usage = string.Format("{0} <{1}> <{2}>", CommandName, ArgumentNameNugetPackageId, string.Join("|", this.allowedDeploymentTypes)),
                 Examples = new Dictionary<string, string>
                     {
                         {
-                            string.Format("{0} {1}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId),
+                            string.Format("{0} {1} <{2}> \"{3}\" \"{4}\"", CommandName, "Some.Package.Name", string.Join("|", this.allowedDeploymentTypes), "PROD-A", "PROD"),
                             Resources.InstallCommand.CommandExampleDescription1
-                        },
-                        {
-                            string.Format("{0} {1} {2}", CommandName, NuDeployConstants.NuDeployCommandLinePackageId, DeploymentType.Full),
-                            Resources.InstallCommand.CommandExampleDescription2
-                        },
-                        {
-                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameNugetDeploymentType, DeploymentType.Full),
-                            Resources.InstallCommand.CommandExampleDescription3
-                        },
-                        {
-                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameSystemSettingTransformationProfiles, "PROD-A"),
-                            Resources.InstallCommand.CommandExampleDescription4
-                        },
-                        {
-                            string.Format("{0} -{1}=\"{2}\" -{3}=\"{4}\"", CommandName, ArgumentNameNugetPackageId, NuDeployConstants.NuDeployCommandLinePackageId, ArgumentNameSystemSettingTransformationProfiles, "DB-Instance-B,Server-1"),
-                            Resources.InstallCommand.CommandExampleDescription5
                         }
                     },
                 ArgumentDescriptions = new Dictionary<string, string>
                     {
                         { ArgumentNameNugetPackageId, Resources.InstallCommand.ArgumentDescriptionNugetPackageId },
                         { ArgumentNameNugetDeploymentType, string.Format(Resources.InstallCommand.ArgumentDescriptionDeploymentTypeTemplate, string.Join(", ", this.allowedDeploymentTypes), DeploymentType.Full) },
-                        { ArgumentNameSystemSettingTransformationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationProfilesTemplate, PackageConfigurationTransformationService.TransformedSystemSettingsFileName) }
+                        { ArgumentNameSystemSettingTransformationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionSystemSettingTransformationProfilesTemplate, PackageConfigurationTransformationService.TransformedSystemSettingsFileName) },
+                        { ArgumentNameBuildConfigurationProfiles, string.Format(Resources.InstallCommand.ArgumentDescriptionBuildConfigurationProfilesTemplate, PackageConfigurationTransformationService.TransformedSystemSettingsFileName) }
                     }
             };
 
@@ -130,6 +117,16 @@ namespace NuDeploy.CommandLine.Commands.Console
                     transformationProfileNamesArgument.Split(NuDeployConstants.MultiValueSeperator).Where(arg => string.IsNullOrWhiteSpace(arg) == false).Select(arg => arg.Trim()).ToArray();
             }
 
+            // build configuration profiles name
+            string buildConfigurationProfileNamesArgument = this.Arguments.ContainsKey(ArgumentNameBuildConfigurationProfiles) ? this.Arguments[ArgumentNameBuildConfigurationProfiles] : string.Empty;
+            var buildConfigurationProfileNames = new string[] { };
+            if (!string.IsNullOrWhiteSpace(buildConfigurationProfileNamesArgument))
+            {
+                buildConfigurationProfileNames =
+                    buildConfigurationProfileNamesArgument.Split(NuDeployConstants.MultiValueSeperator).Where(arg => string.IsNullOrWhiteSpace(arg) == false).
+                        Select(arg => arg.Trim()).ToArray();
+            }
+
             // options
             bool forceInstallation =
                 this.Arguments.Any(
@@ -138,7 +135,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                     && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
 
             // install the package
-            this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+            this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfileNames);
         }
     }
 }

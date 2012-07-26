@@ -113,7 +113,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>()), Times.Never());
+            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>()), Times.Never());
         }
 
         [TestCase(null)]
@@ -135,7 +135,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>()), Times.Never());
+            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>()), Times.Never());
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(packageId, It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>()), Times.Never());
+            packageInstaller.Verify(p => p.Install(packageId, It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>()), Times.Never());
         }
 
 
@@ -202,7 +202,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(packageId, It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>()), Times.Never());
+            packageInstaller.Verify(p => p.Install(packageId, It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>()), Times.Never());
         }
 
         [Test]
@@ -227,7 +227,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.Is<string[]>(strings => strings.Length == 0)), Times.Once());
+            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.Is<string[]>(strings => strings.Length == 0), It.IsAny<string[]>()), Times.Once());
         }
 
         [TestCase(null)]
@@ -255,7 +255,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.Is<string[]>(strings => strings.Length == 0)), Times.Once());
+            packageInstaller.Verify(p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.Is<string[]>(strings => strings.Length == 0), It.IsAny<string[]>()), Times.Once());
         }
 
         [Test]
@@ -288,7 +288,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
                     It.IsAny<string>(),
                     It.IsAny<DeploymentType>(),
                     It.IsAny<bool>(),
-                    It.Is<string[]>(strings => strings.Length == 1 && strings.First().Equals(systemSettingTransformationProfilesString))),
+                    It.Is<string[]>(strings => strings.Length == 1 && strings.First().Equals(systemSettingTransformationProfilesString)),
+                    It.IsAny<string[]>()),
                 Times.Once());
         }
 
@@ -322,7 +323,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
                     It.IsAny<string>(),
                     It.IsAny<DeploymentType>(),
                     It.IsAny<bool>(),
-                    It.Is<string[]>(strings => strings.Length == 2 && strings.First().Equals("Profile1") && strings.Last().Equals("Profile2"))),
+                    It.Is<string[]>(strings => strings.Length == 2 && strings.First().Equals("Profile1") && strings.Last().Equals("Profile2")), 
+                    It.IsAny<string[]>()),
                 Times.Once());
         }
 
@@ -351,7 +353,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             packageInstaller.Verify(
-                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), expectedForceOptionValue, It.IsAny<string[]>()), Times.Once());
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), expectedForceOptionValue, It.IsAny<string[]>(), It.IsAny<string[]>()), Times.Once());
         }
 
         [Test]
@@ -381,7 +383,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             packageInstaller.Verify(
-                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), expectedForceOptionValue, It.IsAny<string[]>()), Times.Once());
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), expectedForceOptionValue, It.IsAny<string[]>(), It.IsAny<string[]>()), Times.Once());
         }
 
         #endregion

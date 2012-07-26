@@ -113,16 +113,21 @@ namespace NuDeploy.Core.Services.Installation
             this.configurationFileTransformationService = configurationFileTransformationService;
         }
 
-        public bool Install(string packageId, DeploymentType deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
+        public bool Install(string packageId, DeploymentType deploymentType, bool forceInstallation, string[] packageConfigurationProfiles, string[] buildConfigurationProfiles)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 throw new ArgumentException("packageId");
             }
 
-            if (systemSettingTransformationProfileNames == null)
+            if (packageConfigurationProfiles == null)
             {
-                throw new ArgumentNullException("systemSettingTransformationProfileNames");
+                throw new ArgumentNullException("packageConfigurationProfiles");
+            }
+
+            if (buildConfigurationProfiles == null)
+            {
+                throw new ArgumentNullException("buildConfigurationProfiles");
             }
 
             if (deploymentType == DeploymentType.NotRecognized)
@@ -183,13 +188,13 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // apply system setting transformations
-            if (!this.packageConfigurationTransformationService.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames))
+            if (!this.packageConfigurationTransformationService.TransformSystemSettings(extractedPackage.Folder, packageConfigurationProfiles))
             {
                 return false;
             }
 
             // apply configuraton file transformations
-            if (!this.configurationFileTransformationService.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames))
+            if (!this.configurationFileTransformationService.TransformConfigurationFiles(extractedPackage.Folder, buildConfigurationProfiles))
             {
                 return false;
             }
