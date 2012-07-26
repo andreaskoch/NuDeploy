@@ -86,6 +86,7 @@ namespace CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(IPrePackagingFolderPathProvider))]
         [TestCase(typeof(IPrepackagingService))]
         [TestCase(typeof(IInstallationStatusProvider))]
+        [TestCase(typeof(IConfigurationFileTransformationService))]
         [TestCase(typeof(IPackageConfigurationTransformationService))]
         [TestCase(typeof(IConfigurationFileTransformer))]
         [TestCase(typeof(ISelfUpdateService))]

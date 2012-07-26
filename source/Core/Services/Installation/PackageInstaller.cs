@@ -41,7 +41,9 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly IPackageConfigurationTransformationService packageConfigurationTransformationService;
 
-        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IPowerShellExecutor powerShellExecutor, IInstallationLogicProvider installationLogicProvider, IPackageUninstaller packageUninstaller, INugetPackageExtractor nugetPackageExtractor, IPackageConfigurationTransformationService packageConfigurationTransformationService)
+        private readonly IConfigurationFileTransformationService configurationFileTransformationService;
+
+        public PackageInstaller(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, IUserInterface userInterface, IPackageConfigurationAccessor packageConfigurationAccessor, IPackageRepositoryBrowser packageRepositoryBrowser, IPowerShellExecutor powerShellExecutor, IInstallationLogicProvider installationLogicProvider, IPackageUninstaller packageUninstaller, INugetPackageExtractor nugetPackageExtractor, IPackageConfigurationTransformationService packageConfigurationTransformationService, IConfigurationFileTransformationService configurationFileTransformationService)
         {
             if (applicationInformation == null)
             {
@@ -93,6 +95,11 @@ namespace NuDeploy.Core.Services.Installation
                 throw new ArgumentNullException("packageConfigurationTransformationService");
             }
 
+            if (configurationFileTransformationService == null)
+            {
+                throw new ArgumentNullException("configurationFileTransformationService");
+            }
+
             this.applicationInformation = applicationInformation;
             this.filesystemAccessor = filesystemAccessor;
             this.userInterface = userInterface;
@@ -103,6 +110,7 @@ namespace NuDeploy.Core.Services.Installation
             this.packageUninstaller = packageUninstaller;
             this.nugetPackageExtractor = nugetPackageExtractor;
             this.packageConfigurationTransformationService = packageConfigurationTransformationService;
+            this.configurationFileTransformationService = configurationFileTransformationService;
         }
 
         public bool Install(string packageId, DeploymentType deploymentType, bool forceInstallation, string[] systemSettingTransformationProfileNames)
@@ -174,8 +182,14 @@ namespace NuDeploy.Core.Services.Installation
                 return false;
             }
 
-            // apply system setting transformation
+            // apply system setting transformations
             if (!this.packageConfigurationTransformationService.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames))
+            {
+                return false;
+            }
+
+            // apply configuraton file transformations
+            if (!this.configurationFileTransformationService.TransformConfigurationFiles(systemSettingTransformationProfileNames))
             {
                 return false;
             }

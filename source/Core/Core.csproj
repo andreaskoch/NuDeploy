@@ -162,7 +162,9 @@
     <Compile Include="Services\Packaging\PrePackaging\IPrepackagingService.cs" />
     <Compile Include="Services\Packaging\PrePackaging\PrepackagingService.cs" />
     <Compile Include="Services\Packaging\SolutionPackagingService.cs" />
+    <Compile Include="Services\Transformation\ConfigurationFileTransformationService.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformer.cs" />
+    <Compile Include="Services\Transformation\IConfigurationFileTransformationService.cs" />
     <Compile Include="Services\Transformation\IConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IPackageConfigurationTransformationService.cs" />
     <Compile Include="Services\Transformation\PackageConfigurationTransformationService.cs" />

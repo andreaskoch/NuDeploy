@@ -38,6 +38,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             var packageInstaller = new PackageInstaller(
@@ -50,7 +51,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Assert
             Assert.IsNotNull(packageInstaller);
@@ -70,6 +72,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -82,7 +85,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -99,6 +103,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -111,7 +116,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -128,6 +134,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -140,7 +147,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -157,6 +165,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -169,7 +178,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -186,6 +196,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -198,7 +209,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -215,6 +227,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -227,7 +240,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -244,6 +258,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -256,7 +271,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 null,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -273,6 +289,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var installationLogicProvider = new Mock<IInstallationLogicProvider>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -285,7 +302,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 null,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -302,6 +320,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var installationLogicProvider = new Mock<IInstallationLogicProvider>();
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -314,7 +333,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 null,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
         }
 
         [Test]
@@ -331,6 +351,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var installationLogicProvider = new Mock<IInstallationLogicProvider>();
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // Act
             new PackageInstaller(
@@ -343,6 +364,38 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
+                null,
+                configurationFileTransformationService.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_ConfigurationFileTransformationServiceParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
+            var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
+            var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+
+            // Act
+            new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object,
+                nugetPackageExtractor.Object,
+                packageConfigurationTransformationService.Object,
                 null);
         }
 
@@ -371,6 +424,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -382,7 +436,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -408,6 +463,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -419,7 +475,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -446,6 +503,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -457,7 +515,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -482,6 +541,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             // configure repository configurations
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>();
@@ -497,7 +557,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -525,6 +586,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -547,7 +609,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -575,6 +638,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -599,7 +663,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -627,6 +692,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -654,7 +720,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -685,6 +752,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -712,7 +780,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -740,6 +809,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -770,7 +840,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -798,6 +869,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -831,7 +903,72 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
+
+            // Act
+            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void Install_TransformConfigurationFilesFails_ResultIsFalse()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            DeploymentType deploymentType = DeploymentType.Full;
+            bool forceInstallation = false;
+            var systemSettingTransformationProfileNames = new string[] { };
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
+            var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
+            var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
+
+            var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
+                {
+                    new SourceRepositoryConfiguration { Name = "Test Repository", Url = new Uri("http://nuget.example.com/api/v2") }
+                };
+            packageRepositoryBrowser.Setup(p => p.RepositoryConfigurations).Returns(sourceRepositoryConfigurations);
+
+            var package = new Mock<IPackage>();
+            package.Setup(p => p.Id).Returns(packageId);
+            packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
+
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+
+            var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
+            nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
+
+            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
+
+            // configure configuration file transformation
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(false);
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object,
+                nugetPackageExtractor.Object,
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -859,6 +996,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -878,8 +1016,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
-            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).
-                Returns(true);
+            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
 
             // configure installation script lookup
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(false);
@@ -894,7 +1032,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -922,6 +1061,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -941,9 +1081,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
-            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).
-                Returns(true);
-
+            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
@@ -959,7 +1098,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -987,6 +1127,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -1007,9 +1148,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
-            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).
-                Returns(true);
-
+            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
@@ -1025,7 +1165,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
@@ -1053,6 +1194,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var packageUninstaller = new Mock<IPackageUninstaller>();
             var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
             var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
 
             var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
                 {
@@ -1073,9 +1215,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
-            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).
-                Returns(true);
-
+            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
@@ -1091,7 +1232,8 @@ namespace NuDeploy.Tests.UnitTests.Installation
                 installationLogicProvider.Object,
                 packageUninstaller.Object,
                 nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object);
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
 
             // Act
             bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
