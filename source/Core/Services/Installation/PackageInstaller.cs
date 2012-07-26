@@ -117,6 +117,11 @@ namespace NuDeploy.Core.Services.Installation
                 throw new ArgumentNullException("systemSettingTransformationProfileNames");
             }
 
+            if (deploymentType == DeploymentType.NotRecognized)
+            {
+                throw new ArgumentException("deploymentType");
+            }
+
             // check package source configuration
             if (this.packageRepositoryBrowser.RepositoryConfigurations == null || this.packageRepositoryBrowser.RepositoryConfigurations.Count() == 0)
             {

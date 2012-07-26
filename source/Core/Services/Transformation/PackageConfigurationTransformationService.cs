@@ -9,7 +9,7 @@ namespace NuDeploy.Core.Services.Transformation
 
         public const string SystemSettingsFolder = "tools";
 
-        public const string SystemSettingsTransformationFilenameTemplate = "systemsettings.transformation.{0}.xml";
+        public const string SystemSettingsTransformationFilenameTemplate = "systemsettings.{0}.xml";
 
         public const string TransformedSystemSettingsFileName = SystemSettingsFileName + ".transformed";
 

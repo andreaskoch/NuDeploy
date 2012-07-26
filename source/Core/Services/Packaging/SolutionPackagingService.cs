@@ -61,7 +61,7 @@ namespace NuDeploy.Core.Services.Packaging
             }
 
             // pre-packaging
-            if (!this.prepackagingService.Prepackage(buildConfiguration))
+            if (!this.prepackagingService.Prepackage())
             {
                 return false;
             }

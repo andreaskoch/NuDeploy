@@ -52,13 +52,8 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             this.prePackagingFolderPath = prePackagingFolderPathProvider.GetPrePackagingFolderPath();
         }
 
-        public bool Prepackage(string buildConfiguration)
+        public bool Prepackage()
         {
-            if (string.IsNullOrWhiteSpace(buildConfiguration))
-            {
-                throw new ArgumentException("buildConfiguration");
-            }
-
             if (!this.filesystemAccessor.DirectoryExists(this.prePackagingFolderPath))
             {
                 return false;
@@ -66,7 +61,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
 
             try
             {
-                this.CopyFilesToPrePackagingFolder(buildConfiguration);
+                this.CopyFilesToPrePackagingFolder();
                 return true;
             }
             catch (Exception)
@@ -75,17 +70,8 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             }
         }
 
-        private void CopyFilesToPrePackagingFolder(string buildConfiguration)
+        private void CopyFilesToPrePackagingFolder()
         {
-            // nuspec
-            var nuspecFile = this.buildResultFilePathProvider.GetNuspecFilePath(buildConfiguration);
-            if (nuspecFile != null)
-            {
-                string sourcePath = nuspecFile.AbsoluteFilePath;
-                string targetPath = this.GetTargetPath(nuspecFile.RelativeFilePath);
-                this.filesystemAccessor.CopyFile(sourcePath, targetPath);
-            }
-
             // deployment package additions
             var deploymentPackageAdditionSourceFiles = this.buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths();
             foreach (var sourceFile in deploymentPackageAdditionSourceFiles)

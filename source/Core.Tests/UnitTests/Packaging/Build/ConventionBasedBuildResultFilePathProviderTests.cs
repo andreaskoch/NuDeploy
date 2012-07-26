@@ -488,7 +488,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Build
         public void GetNuspecFilePath_FolderDoesNotExist_ResultIsNull()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string buildFolder = Path.GetFullPath("build-folder");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -503,7 +502,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Build
                 filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetNuspecFilePath(buildConfiguration);
+            var result = buildResultFilePathProvider.GetNuspecFilePath();
 
             // Assert
             Assert.IsNull(result);
@@ -513,7 +512,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Build
         public void GetNuspecFilePath_FolderExist_ButIsEmpty_ResultIsNull()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string buildFolder = Path.GetFullPath("build-folder");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -529,7 +527,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Build
                 filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetNuspecFilePath(buildConfiguration);
+            var result = buildResultFilePathProvider.GetNuspecFilePath();
 
             // Assert
             Assert.IsNull(result);
@@ -539,7 +537,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Build
         public void GetNuspecFilePath_FolderExist_ContainsOneNuSpecFile_GetRelativeFilePathInfoIsCalledForTheDefaultNuspecFile()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string buildFolder = Path.GetFullPath("build-folder");
 
             var correctNuSpecfile = new FileInfo(Path.Combine(buildFolder, "file1.nuspec"));
@@ -558,80 +555,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Build
                 filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            buildResultFilePathProvider.GetNuspecFilePath(buildConfiguration);
-
-            // Assert
-            string absolutePath = correctNuSpecfile.FullName;
-            relativeFilePathInfoFactory.Verify(r => r.GetRelativeFilePathInfo(absolutePath, It.IsAny<string>()), Times.Once());
-        }
-
-        [TestCase("Debug")]
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        public void GetNuspecFilePath_FolderExist_ContainsMultipleNuSpecFiles_BuildConfigurationDoesNotMatchForTheFiles_GetRelativeFilePathInfoIsCalledForTheDefaultNuspecFile(string buildConfiguration)
-        {
-            // Arrange
-            string buildFolder = Path.GetFullPath("build-folder");
-
-            var correctNuSpecfile = new FileInfo(Path.Combine(buildFolder, "file1.nuspec"));
-            var files = new List<FileInfo>
-                {
-                    correctNuSpecfile,
-                    new FileInfo(Path.Combine(buildFolder, "file1.Release.nuspec")),
-                    new FileInfo(Path.Combine(buildFolder, "file1.DEV.nuspec")),
-                    new FileInfo(Path.Combine(buildFolder, "file1.PRD.nuspec")),
-                };
-
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
-            filesystemAccessor.Setup(f => f.GetFiles(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(files);
-
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
-            var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
-
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
-
-            // Act
-            buildResultFilePathProvider.GetNuspecFilePath(buildConfiguration);
-
-            // Assert
-            string absolutePath = correctNuSpecfile.FullName;
-            relativeFilePathInfoFactory.Verify(r => r.GetRelativeFilePathInfo(absolutePath, It.IsAny<string>()), Times.Once());
-        }
-
-        [Test]
-        public void GetNuspecFilePath_FolderExist_ContainsMultipleNuSpecFiles_GetRelativeFilePathInfoIsCalledForTheCorrectNuspecFile()
-        {
-            // Arrange
-            string buildConfiguration = "Debug";
-            string buildFolder = Path.GetFullPath("build-folder");
-
-            var correctNuSpecfile = new FileInfo(Path.Combine(buildFolder, "file1.Debug.nuspec"));
-            var files = new List<FileInfo>
-                {
-                    new FileInfo(Path.Combine(buildFolder, "file1.nuspec")),
-                    new FileInfo(Path.Combine(buildFolder, "file1.Release.nuspec")),
-                    correctNuSpecfile
-                };
-
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
-            filesystemAccessor.Setup(f => f.GetFiles(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(files);
-
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
-            var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
-
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
-
-            // Act
-            buildResultFilePathProvider.GetNuspecFilePath(buildConfiguration);
+            buildResultFilePathProvider.GetNuspecFilePath();
 
             // Assert
             string absolutePath = correctNuSpecfile.FullName;

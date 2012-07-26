@@ -389,6 +389,43 @@ namespace NuDeploy.Tests.UnitTests.Installation
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Install_DeploymentTypeIsInvalid_ArgumentExceptionIsThrown()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            DeploymentType deploymentType = DeploymentType.NotRecognized;
+            bool forceInstallation = false;
+            var systemSettingTransformationProfileNames = new string[] { };
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var userInterface = new Mock<IUserInterface>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
+            var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
+            var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                userInterface.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object,
+                nugetPackageExtractor.Object,
+                packageConfigurationTransformationService.Object);
+
+            // Act
+            packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames);
+        }
+
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Install_TransformationProfileNamesParameterIsNull_ArgumentNullExceptionIsThrown()
         {

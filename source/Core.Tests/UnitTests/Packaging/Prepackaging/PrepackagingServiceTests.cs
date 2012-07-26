@@ -98,30 +98,9 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Prepackage_BuildConfigurationIsNotValid_ArgumentExceptionIsThrown(string buildConfiguration)
-        {
-            // Arrange
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
-            var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
-
-            var prepackagingService = new PrepackagingService(
-                filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
-
-            // Act
-            prepackagingService.Prepackage(buildConfiguration);
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
         public void Prepackage_PrepackagingFolderIsInvalid_ResultIsFalse(string prepackagingFolder)
         {
             // Arrange
-            string buildConfiguration = "Debug";
-
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(false);
 
@@ -134,35 +113,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void Prepackage_CopyFilesToPrePackagingFolderThrowsAnException_ResultIsFalse()
-        {
-            // Arrange
-            string buildConfiguration = "Debug";
-            string prepackagingFolder = Path.GetFullPath("Prepackaging");
-
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
-
-            var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
-
-            var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetNuspecFilePath(It.IsAny<string>())).Throws(new Exception());
-
-            var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
-            prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
-
-            var prepackagingService = new PrepackagingService(
-                filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
-
-            // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsFalse(result);
@@ -172,7 +123,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_PrepackagingFolderIsDoesNotExist_ResultIsFalse()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Non-Existing-Folder");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -185,7 +135,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsFalse(result);
@@ -195,7 +145,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_NoFilesInBuildResultFolder_NothingIsCopied_ResultIsTrue()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -210,7 +159,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsTrue(result);
@@ -218,40 +167,9 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_NuspecFileExists_FileIsCopied_ResultIsTrue()
-        {
-            // Arrange
-            string buildConfiguration = "Debug";
-            string prepackagingFolder = Path.GetFullPath("Prepackaging");
-
-            var nuspecFile = new RelativeFilePathInfo(@"C:\app\some-folder\some-file.txt", @"some-folder\some-file.txt");
-
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
-
-            var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
-            var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetNuspecFilePath(buildConfiguration)).Returns(nuspecFile);
-
-            var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
-            prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
-
-            var prepackagingService = new PrepackagingService(
-                filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
-
-            // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
-
-            // Assert
-            Assert.IsTrue(result);
-            filesystemAccessor.Verify(f => f.CopyFile(nuspecFile.AbsoluteFilePath, It.Is<string>(s => s.EndsWith(nuspecFile.RelativeFilePath))), Times.Once());
-        }
-
-        [Test]
         public void Prepackage_DeploymentPackageAdditions_FilesAreCopied_ResultIsTrue()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -275,7 +193,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsTrue(result);
@@ -291,7 +209,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_AssemblyResourcesAreDownloaded_ResultIsTrue()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -306,7 +223,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsTrue(result);
@@ -317,7 +234,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_Websites_FilesAreCopiedToTheWebsitesFolder_ResultIsTrue()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -341,7 +257,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsTrue(result);
@@ -381,7 +297,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsTrue(result);
@@ -397,7 +313,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_Applications_FilesAreCopiedToTheApplicationsFolder_ResultIsTrue()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -421,7 +336,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage(buildConfiguration);
+            var result = prepackagingService.Prepackage();
 
             // Assert
             Assert.IsTrue(result);

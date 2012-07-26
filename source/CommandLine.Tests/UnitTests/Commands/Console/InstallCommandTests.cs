@@ -16,6 +16,14 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
     [TestFixture]
     public class InstallCommandTests
     {
+        private LoggingUserInterface loggingUserInterface;
+
+        [SetUp]
+        public void BeforeEachTest()
+        {
+            this.loggingUserInterface = new LoggingUserInterface();
+        }
+
         #region constructor
 
         [Test]
@@ -131,11 +139,10 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         }
 
         [Test]
-        public void Execute_NoDeploymentTypeSupplied_DeploymentTypeFullIsUsedForInstall()
+        public void Execute_NoDeploymentTypeSupplied_InstallIsNotCalled()
         {
             // Arrange
             string packageId = "Package.A";
-            DeploymentType expectedDeploymentType = DeploymentType.Full;
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
@@ -150,34 +157,52 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(packageId, expectedDeploymentType, It.IsAny<bool>(), It.IsAny<string[]>()), Times.Once());
+            packageInstaller.Verify(p => p.Install(packageId, It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>()), Times.Never());
         }
 
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("SomeInvalidDeploymentType")]
-        public void Execute_InvalidDeploymentTypeSupplied_DeploymentTypeFullIsUsedForInstall(string deploymentType)
+
+        [Test]
+        public void Execute_NoDeploymentTypeSupplied_MessageIsWrittenToUserInterface()
         {
             // Arrange
             string packageId = "Package.A";
-            DeploymentType expectedDeploymentType = DeploymentType.Full;
 
-            var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
 
-            var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
+            var installCommand = new InstallCommand(this.loggingUserInterface.UserInterface, packageInstaller.Object, deploymentTypeParser.Object);
 
             // prepare arguments
             installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetPackageId, packageId);
-            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetDeploymentType, deploymentType);
 
             // Act
             installCommand.Execute();
 
             // Assert
-            packageInstaller.Verify(p => p.Install(packageId, expectedDeploymentType, It.IsAny<bool>(), It.IsAny<string[]>()), Times.Once());
+            Assert.IsNotNullOrEmpty(this.loggingUserInterface.UserInterfaceOutput);
+        }
+
+        public void Execute_DeploymentTypeIsUnrecognized_InstallIsNotCalled()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var userInterface = new Mock<IUserInterface>();
+            var packageInstaller = new Mock<IPackageInstaller>();
+            var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(It.IsAny<string>())).Returns(DeploymentType.NotRecognized);
+
+            var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
+
+            // prepare arguments
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetPackageId, packageId);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetDeploymentType, "SomethingReallyWrong");
+
+            // Act
+            installCommand.Execute();
+
+            // Assert
+            packageInstaller.Verify(p => p.Install(packageId, It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>()), Times.Never());
         }
 
         [Test]
@@ -190,6 +215,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
             var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
 
@@ -216,6 +242,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
             var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
 
@@ -242,6 +269,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
             var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
 
@@ -275,6 +303,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
             var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
 
@@ -309,6 +338,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
             var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
 
@@ -336,6 +366,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
             var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
 

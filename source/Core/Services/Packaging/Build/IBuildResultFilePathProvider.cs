@@ -11,7 +11,5 @@ namespace NuDeploy.Core.Services.Packaging.Build
         RelativeFilePathInfo[] GetApplicationFilePaths();
 
         RelativeFilePathInfo[] GetDeploymentPackageAdditionFilePaths();
-
-        RelativeFilePathInfo GetNuspecFilePath(string buildConfiguration);
     }
 }

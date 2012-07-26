@@ -39,6 +39,25 @@ namespace NuDeploy.Tests.UnitTests.Installation
             Assert.AreEqual(DeploymentTypeParser.DefaultDeploymentType, result);
         }
 
+        [TestCase("NotRecognized")]
+        [TestCase("Notrecognized")]
+        [TestCase("notrecognized")]
+        [TestCase("NOTRECOGNIZED")]
+        [TestCase("NotRecognized ")]
+        [TestCase(" NotRecognized")]
+        [TestCase(" NotRecognized ")]
+        public void GetDeploymentType_SuppliedStringIsRepresentsTheNotRecognizedDeploymentType_ResultIsTheNotRecognizedDeploymentType(string deploymentTypeString)
+        {
+            // Arrange
+            var deploymentTypeParser = new DeploymentTypeParser();
+
+            // Act
+            var result = deploymentTypeParser.GetDeploymentType(deploymentTypeString);
+
+            // Assert
+            Assert.AreEqual(DeploymentType.NotRecognized, result);
+        }
+
         [TestCase("Update")]
         [TestCase("update")]
         [TestCase("UPDATE")]

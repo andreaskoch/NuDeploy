@@ -109,6 +109,17 @@ namespace NuDeploy.CommandLine.Commands.Console
             // deployment type
             string deploymentTypeString = this.Arguments.ContainsKey(ArgumentNameNugetDeploymentType) ? this.Arguments[ArgumentNameNugetDeploymentType] : string.Empty;
             DeploymentType deploymentType = this.deploymentTypeParser.GetDeploymentType(deploymentTypeString);
+            if (deploymentType == DeploymentType.NotRecognized)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        Resources.InstallCommand.DeploymentTypeWasNotRecognizedMessageTemplate,
+                        deploymentTypeString,
+                        string.Join(", ", this.allowedDeploymentTypes)));
+
+                return;
+            }
+
 
             // system settings transformation names
             string transformationProfileNamesArgument = this.Arguments.ContainsKey(ArgumentNameSystemSettingTransformationProfiles) ? this.Arguments[ArgumentNameSystemSettingTransformationProfiles] : string.Empty;

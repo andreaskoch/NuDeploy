@@ -4,7 +4,7 @@ namespace NuDeploy.Core.Services.Installation
 {
     public class DeploymentTypeParser : IDeploymentTypeParser
     {
-        public const DeploymentType DefaultDeploymentType = DeploymentType.Full;
+        public const DeploymentType DefaultDeploymentType = DeploymentType.NotRecognized;
 
         public DeploymentType GetDeploymentType(string deploymentType)
         {

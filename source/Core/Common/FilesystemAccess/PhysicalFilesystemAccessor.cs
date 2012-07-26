@@ -133,6 +133,13 @@ namespace NuDeploy.Core.Common.FilesystemAccess
 
             try
             {
+                if (this.FileExists(filePath))
+                {
+                    this.DeleteFile(filePath);
+                }
+
+                this.EnsureParentDirectoryExists(filePath);
+
                 TextWriter textWriter = new StreamWriter(File.OpenWrite(filePath), this.encodingProvider.GetEncoding());
                 return textWriter;
             }

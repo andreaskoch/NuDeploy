@@ -120,20 +120,13 @@ namespace NuDeploy.Core.Services.Packaging.Build
             return new RelativeFilePathInfo[] { };
         }
 
-        public RelativeFilePathInfo GetNuspecFilePath(string buildConfiguration)
+        public RelativeFilePathInfo GetNuspecFilePath()
         {
-            var nuspecSourceFolderPath = this.buildFolder;
-
-            var nuspecFiles =
-                this.filesystemAccessor.GetFiles(nuspecSourceFolderPath).Where(
-                    f => f.Extension.Equals(NuDeployConstants.NuSpecFileExtension, StringComparison.OrdinalIgnoreCase)).ToList();
-
-            var buildConfigurationSpecificNuspecFileExtension = string.Format(".{0}{1}", buildConfiguration, NuDeployConstants.NuSpecFileExtension);
+            var nuspecSourceFolderPath = Path.Combine(this.buildFolder, FolderNameDeploymentPackageAdditions);
 
             var nuspecFile =
-                nuspecFiles.FirstOrDefault(
-                    specFile => specFile.Name.EndsWith(buildConfigurationSpecificNuspecFileExtension, StringComparison.OrdinalIgnoreCase))
-                ?? nuspecFiles.FirstOrDefault();
+                this.filesystemAccessor.GetFiles(nuspecSourceFolderPath).FirstOrDefault(
+                    f => f.Extension.Equals(NuDeployConstants.NuSpecFileExtension, StringComparison.OrdinalIgnoreCase));
 
             if (nuspecFile == null)
             {

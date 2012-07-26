@@ -175,7 +175,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(true);
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage(buildConfiguration)).Returns(false);
+            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(false);
 
             var packagingServiceMock = new Mock<IPackagingService>();
 
@@ -200,7 +200,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(true);
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage(buildConfiguration)).Returns(true);
+            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(true);
 
             var packagingServiceMock = new Mock<IPackagingService>();
             packagingServiceMock.Setup(p => p.Package()).Returns(false);
@@ -226,7 +226,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(true);
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage(buildConfiguration)).Returns(true);
+            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(true);
 
             var packagingServiceMock = new Mock<IPackagingService>();
             packagingServiceMock.Setup(p => p.Package()).Returns(true);
