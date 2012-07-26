@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Build.Execution;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Logging;
 
 namespace NuDeploy.Core.Services.Packaging.Build
 {
@@ -54,9 +56,10 @@ namespace NuDeploy.Core.Services.Packaging.Build
                 buildConfiguration, DefaultTargetPlatform, this.buildFolder, additionalBuildProperties.ToList());
 
             // prepare build request
+            var buildLogger = new ConsoleLogger();
             var buildRequestData = new BuildRequestData(solutionPath, buildProperties, null, new[] { DefaultBuildTarget }, null);
-            var buildParameters = new BuildParameters();
-            
+            var buildParameters = new BuildParameters { Loggers = new ILogger[] { buildLogger } };
+
             // build
             BuildResult result = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequestData);
 
