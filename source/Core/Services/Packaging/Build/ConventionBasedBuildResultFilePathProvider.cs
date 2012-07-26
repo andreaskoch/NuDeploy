@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 
-using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Services.Filesystem;
 
@@ -118,22 +117,6 @@ namespace NuDeploy.Core.Services.Packaging.Build
             }
 
             return new RelativeFilePathInfo[] { };
-        }
-
-        public RelativeFilePathInfo GetNuspecFilePath()
-        {
-            var nuspecSourceFolderPath = Path.Combine(this.buildFolder, FolderNameDeploymentPackageAdditions);
-
-            var nuspecFile =
-                this.filesystemAccessor.GetFiles(nuspecSourceFolderPath).FirstOrDefault(
-                    f => f.Extension.Equals(NuDeployConstants.NuSpecFileExtension, StringComparison.OrdinalIgnoreCase));
-
-            if (nuspecFile == null)
-            {
-                return null;
-            }
-
-            return this.relativeFilePathInfoFactory.GetRelativeFilePathInfo(nuspecFile.FullName, nuspecSourceFolderPath);
         }
     }
 }
