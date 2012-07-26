@@ -189,7 +189,7 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // apply configuraton file transformations
-            if (!this.configurationFileTransformationService.TransformConfigurationFiles(systemSettingTransformationProfileNames))
+            if (!this.configurationFileTransformationService.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames))
             {
                 return false;
             }

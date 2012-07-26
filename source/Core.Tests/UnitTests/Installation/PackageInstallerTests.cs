@@ -955,7 +955,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
 
             // configure configuration file transformation
-            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(false);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(false);
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -1017,7 +1017,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
             packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
-            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
 
             // configure installation script lookup
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(false);
@@ -1082,7 +1082,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
             packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
-            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
@@ -1149,7 +1149,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
             packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
-            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
@@ -1216,7 +1216,7 @@ namespace NuDeploy.Tests.UnitTests.Installation
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
             packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
-            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(systemSettingTransformationProfileNames)).Returns(true);
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(true);
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
