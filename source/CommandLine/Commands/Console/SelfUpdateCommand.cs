@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Runtime.InteropServices;
 
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Services.Update;
@@ -16,10 +17,28 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         private readonly ISelfUpdateService selfUpdateService;
 
-        public SelfUpdateCommand(ApplicationInformation applicationInformation, ISelfUpdateService selfUpdateService)
+        private readonly _Assembly targetAssembly;
+
+        public SelfUpdateCommand(ApplicationInformation applicationInformation, ISelfUpdateService selfUpdateService, _Assembly targetAssembly)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (selfUpdateService == null)
+            {
+                throw new ArgumentNullException("selfUpdateService");
+            }
+
+            if (targetAssembly == null)
+            {
+                throw new ArgumentNullException("targetAssembly");
+            }
+
             this.applicationInformation = applicationInformation;
             this.selfUpdateService = selfUpdateService;
+            this.targetAssembly = targetAssembly;
 
             this.Attributes = new CommandAttributes
             {
@@ -48,8 +67,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public void Execute()
         {
-            Assembly assembly = this.GetType().Assembly;
-            this.selfUpdateService.SelfUpdate(assembly.Location, assembly.GetName().Version);
+            this.selfUpdateService.SelfUpdate(this.targetAssembly.Location, this.targetAssembly.GetName().Version);
         }
     }
 }
