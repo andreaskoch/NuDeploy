@@ -329,6 +329,150 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         }
 
         [Test]
+        public void Execute_NoBuildConfigurationProfileNamesSupplied_EmptyArrayIsUsedForInstall()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            string deploymentTypeString = "Full";
+            string systemSettingTransformationProfilesString = "Profile1,Profile2";
+
+            var userInterface = new Mock<IUserInterface>();
+            var packageInstaller = new Mock<IPackageInstaller>();
+            var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
+
+            var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
+
+            // prepare arguments
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetPackageId, packageId);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetDeploymentType, deploymentTypeString);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameSystemSettingTransformationProfiles, systemSettingTransformationProfilesString);
+
+            // Act
+            installCommand.Execute();
+
+            // Assert
+            packageInstaller.Verify(
+                p =>
+                p.Install(
+                    It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.Is<string[]>(strings => strings.Length == 0)),
+                Times.Once());
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void Execute_InvalidBuildConfigurationProfileNamesSupplied_EmptyArrayIsUsedForInstall(string buildConfigurationProfileNamesString)
+        {
+            // Arrange
+            string packageId = "Package.A";
+            string deploymentTypeString = "Full";
+            string systemSettingTransformationProfilesString = "Profile1,Profile2";
+
+            var userInterface = new Mock<IUserInterface>();
+            var packageInstaller = new Mock<IPackageInstaller>();
+            var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
+
+            var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
+
+            // prepare arguments
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetPackageId, packageId);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetDeploymentType, deploymentTypeString);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameSystemSettingTransformationProfiles, systemSettingTransformationProfilesString);
+
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameBuildConfigurationProfiles, buildConfigurationProfileNamesString);
+
+            // Act
+            installCommand.Execute();
+
+            // Assert
+            packageInstaller.Verify(
+                p =>
+                p.Install(
+                    It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.Is<string[]>(strings => strings.Length == 0)),
+                Times.Once());
+        }
+
+        [Test]
+        public void Execute_OneBuildConfigurationProfileNameSupplied_InstallIsCalledWithOneBuildConfigurationProfile()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            string deploymentTypeString = "Full";
+            string systemSettingTransformationProfilesString = "Profile1,Profile2";
+
+            string buildConfigurationProfileNamesString = "PROD";
+
+            var userInterface = new Mock<IUserInterface>();
+            var packageInstaller = new Mock<IPackageInstaller>();
+            var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
+
+            var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
+
+            // prepare arguments
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetPackageId, packageId);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetDeploymentType, deploymentTypeString);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameSystemSettingTransformationProfiles, systemSettingTransformationProfilesString);
+
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameBuildConfigurationProfiles, buildConfigurationProfileNamesString);
+
+            // Act
+            installCommand.Execute();
+
+            // Assert
+            packageInstaller.Verify(
+                p =>
+                p.Install(
+                    It.IsAny<string>(),
+                    It.IsAny<DeploymentType>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<string[]>(),
+                    It.Is<string[]>(strings => strings.Length == 1 && strings.First().Equals(buildConfigurationProfileNamesString))),
+                Times.Once());
+        }
+
+        [Test]
+        public void Execute_TwoBuildConfigurationProfileNamesSupplied_InstallIsCalledWithTwoBuildConfigurationProfiles()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            string deploymentTypeString = "Full";
+            string systemSettingTransformationProfilesString = "Profile1,Profile2";
+
+            string buildConfigurationProfileNamesString = "PROD,PROD-B";
+
+            var userInterface = new Mock<IUserInterface>();
+            var packageInstaller = new Mock<IPackageInstaller>();
+            var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
+            deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
+
+            var installCommand = new InstallCommand(userInterface.Object, packageInstaller.Object, deploymentTypeParser.Object);
+
+            // prepare arguments
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetPackageId, packageId);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameNugetDeploymentType, deploymentTypeString);
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameSystemSettingTransformationProfiles, systemSettingTransformationProfilesString);
+
+            installCommand.Arguments.Add(InstallCommand.ArgumentNameBuildConfigurationProfiles, buildConfigurationProfileNamesString);
+
+            // Act
+            installCommand.Execute();
+
+            // Assert
+            packageInstaller.Verify(
+                p =>
+                p.Install(
+                    It.IsAny<string>(),
+                    It.IsAny<DeploymentType>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<string[]>(),
+                    It.Is<string[]>(strings => strings.Length == 2 && strings.First().Equals("PROD") && strings.Last().Equals("PROD-B"))),
+                Times.Once());
+        }
+
+        [Test]
         public void Execute_ForceOptionIsNotSupplied_InstallIsCalledWithoutForceOption()
         {
             // Arrange
