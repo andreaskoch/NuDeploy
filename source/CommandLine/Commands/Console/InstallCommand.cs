@@ -23,7 +23,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         private readonly string[] alternativeCommandNames = new[] { "deploy" };
 
-        private readonly string[] allowedDeploymentTypes = Enum.GetValues(typeof(DeploymentType)).Cast<DeploymentType>().Select(d => d.ToString()).ToArray();
+        private readonly string[] allowedDeploymentTypes = Enum.GetValues(typeof(DeploymentType)).Cast<DeploymentType>().Where(d => d != DeploymentType.NotRecognized).Select(d => d.ToString()).ToArray();
 
         private readonly IUserInterface userInterface;
 
@@ -63,7 +63,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                 Examples = new Dictionary<string, string>
                     {
                         {
-                            string.Format("{0} {1} <{2}> \"{3}\" \"{4}\"", CommandName, "Some.Package.Name", string.Join("|", this.allowedDeploymentTypes), "PROD-A", "PROD"),
+                            string.Format("{0} {1} <{2}> \"{3}\" \"{4}\"", CommandName, "Some.Package.Name", string.Join("|", this.allowedDeploymentTypes), "PROD,Server-03", "PROD"),
                             Resources.InstallCommand.CommandExampleDescription1
                         }
                     },

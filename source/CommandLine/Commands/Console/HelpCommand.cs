@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using StructureMap;
+
 namespace NuDeploy.CommandLine.Commands.Console
 {
     public class HelpCommand : ICommand
@@ -14,24 +16,16 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         private readonly IHelpProvider helpProvider;
 
-        private readonly ICommandProvider commandProvider;
-
         private IList<ICommand> availableCommands;
 
-        public HelpCommand(IHelpProvider helpProvider, ICommandProvider commandProvider)
+        public HelpCommand(IHelpProvider helpProvider)
         {
             if (helpProvider == null)
             {
                 throw new ArgumentNullException("helpProvider");
             }
 
-            if (commandProvider == null)
-            {
-                throw new ArgumentNullException("commandProvider");
-            }
-
             this.helpProvider = helpProvider;
-            this.commandProvider = commandProvider;
 
             this.Attributes = new CommandAttributes
                 {
@@ -71,8 +65,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             {
                 if (this.availableCommands == null)
                 {
-                    this.availableCommands = this.commandProvider.GetAvailableCommands();
-                    this.availableCommands.Add(this);
+                    this.availableCommands = ObjectFactory.GetInstance<ICommandProvider>().GetAvailableCommands();
                 }
 
                 return this.availableCommands;

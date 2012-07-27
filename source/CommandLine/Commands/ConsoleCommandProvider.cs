@@ -10,7 +10,7 @@ namespace NuDeploy.CommandLine.Commands
     {
         private readonly IList<ICommand> commands;
 
-        public ConsoleCommandProvider(InstallationStatusCommand installationStatus, InstallCommand install, UninstallCommand uninstall, CleanupCommand cleanup, PackageSolutionCommand package, RepositorySourceConfigurationCommand configureSources, SelfUpdateCommand selfUpdate)
+        public ConsoleCommandProvider(InstallationStatusCommand installationStatus, InstallCommand install, UninstallCommand uninstall, CleanupCommand cleanup, PackageSolutionCommand package, RepositorySourceConfigurationCommand configureSources, SelfUpdateCommand selfUpdate, HelpCommand helpCommand)
         {
             if (installationStatus == null)
             {
@@ -47,7 +47,12 @@ namespace NuDeploy.CommandLine.Commands
                 throw new ArgumentNullException("selfUpdate");
             }
 
-            this.commands = new List<ICommand> { installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate };
+            if (helpCommand == null)
+            {
+                throw new ArgumentNullException("helpCommand");
+            }
+
+            this.commands = new List<ICommand> { installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate, helpCommand };
         }
 
         public ConsoleCommandProvider(IEnumerable<ICommand> commands)

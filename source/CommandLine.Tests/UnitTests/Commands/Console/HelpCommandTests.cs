@@ -20,10 +20,9 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         {
             // Arrange
             var helpProvider = new Mock<IHelpProvider>();
-            var commandProvider = new Mock<ICommandProvider>();
 
             // Act
-            var helpCommand = new HelpCommand(helpProvider.Object, commandProvider.Object);
+            var helpCommand = new HelpCommand(helpProvider.Object);
 
             // Assert
             Assert.IsNotNull(helpCommand);
@@ -34,10 +33,9 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         {
             // Arrange
             var helpProvider = new Mock<IHelpProvider>();
-            var commandProvider = new Mock<ICommandProvider>();
 
             // Act
-            var helpCommand = new HelpCommand(helpProvider.Object, commandProvider.Object);
+            var helpCommand = new HelpCommand(helpProvider.Object);
 
             // Assert
             CommandTestUtilities.ValidateCommandAttributes(helpCommand.Attributes);
@@ -47,22 +45,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_HelpProviderParametersIsNotSet_ArgumentNullExceptionIsThrown()
         {
-            // Arrange
-            var commandProvider = new Mock<ICommandProvider>();
-
             // Act
-            new HelpCommand(null, commandProvider.Object);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_CommandProviderParametersIsNotSet_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var helpProvider = new Mock<IHelpProvider>();
-
-            // Act
-            new HelpCommand(helpProvider.Object, null);
+            new HelpCommand(null);
         }
 
         #endregion
@@ -74,12 +58,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         {
             // Arrange
             var helpProvider = new Mock<IHelpProvider>();
-            var commandProvider = new Mock<ICommandProvider>();
 
-            var commands = new List<ICommand> { new Mock<ICommand>().Object };
-            commandProvider.Setup(p => p.GetAvailableCommands()).Returns(commands);
-
-            var helpCommand = new HelpCommand(helpProvider.Object, commandProvider.Object);
+            var helpCommand = new HelpCommand(helpProvider.Object);
 
             // Act
             helpCommand.Execute();
@@ -95,12 +75,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         {
             // Arrange
             var helpProvider = new Mock<IHelpProvider>();
-            var commandProvider = new Mock<ICommandProvider>();
 
-            var commands = new List<ICommand> { new Mock<ICommand>().Object };
-            commandProvider.Setup(p => p.GetAvailableCommands()).Returns(commands);
-
-            var helpCommand = new HelpCommand(helpProvider.Object, commandProvider.Object);
+            var helpCommand = new HelpCommand(helpProvider.Object);
 
             helpCommand.Arguments.Add(HelpCommand.ArgumentNameCommandName, commandName);
 
@@ -109,53 +85,6 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             helpProvider.Verify(h => h.ShowHelpOverview(It.IsAny<IEnumerable<ICommand>>()), Times.Once());
-        }
-
-        [Test]
-        public void Execute_SuppliedCommandNameDoesNotMatchAnyOfTheAvailableCommands_GeneralHelpIsCalled()
-        {
-            // Arrange
-            string commandName = "SomeUnknownCommand";
-
-            var helpProvider = new Mock<IHelpProvider>();
-            var commandProvider = new Mock<ICommandProvider>();
-
-            var commands = new List<ICommand> { CommandTestUtilities.GetCommand("test"), CommandTestUtilities.GetCommand("pause") };
-            commandProvider.Setup(p => p.GetAvailableCommands()).Returns(commands);
-
-            var helpCommand = new HelpCommand(helpProvider.Object, commandProvider.Object);
-
-            helpCommand.Arguments.Add(HelpCommand.ArgumentNameCommandName, commandName);
-
-            // Act
-            helpCommand.Execute();
-
-            // Assert
-            helpProvider.Verify(h => h.ShowHelpOverview(It.IsAny<IEnumerable<ICommand>>()), Times.Once());
-        }
-
-        [Test]
-        public void Execute_SuppliedCommandNameIsRecognized_CommandHelpIsCalled()
-        {
-            // Arrange
-            string commandName = "knowncommand";
-
-            var helpProvider = new Mock<IHelpProvider>();
-            var commandProvider = new Mock<ICommandProvider>();
-
-            var knownCommands = CommandTestUtilities.GetCommand(commandName);
-            var commands = new List<ICommand> { knownCommands, CommandTestUtilities.GetCommand("pause") };
-            commandProvider.Setup(p => p.GetAvailableCommands()).Returns(commands);
-
-            var helpCommand = new HelpCommand(helpProvider.Object, commandProvider.Object);
-
-            helpCommand.Arguments.Add(HelpCommand.ArgumentNameCommandName, commandName);
-
-            // Act
-            helpCommand.Execute();
-
-            // Assert
-            helpProvider.Verify(h => h.ShowHelp(knownCommands), Times.Once());
         }
 
         #endregion         
