@@ -123,28 +123,4 @@
   <data name="CommandExampleDescription1" xml:space="preserve">
     <value>Update this application to the latest version available on the server.</value>
   </data>
-  <data name="CurrentVersionTemplate" xml:space="preserve">
-    <value>You are currently running {0} version {1}.</value>
-  </data>
-  <data name="ExecutableNotFoundInPackageMessageTemplate" xml:space="preserve">
-    <value>Invalid {0} package. Unable to locate {1} within the package.</value>
-  </data>
-  <data name="NoUpdateRequiredMessageTemplate" xml:space="preserve">
-    <value>Your current version of {0} is up to date.</value>
-  </data>
-  <data name="PackageNotFound" xml:space="preserve">
-    <value>Package was not found.</value>
-  </data>
-  <data name="SelfupdateMessageTemplate" xml:space="preserve">
-    <value>Searching for the latest version of the "{0}" package at one of the currently configured repositories (in this order): {1}</value>
-  </data>
-  <data name="UpdateFailedMessageTemplate" xml:space="preserve">
-    <value>Updating the application "{0}" failed.</value>
-  </data>
-  <data name="UpdateMessageTemplate" xml:space="preserve">
-    <value>Updating {0} to {1}.</value>
-  </data>
-  <data name="UpdateSuccessful" xml:space="preserve">
-    <value>Update successful.</value>
-  </data>
 </root>

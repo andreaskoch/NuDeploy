@@ -61,24 +61,6 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update the running {0} to the newest version available from the server..
-        /// </summary>
-        internal static string CommandDescriptionTextTemplate {
-            get {
-                return ResourceManager.GetString("CommandDescriptionTextTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Update this application to the latest version available on the server..
-        /// </summary>
-        internal static string CommandExampleDescription1 {
-            get {
-                return ResourceManager.GetString("CommandExampleDescription1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You are currently running {0} version {1}..
         /// </summary>
         internal static string CurrentVersionTemplate {

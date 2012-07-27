@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CommandDescriptionTextTemplate" xml:space="preserve">
-    <value>Update the running {0} to the newest version available from the server.</value>
-  </data>
-  <data name="CommandExampleDescription1" xml:space="preserve">
-    <value>Update this application to the latest version available on the server.</value>
-  </data>
   <data name="CurrentVersionTemplate" xml:space="preserve">
     <value>You are currently running {0} version {1}.</value>
   </data>
