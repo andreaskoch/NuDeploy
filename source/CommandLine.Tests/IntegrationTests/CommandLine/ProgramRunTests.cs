@@ -18,7 +18,7 @@ using StructureMap;
 namespace CommandLine.Tests.IntegrationTests.CommandLine
 {
     [TestFixture]
-    public class ProgramTests
+    public class ProgramRunTests
     {
         private readonly Mutex sequentialTestExecutionMonitor;
 
