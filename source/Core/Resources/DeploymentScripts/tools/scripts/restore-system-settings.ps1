@@ -237,6 +237,12 @@ if ($systemsettings.Settings.Certificates -and $systemsettings.Settings.Certific
 	$certificateFolder = Join-Path $toolsDirectory certificates
 	foreach($certificate in $systemsettings.Settings.Certificates.Certificate) 
 	{
+		if ($certificate.IsShared -eq "true")
+		{
+			"Leaving certificate $($certificate.Thumbprint) installed because it is shared."
+			continue
+		}
+
 		$certificatePath = $certificate.CertificateRootStore + "\" + $certificate.CertificateStore
 		
 		"Removing certificate $($certificate.Thumbprint) from $certificatePath"
