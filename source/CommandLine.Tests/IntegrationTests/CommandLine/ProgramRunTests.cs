@@ -38,7 +38,7 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
 
         private IEncodingProvider encodingProvider;
 
-        public ProgramTests()
+        public ProgramRunTests()
         {
             this.sequentialTestExecutionMonitor = new Mutex(false);
         }
