@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,7 +9,7 @@ using NuDeploy.Core.Common.Infrastructure;
 
 namespace NuDeploy.Core.Common.Logging
 {
-    public class ActionLogger : IActionLogger, IDisposable
+    public class ActionLogger : IActionLogger
     {
         public const string LogFilenamePattern = "NuDeploy.{0}.log";
 
@@ -18,17 +19,16 @@ namespace NuDeploy.Core.Common.Logging
 
         private readonly Encoding logfileEncoding;
 
-        private readonly StreamWriter logStreamWriter;
-
         private readonly Regex tooMuchWhiteSpaceRegex = new Regex("\\s{2,}");
+
+        private readonly string logfilPath;
 
         public ActionLogger(ApplicationInformation applicationInformation, IEncodingProvider encodingProvider)
         {
             this.applicationInformation = applicationInformation;
             this.logfileEncoding = encodingProvider.GetEncoding();
 
-            var logfilPath = this.GetLogfilePath();
-            this.logStreamWriter = new StreamWriter(logfilPath, true, this.logfileEncoding);
+            this.logfilPath = this.GetLogfilePath();
         }
 
         public void Log(string message, params object[] args)
@@ -52,17 +52,9 @@ namespace NuDeploy.Core.Common.Logging
             string computer = this.applicationInformation.MachineName;
 
             var entry = new[] { date, time, utcOffset, user, computer, content };
+            string line = string.Join(ValueSeperator, entry);
 
-            this.logStreamWriter.WriteLine(string.Join(ValueSeperator, entry));
-            this.logStreamWriter.Flush();
-        }
-
-        public void Dispose()
-        {
-            if (this.logStreamWriter != null)
-            {
-                this.logStreamWriter.Close();
-            }
+            File.AppendAllLines(this.logfilPath, new List<string> { line }, this.logfileEncoding);
         }
 
         private string GetLogfilePath()

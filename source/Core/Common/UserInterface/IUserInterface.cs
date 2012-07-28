@@ -4,6 +4,8 @@ namespace NuDeploy.Core.Common.UserInterface
 {
     public interface IUserInterface
     {
+        string UserInterfaceContent { get; }
+
         string GetInput();
 
         void Write(string text);

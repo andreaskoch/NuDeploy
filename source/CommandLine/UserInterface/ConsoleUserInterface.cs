@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
@@ -14,8 +15,20 @@ namespace NuDeploy.CommandLine.UserInterface
 
         private readonly IActionLogger logger;
 
+        private readonly StringBuilder userInterfaceContent = new StringBuilder();
+
         public ConsoleUserInterface(IConsoleTextManipulation textManipulation, IActionLogger logger)
         {
+            if (textManipulation == null)
+            {
+                throw new ArgumentNullException("textManipulation");
+            }
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+
             this.textManipulation = textManipulation;
             this.logger = logger;
         }
@@ -42,25 +55,25 @@ namespace NuDeploy.CommandLine.UserInterface
 
         public string GetInput()
         {
-            this.logger.Log("Requesting input from user.");
-
+            this.CaptureLine("Requesting input from user.");
             string input = Console.ReadLine();
 
-            this.logger.Log("User entered {0}", input);
+            this.CaptureLine("User entered {0}", input);
             return input;
         }
 
         public void ShowIndented(string text, int marginLeft)
         {       
             string indentedText = this.textManipulation.IndentText(text, this.WindowWidth, marginLeft);
+
             Console.WriteLine(indentedText);
-            this.logger.Log(text);
+            this.CaptureLine(text);
         }
 
         public void Write(string text)
         {
             Console.Write(text);
-            this.logger.Log(text);
+            this.Capture(text);
         }
 
         public void WriteLine(string text)
@@ -68,7 +81,7 @@ namespace NuDeploy.CommandLine.UserInterface
             string wrappedText = this.textManipulation.WrapText(text, this.WindowWidth);
 
             Console.WriteLine(wrappedText);
-            this.logger.Log(text);
+            this.CaptureLine(text);
         }
 
         public void ShowLabelValuePair(string label, string value, int distanceBetweenLabelAndValue)
@@ -95,8 +108,28 @@ namespace NuDeploy.CommandLine.UserInterface
                 string text = string.Concat(keyColumnText, valueColumnText);
 
                 Console.Write(text + Environment.NewLine);
-                this.logger.Log(text);
+                this.CaptureLine(text);
             }
+        }
+
+        public string UserInterfaceContent
+        {
+            get
+            {
+                return this.userInterfaceContent.ToString();
+            }
+        }
+
+        private void Capture(string text, params object[] arguments)
+        {
+            this.userInterfaceContent.Append(string.Format(text, arguments));
+            this.logger.Log(text, arguments);
+        }
+
+        private void CaptureLine(string text, params object[] arguments)
+        {
+            this.userInterfaceContent.AppendLine(string.Format(text, arguments));
+            this.logger.Log(text, arguments);
         }
     }
 }

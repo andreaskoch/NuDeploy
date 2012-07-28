@@ -54,7 +54,7 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
 
                         /* console */
-                        config.For<IUserInterface>().Use<ConsoleUserInterface>();
+                        config.For<IUserInterface>().Singleton().Use<ConsoleUserInterface>();
                         config.For<IConsoleTextManipulation>().Use<ConsoleTextManipulation>();
 
                         /* powershell */

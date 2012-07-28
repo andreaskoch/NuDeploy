@@ -10,7 +10,7 @@ namespace NuDeploy.CommandLine.Commands
     {
         private readonly IList<ICommand> commands;
 
-        public ConsoleCommandProvider(InstallationStatusCommand installationStatus, InstallCommand install, UninstallCommand uninstall, CleanupCommand cleanup, PackageSolutionCommand package, RepositorySourceConfigurationCommand configureSources, SelfUpdateCommand selfUpdate, HelpCommand helpCommand)
+        public ConsoleCommandProvider(InstallationStatusCommand installationStatus, InstallCommand install, UninstallCommand uninstall, CleanupCommand cleanup, PackageSolutionCommand package, RepositorySourceConfigurationCommand configureSources, SelfUpdateCommand selfUpdate, IHelpCommand helpCommand)
         {
             if (installationStatus == null)
             {
