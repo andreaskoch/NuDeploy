@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 
 using NuDeploy.CommandLine.Commands.Console;
@@ -15,17 +14,58 @@ namespace NuDeploy.CommandLine
 {
     public class Program
     {
-        private const string AppGuid = "af28a510-01c5-4e7c-b9f6-06a016c56d1c";
+        public const string AppGuid = "af28a510-01c5-4e7c-b9f6-06a016c56d1c";
 
-        public Program()
+        public const string NuDeployMutexName = "Global\\" + AppGuid;
+
+        private readonly ApplicationInformation applicationInformation;
+
+        private readonly IUserInterface userInterface;
+
+        private readonly IActionLogger logger;
+
+        private readonly ICommandLineArgumentInterpreter commandLineArgumentInterpreter;
+
+        private readonly HelpCommand helpCommand;
+
+        public Program(ApplicationInformation applicationInformation, IUserInterface userInterface, IActionLogger logger, ICommandLineArgumentInterpreter commandLineArgumentInterpreter, HelpCommand helpCommand)
         {
-            StructureMapSetup.Setup();
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (userInterface == null)
+            {
+                throw new ArgumentNullException("userInterface");
+            }
+
+            if (logger == null)
+            {
+                throw new ArgumentNullException("logger");
+            }
+
+            if (commandLineArgumentInterpreter == null)
+            {
+                throw new ArgumentNullException("commandLineArgumentInterpreter");
+            }
+
+            if (helpCommand == null)
+            {
+                throw new ArgumentNullException("helpCommand");
+            }
+
+            this.applicationInformation = applicationInformation;
+            this.userInterface = userInterface;
+            this.logger = logger;
+            this.commandLineArgumentInterpreter = commandLineArgumentInterpreter;
+            this.helpCommand = helpCommand;
         }
 
         [STAThread]
         public static int Main(string[] args)
         {
-            using (var mutex = new Mutex(false, "Global\\" + AppGuid))
+            using (var mutex = new Mutex(false, NuDeployMutexName))
             {
                 if (!mutex.WaitOne(0, false))
                 {
@@ -39,24 +79,28 @@ namespace NuDeploy.CommandLine
                 Console.ReadLine();
 #endif
 
-                var program = new Program();
+                StructureMapSetup.Setup();
+
+                var program = new Program(
+                    ObjectFactory.GetInstance<ApplicationInformation>(),
+                    ObjectFactory.GetInstance<IUserInterface>(),
+                    ObjectFactory.GetInstance<IActionLogger>(),
+                    ObjectFactory.GetInstance<ICommandLineArgumentInterpreter>(),
+                    ObjectFactory.GetInstance<HelpCommand>());
+
                 return program.Run(args);                
             }
         }
 
         public int Run(string[] args)
         {
-            var console = ObjectFactory.GetInstance<IUserInterface>();
-            var logger = ObjectFactory.GetInstance<IActionLogger>();
-            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
+            var console = this.userInterface;
 
             try
             {
-                logger.Log("Command: {0} {1}", applicationInformation.NameOfExecutable, string.Join(" ", args));
+                this.logger.Log("Command: {0} {1}", this.applicationInformation.NameOfExecutable, string.Join(" ", args));
 
-                var commandLineArgumentInterpreter = ObjectFactory.GetInstance<ICommandLineArgumentInterpreter>();
-                var command = commandLineArgumentInterpreter.GetCommand(args) ?? ObjectFactory.GetInstance<HelpCommand>();
-
+                var command = this.commandLineArgumentInterpreter.GetCommand(args) ?? this.helpCommand;
                 command.Execute();
             }
             catch (Exception exception)
