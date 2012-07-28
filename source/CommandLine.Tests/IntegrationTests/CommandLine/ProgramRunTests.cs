@@ -69,6 +69,19 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
         }
 
         [Test]
+        public void NoCommandLineArgumentsSupplied_ResultIsZero()
+        {
+            // Arrange
+            var commandlineArguments = new string[] { };
+
+            // Act
+            int result = this.program.Run(commandlineArguments);
+
+            // Assert
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
         public void NoCommandLineArguments_HelpOverviewIsDisplayed_HelpTextContainsAllCommandNames()
         {
             // Arrange
