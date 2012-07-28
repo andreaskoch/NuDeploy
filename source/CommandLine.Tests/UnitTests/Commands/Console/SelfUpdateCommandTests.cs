@@ -33,6 +33,21 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
         }
 
         [Test]
+        public void Constructor_CommandAttributesAreInitializedProperly()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation();
+            var selfUpdateService = new Mock<ISelfUpdateService>();
+            var targetAssembly = new Mock<_Assembly>();
+
+            // Act
+            var selfupdateCommand = new SelfUpdateCommand(applicationInformation, selfUpdateService.Object, targetAssembly.Object);
+
+            // Assert
+            CommandTestUtilities.ValidateCommandAttributes(selfupdateCommand.Attributes);
+        }
+
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_ApplicationInformationParametersIsNotSet_ArgumentNullExceptionIsThrown()
         {
