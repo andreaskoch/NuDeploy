@@ -72,7 +72,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             }
         }
 
-        public void Execute()
+        public bool Execute()
         {
             string commandName = this.Arguments.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(commandName) == false)
@@ -86,11 +86,12 @@ namespace NuDeploy.CommandLine.Commands.Console
                 if (matchedCommand != null)
                 {
                     this.helpProvider.ShowHelp(matchedCommand);
-                    return;
+                    return true;
                 }                
             }
 
             this.helpProvider.ShowHelpOverview(this.AvailableCommands);
+            return true;
         }
     }
 }

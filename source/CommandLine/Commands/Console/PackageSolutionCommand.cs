@@ -86,14 +86,14 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
             // Solution Path Parameter
             string solutionPath = this.Arguments.ContainsKey(ArgumentNameSolutionPath) ? this.Arguments[ArgumentNameSolutionPath] : string.Empty;
             if (string.IsNullOrWhiteSpace(solutionPath))
             {
                 this.userInterface.WriteLine(string.Format(Resources.PackageSolutionCommand.SolutionPathArgumentNotSetMessage));
-                return;
+                return false;
             }
 
             // Build Configuration
@@ -101,7 +101,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             if (string.IsNullOrWhiteSpace(buildConfiguration))
             {
                 this.userInterface.WriteLine(string.Format(Resources.PackageSolutionCommand.BuildConfigurationArgumentNotSetMessage));
-                return;
+                return false;
             }
 
             // MSBuild Properties
@@ -116,10 +116,11 @@ namespace NuDeploy.CommandLine.Commands.Console
             if (!this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties))
             {
                 this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingFailureMessage);
-                return;
+                return false;
             }
 
             this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingSuccessMessage);
+            return true;
         }
     }
 }

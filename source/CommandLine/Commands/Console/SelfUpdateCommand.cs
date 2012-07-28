@@ -65,9 +65,9 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
-            this.selfUpdateService.SelfUpdate(this.targetAssembly.Location, this.targetAssembly.GetName().Version);
+            return this.selfUpdateService.SelfUpdate(this.targetAssembly.Location, this.targetAssembly.GetName().Version);
         }
     }
 }

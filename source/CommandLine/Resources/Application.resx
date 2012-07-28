@@ -120,4 +120,7 @@
   <data name="AnotherInstanceIsAlreadyRunning" xml:space="preserve">
     <value>There is already another instance of this application running. Please try again later.</value>
   </data>
+  <data name="CommandLineArgumentLogMessageTemplate" xml:space="preserve">
+    <value>Command: {0} {1}</value>
+  </data>
 </root>

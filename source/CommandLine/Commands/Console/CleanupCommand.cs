@@ -66,19 +66,18 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
             // package id (required parameter)
             string packageId = this.Arguments.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 this.userInterface.WriteLine(Resources.CleanupCommand.CleanupMessageAllInstalledPackages);
-                this.cleanupService.Cleanup();
-                return;
+                return this.cleanupService.Cleanup();
             }
 
             this.userInterface.WriteLine(string.Format(Resources.CleanupCommand.CleanupMessageTemplateSpecificPackage, packageId));
-            this.cleanupService.Cleanup(packageId);
+            return this.cleanupService.Cleanup(packageId);
         }
     }
 }

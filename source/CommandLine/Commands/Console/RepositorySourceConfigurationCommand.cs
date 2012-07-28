@@ -121,7 +121,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
             // identify the action (required parameter)
             string suppliedActionName = this.Arguments.ContainsKey(ArgumentNameAction) ? this.Arguments[ArgumentNameAction] : string.Empty;
@@ -134,7 +134,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                     this.userInterface.WriteLine(
                         string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.allowedActions)));
 
-                    break;
+                    return false;
                 }
 
                 case RepositoryConfigurationCommandAction.Add:
@@ -145,7 +145,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                         this.userInterface.WriteLine(
                             string.Format(string.Format(Resources.RepositorySourceConfigurationCommand.AddCommandInvalidArgumentCountMessageTemplate, RepositoryConfigurationCommandAction.Add, 2)));
 
-                        return;
+                        return false;
                     }
 
                     string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName];
@@ -159,7 +159,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                                 sourceRepositoryName,
                                 repositoryUrlString));
 
-                        return;
+                        return false;
                     }
 
                     // success
@@ -169,7 +169,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                             sourceRepositoryName,
                             repositoryUrlString));
 
-                    break;
+                    return true;
                 }
 
                 case RepositoryConfigurationCommandAction.Delete:
@@ -180,7 +180,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                         this.userInterface.WriteLine(
                             string.Format(Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationNoRepositoryNameSuppliedMessage));
 
-                        return;
+                        return false;
                     }
 
                     string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName] ?? this.Arguments.Values.Skip(1).Take(1).FirstOrDefault();
@@ -191,7 +191,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                             string.Format(
                                 Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationFailedMessageTemplate, sourceRepositoryName));
 
-                        return;
+                        return false;
                     }
 
                     // success
@@ -199,7 +199,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                         string.Format(
                             Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationSucceededMessageTemplate, sourceRepositoryName));
 
-                    break;
+                    return true;
                 }
 
                 case RepositoryConfigurationCommandAction.List:
@@ -208,7 +208,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                     if (repositoryConfigurations.Count == 0)
                     {
                         this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ListSourceRepositoryConfigurationsNoRepositoriesConfiguredMessage);
-                        return;
+                        return true;
                     }
 
                     var dataToDisplay = new Dictionary<string, string>
@@ -224,7 +224,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                     }
 
                     this.userInterface.ShowKeyValueStore(dataToDisplay, 4);
-                    break;
+                    return true;
                 }
 
                 case RepositoryConfigurationCommandAction.Reset:
@@ -232,13 +232,15 @@ namespace NuDeploy.CommandLine.Commands.Console
                     if (!this.sourceRepositoryProvider.ResetRepositoryConfiguration())
                     {
                         this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ResetSourceRepositoryConfigurationFailedMessage);
-                        return;
+                        return false;
                     }
 
                     this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ResetSourceRepositoryConfigurationSuccessMessage);
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }

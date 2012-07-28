@@ -83,14 +83,14 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
             // package id (required parameter)
             string packageId = this.Arguments.ContainsKey(ArgumentNameNugetPackageId) ? this.Arguments[ArgumentNameNugetPackageId] : string.Empty;
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 this.userInterface.WriteLine(Resources.InstallCommand.NoPackageIdSpecifiedMessage);
-                return;
+                return false;
             }
 
             // deployment type
@@ -104,9 +104,8 @@ namespace NuDeploy.CommandLine.Commands.Console
                         deploymentTypeString,
                         string.Join(", ", this.allowedDeploymentTypes)));
 
-                return;
+                return false;
             }
-
 
             // system settings transformation names
             string transformationProfileNamesArgument = this.Arguments.ContainsKey(ArgumentNameSystemSettingTransformationProfiles) ? this.Arguments[ArgumentNameSystemSettingTransformationProfiles] : string.Empty;
@@ -135,7 +134,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                     && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
 
             // install the package
-            this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfileNames);
+            return this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfileNames);
         }
     }
 }

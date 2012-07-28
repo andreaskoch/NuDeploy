@@ -67,7 +67,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
             // package id
             string packageId = this.Arguments.ContainsKey(ArgumentNameNugetPackageId) ? this.Arguments[ArgumentNameNugetPackageId] : string.Empty;
@@ -85,7 +85,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                         ? Resources.InstallationStatusCommand.NoPackagesInstalledMessage
                         : string.Format(Resources.InstallationStatusCommand.NoInstancesOfPackageInstalledMessageTemplate, packageId));
 
-                return;
+                return true;
             }
 
             // display package installation status
@@ -107,6 +107,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             }
 
             this.userInterface.ShowKeyValueStore(dataToDisplay, 4);
+            return true;
         }
     }
 }

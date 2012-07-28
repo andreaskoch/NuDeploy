@@ -8,6 +8,6 @@ namespace NuDeploy.CommandLine.Commands
 
         IDictionary<string, string> Arguments { get; set; }
 
-        void Execute();
+        bool Execute();
     }
 }

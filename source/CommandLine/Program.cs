@@ -92,26 +92,32 @@ namespace NuDeploy.CommandLine
             }
         }
 
-        public int Run(string[] args)
+        public int Run(string[] commandLineArguments)
         {
-            var console = this.userInterface;
+            if (commandLineArguments == null)
+            {
+                throw new ArgumentNullException("commandLineArguments");
+            }
 
             try
             {
-                this.logger.Log("Command: {0} {1}", this.applicationInformation.NameOfExecutable, string.Join(" ", args));
+                this.logger.Log(
+                    Resources.Application.CommandLineArgumentLogMessageTemplate,
+                    this.applicationInformation.NameOfExecutable,
+                    string.Join(" ", commandLineArguments));
 
-                var command = this.commandLineArgumentInterpreter.GetCommand(args) ?? this.helpCommand;
+                var command = this.commandLineArgumentInterpreter.GetCommand(commandLineArguments) ?? this.helpCommand;
                 command.Execute();
+
+                return 0;
             }
             catch (Exception exception)
             {
-                console.WriteLine(exception.Message);
-                console.WriteLine(exception.StackTrace);
+                this.userInterface.WriteLine(exception.Message);
+                this.userInterface.WriteLine(exception.StackTrace);
 
                 return 1;
             }
-
-            return 0;
         }
     }
 }

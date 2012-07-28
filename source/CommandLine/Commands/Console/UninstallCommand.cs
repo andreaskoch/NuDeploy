@@ -62,23 +62,24 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public IDictionary<string, string> Arguments { get; set; }
 
-        public void Execute()
+        public bool Execute()
         {
             // package id (required parameter)
             string packageId = this.Arguments.Values.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 this.userInterface.WriteLine(Resources.UninstallCommand.NoPackageIdSpecifiedMessage);
-                return;
+                return false;
             }
 
             if (!this.packageUninstaller.Uninstall(packageId, null))
             {
                 this.userInterface.WriteLine(string.Format(Resources.UninstallCommand.UninstallFailedMessageTemplate, packageId));
-                return;
+                return false;
             }
 
             this.userInterface.WriteLine(string.Format(Resources.UninstallCommand.UninstallSucceededMessageTemplate, packageId));
+            return true;
         }
     }
 }

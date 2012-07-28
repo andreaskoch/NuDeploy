@@ -68,5 +68,14 @@ namespace NuDeploy.CommandLine.Resources {
                 return ResourceManager.GetString("AnotherInstanceIsAlreadyRunning", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command: {0} {1}.
+        /// </summary>
+        internal static string CommandLineArgumentLogMessageTemplate {
+            get {
+                return ResourceManager.GetString("CommandLineArgumentLogMessageTemplate", resourceCulture);
+            }
+        }
     }
 }
