@@ -48,7 +48,7 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
         {
             this.sequentialTestExecutionMonitor.WaitOne();
 
-            this.Cleanup();
+            CommandLineIntegrationTestUtilities.Cleanup();
 
             StructureMapSetup.Setup();
             this.encodingProvider = ObjectFactory.GetInstance<IEncodingProvider>();
@@ -121,27 +121,5 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
             var logFileContent = File.ReadAllText(logFilePath, this.encodingProvider.GetEncoding());
             Assert.IsTrue(logFileContent.Contains(commandLine));
         }
-
-        #region utility methods
-
-        private void Cleanup()
-        {
-            var appInfo = ApplicationInformationProvider.GetApplicationInformation();
-
-            this.DeleteFolder(appInfo.LogFolder);
-            this.DeleteFolder(appInfo.BuildFolder);
-            this.DeleteFolder(appInfo.PrePackagingFolder);
-            this.DeleteFolder(appInfo.PackagingFolder);
-        }
-
-        private void DeleteFolder(string path)
-        {
-            if (Directory.Exists(path))
-            {
-                Directory.Delete(path, true);
-            }            
-        }
-
-        #endregion
     }
 }
