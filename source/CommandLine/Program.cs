@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-using NuDeploy.CommandLine.Commands.Console;
+using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.DependencyResolution;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.Core.Common.Infrastructure;
@@ -26,9 +26,9 @@ namespace NuDeploy.CommandLine
 
         private readonly ICommandLineArgumentInterpreter commandLineArgumentInterpreter;
 
-        private readonly HelpCommand helpCommand;
+        private readonly IHelpCommand helpCommand;
 
-        public Program(ApplicationInformation applicationInformation, IUserInterface userInterface, IActionLogger logger, ICommandLineArgumentInterpreter commandLineArgumentInterpreter, HelpCommand helpCommand)
+        public Program(ApplicationInformation applicationInformation, IUserInterface userInterface, IActionLogger logger, ICommandLineArgumentInterpreter commandLineArgumentInterpreter, IHelpCommand helpCommand)
         {
             if (applicationInformation == null)
             {
@@ -86,7 +86,7 @@ namespace NuDeploy.CommandLine
                     ObjectFactory.GetInstance<IUserInterface>(),
                     ObjectFactory.GetInstance<IActionLogger>(),
                     ObjectFactory.GetInstance<ICommandLineArgumentInterpreter>(),
-                    ObjectFactory.GetInstance<HelpCommand>());
+                    ObjectFactory.GetInstance<IHelpCommand>());
 
                 return program.Run(args);                
             }
@@ -107,9 +107,7 @@ namespace NuDeploy.CommandLine
                     string.Join(" ", commandLineArguments));
 
                 var command = this.commandLineArgumentInterpreter.GetCommand(commandLineArguments) ?? this.helpCommand;
-                command.Execute();
-
-                return 0;
+                return command.Execute() ? 0 : 1;
             }
             catch (Exception exception)
             {

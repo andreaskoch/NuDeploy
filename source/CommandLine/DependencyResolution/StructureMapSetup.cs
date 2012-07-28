@@ -3,6 +3,7 @@ using System.Management.Automation.Host;
 using System.Runtime.InteropServices;
 
 using NuDeploy.CommandLine.Commands;
+using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.CommandLine.UserInterface;
 using NuDeploy.Core.Common.FileEncoding;
@@ -126,6 +127,7 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<ISelfUpdateService>().Use<SelfUpdateService>();
 
                         config.For<IHelpProvider>().Use<HelpProvider>();
+                        config.For<IHelpCommand>().Use<HelpCommand>();
                         config.For<ICommandProvider>().Use<ConsoleCommandProvider>();
                     });
         }

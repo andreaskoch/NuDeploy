@@ -74,6 +74,7 @@
     <Compile Include="Commands\Console\RepositorySourceConfigurationCommand.cs" />
     <Compile Include="Commands\Console\SelfUpdateCommand.cs" />
     <Compile Include="Commands\Console\UninstallCommand.cs" />
+    <Compile Include="Commands\IHelpCommand.cs" />
     <Compile Include="Commands\HelpProvider.cs" />
     <Compile Include="Commands\IBuildPropertyParser.cs" />
     <Compile Include="Commands\ICommand.cs" />

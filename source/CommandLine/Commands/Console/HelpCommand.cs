@@ -6,7 +6,7 @@ using StructureMap;
 
 namespace NuDeploy.CommandLine.Commands.Console
 {
-    public class HelpCommand : ICommand
+    public class HelpCommand : IHelpCommand
     {
         public const string CommandName = "help";
 
