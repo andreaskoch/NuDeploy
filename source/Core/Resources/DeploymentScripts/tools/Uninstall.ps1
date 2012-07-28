@@ -11,14 +11,14 @@ $removeContentScript = (Join-Path $scriptsDirectory remove-content.ps1)
 $restoreSystemSettingsScript = (Join-Path $scriptsDirectory restore-system-settings.ps1)
 $removeFileSystemPermissionsScript = (Join-Path $scriptsDirectory remove-filesystem-permissions.ps1)
 
+"Restoring system settings"
+& $restoreSystemSettingsScript
+
 "Removing External Dependencies"
 & $uninstallExternalDependenciesScript
 
 "Removing filesystem permissions"
 & $removeFileSystemPermissionsScript
-
-"Restoring system settings"
-& $restoreSystemSettingsScript
 
 "Removing filesystem links"
 & $removeFilesystemLinksScript
