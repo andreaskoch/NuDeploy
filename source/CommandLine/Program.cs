@@ -75,7 +75,7 @@ namespace NuDeploy.CommandLine
 
 #if DEBUG
                 int processId = Process.GetCurrentProcess().Id;
-                Console.WriteLine(string.Format("For debug attach to process {0} and hit <Enter>.", processId));
+                Console.WriteLine(string.Format(Resources.Application.AttachToProcessWaitMessageTemplate, processId));
                 Console.ReadLine();
 #endif
 

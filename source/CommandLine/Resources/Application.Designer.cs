@@ -70,6 +70,15 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For debug attach to process {0} and hit &lt;Enter&gt;..
+        /// </summary>
+        internal static string AttachToProcessWaitMessageTemplate {
+            get {
+                return ResourceManager.GetString("AttachToProcessWaitMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command: {0} {1}.
         /// </summary>
         internal static string CommandLineArgumentLogMessageTemplate {
