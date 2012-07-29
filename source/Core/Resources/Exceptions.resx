@@ -123,7 +123,4 @@
   <data name="PowerShellScriptNotFound" xml:space="preserve">
     <value>PowerShell script not found.</value>
   </data>
-  <data name="SourceRepositoryConfigurationInvalid" xml:space="preserve">
-    <value>The supplied source repository configuration is not valid.</value>
-  </data>
 </root>
