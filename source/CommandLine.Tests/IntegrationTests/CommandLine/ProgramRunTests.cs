@@ -4,6 +4,7 @@ using System.Threading;
 
 using NuDeploy.CommandLine;
 using NuDeploy.CommandLine.Commands;
+using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.DependencyResolution;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.Core.Common.FileEncoding;
@@ -20,6 +21,8 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
     [TestFixture]
     public class ProgramRunTests
     {
+        #region Test Setup
+        
         private readonly Mutex sequentialTestExecutionMonitor;
 
         private Program program;
@@ -48,7 +51,7 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
         {
             this.sequentialTestExecutionMonitor.WaitOne();
 
-            CommandLineIntegrationTestUtilities.Cleanup();
+            CommandLineIntegrationTestUtilities.RemoveAllFilesAndFoldersWhichAreCreatedOnStartup();
 
             StructureMapSetup.Setup();
             this.encodingProvider = ObjectFactory.GetInstance<IEncodingProvider>();
@@ -68,6 +71,10 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
             this.sequentialTestExecutionMonitor.ReleaseMutex();
         }
 
+        #endregion
+
+        #region General
+
         [Test]
         public void NoCommandLineArgumentsSupplied_ResultIsZero()
         {
@@ -80,6 +87,29 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
             // Assert
             Assert.AreEqual(0, result);
         }
+
+        [TestCase("UnknownCommand")]
+        [TestCase("asjdjsakdjsakldj")]
+        [TestCase("help install")]
+        [TestCase("help package")]
+        [TestCase("install")]
+        public void RandomCommandsArePassedToTheApplication_CommandIsLoggedToDisc(string commandLine)
+        {
+            // Arrange
+            var commandlineArguments = commandLine.Split(' ');
+
+            // Act
+            this.program.Run(commandlineArguments);
+
+            // Assert
+            var logFilePath = Directory.GetFiles(this.applicationInformation.LogFolder, "*.log").First();
+            var logFileContent = File.ReadAllText(logFilePath, this.encodingProvider.GetEncoding());
+            Assert.IsTrue(logFileContent.Contains(commandLine));
+        }
+
+        #endregion
+
+        #region Help Overview
 
         [Test]
         public void NoCommandLineArguments_HelpOverviewIsDisplayed_HelpTextContainsAllCommandNames()
@@ -116,23 +146,38 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
             }
         }
 
-        [TestCase("UnknownCommand")]
-        [TestCase("asjdjsakdjsakldj")]
-        [TestCase("help install")]
-        [TestCase("help package")]
-        [TestCase("install")]
-        public void RandomCommandsArePassedToTheApplication_CommandIsLoggedToDisc(string commandLine)
+        #endregion
+
+        #region Help (Command specific)
+
+        [TestCase(CleanupCommand.CommandName)]
+        [TestCase(HelpCommand.CommandName)]
+        [TestCase(InstallationStatusCommand.CommandName)]
+        [TestCase(InstallCommand.CommandName)]
+        [TestCase(PackageSolutionCommand.CommandName)]
+        [TestCase(RepositorySourceConfigurationCommand.CommandName)]
+        [TestCase(SelfUpdateCommand.CommandName)]
+        [TestCase(UninstallCommand.CommandName)]
+        public void HelpCommandIsCalled_ArgumentIsKnownCommand_CommandSpecificHelpIsDisplayed(string commandName)
         {
             // Arrange
-            var commandlineArguments = commandLine.Split(' ');
+            var commandlineArguments = new[] { "help", commandName };
 
             // Act
             this.program.Run(commandlineArguments);
 
             // Assert
-            var logFilePath = Directory.GetFiles(this.applicationInformation.LogFolder, "*.log").First();
-            var logFileContent = File.ReadAllText(logFilePath, this.encodingProvider.GetEncoding());
-            Assert.IsTrue(logFileContent.Contains(commandLine));
+            var command = this.commandProvider.GetAvailableCommands().FirstOrDefault(c => c.Attributes.CommandName.Equals(commandName));
+
+            Assert.IsTrue(this.userInterface.UserInterfaceContent.Contains(command.Attributes.CommandName), string.Format("The command help should display the command name \"{0}\".", command.Attributes.CommandName));
+            Assert.IsTrue(this.userInterface.UserInterfaceContent.Contains(command.Attributes.Description), string.Format("The command help should display the command description text \"{0}\".", command.Attributes.Description));
+
+            foreach (var argument in command.Attributes.RequiredArguments)
+            {
+                Assert.IsTrue(this.userInterface.UserInterfaceContent.Contains(argument), string.Format("The command help should display the command argument \"{0}\".", argument));
+            }
         }
+
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class SelfUpdateCommand : ICommand
     {
-        private const string CommandName = "selfupdate";
+        public const string CommandName = "selfupdate";
 
         private readonly string[] alternativeCommandNames = new[] { "update" };
 

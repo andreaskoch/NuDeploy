@@ -1,7 +1,10 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Linq;
+using System.Threading;
 
 using NuDeploy.CommandLine;
 using NuDeploy.CommandLine.Commands;
+using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.UserInterface;
 
 using NUnit.Framework;
@@ -13,6 +16,8 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
     [TestFixture]
     public class ProgramMainTests
     {
+        #region Test Setup
+        
         private readonly Mutex sequentialTestExecutionMonitor;
 
         public ProgramMainTests()
@@ -25,7 +30,7 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
         {
             this.sequentialTestExecutionMonitor.WaitOne();
 
-            CommandLineIntegrationTestUtilities.Cleanup();
+            CommandLineIntegrationTestUtilities.RemoveAllFilesAndFoldersWhichAreCreatedOnStartup();
         }
 
         [TearDown]
@@ -33,6 +38,10 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
         {
             this.sequentialTestExecutionMonitor.ReleaseMutex();
         }
+
+        #endregion
+
+        #region Help
 
         [Test]
         public void NoCommandLineArgumentsSupplied_ResultIsZero()
@@ -65,5 +74,85 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
                 Assert.IsTrue(userInterface.UserInterfaceContent.Contains(command.Attributes.CommandName));
             }
         }
+
+        #endregion
+
+        #region Logging
+        
+        [Test]
+        public void LogFolderIsCreated()
+        {
+            // Arrange
+            var commandLineArguments = new string[] { };
+
+            // Act
+            Program.Main(commandLineArguments);
+
+            // Assert
+            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
+            Assert.IsTrue(Directory.Exists(applicationInformation.LogFolder));
+        }
+
+        [Test]
+        public void LogFileIsCreatedInLogFolder()
+        {
+            // Arrange
+            var commandLineArguments = new string[] { };
+
+            // Act
+            Program.Main(commandLineArguments);
+
+            // Assert
+            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
+            Assert.IsTrue(Directory.GetFiles(applicationInformation.LogFolder, "*.log", SearchOption.TopDirectoryOnly).Any());
+        }
+
+        #endregion
+
+        #region Packaging
+
+        [Test]
+        public void BuildFolderIsCreatedOnStartup()
+        {
+            // Arrange
+            var commandLineArguments = new string[] { };
+
+            // Act
+            Program.Main(commandLineArguments);
+
+            // Assert
+            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
+            Assert.IsTrue(Directory.Exists(applicationInformation.BuildFolder));
+        }
+
+        [Test]
+        public void PrePackageFolderIsCreatedOnStartup()
+        {
+            // Arrange
+            var commandLineArguments = new string[] { };
+
+            // Act
+            Program.Main(commandLineArguments);
+
+            // Assert
+            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
+            Assert.IsTrue(Directory.Exists(applicationInformation.PrePackagingFolder));
+        }
+
+        [Test]
+        public void PackageFolderIsCreatedOnStartup()
+        {
+            // Arrange
+            var commandLineArguments = new string[] { };
+
+            // Act
+            Program.Main(commandLineArguments);
+
+            // Assert
+            var applicationInformation = ObjectFactory.GetInstance<ApplicationInformation>();
+            Assert.IsTrue(Directory.Exists(applicationInformation.PackagingFolder));
+        }
+
+        #endregion
     }
 }

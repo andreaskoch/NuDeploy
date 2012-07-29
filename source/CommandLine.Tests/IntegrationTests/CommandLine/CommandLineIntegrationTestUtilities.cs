@@ -6,7 +6,7 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
 {
     public static class CommandLineIntegrationTestUtilities
     {
-        public static void Cleanup()
+        public static void RemoveAllFilesAndFoldersWhichAreCreatedOnStartup()
         {
             var appInfo = ApplicationInformationProvider.GetApplicationInformation();
 
