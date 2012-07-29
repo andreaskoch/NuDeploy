@@ -168,7 +168,7 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.Sites -and $s
 			}
 		}
 		
-		if ($site.SslBindings -and $site.Bindings.SslBinding)
+		if ($site.SslBindings -and $site.SslBindings.SslBinding)
 		{
 			"Creating SSL Bindings"
 			foreach($binding in $site.SslBindings.SslBinding)

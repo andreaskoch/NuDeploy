@@ -103,7 +103,7 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.Sites -and $s
 			Clear-WebsiteBindings -Name $site.Name
 		}
 		
-		if ($site.SslBindings -and $site.Bindings.SslBinding)
+		if ($site.SslBindings -and $site.SslBindings.SslBinding)
 		{		
 			"Remove all ssl bindings from website $($site.Name)"
 			foreach($binding in $site.SslBindings.SslBinding)
