@@ -18,9 +18,11 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public const string ArgumentNameRepositoryUrl = "Url";
 
-        private readonly string[] alternativeCommandNames = new[] { "reps", "repositories", "repoconfigs" };
+        public readonly string[] AlternativeCommandNames = new[] { "reps", "repositories", "repoconfigs" };
 
-        private readonly string[] allowedActions = Enum.GetValues(typeof(RepositoryConfigurationCommandAction)).Cast<RepositoryConfigurationCommandAction>().Select(d => d.ToString()).ToArray();
+        public readonly string[] AllowedActions =
+            Enum.GetValues(typeof(RepositoryConfigurationCommandAction)).Cast<RepositoryConfigurationCommandAction>().Where(
+                d => d != RepositoryConfigurationCommandAction.Unrecognized).Select(d => d.ToString()).ToArray();
 
         private readonly IUserInterface userInterface;
 
@@ -52,13 +54,13 @@ namespace NuDeploy.CommandLine.Commands.Console
             this.Attributes = new CommandAttributes
                 {
                     CommandName = CommandName,
-                    AlternativeCommandNames = this.alternativeCommandNames,
+                    AlternativeCommandNames = this.AlternativeCommandNames,
                     RequiredArguments = new[] { ArgumentNameAction, ArgumentNameRepositoryName, ArgumentNameRepositoryUrl },
                     PositionalArguments = new[] { ArgumentNameAction, ArgumentNameRepositoryName, ArgumentNameRepositoryUrl },
                     Description = Resources.RepositorySourceConfigurationCommand.CommandDescriptionText,
                     Usage =
                         string.Format(
-                            "{0} <{1}> <{2}> <{3}>", CommandName, string.Join("|", this.allowedActions), ArgumentNameRepositoryName, ArgumentNameRepositoryUrl),
+                            "{0} <{1}> <{2}> <{3}>", CommandName, string.Join("|", this.AllowedActions), ArgumentNameRepositoryName, ArgumentNameRepositoryUrl),
                     Examples =
                         new Dictionary<string, string>
                             {
@@ -107,7 +109,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                                     ArgumentNameAction,
                                     string.Format(
                                         Resources.RepositorySourceConfigurationCommand.ArgumentDescriptionRepositoryActionTemplate,
-                                        string.Join(", ", this.allowedActions))
+                                        string.Join(", ", this.AllowedActions))
                                     },
                                 { ArgumentNameRepositoryName, Resources.RepositorySourceConfigurationCommand.ArgumentDescriptionRepositoryName },
                                 { ArgumentNameRepositoryUrl, Resources.RepositorySourceConfigurationCommand.ArgumentDescriptionRepositoryUrl }
@@ -132,7 +134,7 @@ namespace NuDeploy.CommandLine.Commands.Console
                 case RepositoryConfigurationCommandAction.Unrecognized:
                 {
                     this.userInterface.WriteLine(
-                        string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.allowedActions)));
+                        string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.AllowedActions)));
 
                     return false;
                 }

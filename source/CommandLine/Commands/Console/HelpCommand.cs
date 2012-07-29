@@ -12,7 +12,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public const string ArgumentNameCommandName = "CommandName";
 
-        private readonly string[] alternativeCommandNames = new[] { "?" };
+        public readonly string[] AlternativeCommandNames = new[] { "?" };
 
         private readonly IHelpProvider helpProvider;
 
@@ -30,7 +30,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             this.Attributes = new CommandAttributes
                 {
                     CommandName = CommandName,
-                    AlternativeCommandNames = this.alternativeCommandNames,
+                    AlternativeCommandNames = this.AlternativeCommandNames,
                     RequiredArguments = new[] { ArgumentNameCommandName },
                     PositionalArguments = new[] { ArgumentNameCommandName },
                     Description = Resources.HelpCommand.CommandDescriptionText,

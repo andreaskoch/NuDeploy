@@ -85,8 +85,15 @@ namespace NuDeploy.Core.Services.Installation.Repositories
                 throw new ArgumentException("repositoryName");
             }
 
-            var repositories = this.Load().Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false);
-            return this.Save(repositories.ToArray());
+
+            var repositories = this.Load().ToList();
+            if (!repositories.Any(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+
+            var newRepositoryList = repositories.Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
+            return this.Save(newRepositoryList);
         }
 
         public bool ResetRepositoryConfiguration()
