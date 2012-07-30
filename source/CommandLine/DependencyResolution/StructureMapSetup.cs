@@ -23,6 +23,7 @@ using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.Nuget;
 using NuDeploy.Core.Services.Packaging.PrePackaging;
+using NuDeploy.Core.Services.Publishing;
 using NuDeploy.Core.Services.Transformation;
 using NuDeploy.Core.Services.Update;
 
@@ -122,6 +123,12 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IPackageConfigurationTransformationService>().Use<PackageConfigurationTransformationService>();
                         config.For<IConfigurationFileTransformationService>().Use<ConfigurationFileTransformationService>();
                         config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
+
+                        /* publishing */
+                        config.For<IPackageServerFactory>().Use<PackageServerFactory>();
+                        config.For<IPublishConfigurationFactory>().Use<PublishConfigurationFactory>();
+                        config.For<IPublishConfigurationAccessor>().Use<ConfigFilePublishConfigurationAccessor>();
+                        config.For<IPublishingService>().Use<PublishingService>();
 
                         /* update */
                         config.For<ISelfUpdateService>().Use<SelfUpdateService>();

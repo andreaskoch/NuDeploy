@@ -2,20 +2,22 @@ using System;
 
 using Newtonsoft.Json;
 
-namespace NuDeploy.Core.Common
+namespace NuDeploy.Core.Services.Publishing
 {
-    public class SourceRepositoryConfiguration
+    public class PublishConfiguration
     {
         public string Name { get; set; }
 
-        public Uri Url { get; set; }
+        public string PublishLocation { get; set; }
+
+        public string ApiKey { get; set; }
 
         [JsonIgnore]
         public bool IsValid
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(this.Name) && this.Url != null;
+                return !string.IsNullOrWhiteSpace(this.Name) && !string.IsNullOrWhiteSpace(this.PublishLocation);
             }
         }
 
@@ -23,10 +25,14 @@ namespace NuDeploy.Core.Common
         {
             if (!string.IsNullOrWhiteSpace(this.Name))
             {
-                return string.Format("{0} (Url: {1})", this.Name, this.Url != null ? this.Url.ToString() : "not-set");
+                return string.Format(
+                    "{0} (Location: {1}, Api Key: {2})",
+                    this.Name,
+                    string.IsNullOrWhiteSpace(this.PublishLocation) ? "not-set" : this.PublishLocation,
+                    string.IsNullOrWhiteSpace(this.ApiKey) ? "not-set" : this.ApiKey);
             }
 
-            return typeof(SourceRepositoryConfiguration).Name;
+            return typeof(PublishConfiguration).Name;
         }
 
         public override int GetHashCode()
@@ -43,16 +49,16 @@ namespace NuDeploy.Core.Common
                 return false;
             }
 
-            var otherObj = obj as SourceRepositoryConfiguration;
+            var otherObj = obj as PublishConfiguration;
             if (otherObj != null)
             {
                 if (this.Name.Equals(otherObj.Name, StringComparison.OrdinalIgnoreCase)
-                       && this.Url.Equals(otherObj.Url))
+                    && this.PublishLocation.Equals(otherObj.PublishLocation) && this.ApiKey.Equals(otherObj.ApiKey))
                 {
                     return true;
                 }
 
-                return this.Name == otherObj.Name && this.Url == otherObj.Url;
+                return this.Name == otherObj.Name && this.PublishLocation == otherObj.PublishLocation;
             }
 
             return false;
