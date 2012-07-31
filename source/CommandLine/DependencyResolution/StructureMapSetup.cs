@@ -10,6 +10,7 @@ using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.Serialization;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Cleanup;
@@ -53,6 +54,9 @@ namespace NuDeploy.CommandLine.DependencyResolution
 
                         /* filesystem access */
                         config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
+
+                        /* serialization */
+                        config.For<IObjectSerializer<PublishConfiguration>>().Singleton().Use<JSONObjectSerializer<PublishConfiguration>>();
 
                         /* console */
                         config.For<IUserInterface>().Singleton().Use<ConsoleUserInterface>();

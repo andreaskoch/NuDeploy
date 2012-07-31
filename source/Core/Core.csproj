@@ -70,6 +70,10 @@
     <Compile Include="Common\NuDeployConstants.cs" />
     <Compile Include="Common\NuDeployPackageInfo.cs" />
     <Compile Include="Common\PackageInfo.cs" />
+    <Compile Include="Common\Persistence\FilesystemPersistence.cs" />
+    <Compile Include="Common\Persistence\IFilesystemPersistence.cs" />
+    <Compile Include="Common\Serialization\IObjectSerializer.cs" />
+    <Compile Include="Common\Serialization\JSONObjectSerializer.cs" />
     <Compile Include="Common\SourceRepositoryConfiguration.cs" />
     <Compile Include="Common\UserInterface\IUserInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
