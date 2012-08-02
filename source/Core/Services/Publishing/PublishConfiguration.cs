@@ -6,6 +6,13 @@ namespace NuDeploy.Core.Services.Publishing
 {
     public class PublishConfiguration
     {
+        public PublishConfiguration()
+        {
+            this.Name = string.Empty;
+            this.PublishLocation = string.Empty;
+            this.ApiKey = string.Empty;
+        }
+
         public string Name { get; set; }
 
         public string PublishLocation { get; set; }
@@ -58,7 +65,7 @@ namespace NuDeploy.Core.Services.Publishing
                     return true;
                 }
 
-                return this.Name == otherObj.Name && this.PublishLocation == otherObj.PublishLocation;
+                return this.Name == otherObj.Name && this.PublishLocation == otherObj.PublishLocation && this.ApiKey == otherObj.ApiKey;
             }
 
             return false;
