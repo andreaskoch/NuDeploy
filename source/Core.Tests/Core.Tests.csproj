@@ -57,6 +57,7 @@
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\AssemblyFileResourceProviderTests.cs" />
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
+    <Compile Include="IntegrationTests\Common\JSONObjectSerializerTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
