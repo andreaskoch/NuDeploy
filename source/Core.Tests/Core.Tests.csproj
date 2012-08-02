@@ -96,6 +96,7 @@
     <Compile Include="UnitTests\Packaging\Nuget\PackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\Prepackaging\PrepackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\SolutionPackagingServiceTests.cs" />
+    <Compile Include="UnitTests\Persistence\FilesystemPersistenceTests.cs" />
     <Compile Include="UnitTests\Publishing\ConfigFilePublishConfigurationAccessorTests.cs" />
     <Compile Include="UnitTests\Publishing\PackageServerFactoryTests.cs" />
     <Compile Include="UnitTests\Publishing\PublishConfigurationFactoryTests.cs" />
