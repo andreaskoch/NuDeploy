@@ -95,6 +95,7 @@
     <Compile Include="UnitTests\Publishing\ConfigFilePublishConfigurationAccessorTests.cs" />
     <Compile Include="UnitTests\Publishing\PackageServerFactoryTests.cs" />
     <Compile Include="UnitTests\Publishing\PublishConfigurationFactoryTests.cs" />
+    <Compile Include="UnitTests\Publishing\PublishingServiceTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
