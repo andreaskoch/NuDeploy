@@ -6,6 +6,8 @@ using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Persistence;
+using NuDeploy.Core.Common.Serialization;
 using NuDeploy.Core.Services.Installation.Repositories;
 
 using NUnit.Framework;
@@ -23,10 +25,12 @@ namespace NuDeploy.Tests.IntegrationTests.Services
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
             var sourceRepositoryConfigurationFactory = new SourceRepositoryConfigurationFactory();
+            var objectSerializer = new JSONObjectSerializer<SourceRepositoryConfiguration[]>();
+            var filesystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
+            var filesystemPersistence = new FilesystemPersistence<SourceRepositoryConfiguration[]>(filesystemAccessor, objectSerializer);
 
-            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, fileSystemAccessor, sourceRepositoryConfigurationFactory);
+            this.sourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(applicationInformation, sourceRepositoryConfigurationFactory, filesystemPersistence);
         }
 
         [SetUp]
@@ -36,14 +40,13 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         }
 
         [Test]
-        public void GetRepositories_ConfigFileDoesNotExist_ResultContainsDefaultRepository()
+        public void GetRepositories_ConfigFileDoesNotExist_ResultContainsNoEntries()
         {
             // Act
             var result = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
 
             // Assert
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(NuDeployConstants.DefaultFeedUrl, result.First().Url);
+            Assert.AreEqual(0, result.Count);
         }
 
         [Test]
@@ -64,15 +67,16 @@ namespace NuDeploy.Tests.IntegrationTests.Services
         public void SaveRepository_EntryAlreadyExists_ResultContainsOnlyOneEntry()
         {
             // Arrange
-            var repository = this.sourceRepositoryProvider.GetRepositoryConfigurations().First();
+            string repositoryName = "Test Repo";
+            string repositoryUrl = @"C:\local-nuget-repository";
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+            Assert.IsTrue(this.sourceRepositoryProvider.GetRepositoryConfigurations().Any(r => r.Name.Equals(repositoryName)));
 
             // Act
-            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repository.Name, repository.Url.ToString());
+            this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
 
             // Assert
-            var result = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(NuDeployConstants.DefaultFeedUrl, result.First().Url);
+            Assert.AreEqual(1, this.sourceRepositoryProvider.GetRepositoryConfigurations().Count());
         }
 
         [Test]
@@ -88,7 +92,7 @@ namespace NuDeploy.Tests.IntegrationTests.Services
             // Assert
             var results = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
 
-            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(1, results.Count);
             Assert.IsTrue(results.Any(r => r.Name.Equals(repositoryName)));
         }
 
@@ -123,13 +127,15 @@ namespace NuDeploy.Tests.IntegrationTests.Services
 
             // Assert
             var results = this.sourceRepositoryProvider.GetRepositoryConfigurations().ToList();
-            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(0, results.Count);
         }
 
         [Test]
         public void DeleteRepository_RemoveDefaultRepository_ResultIsEmpty()
         {
             // Arrange
+            this.ResetRepositoryConfiguration();
+
             var initialRepository = this.sourceRepositoryProvider.GetRepositoryConfigurations().First();
             var repositoryName = initialRepository.Name;
 

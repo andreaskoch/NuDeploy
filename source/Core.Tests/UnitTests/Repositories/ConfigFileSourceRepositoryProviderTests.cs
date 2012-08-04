@@ -2,8 +2,9 @@
 
 using Moq;
 
-using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Persistence;
 using NuDeploy.Core.Services.Installation.Repositories;
 
 using NUnit.Framework;
@@ -20,12 +21,12 @@ namespace NuDeploy.Tests.UnitTests.Repositories
         {
             // Arrange
             var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
 
             // Act
             var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
-                applicationInformation, filesystemAccessor.Object, sourceRepositoryConfigurationFactory.Object);
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
 
             // Assert
             Assert.IsNotNull(configFileSourceRepositoryProvider);
@@ -36,23 +37,11 @@ namespace NuDeploy.Tests.UnitTests.Repositories
         public void Constructor_ApplicationInformationParametersIsNotSet_ArgumentNullExceptionIsThrown()
         {
             // Arrange
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
             var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
 
             // Act
-            new ConfigFileSourceRepositoryProvider(null, filesystemAccessor.Object, sourceRepositoryConfigurationFactory.Object);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_FilesystemAccessorParametersIsNotSet_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var applicationInformation = new ApplicationInformation();
-            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
-
-            // Act
-            new ConfigFileSourceRepositoryProvider(applicationInformation, null, sourceRepositoryConfigurationFactory.Object);
+            new ConfigFileSourceRepositoryProvider(null, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
         }
 
         [Test]
@@ -61,10 +50,22 @@ namespace NuDeploy.Tests.UnitTests.Repositories
         {
             // Arrange
             var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
 
             // Act
-            new ConfigFileSourceRepositoryProvider(applicationInformation, filesystemAccessor.Object, null);
+            new ConfigFileSourceRepositoryProvider(applicationInformation, null, filesystemPersistence.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_FilesystemPersistenceParametersIsNotSet_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation();
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+
+            // Act
+            new ConfigFileSourceRepositoryProvider(applicationInformation, sourceRepositoryConfigurationFactory.Object, null);
         }
 
         #endregion

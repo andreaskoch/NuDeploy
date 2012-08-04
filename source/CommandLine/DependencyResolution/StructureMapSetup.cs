@@ -6,10 +6,12 @@ using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.CommandLine.UserInterface;
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.Persistence;
 using NuDeploy.Core.Common.Serialization;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
@@ -56,7 +58,11 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
 
                         /* serialization */
-                        config.For<IObjectSerializer<PublishConfiguration>>().Singleton().Use<JSONObjectSerializer<PublishConfiguration>>();
+                        config.For<IObjectSerializer<PublishConfiguration[]>>().Singleton().Use<JSONObjectSerializer<PublishConfiguration[]>>();
+                        config.For<IObjectSerializer<SourceRepositoryConfiguration[]>>().Singleton().Use<JSONObjectSerializer<SourceRepositoryConfiguration[]>>();
+
+                        config.For<IFilesystemPersistence<PublishConfiguration[]>>().Singleton().Use<FilesystemPersistence<PublishConfiguration[]>>();
+                        config.For<IFilesystemPersistence<SourceRepositoryConfiguration[]>>().Singleton().Use<FilesystemPersistence<SourceRepositoryConfiguration[]>>();
 
                         /* console */
                         config.For<IUserInterface>().Singleton().Use<ConsoleUserInterface>();

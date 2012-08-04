@@ -205,22 +205,6 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
 
         #region Repository Configuration
 
-        [Test]
-        public void RepositorySourceConfiguration_ConfigFileIsCreatedOnStartup()
-        {
-            // Arrange
-            var commandlineArguments = new string[] { };
-
-            // Act
-            this.program.Run(commandlineArguments);
-
-            // Assert
-            var sourceRepositoryConfigurationFilePath = Path.Combine(
-                this.applicationInformation.ConfigurationFileFolder, ConfigFileSourceRepositoryProvider.SourceRepositoryConfigurationFileName);
-
-            Assert.IsTrue(File.Exists(sourceRepositoryConfigurationFilePath));            
-        }
-
         [TestCase("ad")]
         [TestCase("aaadd")]
         [TestCase("")]
