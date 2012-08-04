@@ -78,11 +78,13 @@
     <Compile Include="UnitTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
     <Compile Include="UnitTests\Cleanup\CleanupServiceTests.cs" />
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
+    <Compile Include="UnitTests\Common\JSONObjectSerializerTests.cs" />
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Filesystem\RelativeFilePathInfoFactoryTests.cs" />
     <Compile Include="UnitTests\Installation\DeploymentTypeParserTests.cs" />
     <Compile Include="UnitTests\Installation\NugetPackageExtractorTests.cs" />
+    <Compile Include="UnitTests\Installation\PackageConfigurationAccessorTests.cs" />
     <Compile Include="UnitTests\Installation\PackageInstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PackageUninstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PowerShellExecutorTests.cs" />

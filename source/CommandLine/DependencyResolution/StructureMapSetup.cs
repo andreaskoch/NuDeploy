@@ -58,9 +58,11 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
 
                         /* serialization */
+                        config.For<IObjectSerializer<PackageInfo[]>>().Singleton().Use<JSONObjectSerializer<PackageInfo[]>>();
                         config.For<IObjectSerializer<PublishConfiguration[]>>().Singleton().Use<JSONObjectSerializer<PublishConfiguration[]>>();
                         config.For<IObjectSerializer<SourceRepositoryConfiguration[]>>().Singleton().Use<JSONObjectSerializer<SourceRepositoryConfiguration[]>>();
 
+                        config.For<IFilesystemPersistence<PackageInfo[]>>().Singleton().Use<FilesystemPersistence<PackageInfo[]>>();
                         config.For<IFilesystemPersistence<PublishConfiguration[]>>().Singleton().Use<FilesystemPersistence<PublishConfiguration[]>>();
                         config.For<IFilesystemPersistence<SourceRepositoryConfiguration[]>>().Singleton().Use<FilesystemPersistence<SourceRepositoryConfiguration[]>>();
 

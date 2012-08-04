@@ -9,6 +9,8 @@ using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Persistence;
+using NuDeploy.Core.Common.Serialization;
 using NuDeploy.Core.Services.Installation;
 
 using NUnit.Framework;
@@ -29,8 +31,12 @@ namespace NuDeploy.Tests.IntegrationTests.Services
 
             var encodingProvider = new DefaultFileEncodingProvider();
             var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
+            var objectSerializer = new JSONObjectSerializer<PackageInfo[]>();
+            IFilesystemPersistence<PackageInfo[]> packageInfoFilesystemPersistence = new FilesystemPersistence<PackageInfo[]>(
+                fileSystemAccessor, objectSerializer);
 
-            this.packageConfigurationAccessor = new PackageConfigurationAccessor(applicationInformation, fileSystemAccessor);
+
+            this.packageConfigurationAccessor = new PackageConfigurationAccessor(applicationInformation, packageInfoFilesystemPersistence);
         }
 
         [SetUp]

@@ -13,18 +13,6 @@ namespace NuDeploy.Tests.IntegrationTests.Common
         #region Serialize
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Serialize_ObjectToSerializeParameterIsNull_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var jsonObjectSerializer = new JSONObjectSerializer<PublishConfiguration>();
-            PublishConfiguration publishConfiguration = null;
-
-            // Act
-            jsonObjectSerializer.Serialize(publishConfiguration);
-        }
-
-        [Test]
         public void Serialize_PublishConfiguration_JsonContainsAllProperties()
         {
             // Arrange
@@ -47,18 +35,6 @@ namespace NuDeploy.Tests.IntegrationTests.Common
         #endregion
 
         #region Deserialize
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Deserialize_SerializedObjectParameterIsNull_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var jsonObjectSerializer = new JSONObjectSerializer<PublishConfiguration>();
-            string serializedObject = null;
-
-            // Act
-            jsonObjectSerializer.Deserialize(serializedObject);
-        }
 
         [Test]
         public void Deserialize_PublishConfiguration_SerializedObjectIsValidJson_ResultIsNotNull()

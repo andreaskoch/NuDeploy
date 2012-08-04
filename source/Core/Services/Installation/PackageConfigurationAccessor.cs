@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Newtonsoft.Json;
-
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Persistence;
 
 namespace NuDeploy.Core.Services.Installation
 {
@@ -21,22 +19,32 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly ApplicationInformation applicationInformation;
 
-        private readonly IFilesystemAccessor filesystemAccessor;
+        private readonly IFilesystemPersistence<PackageInfo[]> packageInfoFilesystemPersistence;
 
-        public PackageConfigurationAccessor(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor)
+        public PackageConfigurationAccessor(ApplicationInformation applicationInformation, IFilesystemPersistence<PackageInfo[]> packageInfoFilesystemPersistence)
         {
+            if (applicationInformation == null)
+            {
+                throw new ArgumentNullException("applicationInformation");
+            }
+
+            if (packageInfoFilesystemPersistence == null)
+            {
+                throw new ArgumentNullException("packageInfoFilesystemPersistence");
+            }
+
             this.applicationInformation = applicationInformation;
-            this.filesystemAccessor = filesystemAccessor;
+            this.packageInfoFilesystemPersistence = packageInfoFilesystemPersistence;
             this.packageConfigurationFilePath = this.GetPackageConfigurationFilePath();
         }
 
         public IEnumerable<PackageInfo> GetInstalledPackages()
         {
-            var packages = this.Load();
-            return packages.Distinct().OrderBy(PackageSortKeySelector).ToList();
+            var packages = this.GetExistingPackageConfigurationList();
+            return packages.Where(p => p.IsValid).Distinct().OrderBy(PackageSortKeySelector).ToList();
         }
 
-        public void AddOrUpdate(PackageInfo packageInfo)
+        public bool AddOrUpdate(PackageInfo packageInfo)
         {
             if (packageInfo == null)
             {
@@ -45,10 +53,10 @@ namespace NuDeploy.Core.Services.Installation
 
             if (!packageInfo.IsValid)
             {
-                return;
+                return false;
             }
 
-            var packages = this.Load().ToDictionary(p => p.Id, p => p);
+            var packages = this.GetExistingPackageConfigurationList().ToDictionary(p => p.Id, p => p);
             if (packages.Keys.Any(id => id.Equals(packageInfo.Id, StringComparison.OrdinalIgnoreCase)))
             {
                 var existingEntry = packages[packageInfo.Id];
@@ -69,38 +77,36 @@ namespace NuDeploy.Core.Services.Installation
             var packagesSorted = packages.Values.OrderBy(PackageSortKeySelector).ToArray();
 
             // save
-            this.Save(packagesSorted);
+            return this.SaveNewPackageConfigurationList(packagesSorted);
         }
 
-        public void Remove(string packageId)
+        public bool Remove(string packageId)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
                 throw new ArgumentException("packageId");
             }
 
-            var packages = this.Load().Where(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase) == false).ToArray();
-            this.Save(packages);
-        }
-
-        private IEnumerable<PackageInfo> Load()
-        {
-            if (!this.filesystemAccessor.FileExists(this.packageConfigurationFilePath))
+            var existingPackageList = this.GetExistingPackageConfigurationList().ToList();
+            if (!existingPackageList.Any(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase)))
             {
-                return new List<PackageInfo>();
+                return false;
             }
 
-            string json = this.filesystemAccessor.GetFileContent(this.packageConfigurationFilePath);
-            var packages = JsonConvert.DeserializeObject<PackageInfo[]>(json);
+            var newPackageList = existingPackageList.Where(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase) == false).ToArray();
+            return this.SaveNewPackageConfigurationList(newPackageList);
+        }
 
+        private IEnumerable<PackageInfo> GetExistingPackageConfigurationList()
+        {
+            var packages = this.packageInfoFilesystemPersistence.Load(this.packageConfigurationFilePath) ?? new PackageInfo[] { };
             return packages.Where(p => p.IsValid);
         }
 
-        private void Save(IEnumerable<PackageInfo> packageInfos)
+        private bool SaveNewPackageConfigurationList(IEnumerable<PackageInfo> packageInfos)
         {
             var validPackages = packageInfos.Where(p => p.IsValid).ToArray();
-            string json = JsonConvert.SerializeObject(validPackages);
-            this.filesystemAccessor.WriteContentToFile(json, this.packageConfigurationFilePath);
+            return this.packageInfoFilesystemPersistence.Save(validPackages, this.packageConfigurationFilePath);
         }
 
         private string GetPackageConfigurationFilePath()

@@ -96,8 +96,10 @@ namespace CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(ISelfUpdateService))]
         [TestCase(typeof(IHelpProvider))]
         [TestCase(typeof(ICommandProvider))]
+        [TestCase(typeof(IObjectSerializer<PackageInfo[]>))]
         [TestCase(typeof(IObjectSerializer<PublishConfiguration[]>))]
         [TestCase(typeof(IObjectSerializer<SourceRepositoryConfiguration[]>))]
+        [TestCase(typeof(IFilesystemPersistence<PackageInfo[]>))]
         [TestCase(typeof(IFilesystemPersistence<PublishConfiguration[]>))]
         [TestCase(typeof(IFilesystemPersistence<SourceRepositoryConfiguration[]>))]
         public void CanInstantiate_Interface(Type interfaceType)
