@@ -7,7 +7,7 @@ using Moq;
 
 using NuDeploy.Core.Common.UserInterface;
 
-namespace CommandLine.Tests
+namespace NuDeploy.CommandLine.Tests
 {
     public class LoggingUserInterface
     {

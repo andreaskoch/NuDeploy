@@ -6,7 +6,7 @@ using NuDeploy.Core.Services.AssemblyResourceAccess;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.AssemblyFileResourceAccess
+namespace NuDeploy.Core.Tests.IntegrationTests.AssemblyFileResourceAccess
 {
     [TestFixture]
     public class DeploymentScriptResourceDownloaderTests

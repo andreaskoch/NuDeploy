@@ -7,7 +7,7 @@ using NuDeploy.Core.Services.Packaging.Build;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Packaging.Build
+namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
 {
     [TestFixture]
     public class SolutionBuilderTests

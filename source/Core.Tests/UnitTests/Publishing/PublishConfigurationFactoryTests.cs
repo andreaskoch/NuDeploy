@@ -2,7 +2,7 @@
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Publishing
+namespace NuDeploy.Core.Tests.UnitTests.Publishing
 {
     [TestFixture]
     public class PublishConfigurationFactoryTests

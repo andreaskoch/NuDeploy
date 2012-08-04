@@ -9,7 +9,7 @@ using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Persistence
+namespace NuDeploy.Core.Tests.UnitTests.Persistence
 {
     [TestFixture]
     public class FilesystemPersistenceTests

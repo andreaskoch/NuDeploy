@@ -12,7 +12,7 @@ using NuDeploy.Core.Services.Packaging.PrePackaging;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
+namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
 {
     [TestFixture]
     public class PrepackagingServiceTests
@@ -273,7 +273,6 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_WebApplications_FilesAreCopiedToTheWebApplicationsFolder_ResultIsTrue()
         {
             // Arrange
-            string buildConfiguration = "Debug";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]

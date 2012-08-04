@@ -10,7 +10,7 @@ using NuDeploy.Core.Services.Packaging.Nuget;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
+namespace NuDeploy.Core.Tests.UnitTests.Packaging.Nuget
 {
     [TestFixture]
     public class PackagingServiceTests

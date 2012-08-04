@@ -17,7 +17,7 @@ using NuGet;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Installation
+namespace NuDeploy.Core.Tests.UnitTests.Installation
 {
     [TestFixture]
     public class PackageInstallerTests

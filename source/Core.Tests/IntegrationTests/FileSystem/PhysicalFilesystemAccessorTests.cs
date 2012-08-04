@@ -7,7 +7,7 @@ using NuDeploy.Core.Common.FilesystemAccess;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.FileSystem
+namespace NuDeploy.Core.Tests.IntegrationTests.FileSystem
 {
     [TestFixture]
     public class PhysicalFilesystemAccessorTests

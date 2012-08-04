@@ -6,7 +6,7 @@ using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Transformation
+namespace NuDeploy.Core.Tests.UnitTests.Transformation
 {
     [TestFixture]
     public class PackageConfigurationTransformationServiceTests
@@ -105,7 +105,7 @@ namespace NuDeploy.Tests.UnitTests.Transformation
             var packageConfigurationTransformationService = new PackageConfigurationTransformationService(configurationFileTransformer.Object);
 
             // Act
-            bool result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
+            packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
 
             // Assert
             foreach (var systemSettingTransformationProfileName in systemSettingTransformationProfileNames)

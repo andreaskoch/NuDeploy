@@ -13,7 +13,7 @@ using NuDeploy.Core.Services.Packaging;
 
 using NUnit.Framework;
 
-namespace CommandLine.Tests.UnitTests.Commands.Console
+namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 {
     [TestFixture]
     public class PackageSolutionCommandTests

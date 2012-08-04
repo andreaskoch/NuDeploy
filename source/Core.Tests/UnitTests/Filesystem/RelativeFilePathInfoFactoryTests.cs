@@ -4,7 +4,7 @@ using NuDeploy.Core.Services.Filesystem;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Filesystem
+namespace NuDeploy.Core.Tests.UnitTests.Filesystem
 {
     [TestFixture]
     public class RelativeFilePathInfoFactoryTests

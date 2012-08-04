@@ -11,7 +11,7 @@ using NuDeploy.Core.Services.Packaging;
 
 using NUnit.Framework;
 
-namespace CommandLine.Tests.IntegrationTests
+namespace NuDeploy.CommandLine.Tests.IntegrationTests
 {
     [TestFixture]
     public class CommandLineArgumentInterpreterTests

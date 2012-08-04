@@ -36,7 +36,7 @@ using NUnit.Framework;
 
 using StructureMap;
 
-namespace CommandLine.Tests.IntegrationTests.DependencyResolution
+namespace NuDeploy.CommandLine.Tests.IntegrationTests.DependencyResolution
 {
     [TestFixture]
     public class StructureMapSetupTests

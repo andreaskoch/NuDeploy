@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 using NuDeploy.CommandLine.Infrastructure.Console;
 
-namespace CommandLine.Tests.UnitTests.Commands
+namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
 {
     [TestFixture]
     public class CommandArgumentNameMatcherTests

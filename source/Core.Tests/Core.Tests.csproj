@@ -8,8 +8,8 @@
     <ProjectGuid>{BE899664-4A8E-488D-A689-D56CBFEA8554}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuDeploy.Tests</RootNamespace>
-    <AssemblyName>NuDeploy.Tests</AssemblyName>
+    <RootNamespace>NuDeploy.Core.Tests</RootNamespace>
+    <AssemblyName>NuDeploy.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

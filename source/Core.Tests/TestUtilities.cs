@@ -6,7 +6,7 @@ using NuDeploy.Core.Common;
 
 using NuGet;
 
-namespace NuDeploy.Tests
+namespace NuDeploy.Core.Tests
 {
     public class TestUtilities
     {

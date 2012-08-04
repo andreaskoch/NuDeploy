@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 using NuDeploy.Core.Common.Infrastructure;
 
-namespace NuDeploy.Tests.IntegrationTests.Common
+namespace NuDeploy.Core.Tests.IntegrationTests.Common
 {
     [TestFixture]
     public class ApplicationInformationProviderTests

@@ -15,7 +15,7 @@ using NuDeploy.Core.Services.Installation;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.Services
+namespace NuDeploy.Core.Tests.IntegrationTests.Services
 {
     [TestFixture]
     public class PackageConfigurationAccessorTests

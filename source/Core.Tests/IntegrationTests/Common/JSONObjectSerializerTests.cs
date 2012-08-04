@@ -5,7 +5,7 @@ using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.Common
+namespace NuDeploy.Core.Tests.IntegrationTests.Common
 {
     [TestFixture]
     public class JSONObjectSerializerTests

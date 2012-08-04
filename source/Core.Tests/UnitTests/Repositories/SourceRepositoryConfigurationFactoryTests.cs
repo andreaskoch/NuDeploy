@@ -2,7 +2,7 @@
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Repositories
+namespace NuDeploy.Core.Tests.UnitTests.Repositories
 {
     [TestFixture]
     public class SourceRepositoryConfigurationFactoryTests
