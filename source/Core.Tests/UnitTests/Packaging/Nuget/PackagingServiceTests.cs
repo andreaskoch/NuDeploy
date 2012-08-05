@@ -354,7 +354,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Nuget
             packageStream.Close();
 
             // Assert
-            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsTrue(File.Exists(targetPackagePath));
         }
 

@@ -11,6 +11,7 @@ using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging;
+using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
 
@@ -36,9 +37,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object);
+            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Assert
             Assert.IsNotNull(packageSolutionCommand);
@@ -51,9 +53,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object);
+            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Assert
             CommandTestUtilities.ValidateCommandAttributes(packageSolutionCommand.Attributes);
@@ -66,9 +69,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            new PackageSolutionCommand(null, solutionPackagingService.Object, buildPropertyParser.Object);
+            new PackageSolutionCommand(null, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
         }
 
         [Test]
@@ -78,9 +82,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var userInterface = new Mock<IUserInterface>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            new PackageSolutionCommand(userInterface.Object, null, buildPropertyParser.Object);
+            new PackageSolutionCommand(userInterface.Object, null, buildPropertyParser.Object, publishingService.Object);
         }
 
         [Test]
@@ -90,9 +95,23 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var userInterface = new Mock<IUserInterface>();
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, null);
+            new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, null, publishingService.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PublishingServiceParametersIsNotSet_ArgumentNullException()
+        {
+            // Arrange
+            var userInterface = new Mock<IUserInterface>();
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+
+            // Act
+            new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object, null);
         }
 
         #endregion
@@ -105,7 +124,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Act
             packageSolutionCommand.Execute();
@@ -120,7 +140,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Act
             packageSolutionCommand.Execute();
@@ -137,7 +158,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
@@ -157,7 +179,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
@@ -179,7 +202,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -198,7 +222,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -219,7 +244,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -242,7 +268,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -267,7 +294,12 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -291,7 +323,12 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -315,7 +352,12 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -340,7 +382,12 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -365,7 +412,12 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -408,7 +460,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new FailureResult());
 
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
@@ -432,7 +485,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
 
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);

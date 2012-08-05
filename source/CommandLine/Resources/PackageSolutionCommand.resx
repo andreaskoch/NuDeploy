@@ -123,6 +123,9 @@
   <data name="ArgumentDescriptionMSBuildProperties" xml:space="preserve">
     <value>The properties to pass to MS Build (e.g. IsAutoBuild=True).</value>
   </data>
+  <data name="ArgumentDescriptionPublishingConfiguration" xml:space="preserve">
+    <value>If you specify this parameter the package will be published using the supplied publish configuration.</value>
+  </data>
   <data name="ArgumentDescriptionSolutionPath" xml:space="preserve">
     <value>The path of the solution to package (e.g. C:\dev\projects\sample\sample.sln).</value>
   </data>
@@ -140,6 +143,12 @@
   </data>
   <data name="PackagingSuccessMessage" xml:space="preserve">
     <value>Packaging succeeded.</value>
+  </data>
+  <data name="PublishingFailedMessageTemplate" xml:space="preserve">
+    <value>Publishing failed (Package: {0}, Publish Configuration: {1}).</value>
+  </data>
+  <data name="PublishingSucceededMessageTemplate" xml:space="preserve">
+    <value>Publishing succeeded (Package: {0}, Publish Configuration: {1}).</value>
   </data>
   <data name="SolutionPathArgumentNotSetMessage" xml:space="preserve">
     <value>You must specifiy a solution path.</value>

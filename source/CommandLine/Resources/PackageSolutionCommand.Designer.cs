@@ -79,6 +79,15 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you specify this parameter the package will be published using the supplied publish configuration..
+        /// </summary>
+        internal static string ArgumentDescriptionPublishingConfiguration {
+            get {
+                return ResourceManager.GetString("ArgumentDescriptionPublishingConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path of the solution to package (e.g. C:\dev\projects\sample\sample.sln)..
         /// </summary>
         internal static string ArgumentDescriptionSolutionPath {
@@ -129,6 +138,24 @@ namespace NuDeploy.CommandLine.Resources {
         internal static string PackagingSuccessMessage {
             get {
                 return ResourceManager.GetString("PackagingSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publishing failed (Package: {0}, Publish Configuration: {1})..
+        /// </summary>
+        internal static string PublishingFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("PublishingFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publishing succeeded (Package: {0}, Publish Configuration: {1})..
+        /// </summary>
+        internal static string PublishingSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("PublishingSucceededMessageTemplate", resourceCulture);
             }
         }
         

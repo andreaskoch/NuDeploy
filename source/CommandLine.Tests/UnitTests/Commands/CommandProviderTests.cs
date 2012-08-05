@@ -45,6 +45,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
 
         private HelpCommand help;
 
+        [TestFixtureSetUp]
         public void Setup()
         {
             this.userInterface = new Mock<IUserInterface>().Object;
@@ -52,7 +53,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             this.install = new InstallCommand(this.userInterface, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             this.uninstall = new UninstallCommand(this.userInterface, new Mock<IPackageUninstaller>().Object);
             this.cleanup = new CleanupCommand(this.userInterface, new Mock<ICleanupService>().Object);
-            this.package = new PackageSolutionCommand(this.userInterface, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
+            this.package = new PackageSolutionCommand(this.userInterface, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object, new Mock<IPublishingService>().Object);
             this.configureSources = new RepositorySourceConfigurationCommand(this.userInterface, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             this.configurePublishingTargets = new PublishingTargetConfigurationCommand(this.userInterface, new Mock<IPublishingTargetConfigurationCommandActionParser>().Object, new Mock<IPublishConfigurationAccessor>().Object);
             this.selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
