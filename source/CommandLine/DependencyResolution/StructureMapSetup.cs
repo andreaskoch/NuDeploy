@@ -141,6 +141,8 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IPublishConfigurationFactory>().Use<PublishConfigurationFactory>();
                         config.For<IPublishConfigurationAccessor>().Use<ConfigFilePublishConfigurationAccessor>();
                         config.For<IPublishingService>().Use<PublishingService>();
+                        config.For<IPublishingTargetConfigurationCommandActionParser>().Use<PublishingTargetConfigurationCommandActionParser>();
+                        config.For<IPublishConfigurationAccessor>().Use<ConfigFilePublishConfigurationAccessor>();
 
                         /* update */
                         config.For<ISelfUpdateService>().Use<SelfUpdateService>();

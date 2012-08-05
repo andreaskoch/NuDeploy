@@ -70,6 +70,7 @@
     <Compile Include="Commands\BuildPropertyParser.cs" />
     <Compile Include="Commands\CommandAttributes.cs" />
     <Compile Include="Commands\Console\CleanupCommand.cs" />
+    <Compile Include="Commands\Console\PublishingTargetConfigurationCommand.cs" />
     <Compile Include="Commands\Console\PublishCommand.cs" />
     <Compile Include="Commands\Console\HelpCommand.cs" />
     <Compile Include="Commands\Console\InstallationStatusCommand.cs" />
@@ -78,6 +79,9 @@
     <Compile Include="Commands\Console\RepositorySourceConfigurationCommand.cs" />
     <Compile Include="Commands\Console\SelfUpdateCommand.cs" />
     <Compile Include="Commands\Console\UninstallCommand.cs" />
+    <Compile Include="Commands\IPublishingTargetConfigurationCommandActionParser.cs" />
+    <Compile Include="Commands\PublishingTargetConfigurationCommandActionParser.cs" />
+    <Compile Include="Commands\PublishingTargetConfigurationCommandAction.cs" />
     <Compile Include="Commands\IHelpCommand.cs" />
     <Compile Include="Commands\HelpProvider.cs" />
     <Compile Include="Commands\IBuildPropertyParser.cs" />
@@ -106,6 +110,11 @@
     </Compile>
     <Compile Include="Resources\CleanupCommand.Designer.cs">
       <DependentUpon>CleanupCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\PublishingTargetConfigurationCommand.Designer.cs">
+      <DependentUpon>PublishingTargetConfigurationCommand.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -163,6 +172,10 @@
     <EmbeddedResource Include="Resources\Application.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PublishingTargetConfigurationCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PublishingTargetConfigurationCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\HelpCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

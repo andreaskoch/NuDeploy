@@ -118,69 +118,72 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddCommandExampleDescriptionNamedArguments" xml:space="preserve">
-    <value>Add a repository to the source repository configuration (using named arguments).</value>
+    <value>Add a publishing target to the publishing target configuration (using named arguments).</value>
   </data>
   <data name="AddCommandExampleDescriptionPositionalArguments" xml:space="preserve">
-    <value>Add a repository to the source repository configuration (using positional arguments).</value>
+    <value>Add a publishing target to the publishing target configuration (using positional arguments).</value>
   </data>
   <data name="AddCommandInvalidArgumentCountMessageTemplate" xml:space="preserve">
-    <value>The "{0}" command requires {1} parameters. The repository Name and the Url.</value>
+    <value>The "{0}" command requires {1} parameters. The name of the publishing configuration and the url.</value>
   </data>
-  <data name="ArgumentDescriptionRepositoryActionTemplate" xml:space="preserve">
+  <data name="ArgumentDescriptionPublishConfigurationName" xml:space="preserve">
+    <value>The name of the publishing configuration (e.g. "Nuget Gallery")</value>
+  </data>
+  <data name="ArgumentDescriptionPublishingTargetActionTemplate" xml:space="preserve">
     <value>The action to perform ({0}).</value>
   </data>
-  <data name="ArgumentDescriptionRepositoryName" xml:space="preserve">
-    <value>The name of the repository (e.g. "Nuget Gallery")</value>
-  </data>
-  <data name="ArgumentDescriptionRepositoryUrl" xml:space="preserve">
-    <value>The repository url (e.g "https://nuget.org/api/v2/").</value>
+  <data name="ArgumentDescriptionPublishLocation" xml:space="preserve">
+    <value>The publishing location/url (e.g "https://nuget.org/api/v2/", "C:\local-nuget-repository").</value>
   </data>
   <data name="CommandDescriptionText" xml:space="preserve">
-    <value>Add, remove or reset the repository source configuration.</value>
+    <value>Add, remove or reset the publishing configuration.</value>
   </data>
   <data name="DeleteCommandExampleDescriptionPositionalArguments" xml:space="preserve">
-    <value>Remove the specified repository configuration (using positional arguments).</value>
+    <value>Remove the publishing configuration which matches the supplied name (using positional arguments).</value>
   </data>
-  <data name="DeleteSourceRepositoryConfigurationFailedMessageTemplate" xml:space="preserve">
-    <value>The repository "{0}" could not be removed from your configuration.</value>
+  <data name="DeletePublishingConfigurationFailedMessageTemplate" xml:space="preserve">
+    <value>The publishing configuration "{0}" could not be removed.</value>
   </data>
-  <data name="DeleteSourceRepositoryConfigurationNoRepositoryNameSuppliedMessage" xml:space="preserve">
-    <value>You must specify the name of the repository you want to delete from your configuration.</value>
+  <data name="DeletePublishingConfigurationNoNameSuppliedMessage" xml:space="preserve">
+    <value>You must specify the name of the publishing configuration you want to delete from your configuration.</value>
   </data>
-  <data name="DeleteSourceRepositoryConfigurationSucceededMessageTemplate" xml:space="preserve">
-    <value>The repository "{0}" has been successfully removed from your configuration.</value>
+  <data name="DeletePublishingConfigurationSucceededMessageTemplate" xml:space="preserve">
+    <value>The publishing configuration "{0}" has been successfully removed from your configuration.</value>
   </data>
   <data name="InvalidActionNameMessageTemplate" xml:space="preserve">
     <value>You must use one of these actions: {0}.</value>
   </data>
   <data name="ListCommandExampleDescription" xml:space="preserve">
-    <value>List all source repository configurations.</value>
+    <value>List all publishing configurations.</value>
   </data>
-  <data name="ListSourceRepositoryConfigurationsNoRepositoriesConfiguredMessage" xml:space="preserve">
-    <value>You have currently no source repositories configured.</value>
+  <data name="ListPublishingConfigurationsNoConfigsAvailableMessage" xml:space="preserve">
+    <value>There are currently no publishing targets configured.</value>
   </data>
-  <data name="ResetCommandExampleDescription" xml:space="preserve">
-    <value>Reset the the source repository configuration.</value>
-  </data>
-  <data name="ResetSourceRepositoryConfigurationFailedMessage" xml:space="preserve">
-    <value>Resetting your repository configuration failed.</value>
-  </data>
-  <data name="ResetSourceRepositoryConfigurationSuccessMessage" xml:space="preserve">
-    <value>Your repository configuration has been reset successfully.</value>
-  </data>
-  <data name="SampleRepositoryName" xml:space="preserve">
-    <value>Local Nuget Repository</value>
-  </data>
-  <data name="SaveSourceRepositoryConfigurationFailedMessageTemplate" xml:space="preserve">
-    <value>Saving the repository with the name "{0}" and the Url "{1}" failed.</value>
-  </data>
-  <data name="SaveSourceRepositoryConfigurationSucceededMessageTemplate" xml:space="preserve">
-    <value>The repository with the name "{0}" and the Url "{1}" has been saved successfully.</value>
-  </data>
-  <data name="SourceRepositoryConfigurationTableHeadlineColumn1" xml:space="preserve">
+  <data name="PublishingConfigurationTableHeadlineColumn1" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="SourceRepositoryConfigurationTableHeadlineColumn2" xml:space="preserve">
+  <data name="PublishingConfigurationTableHeadlineColumn2" xml:space="preserve">
     <value>Url</value>
+  </data>
+  <data name="ResetCommandExampleDescription" xml:space="preserve">
+    <value>Reset your publishing configuration.</value>
+  </data>
+  <data name="ResetPublishingConfigurationFailedMessage" xml:space="preserve">
+    <value>Resetting your publishing configuration failed.</value>
+  </data>
+  <data name="ResetPublishingConfigurationSuccessMessage" xml:space="preserve">
+    <value>Your publishing configuration has been reset successfully.</value>
+  </data>
+  <data name="SamplePublishingTargetName" xml:space="preserve">
+    <value>Nuget Gallery</value>
+  </data>
+  <data name="SavePublishingConfigurationFailedMessageTemplate" xml:space="preserve">
+    <value>Saving the publishing configuration with the name "{0}" and the location "{1}" failed.</value>
+  </data>
+  <data name="SavePublishingConfigurationSucceededMessageTemplate" xml:space="preserve">
+    <value>The publishing configuration with the name "{0}" and the location "{1}" has been successfully saved.</value>
+  </data>
+  <data name="ArgumentDescriptionApiKey" xml:space="preserve">
+    <value>The API key for the publishing target (only required for remote targets).</value>
   </data>
 </root>

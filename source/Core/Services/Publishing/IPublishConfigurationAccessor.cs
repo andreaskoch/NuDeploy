@@ -11,5 +11,7 @@ namespace NuDeploy.Core.Services.Publishing
         bool AddOrUpdatePublishConfiguration(string configurationName, string publishLocation, string apiKey);
 
         bool DeletePublishConfiguration(string configurationName);
+
+        bool ResetPublishConfiguration();
     }
 }

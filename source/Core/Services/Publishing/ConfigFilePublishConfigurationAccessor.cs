@@ -105,6 +105,11 @@ namespace NuDeploy.Core.Services.Publishing
             return this.SaveNewPublishConfigurationList(newConfigurationList);
         }
 
+        public bool ResetPublishConfiguration()
+        {
+            return this.SaveNewPublishConfigurationList(new PublishConfiguration[] { });
+        }
+
         private IEnumerable<PublishConfiguration> GetExistingPublishConfigurationList()
         {
             return this.publishConfigurationPersistence.Load(this.configurationFilePath) ?? new PublishConfiguration[] { };
