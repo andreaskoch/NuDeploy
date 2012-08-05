@@ -69,6 +69,7 @@
     <Compile Include="UnitTests\Commands\Console\InstallationStatusCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\InstallCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\PackageSolutionCommandTests.cs" />
+    <Compile Include="UnitTests\Commands\Console\PublishCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\RepositorySourceConfigurationCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\SelfUpdateCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\UninstallCommandTests.cs" />

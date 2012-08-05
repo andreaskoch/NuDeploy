@@ -13,6 +13,7 @@ using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.Repositories;
 using NuDeploy.Core.Services.Installation.Status;
 using NuDeploy.Core.Services.Packaging;
+using NuDeploy.Core.Services.Publishing;
 using NuDeploy.Core.Services.Update;
 
 using NUnit.Framework;
@@ -33,10 +34,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            var result = new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate, help);
+            var result = new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate, publishCommand, help);
 
             // Assert
             Assert.IsNotNull(result);
@@ -53,10 +55,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(null, install, uninstall, cleanup, package, configureSources, selfUpdate, help);
+            new ConsoleCommandProvider(null, install, uninstall, cleanup, package, configureSources, selfUpdate, publishCommand, help);
         }
 
         [Test]
@@ -70,10 +73,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, null, uninstall, cleanup, package, configureSources, selfUpdate, help);
+            new ConsoleCommandProvider(installationStatus, null, uninstall, cleanup, package, configureSources, selfUpdate, publishCommand, help);
         }
 
         [Test]
@@ -87,10 +91,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, null, cleanup, package, configureSources, selfUpdate, help);
+            new ConsoleCommandProvider(installationStatus, install, null, cleanup, package, configureSources, selfUpdate, publishCommand, help);
         }
 
         [Test]
@@ -104,10 +109,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, null, package, configureSources, selfUpdate, help);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, null, package, configureSources, selfUpdate, publishCommand, help);
         }
 
         [Test]
@@ -121,10 +127,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, null, configureSources, selfUpdate, help);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, null, configureSources, selfUpdate, publishCommand, help);
         }
 
         [Test]
@@ -138,10 +145,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, null, selfUpdate, help);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, null, selfUpdate, publishCommand, help);
         }
 
         [Test]
@@ -155,10 +163,29 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var help = new HelpCommand(new Mock<IHelpProvider>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, null, help);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, null, publishCommand, help);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PublishCommandIsNull_ArgumentNullExceptionIsThrown()
+        {
+            // Arrange
+            var installationStatus = new InstallationStatusCommand(new Mock<IUserInterface>().Object, new Mock<IInstallationStatusProvider>().Object);
+            var install = new InstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
+            var uninstall = new UninstallCommand(new Mock<IUserInterface>().Object, new Mock<IPackageUninstaller>().Object);
+            var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
+            var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
+            var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
+            var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
+            var help = new HelpCommand(new Mock<IHelpProvider>().Object);
+
+            // Act
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate, null, help);
         }
 
         [Test]
@@ -172,10 +199,11 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             var cleanup = new CleanupCommand(new Mock<IUserInterface>().Object, new Mock<ICleanupService>().Object);
             var package = new PackageSolutionCommand(new Mock<IUserInterface>().Object, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object);
             var configureSources = new RepositorySourceConfigurationCommand(new Mock<IUserInterface>().Object, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
+            var publishCommand = new PublishCommand(new Mock<IUserInterface>().Object, new Mock<IPublishingService>().Object);
             var selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
 
             // Act
-            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate, null);
+            new ConsoleCommandProvider(installationStatus, install, uninstall, cleanup, package, configureSources, selfUpdate, publishCommand, null);
         }
 
         [Test]
