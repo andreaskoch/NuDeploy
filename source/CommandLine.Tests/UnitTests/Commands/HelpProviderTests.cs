@@ -9,7 +9,7 @@ using NuDeploy.Core.Common.UserInterface;
 
 using NUnit.Framework;
 
-namespace CommandLine.Tests.UnitTests.Commands
+namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
 {
     [TestFixture]
     public class HelpProviderTests

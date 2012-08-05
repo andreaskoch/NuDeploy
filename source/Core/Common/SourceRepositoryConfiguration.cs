@@ -23,7 +23,7 @@ namespace NuDeploy.Core.Common
         {
             if (!string.IsNullOrWhiteSpace(this.Name))
             {
-                return string.Format("{0} ({1})", this.Name, this.Url != null ? this.Url.ToString() : "url-not-set");
+                return string.Format("{0} (Url: {1})", this.Name, this.Url != null ? this.Url.ToString() : "not-set");
             }
 
             return typeof(SourceRepositoryConfiguration).Name;

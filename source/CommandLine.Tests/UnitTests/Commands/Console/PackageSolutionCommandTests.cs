@@ -9,11 +9,13 @@ using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging;
+using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
 
-namespace CommandLine.Tests.UnitTests.Commands.Console
+namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 {
     [TestFixture]
     public class PackageSolutionCommandTests
@@ -35,9 +37,10 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object);
+            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Assert
             Assert.IsNotNull(packageSolutionCommand);
@@ -50,9 +53,10 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             var userInterface = new Mock<IUserInterface>();
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object);
+            var packageSolutionCommand = new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Assert
             CommandTestUtilities.ValidateCommandAttributes(packageSolutionCommand.Attributes);
@@ -65,9 +69,10 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            new PackageSolutionCommand(null, solutionPackagingService.Object, buildPropertyParser.Object);
+            new PackageSolutionCommand(null, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
         }
 
         [Test]
@@ -77,9 +82,10 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var userInterface = new Mock<IUserInterface>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            new PackageSolutionCommand(userInterface.Object, null, buildPropertyParser.Object);
+            new PackageSolutionCommand(userInterface.Object, null, buildPropertyParser.Object, publishingService.Object);
         }
 
         [Test]
@@ -89,9 +95,23 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var userInterface = new Mock<IUserInterface>();
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            var publishingService = new Mock<IPublishingService>();
 
             // Act
-            new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, null);
+            new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, null, publishingService.Object);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PublishingServiceParametersIsNotSet_ArgumentNullException()
+        {
+            // Arrange
+            var userInterface = new Mock<IUserInterface>();
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+
+            // Act
+            new PackageSolutionCommand(userInterface.Object, solutionPackagingService.Object, buildPropertyParser.Object, null);
         }
 
         #endregion
@@ -104,13 +124,14 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Act
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [Test]
@@ -119,7 +140,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // Act
             packageSolutionCommand.Execute();
@@ -136,7 +158,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
@@ -145,7 +168,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [TestCase(null)]
@@ -156,7 +179,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
@@ -178,7 +202,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -188,7 +213,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [Test]
@@ -197,7 +222,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -218,7 +244,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -230,7 +257,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [TestCase(null)]
@@ -241,7 +268,8 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -266,7 +294,12 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -290,7 +323,12 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -314,7 +352,12 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -328,7 +371,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             solutionPackagingService.Verify(
-                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<IEnumerable<KeyValuePair<string, string>>>(d => d.Any() == false)), Times.Once());
+                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<KeyValuePair<string, string>[]>(d => d.Any() == false)), Times.Once());
         }
 
         [TestCase(null)]
@@ -339,7 +382,12 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -355,7 +403,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             solutionPackagingService.Verify(
-                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<IEnumerable<KeyValuePair<string, string>>>(d => d.Any() == false)), Times.Once());
+                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<KeyValuePair<string, string>[]>(d => d.Any() == false)), Times.Once());
         }
 
         [Test]
@@ -364,7 +412,12 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+
+            solutionPackagingService.Setup(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -392,7 +445,7 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             // Assert
             solutionPackagingService.Verify(
                 p =>
-                p.PackageSolution(solutionPath, buildConfiguration, It.Is<IEnumerable<KeyValuePair<string, string>>>(d => d.Count() == buildProperties.Count)),
+                p.PackageSolution(solutionPath, buildConfiguration, It.Is<KeyValuePair<string, string>[]>(d => d.Count() == buildProperties.Count)),
                 Times.Once());
         }
 
@@ -404,10 +457,11 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             string buildConfiguration = "Debug";
 
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
-            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<IEnumerable<KeyValuePair<string, string>>>())).Returns(false);
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new FailureResult());
 
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
@@ -428,10 +482,11 @@ namespace CommandLine.Tests.UnitTests.Commands.Console
             string buildConfiguration = "Debug";
 
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
-            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<IEnumerable<KeyValuePair<string, string>>>())).Returns(true);
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
 
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
-            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
 
             // prepare command arguments
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);

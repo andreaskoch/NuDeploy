@@ -15,7 +15,7 @@ using NuGet;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Update
+namespace NuDeploy.Core.Tests.UnitTests.Update
 {
     [TestFixture]
     public class SelfUpdateServiceTests

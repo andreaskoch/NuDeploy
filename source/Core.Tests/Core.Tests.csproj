@@ -8,8 +8,8 @@
     <ProjectGuid>{BE899664-4A8E-488D-A689-D56CBFEA8554}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuDeploy.Tests</RootNamespace>
-    <AssemblyName>NuDeploy.Tests</AssemblyName>
+    <RootNamespace>NuDeploy.Core.Tests</RootNamespace>
+    <AssemblyName>NuDeploy.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -39,7 +39,10 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NuGet.Core, Version=1.8.30423.9026, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NuGet.Core, Version=2.0.30619.9119, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NuGet.Core.2.0.1\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -53,13 +56,16 @@
     </Compile>
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\AssemblyFileResourceProviderTests.cs" />
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
+    <Compile Include="IntegrationTests\CoreIntegrationTestUtilities.cs" />
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
+    <Compile Include="IntegrationTests\Common\JSONObjectSerializerTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\BuildFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\PrePackagingFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellSessionFactoryTests.cs" />
+    <Compile Include="IntegrationTests\Publishing\PublishingServiceTests.cs" />
     <Compile Include="IntegrationTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="IntegrationTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
@@ -74,11 +80,13 @@
     <Compile Include="UnitTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
     <Compile Include="UnitTests\Cleanup\CleanupServiceTests.cs" />
     <Compile Include="UnitTests\Common\DefaultFileEncodingProviderTests.cs" />
+    <Compile Include="UnitTests\Common\JSONObjectSerializerTests.cs" />
     <Compile Include="UnitTests\Common\PackageInfoTests.cs" />
     <Compile Include="UnitTests\Common\SourceRepositoryConfigurationTests.cs" />
     <Compile Include="UnitTests\Filesystem\RelativeFilePathInfoFactoryTests.cs" />
     <Compile Include="UnitTests\Installation\DeploymentTypeParserTests.cs" />
     <Compile Include="UnitTests\Installation\NugetPackageExtractorTests.cs" />
+    <Compile Include="UnitTests\Installation\PackageConfigurationAccessorTests.cs" />
     <Compile Include="UnitTests\Installation\PackageInstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PackageUninstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PowerShellExecutorTests.cs" />
@@ -92,6 +100,12 @@
     <Compile Include="UnitTests\Packaging\Nuget\PackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\Prepackaging\PrepackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\SolutionPackagingServiceTests.cs" />
+    <Compile Include="UnitTests\Persistence\FilesystemPersistenceTests.cs" />
+    <Compile Include="UnitTests\Publishing\ConfigFilePublishConfigurationAccessorTests.cs" />
+    <Compile Include="UnitTests\Publishing\PackageServerFactoryTests.cs" />
+    <Compile Include="UnitTests\Publishing\PublishConfigurationFactoryTests.cs" />
+    <Compile Include="UnitTests\Publishing\PublishConfigurationTests.cs" />
+    <Compile Include="UnitTests\Publishing\PublishingServiceTests.cs" />
     <Compile Include="UnitTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="UnitTests\Repositories\ConfigFileSourceRepositoryProviderTests.cs" />
     <Compile Include="UnitTests\Repositories\PackageRepositoryBrowserTests.cs" />
@@ -129,6 +143,9 @@
     <None Include="IntegrationTests\PowerShell\TestScript-01-ReturnResults.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="IntegrationTests\Publishing\Sample.1.0.0.nupkg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

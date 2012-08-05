@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 using PackageRepositoryFactory = NuDeploy.Core.Services.Installation.Repositories.PackageRepositoryFactory;
 
-namespace NuDeploy.Tests.UnitTests.Repositories
+namespace NuDeploy.Core.Tests.UnitTests.Repositories
 {
     [TestFixture]
     public class PackageRepositoryFactoryTests
@@ -119,13 +119,10 @@ namespace NuDeploy.Tests.UnitTests.Repositories
         public void CreateRepository_PackageSourceParameterIsARemoteUri_DataServicePackageRepositoryIsReturned()
         {
             // Arrange
-            bool httpClientFactoryGotCalled = false;
-
             var packageSource = "https://nuget.org/api/v2/";
 
             Func<Uri, IHttpClient> httpClientFactoryMock = u =>
             {
-                httpClientFactoryGotCalled = true;
                 return new Mock<IHttpClient>().Object;
             };
 

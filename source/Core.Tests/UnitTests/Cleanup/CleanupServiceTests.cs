@@ -13,7 +13,7 @@ using NUnit.Framework;
 
 using NuDeploy.Core.Services.Installation.Status;
 
-namespace NuDeploy.Tests.UnitTests.Cleanup
+namespace NuDeploy.Core.Tests.UnitTests.Cleanup
 {
     [TestFixture]
     public class CleanupServiceTests

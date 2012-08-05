@@ -40,33 +40,44 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
             this.packagingFolderPath = packagingFolderPathProvider.GetPackagingFolderPath();
         }
 
-        public bool Package()
+        public IServiceResult Package()
         {
             // Locate work folders
             string packageBasePath = this.prePackagingFolderPath;
             string packageFolder = this.packagingFolderPath;
 
-            if (!this.filesystemAccessor.DirectoryExists(packageBasePath) || !this.filesystemAccessor.DirectoryExists(packageFolder))
+            if (!this.filesystemAccessor.DirectoryExists(packageBasePath))
             {
-                return false;
+                return new FailureResult(Resources.PackagingService.ErrorBaseFolderDoesNotExistMessageTemplate, packageBasePath);
+            }
+
+            if (!this.filesystemAccessor.DirectoryExists(packageFolder))
+            {
+                return new FailureResult(Resources.PackagingService.ErrorPackagingFolderDoesNotExistMessageTemplate, packageFolder);
             }
 
             // Locate NuSpec file
             FileInfo nuspecFile =
                 this.filesystemAccessor.GetFiles(packageBasePath).FirstOrDefault(
                     f => f.Extension.Equals(NuDeployConstants.NuSpecFileExtension, StringComparison.OrdinalIgnoreCase));
+
             if (nuspecFile == null)
             {
-                return false;
+                return
+                    new FailureResult(
+                        Resources.PackagingService.ErrorNuspecFileNotFoundMessageTemplate,
+                        NuDeployConstants.NuSpecFileExtension,
+                        packageBasePath);
             }
 
             // Build package
             try
             {
-                Stream nuspecFileStream = this.filesystemAccessor.GetReadStream(nuspecFile.FullName);
+                string nuspecFilePath = nuspecFile.FullName;
+                Stream nuspecFileStream = this.filesystemAccessor.GetReadStream(nuspecFilePath);
                 if (nuspecFileStream == null)
                 {
-                    return false;
+                    return new FailureResult(Resources.PackagingService.ErrorNuspecFileCannotBeReadMessageTemplate, nuspecFilePath);
                 }
 
                 var packageBuilder = new PackageBuilder(nuspecFileStream, packageBasePath);
@@ -79,17 +90,21 @@ namespace NuDeploy.Core.Services.Packaging.Nuget
                 {
                     if (outputStream == null)
                     {
-                        return false;
+                        return new FailureResult(Resources.PackagingService.ErrorOutputStreamCouldNotBeOpenedMessageTemplate, nugetPackageFilePath);
                     }
 
                     packageBuilder.Save(outputStream);
                 }
 
-                return true;
+                return new SuccessResult(
+                    Resources.PackagingService.SuccessMessageTemplate, packageBasePath, nuspecFilePath)
+                    {
+                        ResultArtefact = nugetPackageFilePath
+                    };
             }
-            catch (Exception)
+            catch (Exception packagingException)
             {
-                return false;
+                return new FailureResult(Resources.PackagingService.FailedMessageTemplate, packagingException.Message);
             }
         }
     }

@@ -34,7 +34,7 @@ namespace NuDeploy.Core.Services.Packaging.Build
             this.buildPropertyProvider = buildPropertyProvider;
         }
 
-        public bool Build(string solutionPath, string buildConfiguration, IEnumerable<KeyValuePair<string, string>> additionalBuildProperties)
+        public IServiceResult Build(string solutionPath, string buildConfiguration, IEnumerable<KeyValuePair<string, string>> additionalBuildProperties)
         {
             if (string.IsNullOrWhiteSpace(solutionPath))
             {
@@ -63,7 +63,20 @@ namespace NuDeploy.Core.Services.Packaging.Build
             // build
             BuildResult result = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequestData);
 
-            return result.OverallResult == BuildResultCode.Success;
+            if (result.OverallResult == BuildResultCode.Success)
+            {
+                return new SuccessResult(
+                    Resources.SolutionBuilder.SuccessMessageTemplate,
+                    solutionPath,
+                    buildConfiguration,
+                    string.Join(",", buildProperties.Select(p => p.Key + "=" + p.Value)));
+            }
+
+            return new FailureResult(
+                Resources.SolutionBuilder.FailureMessageTemplate,
+                solutionPath,
+                buildConfiguration,
+                string.Join(",", buildProperties.Select(p => p.Key + "=" + p.Value)));
         }
     }
 }

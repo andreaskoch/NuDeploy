@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Newtonsoft.Json;
-
 using NuDeploy.Core.Common;
-using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
+using NuDeploy.Core.Common.Persistence;
 
 namespace NuDeploy.Core.Services.Installation.Repositories
 {
@@ -19,22 +17,17 @@ namespace NuDeploy.Core.Services.Installation.Repositories
 
         private readonly ApplicationInformation applicationInformation;
 
-        private readonly IFilesystemAccessor filesystemAccessor;
-
         private readonly ISourceRepositoryConfigurationFactory sourceRepositoryConfigurationFactory;
+
+        private readonly IFilesystemPersistence<SourceRepositoryConfiguration[]> filesystemPersistence;
 
         private readonly string sourceConfigurationFilePath;
 
-        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation, IFilesystemAccessor filesystemAccessor, ISourceRepositoryConfigurationFactory sourceRepositoryConfigurationFactory)
+        public ConfigFileSourceRepositoryProvider(ApplicationInformation applicationInformation, ISourceRepositoryConfigurationFactory sourceRepositoryConfigurationFactory, IFilesystemPersistence<SourceRepositoryConfiguration[]> filesystemPersistence)
         {
             if (applicationInformation == null)
             {
                 throw new ArgumentNullException("applicationInformation");
-            }
-
-            if (filesystemAccessor == null)
-            {
-                throw new ArgumentNullException("filesystemAccessor");
             }
 
             if (sourceRepositoryConfigurationFactory == null)
@@ -42,15 +35,21 @@ namespace NuDeploy.Core.Services.Installation.Repositories
                 throw new ArgumentNullException("sourceRepositoryConfigurationFactory");
             }
 
+            if (filesystemPersistence == null)
+            {
+                throw new ArgumentNullException("filesystemPersistence");
+            }
+
             this.applicationInformation = applicationInformation;
-            this.filesystemAccessor = filesystemAccessor;
             this.sourceRepositoryConfigurationFactory = sourceRepositoryConfigurationFactory;
+            this.filesystemPersistence = filesystemPersistence;
             this.sourceConfigurationFilePath = this.GetSourceConfigurationFilePath();
         }
 
         public IEnumerable<SourceRepositoryConfiguration> GetRepositoryConfigurations()
         {
-            return this.Load();
+            var configurations = this.GetExistingSourceRepsitoryConfigurationList().ToList();
+            return configurations;
         }
 
         public bool SaveRepositoryConfiguration(string repositoryName, string repositoryUrl)
@@ -62,7 +61,7 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             }
 
             // get existing repositoriesConfiguration
-            var repositories = this.Load().ToDictionary(r => r.Name, r => r);
+            var repositories = this.GetExistingSourceRepsitoryConfigurationList().ToDictionary(r => r.Name, r => r);
 
             // add or update
             string existingKey = repositories.Keys.FirstOrDefault(k => k.Equals(sourceRepositoryConfiguration.Name, StringComparison.OrdinalIgnoreCase));
@@ -75,7 +74,7 @@ namespace NuDeploy.Core.Services.Installation.Repositories
                 repositories[existingKey] = sourceRepositoryConfiguration;
             }
 
-            return this.Save(repositories.Values.ToArray());
+            return this.SaveNewSourceRepositoryConfigurationList(repositories.Values.ToArray());
         }
 
         public bool DeleteRepositoryConfiguration(string repositoryName)
@@ -85,44 +84,30 @@ namespace NuDeploy.Core.Services.Installation.Repositories
                 throw new ArgumentException("repositoryName");
             }
 
-
-            var repositories = this.Load().ToList();
+            var repositories = this.GetExistingSourceRepsitoryConfigurationList().ToList();
             if (!repositories.Any(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase)))
             {
                 return false;
             }
 
             var newRepositoryList = repositories.Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
-            return this.Save(newRepositoryList);
+            return this.SaveNewSourceRepositoryConfigurationList(newRepositoryList);
         }
 
         public bool ResetRepositoryConfiguration()
         {
-            return this.CreateDefaultConfiguration();
-        }
-
-        private bool CreateDefaultConfiguration()
-        {
             var defaultSources = new[] { new SourceRepositoryConfiguration { Name = DefaultRepositoryName, Url = NuDeployConstants.DefaultFeedUrl } };
-            return this.Save(defaultSources);
+            return this.SaveNewSourceRepositoryConfigurationList(defaultSources);
         }
 
-        private IEnumerable<SourceRepositoryConfiguration> Load()
+        private IEnumerable<SourceRepositoryConfiguration> GetExistingSourceRepsitoryConfigurationList()
         {
-            if (!this.filesystemAccessor.FileExists(this.sourceConfigurationFilePath))
-            {
-                this.CreateDefaultConfiguration();
-            }
-
-            string json = this.filesystemAccessor.GetFileContent(this.sourceConfigurationFilePath);
-            return JsonConvert.DeserializeObject<SourceRepositoryConfiguration[]>(json);
+            return this.filesystemPersistence.Load(this.sourceConfigurationFilePath) ?? new SourceRepositoryConfiguration[] { };
         }
 
-        private bool Save(SourceRepositoryConfiguration[] repositoriesConfiguration)
+        private bool SaveNewSourceRepositoryConfigurationList(SourceRepositoryConfiguration[] repositoriesConfiguration)
         {
-            string json = JsonConvert.SerializeObject(repositoriesConfiguration);
-            this.filesystemAccessor.WriteContentToFile(json, this.sourceConfigurationFilePath);
-            return true;
+            return this.filesystemPersistence.Save(repositoriesConfiguration, this.sourceConfigurationFilePath);
         }
 
         private string GetSourceConfigurationFilePath()

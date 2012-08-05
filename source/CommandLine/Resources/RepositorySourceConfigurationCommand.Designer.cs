@@ -79,7 +79,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &quot;{0}&quot; command requires {1} parameters. The repository name and the url..
+        ///   Looks up a localized string similar to The &quot;{0}&quot; command requires {1} parameters. The repository Name and the Url..
         /// </summary>
         internal static string AddCommandInvalidArgumentCountMessageTemplate {
             get {
@@ -151,7 +151,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The repository &quot;{0}&quot; has been removed from your configuration successfully..
+        ///   Looks up a localized string similar to The repository &quot;{0}&quot; has been successfully removed from your configuration..
         /// </summary>
         internal static string DeleteSourceRepositoryConfigurationSucceededMessageTemplate {
             get {
@@ -187,7 +187,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset the the source repository configuration to the default..
+        ///   Looks up a localized string similar to Reset the the source repository configuration..
         /// </summary>
         internal static string ResetCommandExampleDescription {
             get {
@@ -205,7 +205,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You repository configuration has been reset successfully..
+        ///   Looks up a localized string similar to Your repository configuration has been reset successfully..
         /// </summary>
         internal static string ResetSourceRepositoryConfigurationSuccessMessage {
             get {
@@ -214,7 +214,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some Repository.
+        ///   Looks up a localized string similar to Local Nuget Repository.
         /// </summary>
         internal static string SampleRepositoryName {
             get {
@@ -223,7 +223,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Saving the repository with the name &quot;{0}&quot; and the URI &quot;{1}&quot; failed..
+        ///   Looks up a localized string similar to Saving the repository with the name &quot;{0}&quot; and the Url &quot;{1}&quot; failed..
         /// </summary>
         internal static string SaveSourceRepositoryConfigurationFailedMessageTemplate {
             get {
@@ -232,7 +232,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The repository with the name &quot;{0}&quot; and the URI &quot;{1}&quot; has been successfully saved..
+        ///   Looks up a localized string similar to The repository with the name &quot;{0}&quot; and the Url &quot;{1}&quot; has been saved successfully..
         /// </summary>
         internal static string SaveSourceRepositoryConfigurationSucceededMessageTemplate {
             get {

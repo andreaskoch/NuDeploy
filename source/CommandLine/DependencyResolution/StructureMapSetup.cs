@@ -6,10 +6,13 @@ using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.CommandLine.UserInterface;
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.Persistence;
+using NuDeploy.Core.Common.Serialization;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Cleanup;
@@ -23,6 +26,7 @@ using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.Nuget;
 using NuDeploy.Core.Services.Packaging.PrePackaging;
+using NuDeploy.Core.Services.Publishing;
 using NuDeploy.Core.Services.Transformation;
 using NuDeploy.Core.Services.Update;
 
@@ -52,6 +56,15 @@ namespace NuDeploy.CommandLine.DependencyResolution
 
                         /* filesystem access */
                         config.For<IFilesystemAccessor>().Singleton().Use<PhysicalFilesystemAccessor>();
+
+                        /* serialization */
+                        config.For<IObjectSerializer<PackageInfo[]>>().Singleton().Use<JSONObjectSerializer<PackageInfo[]>>();
+                        config.For<IObjectSerializer<PublishConfiguration[]>>().Singleton().Use<JSONObjectSerializer<PublishConfiguration[]>>();
+                        config.For<IObjectSerializer<SourceRepositoryConfiguration[]>>().Singleton().Use<JSONObjectSerializer<SourceRepositoryConfiguration[]>>();
+
+                        config.For<IFilesystemPersistence<PackageInfo[]>>().Singleton().Use<FilesystemPersistence<PackageInfo[]>>();
+                        config.For<IFilesystemPersistence<PublishConfiguration[]>>().Singleton().Use<FilesystemPersistence<PublishConfiguration[]>>();
+                        config.For<IFilesystemPersistence<SourceRepositoryConfiguration[]>>().Singleton().Use<FilesystemPersistence<SourceRepositoryConfiguration[]>>();
 
                         /* console */
                         config.For<IUserInterface>().Singleton().Use<ConsoleUserInterface>();
@@ -122,6 +135,14 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IPackageConfigurationTransformationService>().Use<PackageConfigurationTransformationService>();
                         config.For<IConfigurationFileTransformationService>().Use<ConfigurationFileTransformationService>();
                         config.For<IConfigurationFileTransformer>().Use<ConfigurationFileTransformer>();
+
+                        /* publishing */
+                        config.For<IPackageServerFactory>().Use<PackageServerFactory>();
+                        config.For<IPublishConfigurationFactory>().Use<PublishConfigurationFactory>();
+                        config.For<IPublishConfigurationAccessor>().Use<ConfigFilePublishConfigurationAccessor>();
+                        config.For<IPublishingService>().Use<PublishingService>();
+                        config.For<IPublishingTargetConfigurationCommandActionParser>().Use<PublishingTargetConfigurationCommandActionParser>();
+                        config.For<IPublishConfigurationAccessor>().Use<ConfigFilePublishConfigurationAccessor>();
 
                         /* update */
                         config.For<ISelfUpdateService>().Use<SelfUpdateService>();

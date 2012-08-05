@@ -52,7 +52,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NuGet.Core, Version=1.8.30423.9026, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NuGet.Core, Version=2.0.30619.9119, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NuGet.Core.2.0.1\lib\net40-Client\NuGet.Core.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
     </Reference>
@@ -67,6 +70,8 @@
     <Compile Include="Commands\BuildPropertyParser.cs" />
     <Compile Include="Commands\CommandAttributes.cs" />
     <Compile Include="Commands\Console\CleanupCommand.cs" />
+    <Compile Include="Commands\Console\PublishingTargetConfigurationCommand.cs" />
+    <Compile Include="Commands\Console\PublishCommand.cs" />
     <Compile Include="Commands\Console\HelpCommand.cs" />
     <Compile Include="Commands\Console\InstallationStatusCommand.cs" />
     <Compile Include="Commands\Console\InstallCommand.cs" />
@@ -74,6 +79,9 @@
     <Compile Include="Commands\Console\RepositorySourceConfigurationCommand.cs" />
     <Compile Include="Commands\Console\SelfUpdateCommand.cs" />
     <Compile Include="Commands\Console\UninstallCommand.cs" />
+    <Compile Include="Commands\IPublishingTargetConfigurationCommandActionParser.cs" />
+    <Compile Include="Commands\PublishingTargetConfigurationCommandActionParser.cs" />
+    <Compile Include="Commands\PublishingTargetConfigurationCommandAction.cs" />
     <Compile Include="Commands\IHelpCommand.cs" />
     <Compile Include="Commands\HelpProvider.cs" />
     <Compile Include="Commands\IBuildPropertyParser.cs" />
@@ -105,6 +113,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\PublishingTargetConfigurationCommand.Designer.cs">
+      <DependentUpon>PublishingTargetConfigurationCommand.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\HelpCommand.Designer.cs">
       <DependentUpon>HelpCommand.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -124,6 +137,11 @@
       <DependentUpon>PackageSolutionCommand.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\PublishCommand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PublishCommand.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\RepositorySourceConfigurationCommand.Designer.cs">
       <DependentUpon>RepositorySourceConfigurationCommand.resx</DependentUpon>
@@ -155,6 +173,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PublishingTargetConfigurationCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PublishingTargetConfigurationCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\HelpCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>HelpCommand.Designer.cs</LastGenOutput>
@@ -170,6 +192,10 @@
     <EmbeddedResource Include="Resources\PackageSolutionCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PackageSolutionCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PublishCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PublishCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\RepositorySourceConfigurationCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

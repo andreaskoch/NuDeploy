@@ -7,7 +7,7 @@ using NuDeploy.Core.Services.Installation.PowerShell;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Installation
+namespace NuDeploy.Core.Tests.UnitTests.Installation
 {
     [TestFixture]
     public class PowerShellSessionFactoryTests

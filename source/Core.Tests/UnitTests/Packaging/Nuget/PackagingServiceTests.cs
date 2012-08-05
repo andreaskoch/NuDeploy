@@ -5,12 +5,13 @@ using System.IO;
 using Moq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.Nuget;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
+namespace NuDeploy.Core.Tests.UnitTests.Packaging.Nuget
 {
     [TestFixture]
     public class PackagingServiceTests
@@ -144,7 +145,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             var result = packagingService.Package();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -170,7 +171,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             var result = packagingService.Package();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -199,7 +200,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             var result = packagingService.Package();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -232,7 +233,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             var result = packagingService.Package();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase("")]
@@ -268,7 +269,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             nuspecFileStream.Close();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -307,7 +308,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             nuspecFileStream.Close();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -353,7 +354,7 @@ namespace NuDeploy.Tests.UnitTests.Packaging.Nuget
             packageStream.Close();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsTrue(File.Exists(targetPackagePath));
         }
 

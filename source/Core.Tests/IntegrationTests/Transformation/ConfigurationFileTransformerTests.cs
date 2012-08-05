@@ -10,7 +10,7 @@ using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.Transformation
+namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
 {
     [TestFixture]
     public class ConfigurationFileTransformerTests

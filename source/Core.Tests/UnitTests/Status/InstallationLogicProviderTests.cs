@@ -11,7 +11,7 @@ using NuGet;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Status
+namespace NuDeploy.Core.Tests.UnitTests.Status
 {
     [TestFixture]
     public class InstallationLogicProviderTests

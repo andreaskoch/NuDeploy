@@ -124,7 +124,7 @@
     <value>Add a repository to the source repository configuration (using positional arguments).</value>
   </data>
   <data name="AddCommandInvalidArgumentCountMessageTemplate" xml:space="preserve">
-    <value>The "{0}" command requires {1} parameters. The repository name and the url.</value>
+    <value>The "{0}" command requires {1} parameters. The repository Name and the Url.</value>
   </data>
   <data name="ArgumentDescriptionRepositoryActionTemplate" xml:space="preserve">
     <value>The action to perform ({0}).</value>
@@ -148,7 +148,7 @@
     <value>You must specify the name of the repository you want to delete from your configuration.</value>
   </data>
   <data name="DeleteSourceRepositoryConfigurationSucceededMessageTemplate" xml:space="preserve">
-    <value>The repository "{0}" has been removed from your configuration successfully.</value>
+    <value>The repository "{0}" has been successfully removed from your configuration.</value>
   </data>
   <data name="InvalidActionNameMessageTemplate" xml:space="preserve">
     <value>You must use one of these actions: {0}.</value>
@@ -160,22 +160,22 @@
     <value>You have currently no source repositories configured.</value>
   </data>
   <data name="ResetCommandExampleDescription" xml:space="preserve">
-    <value>Reset the the source repository configuration to the default.</value>
+    <value>Reset the the source repository configuration.</value>
   </data>
   <data name="ResetSourceRepositoryConfigurationFailedMessage" xml:space="preserve">
     <value>Resetting your repository configuration failed.</value>
   </data>
   <data name="ResetSourceRepositoryConfigurationSuccessMessage" xml:space="preserve">
-    <value>You repository configuration has been reset successfully.</value>
+    <value>Your repository configuration has been reset successfully.</value>
   </data>
   <data name="SampleRepositoryName" xml:space="preserve">
-    <value>Some Repository</value>
+    <value>Local Nuget Repository</value>
   </data>
   <data name="SaveSourceRepositoryConfigurationFailedMessageTemplate" xml:space="preserve">
-    <value>Saving the repository with the name "{0}" and the URI "{1}" failed.</value>
+    <value>Saving the repository with the name "{0}" and the Url "{1}" failed.</value>
   </data>
   <data name="SaveSourceRepositoryConfigurationSucceededMessageTemplate" xml:space="preserve">
-    <value>The repository with the name "{0}" and the URI "{1}" has been successfully saved.</value>
+    <value>The repository with the name "{0}" and the Url "{1}" has been saved successfully.</value>
   </data>
   <data name="SourceRepositoryConfigurationTableHeadlineColumn1" xml:space="preserve">
     <value>Name</value>

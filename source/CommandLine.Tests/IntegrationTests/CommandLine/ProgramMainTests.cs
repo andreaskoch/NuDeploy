@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 
-using NuDeploy.CommandLine;
 using NuDeploy.CommandLine.Commands;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.UserInterface;
@@ -11,7 +10,7 @@ using NUnit.Framework;
 
 using StructureMap;
 
-namespace CommandLine.Tests.IntegrationTests.CommandLine
+namespace NuDeploy.CommandLine.Tests.IntegrationTests.CommandLine
 {
     [TestFixture]
     public class ProgramMainTests

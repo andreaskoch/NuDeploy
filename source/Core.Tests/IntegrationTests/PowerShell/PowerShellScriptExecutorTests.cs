@@ -12,7 +12,7 @@ using NuDeploy.Core.Services.Installation.PowerShell;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.PowerShell
+namespace NuDeploy.Core.Tests.IntegrationTests.PowerShell
 {
     [TestFixture]
     public class PowerShellScriptExecutorTests

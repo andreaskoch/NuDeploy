@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Nuget;
@@ -37,42 +38,64 @@ namespace NuDeploy.Core.Services.Packaging
             this.packagingService = packagingService;
         }
 
-        public bool PackageSolution(string solutionPath, string buildConfiguration, IEnumerable<KeyValuePair<string, string>> buildProperties)
+        public IServiceResult PackageSolution(string solutionPath, string buildConfiguration, KeyValuePair<string, string>[] buildProperties)
         {
             if (string.IsNullOrWhiteSpace(solutionPath))
             {
-                return false;
+                return new FailureResult(Resources.SolutionPackagingService.ErrorSolutionPathParameterCannotBeEmpty);
             }
 
             if (string.IsNullOrWhiteSpace(buildConfiguration))
             {
-                return false;
+                return new FailureResult(Resources.SolutionPackagingService.ErrorBuildConfigurationParameterCannotBeEmpty);
             }
 
             if (buildProperties == null)
             {
-                return false;
+                return new FailureResult(Resources.SolutionPackagingService.ErrorBuildPropertiesParameterCannotBeNull);
             }
 
             // Build the solution
-            if (!this.solutionBuilder.Build(solutionPath, buildConfiguration, buildProperties))
+            IServiceResult buildResult = this.solutionBuilder.Build(solutionPath, buildConfiguration, buildProperties);
+            if (buildResult.Status == ServiceResultType.Failure)
             {
-                return false;
+                return
+                    new FailureResult(
+                        Resources.SolutionPackagingService.BuildFailedMessageTemplate,
+                        solutionPath,
+                        buildConfiguration,
+                        string.Join(",", buildProperties.Select(p => p.Key + "=" + p.Value)))
+                        {
+                            InnerResult = buildResult
+                        };
             }
 
             // pre-packaging
-            if (!this.prepackagingService.Prepackage())
+            IServiceResult prepackagingResult = this.prepackagingService.Prepackage();
+            if (prepackagingResult.Status == ServiceResultType.Failure)
             {
-                return false;
+                return new FailureResult(Resources.SolutionPackagingService.PrepackagingFailedMessageTemplate, solutionPath) { InnerResult = prepackagingResult };
             }
 
             // packaging
-            if (!this.packagingService.Package())
+            IServiceResult packageResult = this.packagingService.Package();
+            if (packageResult.Status == ServiceResultType.Failure)
             {
-                return false;
+                return new FailureResult(Resources.SolutionPackagingService.PackagingFailedMessageTemplate, solutionPath) { InnerResult = packageResult };
             }
 
-            return true;
+            string packagePath = packageResult.ResultArtefact;
+
+            return
+                new SuccessResult(
+                    Resources.SolutionPackagingService.PackagingSucceededMessageTemplate,
+                    solutionPath,
+                    buildConfiguration,
+                    string.Join(",", buildProperties.Select(p => p.Key + "=" + p.Value)),
+                    packagePath)
+                    {
+                        ResultArtefact = packagePath
+                    };
         }
     }
 }

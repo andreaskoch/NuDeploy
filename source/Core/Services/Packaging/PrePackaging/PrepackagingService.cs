@@ -52,21 +52,21 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             this.prePackagingFolderPath = prePackagingFolderPathProvider.GetPrePackagingFolderPath();
         }
 
-        public bool Prepackage()
+        public IServiceResult Prepackage()
         {
             if (!this.filesystemAccessor.DirectoryExists(this.prePackagingFolderPath))
             {
-                return false;
+                return new FailureResult(Resources.PrepackagingService.ErrorPrepackagingFolderDoesNotExistMessageTemplate, this.prePackagingFolderPath);
             }
 
             try
             {
                 this.CopyFilesToPrePackagingFolder();
-                return true;
+                return new SuccessResult(Resources.PrepackagingService.SuccessMessageTemplate, this.prePackagingFolderPath);
             }
-            catch (Exception)
+            catch (Exception prepackagingException)
             {
-                return false;
+                return new FailureResult(Resources.PrepackagingService.FailureMessageTemplate, prepackagingException.Message);
             }
         }
 

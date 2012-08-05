@@ -3,7 +3,6 @@ using System.Text;
 
 using Moq;
 
-using NuDeploy.CommandLine;
 using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.Infrastructure.Console;
@@ -13,7 +12,7 @@ using NuDeploy.Core.Common.UserInterface;
 
 using NUnit.Framework;
 
-namespace CommandLine.Tests.UnitTests.CommandLine
+namespace NuDeploy.CommandLine.Tests.UnitTests.CommandLine
 {
     [TestFixture]
     public class ProgramTests

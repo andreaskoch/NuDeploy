@@ -14,7 +14,7 @@ using NUnit.Framework;
 
 using NuDeploy.Core.Services.Installation.Status;
 
-namespace NuDeploy.Tests.UnitTests.Status
+namespace NuDeploy.Core.Tests.UnitTests.Status
 {
     [TestFixture]
     public class InstallationStatusProviderTests

@@ -9,7 +9,7 @@ using NuDeploy.Core.Services.Packaging.Configuration;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.Packaging.Configuration
+namespace NuDeploy.Core.Tests.IntegrationTests.Packaging.Configuration
 {
     [TestFixture]
     public class BuildFolderPathProviderTests

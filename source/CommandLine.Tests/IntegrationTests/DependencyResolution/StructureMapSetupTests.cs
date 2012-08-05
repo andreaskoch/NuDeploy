@@ -6,10 +6,13 @@ using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.DependencyResolution;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.CommandLine.UserInterface;
+using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Logging;
+using NuDeploy.Core.Common.Persistence;
+using NuDeploy.Core.Common.Serialization;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Cleanup;
@@ -23,6 +26,7 @@ using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Configuration;
 using NuDeploy.Core.Services.Packaging.Nuget;
 using NuDeploy.Core.Services.Packaging.PrePackaging;
+using NuDeploy.Core.Services.Publishing;
 using NuDeploy.Core.Services.Transformation;
 using NuDeploy.Core.Services.Update;
 
@@ -32,7 +36,7 @@ using NUnit.Framework;
 
 using StructureMap;
 
-namespace CommandLine.Tests.IntegrationTests.DependencyResolution
+namespace NuDeploy.CommandLine.Tests.IntegrationTests.DependencyResolution
 {
     [TestFixture]
     public class StructureMapSetupTests
@@ -92,6 +96,12 @@ namespace CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(ISelfUpdateService))]
         [TestCase(typeof(IHelpProvider))]
         [TestCase(typeof(ICommandProvider))]
+        [TestCase(typeof(IObjectSerializer<PackageInfo[]>))]
+        [TestCase(typeof(IObjectSerializer<PublishConfiguration[]>))]
+        [TestCase(typeof(IObjectSerializer<SourceRepositoryConfiguration[]>))]
+        [TestCase(typeof(IFilesystemPersistence<PackageInfo[]>))]
+        [TestCase(typeof(IFilesystemPersistence<PublishConfiguration[]>))]
+        [TestCase(typeof(IFilesystemPersistence<SourceRepositoryConfiguration[]>))]
         public void CanInstantiate_Interface(Type interfaceType)
         {
             // Act

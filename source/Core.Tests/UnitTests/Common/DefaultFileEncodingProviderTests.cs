@@ -4,7 +4,7 @@ using NuDeploy.Core.Common.FileEncoding;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.Common
+namespace NuDeploy.Core.Tests.UnitTests.Common
 {
     [TestFixture]
     public class DefaultFileEncodingProviderTests

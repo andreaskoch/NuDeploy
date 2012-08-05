@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-using NuDeploy.CommandLine;
 using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.DependencyResolution;
@@ -19,7 +18,7 @@ using NUnit.Framework;
 
 using StructureMap;
 
-namespace CommandLine.Tests.IntegrationTests.CommandLine
+namespace NuDeploy.CommandLine.Tests.IntegrationTests.CommandLine
 {
     [TestFixture]
     public class ProgramRunTests
@@ -204,22 +203,6 @@ namespace CommandLine.Tests.IntegrationTests.CommandLine
         #endregion
 
         #region Repository Configuration
-
-        [Test]
-        public void RepositorySourceConfiguration_ConfigFileIsCreatedOnStartup()
-        {
-            // Arrange
-            var commandlineArguments = new string[] { };
-
-            // Act
-            this.program.Run(commandlineArguments);
-
-            // Assert
-            var sourceRepositoryConfigurationFilePath = Path.Combine(
-                this.applicationInformation.ConfigurationFileFolder, ConfigFileSourceRepositoryProvider.SourceRepositoryConfigurationFileName);
-
-            Assert.IsTrue(File.Exists(sourceRepositoryConfigurationFilePath));            
-        }
 
         [TestCase("ad")]
         [TestCase("aaadd")]

@@ -2,7 +2,7 @@
 
 using NuDeploy.Core.Common.Infrastructure;
 
-namespace CommandLine.Tests.IntegrationTests.CommandLine
+namespace NuDeploy.CommandLine.Tests.IntegrationTests.CommandLine
 {
     public static class CommandLineIntegrationTestUtilities
     {

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging;
+using NuDeploy.Core.Services.Publishing;
 
 namespace NuDeploy.CommandLine.Commands.Console
 {
@@ -17,6 +19,8 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public const string ArgumentNameMSBuildProperties = "MSBuildProperties";
 
+        public const string ArgumentNamePublishingConfiguration = "PublishingConfiguration";
+
         private readonly string[] alternativeCommandNames = new[] { "pack" };
 
         private readonly IUserInterface userInterface;
@@ -25,7 +29,9 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         private readonly IBuildPropertyParser buildPropertyParser;
 
-        public PackageSolutionCommand(IUserInterface userInterface, ISolutionPackagingService solutionPackagingService, IBuildPropertyParser buildPropertyParser)
+        private readonly IPublishingService publishingService;
+
+        public PackageSolutionCommand(IUserInterface userInterface, ISolutionPackagingService solutionPackagingService, IBuildPropertyParser buildPropertyParser, IPublishingService publishingService)
         {
             if (userInterface == null)
             {
@@ -42,9 +48,15 @@ namespace NuDeploy.CommandLine.Commands.Console
                 throw new ArgumentNullException("buildPropertyParser");
             }
 
+            if (publishingService == null)
+            {
+                throw new ArgumentNullException("publishingService");
+            }
+
             this.userInterface = userInterface;
             this.solutionPackagingService = solutionPackagingService;
             this.buildPropertyParser = buildPropertyParser;
+            this.publishingService = publishingService;
 
             this.Attributes = new CommandAttributes
             {
@@ -54,13 +66,15 @@ namespace NuDeploy.CommandLine.Commands.Console
                     {
                         ArgumentNameSolutionPath,
                         ArgumentNameBuildConfiguration,
-                        ArgumentNameMSBuildProperties
+                        ArgumentNameMSBuildProperties,
+                        ArgumentNamePublishingConfiguration
                     },
                 PositionalArguments = new[]
                     {
                         ArgumentNameSolutionPath,
                         ArgumentNameBuildConfiguration,
-                        ArgumentNameMSBuildProperties                        
+                        ArgumentNameMSBuildProperties,
+                        ArgumentNamePublishingConfiguration
                     },
                 Description = Resources.PackageSolutionCommand.CommandDescriptionText,
                 Usage = string.Format("{0} -{1}=<Path> -{2}=<Debug|Release> -{3}=<Property1=Value1;Property2=Value2>", CommandName, ArgumentNameSolutionPath, ArgumentNameBuildConfiguration, ArgumentNameMSBuildProperties),
@@ -75,7 +89,8 @@ namespace NuDeploy.CommandLine.Commands.Console
                     {
                         { ArgumentNameSolutionPath, Resources.PackageSolutionCommand.ArgumentDescriptionSolutionPath },
                         { ArgumentNameBuildConfiguration, Resources.PackageSolutionCommand.ArgumentDescriptionBuildConfiguration },
-                        { ArgumentNameMSBuildProperties, Resources.PackageSolutionCommand.ArgumentDescriptionMSBuildProperties }
+                        { ArgumentNameMSBuildProperties, Resources.PackageSolutionCommand.ArgumentDescriptionMSBuildProperties },
+                        { ArgumentNamePublishingConfiguration, Resources.PackageSolutionCommand.ArgumentDescriptionPublishingConfiguration }
                     }
             };
 
@@ -113,13 +128,27 @@ namespace NuDeploy.CommandLine.Commands.Console
             }
 
             // Package solution
-            if (!this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties))
+            IServiceResult packagingResult = this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties.ToArray());
+            if (packagingResult.Status == ServiceResultType.Failure)
             {
                 this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingFailureMessage);
                 return false;
             }
 
             this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingSuccessMessage);
+
+            string packagPath = packagingResult.ResultArtefact;
+            string publishConfigurationName = this.Arguments.ContainsKey(ArgumentNamePublishingConfiguration) ? this.Arguments[ArgumentNamePublishingConfiguration] : string.Empty;
+            if (!string.IsNullOrWhiteSpace(publishConfigurationName))
+            {
+                var publishResult = this.publishingService.PublishPackage(packagPath, publishConfigurationName);
+
+                this.userInterface.WriteLine(
+                    publishResult
+                        ? string.Format(Resources.PackageSolutionCommand.PublishingSucceededMessageTemplate, packagPath, publishConfigurationName)
+                        : string.Format(Resources.PackageSolutionCommand.PublishingFailedMessageTemplate, packagPath, publishConfigurationName));
+            }
+
             return true;
         }
     }

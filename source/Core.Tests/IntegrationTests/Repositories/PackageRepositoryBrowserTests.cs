@@ -9,7 +9,7 @@ using NuGet;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.IntegrationTests.Repositories
+namespace NuDeploy.Core.Tests.IntegrationTests.Repositories
 {
     [TestFixture]
     public class PackageRepositoryBrowserTests

@@ -8,10 +8,11 @@ using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.CommandLine.Infrastructure.Console;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Packaging;
+using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
 
-namespace CommandLine.Tests.IntegrationTests
+namespace NuDeploy.CommandLine.Tests.IntegrationTests
 {
     [TestFixture]
     public class CommandLineArgumentInterpreterTests
@@ -36,8 +37,9 @@ namespace CommandLine.Tests.IntegrationTests
             var userInterfaceMock = new Mock<IUserInterface>();
             var solutionPackagingServiceMock = new Mock<ISolutionPackagingService>();
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
 
-            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, solutionPackagingServiceMock.Object, buildPropertyParser.Object);
+            this.packackageSolutionCommand = new PackageSolutionCommand(userInterfaceMock.Object, solutionPackagingServiceMock.Object, buildPropertyParser.Object, publishingService.Object);
 
             this.commands = new List<ICommand> { this.packackageSolutionCommand };
 

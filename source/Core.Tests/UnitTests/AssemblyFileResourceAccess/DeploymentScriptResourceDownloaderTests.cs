@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 using Moq;
 
@@ -9,7 +8,7 @@ using NuDeploy.Core.Services.AssemblyResourceAccess;
 
 using NUnit.Framework;
 
-namespace NuDeploy.Tests.UnitTests.AssemblyFileResourceAccess
+namespace NuDeploy.Core.Tests.UnitTests.AssemblyFileResourceAccess
 {
     public class DeploymentScriptResourceDownloaderTests
     {

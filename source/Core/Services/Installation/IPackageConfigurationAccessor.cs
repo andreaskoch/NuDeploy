@@ -8,8 +8,8 @@ namespace NuDeploy.Core.Services.Installation
     {
         IEnumerable<PackageInfo> GetInstalledPackages();
 
-        void AddOrUpdate(PackageInfo packageInfo);
+        bool AddOrUpdate(PackageInfo packageInfo);
 
-        void Remove(string packageId);
+        bool Remove(string packageId);
     }
 }
