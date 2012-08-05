@@ -241,6 +241,24 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 699a4dac-a376....
+        /// </summary>
+        internal static string SampleApiKey {
+            get {
+                return ResourceManager.GetString("SampleApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://nuget.org/api/v2.
+        /// </summary>
+        internal static string SamplePublishingLocation {
+            get {
+                return ResourceManager.GetString("SamplePublishingLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nuget Gallery.
         /// </summary>
         internal static string SamplePublishingTargetName {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Publishing;
 
@@ -68,23 +67,26 @@ namespace NuDeploy.CommandLine.Commands.Console
                             {
                                 {
                                     string.Format(
-                                        "{0} {1} \"{2}\" \"{3}\"",
+                                        "{0} {1} \"{2}\" \"{3}\" \"{4}\"",
                                         CommandName,
                                         PublishingTargetConfigurationCommandAction.Add,
                                         Resources.PublishingTargetConfigurationCommand.SamplePublishingTargetName,
-                                        NuDeployConstants.DefaultFeedUrl),
+                                        Resources.PublishingTargetConfigurationCommand.SamplePublishingLocation,
+                                        Resources.PublishingTargetConfigurationCommand.SampleApiKey),
                                     Resources.PublishingTargetConfigurationCommand.AddCommandExampleDescriptionNamedArguments
                                     },
                                 {
                                     string.Format(
-                                        "{0} -{1}={2} -{3}=\"{4}\" -{5}=\"{6}\"",
+                                        "{0} -{1}={2} -{3}=\"{4}\" -{5}=\"{6}\" -{7}=\"{8}\"",
                                         CommandName,
                                         ArgumentNameAction,
                                         PublishingTargetConfigurationCommandAction.Add,
                                         ArgumentNamePublishConfigurationName,
                                         Resources.PublishingTargetConfigurationCommand.SamplePublishingTargetName,
                                         ArgumentNamePublishLocation,
-                                        NuDeployConstants.DefaultFeedUrl),
+                                        Resources.PublishingTargetConfigurationCommand.SamplePublishingLocation,
+                                        ArgumentNameApiKey,
+                                        Resources.PublishingTargetConfigurationCommand.SampleApiKey),
                                     Resources.PublishingTargetConfigurationCommand.AddCommandExampleDescriptionNamedArguments
                                     },
                                 {
@@ -134,14 +136,6 @@ namespace NuDeploy.CommandLine.Commands.Console
 
             switch (action)
             {
-                case PublishingTargetConfigurationCommandAction.Unrecognized:
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(Resources.PublishingTargetConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.AllowedActions)));
-
-                    return false;
-                }
-
                 case PublishingTargetConfigurationCommandAction.Add:
                 {
                     if (!this.Arguments.ContainsKey(ArgumentNamePublishConfigurationName) || !this.Arguments.ContainsKey(ArgumentNamePublishLocation))
@@ -155,7 +149,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
                     string publishConfigurationName = this.Arguments[ArgumentNamePublishConfigurationName];
                     string publishLocation = this.Arguments[ArgumentNamePublishLocation];
-                    string apiKey = this.Arguments[ArgumentNameApiKey];
+                    string apiKey = this.Arguments.ContainsKey(ArgumentNameApiKey) ? this.Arguments[ArgumentNameApiKey] : null;
 
                     if (!this.publishConfigurationAccessor.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, apiKey))
                     {
@@ -246,6 +240,9 @@ namespace NuDeploy.CommandLine.Commands.Console
                     return true;
                 }
             }
+
+            this.userInterface.WriteLine(
+                string.Format(Resources.PublishingTargetConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.AllowedActions)));
 
             return false;
         }

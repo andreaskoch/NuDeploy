@@ -131,14 +131,6 @@ namespace NuDeploy.CommandLine.Commands.Console
 
             switch (action)
             {
-                case RepositoryConfigurationCommandAction.Unrecognized:
-                {
-                    this.userInterface.WriteLine(
-                        string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.AllowedActions)));
-
-                    return false;
-                }
-
                 case RepositoryConfigurationCommandAction.Add:
                 {
                     if (!this.Arguments.ContainsKey(ArgumentNameRepositoryName) || !this.Arguments.ContainsKey(ArgumentNameRepositoryUrl))
@@ -241,6 +233,9 @@ namespace NuDeploy.CommandLine.Commands.Console
                     return true;
                 }
             }
+
+            this.userInterface.WriteLine(
+                string.Format(Resources.RepositorySourceConfigurationCommand.InvalidActionNameMessageTemplate, string.Join(", ", this.AllowedActions)));
 
             return false;
         }

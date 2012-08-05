@@ -186,4 +186,10 @@
   <data name="ArgumentDescriptionApiKey" xml:space="preserve">
     <value>The API key for the publishing target (only required for remote targets).</value>
   </data>
+  <data name="SampleApiKey" xml:space="preserve">
+    <value>699a4dac-a376...</value>
+  </data>
+  <data name="SamplePublishingLocation" xml:space="preserve">
+    <value>http://nuget.org/api/v2</value>
+  </data>
 </root>
