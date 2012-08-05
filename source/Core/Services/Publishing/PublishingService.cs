@@ -77,10 +77,23 @@ namespace NuDeploy.Core.Services.Publishing
 
                 try
                 {
-                    packageServer.PushPackage(publishConfiguration.ApiKey, packageStream, Convert.ToInt32(this.defaultTimeout.TotalMilliseconds));
+                    if (publishConfiguration.IsLocal)
+                    {
+                        var packageFile = new FileInfo(packagePath);
+                        string targetPath = Path.Combine(publishConfiguration.PublishLocation, packageFile.Name);
+                        using (Stream writeStream = this.filesystemAccessor.GetWriteStream(targetPath))
+                        {
+                            packageStream.CopyTo(writeStream);
+                        }
+                    }
+                    else
+                    {
+                        packageServer.PushPackage(publishConfiguration.ApiKey, packageStream, Convert.ToInt32(this.defaultTimeout.TotalMilliseconds));
+                    }
+                    
                     return true;
                 }
-                catch (Exception)
+                catch (Exception publishException)
                 {
                     return false;
                 }

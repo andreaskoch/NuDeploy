@@ -7,5 +7,9 @@ namespace NuDeploy.Core.Services.Publishing
         PublishConfiguration GetPublishConfiguration(string configurationName);
 
         IEnumerable<PublishConfiguration> GetPublishConfigurations();
+
+        bool AddOrUpdatePublishConfiguration(string configurationName, string publishLocation, string apiKey);
+
+        bool DeletePublishConfiguration(string configurationName);
     }
 }

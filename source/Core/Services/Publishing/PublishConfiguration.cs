@@ -28,6 +28,26 @@ namespace NuDeploy.Core.Services.Publishing
             }
         }
 
+        [JsonIgnore]
+        public bool IsLocal
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.PublishLocation))
+                {
+                    return true;
+                }
+
+                Uri locationUri;
+                if (Uri.TryCreate(this.PublishLocation, UriKind.Absolute, out locationUri))
+                {
+                    return locationUri.IsUnc || locationUri.IsFile;
+                }
+
+                return true;
+            }
+        }
+
         public override string ToString()
         {
             if (!string.IsNullOrWhiteSpace(this.Name))

@@ -56,6 +56,7 @@
     </Compile>
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\AssemblyFileResourceProviderTests.cs" />
     <Compile Include="IntegrationTests\AssemblyFileResourceAccess\DeploymentScriptResourceDownloaderTests.cs" />
+    <Compile Include="IntegrationTests\CoreIntegrationTestUtilities.cs" />
     <Compile Include="IntegrationTests\Common\ApplicationInformationProviderTests.cs" />
     <Compile Include="IntegrationTests\Common\JSONObjectSerializerTests.cs" />
     <Compile Include="IntegrationTests\FileSystem\PhysicalFilesystemAccessorTests.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="IntegrationTests\Packaging\Configuration\PackagingFolderPathProviderTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellScriptExecutorTests.cs" />
     <Compile Include="IntegrationTests\PowerShell\PowerShellSessionFactoryTests.cs" />
+    <Compile Include="IntegrationTests\Publishing\PublishingServiceTests.cs" />
     <Compile Include="IntegrationTests\Repositories\CommandLineRepositoryFactoryTests.cs" />
     <Compile Include="IntegrationTests\Repositories\PackageRepositoryBrowserTests.cs" />
     <Compile Include="IntegrationTests\Services\ConfigFileSourceRepositoryProviderTests.cs" />
@@ -141,6 +143,9 @@
     <None Include="IntegrationTests\PowerShell\TestScript-01-ReturnResults.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="IntegrationTests\Publishing\Sample.1.0.0.nupkg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
