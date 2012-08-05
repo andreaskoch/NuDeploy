@@ -4,6 +4,7 @@ using System.IO;
 using Moq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
 using NuDeploy.Core.Services.Filesystem;
 using NuDeploy.Core.Services.Packaging.Build;
@@ -116,7 +117,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -138,7 +139,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -162,7 +163,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             filesystemAccessor.Verify(f => f.CopyFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
@@ -196,7 +197,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             foreach (var relativeFilePathInfo in relativeFilePathInfos)
             {
                 string absolutePath = relativeFilePathInfo.AbsoluteFilePath;
@@ -226,7 +227,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             assemblyResourceDownloader.Verify(d => d.Download(prepackagingFolder), Times.Once());
         }
 
@@ -260,7 +261,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             foreach (var relativeFilePathInfo in relativeFilePathInfos)
             {
                 string absolutePath = relativeFilePathInfo.AbsoluteFilePath;
@@ -299,7 +300,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             foreach (var relativeFilePathInfo in relativeFilePathInfos)
             {
                 string absolutePath = relativeFilePathInfo.AbsoluteFilePath;
@@ -338,7 +339,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var result = prepackagingService.Prepackage();
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             foreach (var relativeFilePathInfo in relativeFilePathInfos)
             {
                 string absolutePath = relativeFilePathInfo.AbsoluteFilePath;

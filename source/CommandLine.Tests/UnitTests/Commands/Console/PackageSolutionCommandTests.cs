@@ -9,6 +9,7 @@ using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging;
 
 using NUnit.Framework;
@@ -110,7 +111,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [Test]
@@ -145,7 +146,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [TestCase(null)]
@@ -188,7 +189,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [Test]
@@ -230,7 +231,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Execute();
 
             // Assert
-            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<KeyValuePair<string, string>>>()), Times.Never());
+            solutionPackagingService.Verify(s => s.PackageSolution(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<KeyValuePair<string, string>[]>()), Times.Never());
         }
 
         [TestCase(null)]
@@ -328,7 +329,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             solutionPackagingService.Verify(
-                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<IEnumerable<KeyValuePair<string, string>>>(d => d.Any() == false)), Times.Once());
+                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<KeyValuePair<string, string>[]>(d => d.Any() == false)), Times.Once());
         }
 
         [TestCase(null)]
@@ -355,7 +356,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             // Assert
             solutionPackagingService.Verify(
-                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<IEnumerable<KeyValuePair<string, string>>>(d => d.Any() == false)), Times.Once());
+                p => p.PackageSolution(solutionPath, buildConfiguration, It.Is<KeyValuePair<string, string>[]>(d => d.Any() == false)), Times.Once());
         }
 
         [Test]
@@ -392,7 +393,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Assert
             solutionPackagingService.Verify(
                 p =>
-                p.PackageSolution(solutionPath, buildConfiguration, It.Is<IEnumerable<KeyValuePair<string, string>>>(d => d.Count() == buildProperties.Count)),
+                p.PackageSolution(solutionPath, buildConfiguration, It.Is<KeyValuePair<string, string>[]>(d => d.Count() == buildProperties.Count)),
                 Times.Once());
         }
 
@@ -404,7 +405,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             string buildConfiguration = "Debug";
 
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
-            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<IEnumerable<KeyValuePair<string, string>>>())).Returns(false);
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new FailureResult());
 
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
             var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);
@@ -428,7 +429,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             string buildConfiguration = "Debug";
 
             var solutionPackagingService = new Mock<ISolutionPackagingService>();
-            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<IEnumerable<KeyValuePair<string, string>>>())).Returns(true);
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
 
             var buildPropertyParser = new Mock<IBuildPropertyParser>();
             var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object);

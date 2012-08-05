@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging;
 
 namespace NuDeploy.CommandLine.Commands.Console
@@ -113,7 +114,8 @@ namespace NuDeploy.CommandLine.Commands.Console
             }
 
             // Package solution
-            if (!this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties))
+            IServiceResult packagingResult = this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties.ToArray());
+            if (packagingResult.Status == ServiceResultType.Failure)
             {
                 this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingFailureMessage);
                 return false;

@@ -96,10 +96,30 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\PackagingService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PackagingService.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PrepackagingService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrepackagingService.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\SelfUpdateService.Designer.cs">
       <DependentUpon>SelfUpdateService.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\SolutionBuilder.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SolutionBuilder.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SolutionPackagingService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SolutionPackagingService.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\AssemblyResourceAccess\AssemblyFileResourceInfo.cs" />
     <Compile Include="Services\AssemblyResourceAccess\AssemblyFileResourceProvider.cs" />
@@ -110,6 +130,7 @@
     <Compile Include="Services\AssemblyResourceAccess\IAssemblyResourceDownloader.cs" />
     <Compile Include="Services\Cleanup\CleanupService.cs" />
     <Compile Include="Services\Cleanup\ICleanupService.cs" />
+    <Compile Include="Services\FailureResult.cs" />
     <Compile Include="Services\Filesystem\IRelativeFilePathInfoFactory.cs" />
     <Compile Include="Services\Filesystem\RelativeFilePathInfo.cs" />
     <Compile Include="Services\Filesystem\RelativeFilePathInfoFactory.cs" />
@@ -147,6 +168,8 @@
     <Compile Include="Services\Installation\Status\IInstallationStatusProvider.cs" />
     <Compile Include="Services\Installation\Status\InstallationLogicProvider.cs" />
     <Compile Include="Services\Installation\Status\InstallationStatusProvider.cs" />
+    <Compile Include="Services\IServiceResult.cs" />
+    <Compile Include="Services\NoResult.cs" />
     <Compile Include="Services\Packaging\Build\BuildPropertyProvider.cs" />
     <Compile Include="Services\Packaging\Build\ConventionBasedBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildFolderPathProvider.cs" />
@@ -174,6 +197,9 @@
     <Compile Include="Services\Publishing\PublishConfiguration.cs" />
     <Compile Include="Services\Publishing\PublishConfigurationFactory.cs" />
     <Compile Include="Services\Publishing\PublishingService.cs" />
+    <Compile Include="Services\ServiceResult.cs" />
+    <Compile Include="Services\ServiceResultType.cs" />
+    <Compile Include="Services\SuccessResult.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformationService.cs" />
     <Compile Include="Services\Transformation\ConfigurationFileTransformer.cs" />
     <Compile Include="Services\Transformation\IConfigurationFileTransformationService.cs" />
@@ -201,9 +227,25 @@
       <LastGenOutput>PackageInstaller.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PackagingService.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackagingService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PrepackagingService.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PrepackagingService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SelfUpdateService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SelfUpdateService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SolutionBuilder.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SolutionBuilder.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SolutionPackagingService.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SolutionPackagingService.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\DeploymentScripts\Deploy.ps1" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Moq;
 
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Packaging;
 using NuDeploy.Core.Services.Packaging.Build;
 using NuDeploy.Core.Services.Packaging.Nuget;
@@ -88,13 +89,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             string buildConfiguration = "Debug";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = new Dictionary<string, string>();
+            var buildProperties = new KeyValuePair<string, string>[] { };
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase(null)]
@@ -110,13 +111,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = new Dictionary<string, string>();
+            var buildProperties = new KeyValuePair<string, string>[] { };
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -131,13 +132,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
 
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = null;
+            KeyValuePair<string, string>[] buildProperties = null;
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -146,10 +147,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = new Dictionary<string, string>();
+            var buildProperties = new KeyValuePair<string, string>[] { };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
-            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(false);
+            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new FailureResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
             var packagingServiceMock = new Mock<IPackagingService>();
@@ -157,10 +158,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -169,23 +170,23 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = new Dictionary<string, string>();
+            var buildProperties = new KeyValuePair<string, string>[] { };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
-            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(true);
+            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(false);
+            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(new FailureResult());
 
             var packagingServiceMock = new Mock<IPackagingService>();
 
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -194,24 +195,24 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = new Dictionary<string, string>();
+            var buildProperties = new KeyValuePair<string, string>[] { };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
-            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(true);
+            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(true);
+            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(new SuccessResult());
 
             var packagingServiceMock = new Mock<IPackagingService>();
-            packagingServiceMock.Setup(p => p.Package()).Returns(false);
+            packagingServiceMock.Setup(p => p.Package()).Returns(new FailureResult());
 
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -220,24 +221,24 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            IEnumerable<KeyValuePair<string, string>> buildProperties = new Dictionary<string, string>();
+            var buildProperties = new KeyValuePair<string, string>[] { };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
-            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(true);
+            solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(true);
+            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(new SuccessResult());
 
             var packagingServiceMock = new Mock<IPackagingService>();
-            packagingServiceMock.Setup(p => p.Package()).Returns(true);
+            packagingServiceMock.Setup(p => p.Package()).Returns(new SuccessResult());
 
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             // Act
-            bool result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
+            var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion
