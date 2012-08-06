@@ -53,6 +53,7 @@ namespace NuDeploy.CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(IFilesystemAccessor))]
         [TestCase(typeof(IUserInterface))]
         [TestCase(typeof(IConsoleTextManipulation))]
+        [TestCase(typeof(IServiceResultVisualizer))]
         [TestCase(typeof(IPowerShellSessionFactory))]
         [TestCase(typeof(IPowerShellExecutor))]
         [TestCase(typeof(IPowerShellHost))]

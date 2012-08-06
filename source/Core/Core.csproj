@@ -74,6 +74,7 @@
     <Compile Include="Common\Serialization\IObjectSerializer.cs" />
     <Compile Include="Common\Serialization\JSONObjectSerializer.cs" />
     <Compile Include="Common\SourceRepositoryConfiguration.cs" />
+    <Compile Include="Common\UserInterface\IServiceResultVisualizer.cs" />
     <Compile Include="Common\UserInterface\IUserInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\CleanupService.Designer.cs">
@@ -105,6 +106,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PrepackagingService.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PublishingService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PublishingService.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\SelfUpdateService.Designer.cs">
       <DependentUpon>SelfUpdateService.resx</DependentUpon>
@@ -234,6 +240,10 @@
     <EmbeddedResource Include="Resources\PrepackagingService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PrepackagingService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PublishingService.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PublishingService.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SelfUpdateService.resx">
       <Generator>ResXFileCodeGenerator</Generator>

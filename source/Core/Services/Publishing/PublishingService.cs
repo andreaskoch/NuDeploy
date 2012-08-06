@@ -39,7 +39,7 @@ namespace NuDeploy.Core.Services.Publishing
             this.publishConfigurationAccessor = publishConfigurationAccessor;
         }
 
-        public bool PublishPackage(string packagePath, string packageServerConfigurationName)
+        public IServiceResult PublishPackage(string packagePath, string packageServerConfigurationName)
         {
             if (string.IsNullOrWhiteSpace(packagePath))
             {
@@ -48,7 +48,7 @@ namespace NuDeploy.Core.Services.Publishing
 
             if (!this.filesystemAccessor.FileExists(packagePath))
             {
-                return false;
+                return new FailureResult(Resources.PublishingService.ErrorPackagePathDoesNotExistMessageTemplate, packagePath);
             }
 
             if (string.IsNullOrWhiteSpace(packageServerConfigurationName))
@@ -57,22 +57,27 @@ namespace NuDeploy.Core.Services.Publishing
             }
 
             PublishConfiguration publishConfiguration = this.publishConfigurationAccessor.GetPublishConfiguration(packageServerConfigurationName);
-            if (publishConfiguration == null || !publishConfiguration.IsValid)
+            if (publishConfiguration == null)
             {
-                return false;
+                return new FailureResult(Resources.PublishingService.ErrorPublishingConfigurationWasNotFoundMessageTemplate, packageServerConfigurationName);
+            }
+
+            if (!publishConfiguration.IsValid)
+            {
+                return new FailureResult(Resources.PublishingService.ErrorPublishingConfigurationIsInvalidMessageTemplate, packageServerConfigurationName);
             }
 
             var packageServer = this.packageServerFactory.GetPackageServer(publishConfiguration.PublishLocation);
             if (packageServer == null)
             {
-                return false;
+                return new FailureResult(Resources.PublishingService.ErrorPackageServerCouldNotBeInstantiatedMessageTemplate, publishConfiguration.PublishLocation);
             }
 
             using (Stream packageStream = this.filesystemAccessor.GetReadStream(packagePath))
             {
                 if (packageStream == null)
                 {
-                    return false;
+                    return new FailureResult(Resources.PublishingService.ErrorPackageStreamCouldNotBeOpenedMessageTemplate, packagePath);
                 }
 
                 try
@@ -90,12 +95,13 @@ namespace NuDeploy.Core.Services.Publishing
                     {
                         packageServer.PushPackage(publishConfiguration.ApiKey, packageStream, Convert.ToInt32(this.defaultTimeout.TotalMilliseconds));
                     }
-                    
-                    return true;
+
+                    return new SuccessResult(Resources.PublishingService.SuccessMessageTemplate, packagePath, packageServerConfigurationName);
                 }
                 catch (Exception publishException)
                 {
-                    return false;
+                    return new FailureResult(
+                        Resources.PublishingService.FailureMessageTemplate, packagePath, packageServerConfigurationName, publishException.Message);
                 }
             }
         }

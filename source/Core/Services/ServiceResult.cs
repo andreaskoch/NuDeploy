@@ -9,7 +9,7 @@ namespace NuDeploy.Core.Services
         public ServiceResult(ServiceResultType status, string message, params object[] messageArguments)
         {
             this.status = status;
-            this.message = string.Format(message, messageArguments);
+            this.message = message != null ? string.Format(message, messageArguments) : null;
         }
 
         public ServiceResultType Status

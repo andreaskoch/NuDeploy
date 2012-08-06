@@ -5,6 +5,7 @@ using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Persistence;
 using NuDeploy.Core.Common.Serialization;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
@@ -80,7 +81,7 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Publishing
             // Assert
             string targetPath = Path.Combine(publishLocation, SamplePackageFilename);
 
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsTrue(File.Exists(targetPath));
         }
     }

@@ -153,11 +153,17 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ServiceResultVisualizer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ServiceResultVisualizer.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\UninstallCommand.Designer.cs">
       <DependentUpon>UninstallCommand.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="UserInterface\ConsoleServiceResultVisualizer.cs" />
     <Compile Include="UserInterface\ConsoleTextManipulation.cs" />
     <Compile Include="UserInterface\ConsoleUserInterface.cs" />
     <Compile Include="UserInterface\IConsoleTextManipulation.cs" />
@@ -204,6 +210,10 @@
     <EmbeddedResource Include="Resources\SelfUpdateCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SelfUpdateCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ServiceResultVisualizer.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ServiceResultVisualizer.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UninstallCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 namespace NuDeploy.CommandLine.Commands.Console
@@ -83,12 +84,16 @@ namespace NuDeploy.CommandLine.Commands.Console
             if (string.IsNullOrWhiteSpace(publishConfigurationName))
             {
                 this.userInterface.WriteLine(Resources.PublishCommand.NoPublishConfigurationNameSpecifiedMessage);
+
                 return false;
             }
 
-            if (!this.publishingService.PublishPackage(packagePath, publishConfigurationName))
+            var publishResult = this.publishingService.PublishPackage(packagePath, publishConfigurationName);
+            if (publishResult.Status == ServiceResultType.Failure)
             {
+                this.userInterface.Display(publishResult);
                 this.userInterface.WriteLine(string.Format(Resources.PublishCommand.PublishFailedMessageTemplate, packagePath, publishConfigurationName));
+
                 return false;
             }
 

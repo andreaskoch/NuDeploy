@@ -2,6 +2,6 @@
 {
     public interface IPublishingService
     {
-        bool PublishPackage(string packagePath, string packageServerConfigurationName);
+        IServiceResult PublishPackage(string packagePath, string packageServerConfigurationName);
     }
 }

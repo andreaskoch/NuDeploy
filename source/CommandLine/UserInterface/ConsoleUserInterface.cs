@@ -6,6 +6,7 @@ using System.Text;
 
 using NuDeploy.Core.Common.Logging;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 
 namespace NuDeploy.CommandLine.UserInterface
 {
@@ -15,9 +16,11 @@ namespace NuDeploy.CommandLine.UserInterface
 
         private readonly IActionLogger logger;
 
+        private readonly IServiceResultVisualizer serviceResultVisualizer;
+
         private readonly StringBuilder userInterfaceContent = new StringBuilder();
 
-        public ConsoleUserInterface(IConsoleTextManipulation textManipulation, IActionLogger logger)
+        public ConsoleUserInterface(IConsoleTextManipulation textManipulation, IActionLogger logger, IServiceResultVisualizer serviceResultVisualizer)
         {
             if (textManipulation == null)
             {
@@ -29,8 +32,14 @@ namespace NuDeploy.CommandLine.UserInterface
                 throw new ArgumentNullException("logger");
             }
 
+            if (serviceResultVisualizer == null)
+            {
+                throw new ArgumentNullException("serviceResultVisualizer");
+            }
+
             this.textManipulation = textManipulation;
             this.logger = logger;
+            this.serviceResultVisualizer = serviceResultVisualizer;
         }
 
         public int WindowWidth
@@ -53,6 +62,14 @@ namespace NuDeploy.CommandLine.UserInterface
             }
         }
 
+        public string UserInterfaceContent
+        {
+            get
+            {
+                return this.userInterfaceContent.ToString();
+            }
+        }
+
         public string GetInput()
         {
             this.CaptureLine("Requesting input from user.");
@@ -60,6 +77,11 @@ namespace NuDeploy.CommandLine.UserInterface
 
             this.CaptureLine("User entered {0}", input);
             return input;
+        }
+
+        public void Display(IServiceResult serviceResult)
+        {
+            this.serviceResultVisualizer.Display(this, serviceResult);
         }
 
         public void ShowIndented(string text, int marginLeft)
@@ -109,14 +131,6 @@ namespace NuDeploy.CommandLine.UserInterface
 
                 Console.Write(text + Environment.NewLine);
                 this.CaptureLine(text);
-            }
-        }
-
-        public string UserInterfaceContent
-        {
-            get
-            {
-                return this.userInterfaceContent.ToString();
             }
         }
 

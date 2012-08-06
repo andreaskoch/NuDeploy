@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using NuDeploy.Core.Services;
+
 namespace NuDeploy.Core.Common.UserInterface
 {
     public interface IUserInterface
@@ -7,6 +9,8 @@ namespace NuDeploy.Core.Common.UserInterface
         string UserInterfaceContent { get; }
 
         string GetInput();
+
+        void Display(IServiceResult serviceResult);
 
         void Write(string text);
 

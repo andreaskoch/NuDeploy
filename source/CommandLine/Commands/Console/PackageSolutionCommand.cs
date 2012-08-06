@@ -127,27 +127,34 @@ namespace NuDeploy.CommandLine.Commands.Console
                 buildProperties = this.buildPropertyParser.ParseBuildPropertiesArgument(buildPropertiesArgument).ToList();
             }
 
-            // Package solution
+            // Package
             IServiceResult packagingResult = this.solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties.ToArray());
             if (packagingResult.Status == ServiceResultType.Failure)
             {
+                this.userInterface.Display(packagingResult);
                 this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingFailureMessage);
+
                 return false;
             }
 
-            this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingSuccessMessage);
-
+            // Publish
             string packagPath = packagingResult.ResultArtefact;
             string publishConfigurationName = this.Arguments.ContainsKey(ArgumentNamePublishingConfiguration) ? this.Arguments[ArgumentNamePublishingConfiguration] : string.Empty;
             if (!string.IsNullOrWhiteSpace(publishConfigurationName))
             {
                 var publishResult = this.publishingService.PublishPackage(packagPath, publishConfigurationName);
+                if (publishResult.Status == ServiceResultType.Failure)
+                {
+                    this.userInterface.Display(publishResult);
+                }
 
                 this.userInterface.WriteLine(
-                    publishResult
+                    publishResult.Status == ServiceResultType.Success
                         ? string.Format(Resources.PackageSolutionCommand.PublishingSucceededMessageTemplate, packagPath, publishConfigurationName)
                         : string.Format(Resources.PackageSolutionCommand.PublishingFailedMessageTemplate, packagPath, publishConfigurationName));
             }
+
+            this.userInterface.WriteLine(Resources.PackageSolutionCommand.PackagingSuccessMessage);
 
             return true;
         }

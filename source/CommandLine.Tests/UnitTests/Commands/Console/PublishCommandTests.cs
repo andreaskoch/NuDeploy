@@ -5,6 +5,7 @@ using Moq;
 
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
@@ -358,7 +359,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             var publishingService = new Mock<IPublishingService>();
 
             // prepare publishing service
-            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(false);
+            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(new FailureResult());
 
             var publishCommand = new PublishCommand(userInterface.Object, publishingService.Object);
 
@@ -383,7 +384,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             var publishingService = new Mock<IPublishingService>();
 
             // prepare publishing service
-            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(false);
+            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(new FailureResult());
 
             var publishCommand = new PublishCommand(this.loggingUserInterface.UserInterface, publishingService.Object);
 
@@ -415,7 +416,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             var publishingService = new Mock<IPublishingService>();
 
             // prepare publishing service
-            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(true);
+            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(new SuccessResult());
 
             var publishCommand = new PublishCommand(userInterface.Object, publishingService.Object);
 
@@ -440,7 +441,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             var publishingService = new Mock<IPublishingService>();
 
             // prepare publishing service
-            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(true);
+            publishingService.Setup(p => p.PublishPackage(packagePath, publishConfiguration)).Returns(new SuccessResult());
 
             var publishCommand = new PublishCommand(this.loggingUserInterface.UserInterface, publishingService.Object);
 

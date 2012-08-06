@@ -67,8 +67,9 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IFilesystemPersistence<SourceRepositoryConfiguration[]>>().Singleton().Use<FilesystemPersistence<SourceRepositoryConfiguration[]>>();
 
                         /* console */
-                        config.For<IUserInterface>().Singleton().Use<ConsoleUserInterface>();
                         config.For<IConsoleTextManipulation>().Use<ConsoleTextManipulation>();
+                        config.For<IServiceResultVisualizer>().Use<ConsoleServiceResultVisualizer>();
+                        config.For<IUserInterface>().Singleton().Use<ConsoleUserInterface>();
 
                         /* powershell */
                         config.For<IPowerShellHost>().Use<PowerShellHost>();

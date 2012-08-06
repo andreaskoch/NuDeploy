@@ -5,6 +5,7 @@ using Moq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 using NuGet;
@@ -129,10 +130,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
             var publishingService = new PublishingService(filesystemAccessor.Object, packageServerFactory.Object, publishConfigurationAccessor.Object);
 
             // Act
-            bool result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
+            var result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -154,10 +155,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
             var publishingService = new PublishingService(filesystemAccessor.Object, packageServerFactory.Object, publishConfigurationAccessor.Object);
 
             // Act
-            bool result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
+            var result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -179,10 +180,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
             var publishingService = new PublishingService(filesystemAccessor.Object, packageServerFactory.Object, publishConfigurationAccessor.Object);
 
             // Act
-            bool result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
+            var result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -207,10 +208,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
             var publishingService = new PublishingService(filesystemAccessor.Object, packageServerFactory.Object, publishConfigurationAccessor.Object);
 
             // Act
-            bool result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
+            var result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -237,10 +238,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
             var publishingService = new PublishingService(filesystemAccessor.Object, packageServerFactory.Object, publishConfigurationAccessor.Object);
 
             // Act
-            bool result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
+            var result = publishingService.PublishPackage(packagePath, packageServerConfigurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         #endregion
