@@ -25,7 +25,7 @@ namespace NuDeploy.Core.Services.Transformation
             this.configurationFileTransformer = configurationFileTransformer;
         }
 
-        public bool TransformSystemSettings(string packageFolder, string[] systemSettingTransformationProfileNames)
+        public IServiceResult TransformSystemSettings(string packageFolder, string[] systemSettingTransformationProfileNames)
         {
             if (string.IsNullOrWhiteSpace(packageFolder))
             {
@@ -46,16 +46,26 @@ namespace NuDeploy.Core.Services.Transformation
                 string transformationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, transformationFilename);
                 string destinationFilePath = Path.Combine(packageFolder, SystemSettingsFolder, TransformedSystemSettingsFileName);
 
-                if (!this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath))
+                IServiceResult transformationResult = this.configurationFileTransformer.Transform(
+                    sourceFilePath, transformationFilePath, destinationFilePath);
+
+                if (transformationResult.Status == ServiceResultType.Failure)
                 {
-                    return false;
+                    return new FailureResult(
+                        Resources.PackageConfigurationTransformationService.TransformationProfileFailedMessageTemplate, systemSettingTransformationProfileName)
+                        {
+                            InnerResult = transformationResult
+                        };
                 }
 
                 // make the transformed file the source for the next transformation
                 sourceFilePath = destinationFilePath;
             }
 
-            return true;
+            return new SuccessResult(
+                Resources.PackageConfigurationTransformationService.TransformationSucceededMessageTemplate,
+                packageFolder,
+                string.Join(", ", systemSettingTransformationProfileNames));
         }
     }
 }

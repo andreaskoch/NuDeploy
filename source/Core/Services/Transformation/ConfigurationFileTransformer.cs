@@ -1,100 +1,64 @@
 using System;
-using System.Xml;
 
 using Microsoft.Web.Publishing.Tasks;
 
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
 
 namespace NuDeploy.Core.Services.Transformation
 {
     public class ConfigurationFileTransformer : IConfigurationFileTransformer
     {
-        private readonly IUserInterface userInterface;
-
         private readonly IFilesystemAccessor filesystemAccessor;
 
-        public ConfigurationFileTransformer(IUserInterface userInterface, IFilesystemAccessor filesystemAccessor)
+        public ConfigurationFileTransformer(IFilesystemAccessor filesystemAccessor)
         {
-            if (userInterface == null)
-            {
-                throw new ArgumentNullException("userInterface");
-            }
-
             if (filesystemAccessor == null)
             {
                 throw new ArgumentNullException("filesystemAccessor");
             }
 
-            this.userInterface = userInterface;
             this.filesystemAccessor = filesystemAccessor;
         }
 
-        public bool Transform(string sourceFilePath, string transformationFilePath, string destinationFilePath)
+        public IServiceResult Transform(string sourceFilePath, string transformationFilePath, string destinationFilePath)
         {
             if (string.IsNullOrWhiteSpace(sourceFilePath))
             {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.ConfigurationFileTransformer.SourceFilePathCannotBeNullOrEmptyMessageTemplate, transformationFilePath));
-
-                return false;
+                return new FailureResult(Resources.ConfigurationFileTransformer.SourceFilePathCannotBeNullOrEmptyMessageTemplate, transformationFilePath);
             }
 
             if (string.IsNullOrWhiteSpace(transformationFilePath))
             {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.ConfigurationFileTransformer.TransformationFilePathCannotBeNullOrEmptyMessageTemplate, transformationFilePath));
-
-                return false;
+                return new FailureResult(Resources.ConfigurationFileTransformer.TransformationFilePathCannotBeNullOrEmptyMessageTemplate, transformationFilePath);
             }
 
             if (string.IsNullOrWhiteSpace(destinationFilePath))
             {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.ConfigurationFileTransformer.DestinationFilePathCannotBeNullOrEmptyMessageTemplate, destinationFilePath));
-
-                return false;
+                return new FailureResult(Resources.ConfigurationFileTransformer.DestinationFilePathCannotBeNullOrEmptyMessageTemplate, destinationFilePath);
             }
 
             if (!this.filesystemAccessor.FileExists(sourceFilePath))
             {
-                this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.SourceFilePathDoesNotExistMessageTemplate, sourceFilePath));
-                return false;
+                return new FailureResult(Resources.ConfigurationFileTransformer.SourceFilePathDoesNotExistMessageTemplate, sourceFilePath);
             }
 
             if (!this.filesystemAccessor.FileExists(transformationFilePath))
             {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.ConfigurationFileTransformer.TransformationFilePathDoesNotExistMessageTemplate, transformationFilePath));
-
-                return false;
+                return new FailureResult(Resources.ConfigurationFileTransformer.TransformationFilePathDoesNotExistMessageTemplate, transformationFilePath);
             }
-
-            this.userInterface.WriteLine(
-                string.Format(
-                    Resources.ConfigurationFileTransformer.TransformationStartMessageTemplate,
-                    sourceFilePath,
-                    transformationFilePath,
-                    destinationFilePath));
 
             // read source document
             XmlTransformableDocument transformableDocument = this.GetSourceFile(sourceFilePath);
             if (transformableDocument == null)
             {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.ConfigurationFileTransformer.TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate, sourceFilePath));
-
-                return false;
+                return new FailureResult(Resources.ConfigurationFileTransformer.TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate, sourceFilePath);
             }
 
             // read transformation document
             XmlTransformation transformationFile = this.GetTransformationFile(transformationFilePath);
             if (transformationFile == null)
             {
-                this.userInterface.WriteLine(
-                    string.Format(Resources.ConfigurationFileTransformer.TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate, sourceFilePath));
-
-                return false;                
+                return new FailureResult(Resources.ConfigurationFileTransformer.TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate, sourceFilePath);                
             }
 
             // transform
@@ -104,32 +68,23 @@ namespace NuDeploy.Core.Services.Transformation
             }
             catch (Exception transformationException)
             {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.TransformationExceptionMessageTemplate,
-                        sourceFilePath,
-                        transformationFilePath,
-                        destinationFilePath,
-                        transformationException));
-
-                return false;
+                return new FailureResult(
+                    Resources.ConfigurationFileTransformer.TransformationExceptionMessageTemplate,
+                    sourceFilePath,
+                    transformationFilePath,
+                    destinationFilePath,
+                    transformationException);
             }
 
             // save
-            if (this.SaveTransformedFile(transformableDocument, destinationFilePath))
+            if (!this.SaveTransformedFile(transformableDocument, destinationFilePath))
             {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.TransformationSuccessMessageTemplate,
-                        sourceFilePath,
-                        transformationFilePath,
-                        destinationFilePath));
-
-                return true;
+                return new FailureResult(
+                    Resources.ConfigurationFileTransformer.TransformationFailedMessageTemplate, sourceFilePath, transformationFilePath, destinationFilePath);
             }
 
-            this.userInterface.WriteLine(Resources.ConfigurationFileTransformer.TransformationFailedMessage);
-            return false;
+            return new SuccessResult(
+                Resources.ConfigurationFileTransformer.TransformationSuccessMessageTemplate, sourceFilePath, transformationFilePath, destinationFilePath);
         }
 
         private XmlTransformableDocument GetSourceFile(string filePath)
@@ -143,24 +98,10 @@ namespace NuDeploy.Core.Services.Transformation
                     return transformableDocument;
                 }
             }
-            catch (XmlException xmlException)
+            catch (Exception)
             {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.GetSourceFileXmlExceptionMessageTemplate,
-                        filePath,
-                        xmlException));
+                return null;
             }
-            catch (Exception generalException)
-            {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.GetSourceFileGeneralExceptionMessageTemplate,
-                        filePath,
-                        generalException));
-            }
-
-            return null;
         }
 
         private XmlTransformation GetTransformationFile(string filePath)
@@ -170,24 +111,10 @@ namespace NuDeploy.Core.Services.Transformation
                 string transformationFileContent = this.filesystemAccessor.GetFileContent(filePath);
                 return new XmlTransformation(transformationFileContent, false, null);
             }
-            catch (XmlException xmlException)
+            catch (Exception)
             {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.GetTransformationFileXmlExceptionMessageTemplate,
-                        filePath,
-                        xmlException));
+                return null;
             }
-            catch (Exception generalException)
-            {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.GetTransformationFileGeneralExceptionMessageTemplate,
-                        filePath,
-                        generalException));
-            }
-
-            return null;
         }
 
         private bool SaveTransformedFile(XmlTransformableDocument transformedDocument, string destinationFilePath)
@@ -204,11 +131,6 @@ namespace NuDeploy.Core.Services.Transformation
 
             try
             {
-                if (this.filesystemAccessor.FileExists(destinationFilePath))
-                {
-                    this.userInterface.WriteLine(string.Format(Resources.ConfigurationFileTransformer.DestinationFileAlreadyExistsMessageTemplate, destinationFilePath));
-                }
-
                 this.filesystemAccessor.EnsureParentDirectoryExists(destinationFilePath);
                 using (var textWriter = this.filesystemAccessor.GetTextWriter(destinationFilePath))
                 {
@@ -217,24 +139,10 @@ namespace NuDeploy.Core.Services.Transformation
 
                 return true;
             }
-            catch (XmlException xmlException)
+            catch (Exception)
             {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.SaveTransformedFileXmlExceptionMessageTemplate,
-                        destinationFilePath,
-                        xmlException));
+                return false;
             }
-            catch (Exception generalException)
-            {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.ConfigurationFileTransformer.SaveTransformedFileGeneralExceptionMessageTemplate,
-                        destinationFilePath,
-                        generalException));
-            }
-
-            return false;
         }
     }
 }

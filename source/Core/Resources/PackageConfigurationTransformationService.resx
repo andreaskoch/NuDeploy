@@ -117,37 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DestinationFileAlreadyExistsMessageTemplate" xml:space="preserve">
-    <value>The specified destination file "{0}" for the configuration file transformation does already exist. Please note that the file will be overidden.</value>
+  <data name="TransformationProfileFailedMessageTemplate" xml:space="preserve">
+    <value>The transformation of the "{0}" profile failed.</value>
   </data>
-  <data name="DestinationFilePathCannotBeNullOrEmptyMessageTemplate" xml:space="preserve">
-    <value>The specified destination file path "{0}" for the configuration file transformation cannot be null or empty.</value>
-  </data>
-  <data name="SourceFilePathCannotBeNullOrEmptyMessageTemplate" xml:space="preserve">
-    <value>The specified source file path "{0}" for the configuration file transformation cannot be null or empty.</value>
-  </data>
-  <data name="SourceFilePathDoesNotExistMessageTemplate" xml:space="preserve">
-    <value>The specified source file "{0}" for the configuration file transformation was not found.</value>
-  </data>
-  <data name="TransformationExceptionMessageTemplate" xml:space="preserve">
-    <value>An error occurred during the XML transformation (Source: {0}, Tranformation: {1}, Destination: {2}). {3}</value>
-  </data>
-  <data name="TransformationFailedBecauseSourceFileCouldNotBeReadMessageTemplate" xml:space="preserve">
-    <value>Transformation failed because the source file "{0}" could not be read.</value>
-  </data>
-  <data name="TransformationFailedBecauseTransformationFileCouldNotBeReadMessageTemplate" xml:space="preserve">
-    <value>Transformation failed because the transformation file "{0}" could not be read.</value>
-  </data>
-  <data name="TransformationFailedMessageTemplate" xml:space="preserve">
-    <value>The configuration file transformation failed (Source File: "{0}", Transformation File: "{1}", Target File: "{2}").</value>
-  </data>
-  <data name="TransformationFilePathCannotBeNullOrEmptyMessageTemplate" xml:space="preserve">
-    <value>The specified transformation file path "{0}" for the configuration file transformation cannot be null or empty.</value>
-  </data>
-  <data name="TransformationFilePathDoesNotExistMessageTemplate" xml:space="preserve">
-    <value>The specified transformation file "{0}" for the configuration file transformation was not found.</value>
-  </data>
-  <data name="TransformationSuccessMessageTemplate" xml:space="preserve">
-    <value>The configuration file has been transformed successfully (Source File: "{0}", Transformation File: "{1}", Target File: "{2}").</value>
+  <data name="TransformationSucceededMessageTemplate" xml:space="preserve">
+    <value>The transformation succeeded (Package Folder: \"{0}\", Transformation Profiles: {1}).</value>
   </data>
 </root>

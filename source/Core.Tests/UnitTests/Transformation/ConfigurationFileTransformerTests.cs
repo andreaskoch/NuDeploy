@@ -5,7 +5,7 @@ using System.Text;
 using Moq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
@@ -21,11 +21,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
         public void Constructor_AllParametersAreSet_ObjectIsInstantiated()
         {
             // Arrange
-            IUserInterface userInterface = new Mock<IUserInterface>().Object;
             IFilesystemAccessor filesystemAccessor = new Mock<IFilesystemAccessor>().Object;
 
             // Act
-            var result = new ConfigurationFileTransformer(userInterface, filesystemAccessor);
+            var result = new ConfigurationFileTransformer(filesystemAccessor);
 
             // Assert
             Assert.IsNotNull(result);
@@ -33,26 +32,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_UserInterfaceParameterIsNotSet_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            IUserInterface userInterface = null;
-            IFilesystemAccessor filesystemAccessor = new Mock<IFilesystemAccessor>().Object;
-
-            // Act
-            new ConfigurationFileTransformer(userInterface, filesystemAccessor);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_FilesystemAccessorParameterIsNotSet_ArgumentNullExceptionIsThrown()
         {
             // Arrange
-            IUserInterface userInterface = new Mock<IUserInterface>().Object;
             IFilesystemAccessor filesystemAccessor = null;
 
             // Act
-            new ConfigurationFileTransformer(userInterface, filesystemAccessor);
+            new ConfigurationFileTransformer(filesystemAccessor);
         }
 
         #endregion
@@ -65,18 +51,17 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
         public void Transform_SourceFilePathParameterIsInvalid_ResultIsFalse(string sourceFilePath)
         {
             // Arrange
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             var transformationFilePath = "transform.config";
             var destinationFilePath = "destination.config";
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -87,17 +72,16 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var transformationFilePath = "transform.config";
             var destinationFilePath = "destination.config";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(false);
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase(null)]
@@ -106,18 +90,17 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
         public void Transform_TransformationFilePathParameterIsInvalid_ResultIsFalse(string transformationFilePath)
         {
             // Arrange
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             var sourceFilePath = "source.config";
             var destinationFilePath = "destination.config";
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase(null)]
@@ -126,18 +109,17 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
         public void Transform_DestinationFilePathParameterIsInvalid_ResultIsFalse(string destinationFilePath)
         {
             // Arrange
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             var sourceFilePath = "source.config";
             var transformationFilePath = "transform.config";
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -148,19 +130,17 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var transformationFilePath = "transform.config";
             var destinationFilePath = "destination.config";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
-
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(false);
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase("")]
@@ -171,19 +151,18 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var transformationFilePath = "transform.config";
             var destinationFilePath = "destination.config";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -194,19 +173,18 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var transformationFilePath = "transform.config";
             var destinationFilePath = "destination.config";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Throws(new IOException());
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase("")]
@@ -221,7 +199,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
 
             string sourceFileContent = "<configuration><appSettings><add key=\"Key1\" value=\"Not-Transformed\"/></appSettings></configuration>";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
@@ -229,13 +206,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
             filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Returns(transformationFileContent);
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -248,7 +225,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
 
             string sourceFileContent = "<configuration><appSettings><add key=\"Key1\" value=\"Not-Transformed\"/></appSettings></configuration>";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
@@ -256,13 +232,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             filesystemAccessorMock.Setup(f => f.GetTextReader(sourceFilePath)).Returns(() => TestUtilities.GetStreamReaderForText(sourceFileContent));
             filesystemAccessorMock.Setup(f => f.GetFileContent(transformationFilePath)).Throws(new IOException());
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -280,7 +256,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                 "<configuration xmlns:xdt=\"http://schemas.microsoft.com/XML-Document-Transform\"><appSettings xdt:Transform=\"Replace\"><add key=\"Key1\" value=\""
                 + uniqueString + "\"/></appSettings></configuration>";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
@@ -292,13 +267,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var stringWriter = new StringWriter(destinationFileContent);
             filesystemAccessorMock.Setup(f => f.GetTextWriter(destinationFilePath)).Returns(stringWriter);
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
-            bool result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsNotNull(destinationFileContent.ToString());
             Assert.IsTrue(destinationFileContent.ToString().Contains(uniqueString));
         }
@@ -316,7 +291,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             string sourceFileContent = "<configuration><appSettings><add key=\"Key1\" value=\"Not-Transformed\"/></appSettings></configuration>";
             string transformationFileContent = "<configuration xmlns:xdt=\"http://schemas.microsoft.com/XML-Document-Transform\"><appSettings xdt:Transform=\"Replace\"><add key=\"Key1\" value=\"transformed\"/></appSettings></configuration>";
 
-            var userInterfaceMock = new Mock<IUserInterface>();
             var filesystemAccessorMock = new Mock<IFilesystemAccessor>();
             filesystemAccessorMock.Setup(f => f.FileExists(sourceFilePath)).Returns(true);
             filesystemAccessorMock.Setup(f => f.FileExists(transformationFilePath)).Returns(true);
@@ -335,7 +309,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var stringWriter = new StringWriter(destinationFileContent);
             filesystemAccessorMock.Setup(f => f.GetTextWriter(destinationFilePath)).Returns(stringWriter);
 
-            var configurationFileTransformer = new ConfigurationFileTransformer(userInterfaceMock.Object, filesystemAccessorMock.Object);
+            var configurationFileTransformer = new ConfigurationFileTransformer(filesystemAccessorMock.Object);
 
             // Act
             configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);

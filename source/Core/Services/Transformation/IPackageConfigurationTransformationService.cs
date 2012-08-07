@@ -2,6 +2,6 @@ namespace NuDeploy.Core.Services.Transformation
 {
     public interface IPackageConfigurationTransformationService
     {
-        bool TransformSystemSettings(string packageFolder, string[] systemSettingTransformationProfileNames);
+        IServiceResult TransformSystemSettings(string packageFolder, string[] systemSettingTransformationProfileNames);
     }
 }

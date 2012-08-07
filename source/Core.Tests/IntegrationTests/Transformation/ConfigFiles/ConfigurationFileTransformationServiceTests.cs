@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Moq;
-
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
@@ -24,9 +21,8 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation.ConfigFiles
         [TestFixtureSetUp]
         public void Setup()
         {
-            var userInterface = new Mock<IUserInterface>();
             this.filesystemAccessor = new PhysicalFilesystemAccessor(new DefaultFileEncodingProvider());
-            IConfigurationFileTransformer configurationFileTransformer = new ConfigurationFileTransformer(userInterface.Object, this.filesystemAccessor);
+            IConfigurationFileTransformer configurationFileTransformer = new ConfigurationFileTransformer(this.filesystemAccessor);
             this.configurationFileTransformationService = new ConfigurationFileTransformationService(this.filesystemAccessor, configurationFileTransformer);
         }
 

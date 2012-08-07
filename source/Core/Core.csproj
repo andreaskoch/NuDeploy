@@ -92,6 +92,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\PackageConfigurationTransformationService.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PackageConfigurationTransformationService.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PackageInstaller.Designer.cs">
       <DependentUpon>PackageInstaller.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -227,6 +232,10 @@
     <EmbeddedResource Include="Resources\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PackageConfigurationTransformationService.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackageConfigurationTransformationService.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PackageInstaller.resx">
       <Generator>ResXFileCodeGenerator</Generator>

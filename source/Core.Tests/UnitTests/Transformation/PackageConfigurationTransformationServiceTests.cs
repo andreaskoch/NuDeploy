@@ -2,6 +2,7 @@
 
 using Moq;
 
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
@@ -86,10 +87,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var packageConfigurationTransformationService = new PackageConfigurationTransformationService(configurationFileTransformer.Object);
 
             // Act
-            bool result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
+            var result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -100,7 +101,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var systemSettingTransformationProfileNames = new[] { "profile1", "profile2", "profile3" };
 
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
             var packageConfigurationTransformationService = new PackageConfigurationTransformationService(configurationFileTransformer.Object);
 
@@ -133,16 +134,16 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var systemSettingTransformationProfileNames = new[] { "profile1", "profile2", "profile3" };
 
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.Is<string>(transformationFilePath => transformationFilePath.Contains(profileWhichFailsTheTransformation) == false), It.IsAny<string>())).Returns(true);
-            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.Is<string>(transformationFilePath => transformationFilePath.Contains(profileWhichFailsTheTransformation) == true), It.IsAny<string>())).Returns(false);
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.Is<string>(transformationFilePath => transformationFilePath.Contains(profileWhichFailsTheTransformation) == false), It.IsAny<string>())).Returns(new SuccessResult());
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.Is<string>(transformationFilePath => transformationFilePath.Contains(profileWhichFailsTheTransformation) == true), It.IsAny<string>())).Returns(new FailureResult());
 
             var packageConfigurationTransformationService = new PackageConfigurationTransformationService(configurationFileTransformer.Object);
 
             // Act
-            bool result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
+            var result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -153,15 +154,15 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
             var systemSettingTransformationProfileNames = new[] { "profile1", "profile2", "profile3" };
 
             var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
-            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
             var packageConfigurationTransformationService = new PackageConfigurationTransformationService(configurationFileTransformer.Object);
 
             // Act
-            bool result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
+            var result = packageConfigurationTransformationService.TransformSystemSettings(packageFolder, systemSettingTransformationProfileNames);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion

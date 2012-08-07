@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
 
-using Moq;
-
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
@@ -24,9 +22,8 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
         [TestFixtureSetUp]
         public void Setup()
         {
-            IUserInterface userInterface = new Mock<IUserInterface>().Object;
             this.filesystemAccessor = new PhysicalFilesystemAccessor(new DefaultFileEncodingProvider());
-            this.configurationFileTransformer = new ConfigurationFileTransformer(userInterface, this.filesystemAccessor);
+            this.configurationFileTransformer = new ConfigurationFileTransformer(this.filesystemAccessor);
         }
 
         [SetUp]
@@ -57,12 +54,12 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
             string sourceFileContent = File.ReadAllText(sourceFilePath);
 
             // Act
-            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
             string destinationFileContent = File.ReadAllText(destinationFilePath);
 
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsTrue(File.Exists(destinationFilePath));
             Assert.AreNotEqual(sourceFileContent, destinationFileContent);
         }
@@ -79,11 +76,11 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
             File.WriteAllText(destinationFilePath, destinationFileContent);
 
             // Act
-            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
             string newDestinationFileContent = File.ReadAllText(destinationFilePath);
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.AreNotEqual(destinationFileContent, newDestinationFileContent);
         }
 
@@ -96,10 +93,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
             var destinationFilePath = this.GetTempFolderPath("destination.config");
 
             // Act
-            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
             Assert.IsFalse(File.Exists(destinationFilePath));
         }
 
@@ -112,10 +109,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
             var destinationFilePath = this.GetTempFolderPath(Path.Combine("some", "very", "nested", "folder", "structure", "destination.config"));
 
             // Act
-            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsTrue(File.Exists(destinationFilePath));
         }
 
@@ -131,11 +128,11 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
             var reader = new StreamReader(destinationFilePath);
 
             // Act
-            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
             reader.Close();
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -150,11 +147,11 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation
             var writer = new StreamWriter(destinationFilePath);
 
             // Act
-            bool result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
+            var result = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath);
 
             // Assert
             writer.Close();
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         #endregion

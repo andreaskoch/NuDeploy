@@ -188,7 +188,10 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // apply system setting transformations
-            if (!this.packageConfigurationTransformationService.TransformSystemSettings(extractedPackage.Folder, packageConfigurationProfiles))
+            IServiceResult transformationResult = this.packageConfigurationTransformationService.TransformSystemSettings(
+                extractedPackage.Folder, packageConfigurationProfiles);
+
+            if (transformationResult.Status == ServiceResultType.Failure)
             {
                 return false;
             }
