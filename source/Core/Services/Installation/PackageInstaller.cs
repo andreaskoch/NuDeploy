@@ -188,16 +188,19 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // apply system setting transformations
-            IServiceResult transformationResult = this.packageConfigurationTransformationService.TransformSystemSettings(
+            IServiceResult systemSettingTransformationResult = this.packageConfigurationTransformationService.TransformSystemSettings(
                 extractedPackage.Folder, packageConfigurationProfiles);
 
-            if (transformationResult.Status == ServiceResultType.Failure)
+            if (systemSettingTransformationResult.Status == ServiceResultType.Failure)
             {
                 return false;
             }
 
             // apply configuraton file transformations
-            if (!this.configurationFileTransformationService.TransformConfigurationFiles(extractedPackage.Folder, buildConfigurationProfiles))
+            IServiceResult configFileTransformationResult = this.configurationFileTransformationService.TransformConfigurationFiles(
+                extractedPackage.Folder, buildConfigurationProfiles);
+
+            if (configFileTransformationResult.Status == ServiceResultType.Failure)
             {
                 return false;
             }

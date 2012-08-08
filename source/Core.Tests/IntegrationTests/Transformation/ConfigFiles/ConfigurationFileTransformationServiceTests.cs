@@ -5,6 +5,7 @@ using System.Linq;
 
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
@@ -48,7 +49,7 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation.ConfigFiles
             }
 
             // Act
-            bool result = this.configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
+            var result = this.configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
 
             // Assert that content has changed
             foreach (var keyValuePair in configFilesAndTheirContent)
@@ -66,7 +67,7 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation.ConfigFiles
             Assert.AreNotEqual(allConfigurationFilesBeforeTransformation.Count, allConfigurationFilesAfterTransformation.Count);
 
             // Assert that result is true
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #region utility methods

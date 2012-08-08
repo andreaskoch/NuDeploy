@@ -40,7 +40,7 @@ namespace NuDeploy.Core.Services.Transformation
             this.configurationFileTransformer = configurationFileTransformer;
         }
 
-        public bool TransformConfigurationFiles(string baseDirectoryPath, string[] transformationProfileNames)
+        public IServiceResult TransformConfigurationFiles(string baseDirectoryPath, string[] transformationProfileNames)
         {
             if (string.IsNullOrWhiteSpace(baseDirectoryPath))
             {
@@ -54,7 +54,7 @@ namespace NuDeploy.Core.Services.Transformation
 
             if (transformationProfileNames.Length == 0)
             {
-                return true;
+                return new SuccessResult(Resources.ConfigurationFileTransformationService.NoTransformationProfilesSupplied);
             }
             
             // get all app and web.configs in the content folder
@@ -81,7 +81,16 @@ namespace NuDeploy.Core.Services.Transformation
                     string transformationFilePath = Path.Combine(sourceFileFolder, transformationFilename);
 
                     // transform
-                    this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath: sourceFilePath);
+                    IServiceResult transformationResult = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath: sourceFilePath);
+                    if (transformationResult.Status == ServiceResultType.Failure)
+                    {
+                        return new FailureResult(
+                            Resources.ConfigurationFileTransformationService.TransformationFailedForProfileMessageTemplate,
+                            systemSettingTransformationProfileName)
+                            {
+                                InnerResult = transformationResult
+                            };
+                    }
                 }
 
                 // cleanup
@@ -91,11 +100,16 @@ namespace NuDeploy.Core.Services.Transformation
 
                 foreach (var transformationFile in transformationFiles)
                 {
-                    this.filesystemAccessor.DeleteFile(transformationFile.FullName);
+                    var filePath = transformationFile.FullName;
+                    if (!this.filesystemAccessor.DeleteFile(filePath))
+                    {
+                        return new FailureResult(Resources.ConfigurationFileTransformationService.CleanupFailedForFileMessageTemplate, filePath);
+                    }
                 }
             }
 
-            return true;
+            return new SuccessResult(
+                Resources.ConfigurationFileTransformationService.SuccessMessageTemplate, baseDirectoryPath, string.Join(", ", transformationProfileNames));
         }
     }
 }

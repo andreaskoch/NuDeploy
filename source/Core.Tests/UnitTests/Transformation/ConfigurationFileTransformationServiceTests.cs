@@ -5,6 +5,7 @@ using System.IO;
 using Moq;
 
 using NuDeploy.Core.Common.FilesystemAccess;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Transformation;
 
 using NUnit.Framework;
@@ -108,10 +109,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                 filesystemAccessor.Object, configurationFileTransformer.Object);
 
             // Act
-            bool result = configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
+            var result = configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -132,10 +133,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                 filesystemAccessor.Object, configurationFileTransformer.Object);
 
             // Act
-            bool result = configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
+            var result = configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -181,6 +182,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                 };
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
 
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
+
             var configurationFileTransformationService = new ConfigurationFileTransformationService(
                 filesystemAccessor.Object, configurationFileTransformer.Object);
 
@@ -201,6 +204,81 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
         }
 
         [Test]
+        public void TransformConfigurationFiles_ConfigurationFilesFound_TransformFails_ResultIsFalse()
+        {
+            // Arrange
+            string baseDirectoryPath = Environment.CurrentDirectory;
+            var transformationProfileNames = new[] { "PROD" };
+
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+
+            // prepare filesystem accessor
+            var configurationFiles = new List<FileInfo>
+                {
+                    new FileInfo(Path.Combine(baseDirectoryPath, "websites", "website.A", "web.config")),
+                    new FileInfo(Path.Combine(baseDirectoryPath, "webapplications", "webapp", "web.config")),
+                    new FileInfo(Path.Combine(baseDirectoryPath, "applications", "some-app", "app.config"))
+                };
+            filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
+
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FailureResult());
+
+            var configurationFileTransformationService = new ConfigurationFileTransformationService(
+                filesystemAccessor.Object, configurationFileTransformer.Object);
+
+            // Act
+            var result = configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
+        public void TransformConfigurationFiles_ConfigurationFilesFound_TransformationFileCleanupFails_ResultIsFalse()
+        {
+            // Arrange
+            string baseDirectoryPath = Environment.CurrentDirectory;
+            var transformationProfileNames = new[] { "PROD" };
+
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var configurationFileTransformer = new Mock<IConfigurationFileTransformer>();
+
+            // prepare filesystem accessor
+            var configurationFiles = new List<FileInfo>
+                {
+                    new FileInfo(Path.Combine(baseDirectoryPath, "websites", "website.A", "web.config")),
+                    new FileInfo(Path.Combine(baseDirectoryPath, "webapplications", "webapp", "web.config")),
+                    new FileInfo(Path.Combine(baseDirectoryPath, "applications", "some-app", "app.config"))
+                };
+            filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
+            filesystemAccessor.Setup(f => f.DeleteFile(It.IsAny<string>())).Returns(false);
+
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
+
+            var transformationFileWebsite = new FileInfo(Path.Combine(baseDirectoryPath, "websites", "website.A", "web.PROD.config"));
+            filesystemAccessor.Setup(f => f.GetFiles(It.Is<string>(folder => folder.StartsWith(Path.Combine(baseDirectoryPath, "websites", "website.A"))))).
+                Returns(new List<FileInfo> { transformationFileWebsite });
+
+            var transformationFileWebApp = new FileInfo(Path.Combine(baseDirectoryPath, "webapplications", "webapp", "web.PROD.config"));
+            filesystemAccessor.Setup(f => f.GetFiles(It.Is<string>(folder => folder.StartsWith(Path.Combine(baseDirectoryPath, "webapplications", "webapp"))))).
+                Returns(new List<FileInfo> { transformationFileWebApp });
+
+            var transformationFileApp = new FileInfo(Path.Combine(baseDirectoryPath, "applications", "some-app", "app.PROD.config"));
+            filesystemAccessor.Setup(f => f.GetFiles(It.Is<string>(folder => folder.StartsWith(Path.Combine(baseDirectoryPath, "applications", "some-app"))))).
+                Returns(new List<FileInfo> { transformationFileApp });
+
+            var configurationFileTransformationService = new ConfigurationFileTransformationService(
+                filesystemAccessor.Object, configurationFileTransformer.Object);
+
+            // Act
+            var result = configurationFileTransformationService.TransformConfigurationFiles(baseDirectoryPath, transformationProfileNames);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
         public void TransformConfigurationFiles_ConfigurationFilesFound_TransformationFilesAreDeletedAfterTheTransformation()
         {
             // Arrange
@@ -218,6 +296,9 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                     new FileInfo(Path.Combine(baseDirectoryPath, "applications", "some-app", "app.config"))
                 };
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
+            filesystemAccessor.Setup(f => f.DeleteFile(It.IsAny<string>())).Returns(true);
+
+            configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
             var transformationFileWebsite = new FileInfo(Path.Combine(baseDirectoryPath, "websites", "website.A", "web.PROD.config"));
             filesystemAccessor.Setup(f => f.GetFiles(It.Is<string>(folder => folder.StartsWith(Path.Combine(baseDirectoryPath, "websites", "website.A"))))).
