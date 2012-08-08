@@ -6,7 +6,6 @@ using Moq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
-using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.PowerShell;
@@ -31,7 +30,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -45,7 +43,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -65,7 +62,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
         {
             // Arrange
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -79,7 +75,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 null,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -96,7 +91,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
         {
             // Arrange
             var applicationInformation = new ApplicationInformation();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -109,38 +103,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Act
             new PackageInstaller(
                 applicationInformation,
-                null,
-                userInterface.Object,
-                packageConfigurationAccessor.Object,
-                packageRepositoryBrowser.Object,
-                powerShellExecutor.Object,
-                installationLogicProvider.Object,
-                packageUninstaller.Object,
-                nugetPackageExtractor.Object,
-                packageConfigurationTransformationService.Object,
-                configurationFileTransformationService.Object);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_UserInterfaceParametersIsNotSet_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var applicationInformation = new ApplicationInformation();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
-            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
-            var powerShellExecutor = new Mock<IPowerShellExecutor>();
-            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
-            var packageUninstaller = new Mock<IPackageUninstaller>();
-            var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
-            var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
-            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
-
-            // Act
-            new PackageInstaller(
-                applicationInformation,
-                filesystemAccessor.Object,
                 null,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
@@ -159,7 +121,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
             var installationLogicProvider = new Mock<IInstallationLogicProvider>();
@@ -172,7 +133,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 null,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -190,7 +150,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
             var installationLogicProvider = new Mock<IInstallationLogicProvider>();
@@ -203,7 +162,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 null,
                 powerShellExecutor.Object,
@@ -221,7 +179,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var installationLogicProvider = new Mock<IInstallationLogicProvider>();
@@ -234,7 +191,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 null,
@@ -252,7 +208,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -265,7 +220,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -283,7 +237,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -296,7 +249,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -314,7 +266,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -327,7 +278,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -345,7 +295,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -358,7 +307,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -376,7 +324,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // Arrange
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -389,7 +336,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -418,7 +364,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -431,7 +376,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -458,7 +402,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -471,7 +414,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -500,7 +442,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -513,7 +454,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -541,7 +481,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -554,7 +493,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -580,7 +518,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -597,7 +534,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -608,10 +544,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -626,7 +562,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -650,7 +585,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -661,10 +595,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -679,7 +613,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -700,12 +633,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
             // configure installation logic
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(false);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new FailureResult());
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -716,10 +648,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -735,7 +667,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -755,8 +686,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             // configure uninstaller
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(false);
@@ -764,7 +695,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -775,10 +705,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
             nugetPackageExtractor.Verify(e => e.Extract(package.Object, It.IsAny<string>()), Times.Never());
         }
 
@@ -796,7 +726,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -816,8 +745,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             // configure uninstaller
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(false);
@@ -825,7 +754,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -854,7 +782,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -874,8 +801,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -886,7 +813,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -897,10 +823,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -915,7 +841,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -935,8 +860,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -950,7 +875,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -961,10 +885,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -979,7 +903,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -999,8 +922,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -1015,7 +938,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -1026,10 +948,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -1044,7 +966,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -1064,8 +985,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -1081,7 +1002,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -1092,10 +1012,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -1110,7 +1030,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -1130,8 +1049,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Id).Returns(packageId);
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -1148,7 +1067,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -1159,10 +1077,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -1177,7 +1095,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -1198,8 +1115,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Version).Returns(new SemanticVersion(1, 0, 0, 0));
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -1216,7 +1133,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -1245,7 +1161,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             var applicationInformation = new ApplicationInformation();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var userInterface = new Mock<IUserInterface>();
             var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
             var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
             var powerShellExecutor = new Mock<IPowerShellExecutor>();
@@ -1266,8 +1181,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             package.Setup(p => p.Version).Returns(new SemanticVersion(1, 0, 0, 0));
             packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
 
-            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(true);
-            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(true);
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
 
@@ -1281,10 +1196,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // configure powershell script execution
             powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
+            packageConfigurationAccessor.Setup(p => p.AddOrUpdate(It.IsAny<PackageInfo>())).Returns(true);
+
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
                 filesystemAccessor.Object,
-                userInterface.Object,
                 packageConfigurationAccessor.Object,
                 packageRepositoryBrowser.Object,
                 powerShellExecutor.Object,
@@ -1295,10 +1211,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 configurationFileTransformationService.Object);
 
             // Act
-            bool result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion

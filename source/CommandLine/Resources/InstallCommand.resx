@@ -138,6 +138,12 @@
   <data name="DeploymentTypeWasNotRecognizedMessageTemplate" xml:space="preserve">
     <value>The deployment type "{0}" is unknown. Please use one of these instead: {1}.</value>
   </data>
+  <data name="InstallationFailedMessageTemplate" xml:space="preserve">
+    <value>The installation of package "{0}" failed (Deployment Type: {1}, Force Installation: {2}, Systemsetting Transformations: {3}, Buildconfiguration Transformations: {4}).</value>
+  </data>
+  <data name="InstallationSucceededMessageTemplate" xml:space="preserve">
+    <value>The installation of package "{0}" succeeded (Deployment Type: {1}, Force Installation: {2}, Systemsetting Transformations: {3}, Buildconfiguration Transformations: {4}).</value>
+  </data>
   <data name="NoPackageIdSpecifiedMessage" xml:space="preserve">
     <value>No package id specified.</value>
   </data>

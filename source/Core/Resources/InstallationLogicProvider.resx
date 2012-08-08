@@ -117,79 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeletingPackageFolderMessageTemplate" xml:space="preserve">
-    <value>Deleting package folder "{0}".</value>
-  </data>
-  <data name="DownloadingPackageMessageTemplate" xml:space="preserve">
-    <value>Downloading package "{0}" (Version: {1}) to folder "{2}".</value>
-  </data>
-  <data name="InstallationFinishedMessage" xml:space="preserve">
-    <value>Installation finished.</value>
-  </data>
-  <data name="InstallScriptNotFoundMessageTemplate" xml:space="preserve">
-    <value>Install script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
-  </data>
-  <data name="LatestVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
-    <value>You already have the latest version installed: {0} (Version: {1}).</value>
-  </data>
-  <data name="NewerVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
-    <value>You already have a more recent version installed: {0} (Version: {1}). Use the -{2} option if you still want to install this older version.</value>
-  </data>
-  <data name="PackageDownloadedMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" (Version: {1}) has been downloaded to folder "{2}".</value>
-  </data>
-  <data name="PackageIsNotInstalledMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" is not installed in the current folder.</value>
-  </data>
-  <data name="PackageNotFoundMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" was not found at "{1}". Please check your spelling or your package source configuration.</value>
-  </data>
-  <data name="PackageRemovalFailedMessageTemplate" xml:space="preserve">
-    <value>The removal of the the previous version of "{0}" failed.</value>
-  </data>
-  <data name="StartingInstallationMessageTemplate" xml:space="preserve">
-    <value>Starting installation of package "{0}" (Version: {1}).</value>
-  </data>
-  <data name="StartingUninstallMessageTemplate" xml:space="preserve">
-    <value>Uninstalling package "{0} (Version {1})".</value>
-  </data>
-  <data name="UninstallScriptNotFoundMessageTemplate" xml:space="preserve">
-    <value>Uninstall script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
-  </data>
-  <data name="NoPackageRepositoryConfigurationsAvailable" xml:space="preserve">
-    <value>There are no package repositories configured. Please check your package repository configuration.</value>
-  </data>
-  <data name="ExecutingUninstallScriptMessageTemplate" xml:space="preserve">
-    <value>Executing uninstall script "{0}".</value>
-  </data>
-  <data name="RemovingPackageFromConfigurationMessageTemplate" xml:space="preserve">
-    <value>Removing package "{0}" Version({1}) from the package configuration.</value>
-  </data>
-  <data name="ExecutingUninstallScriptFailedMessageTemplate" xml:space="preserve">
-    <value>Executing the uninstall script "{0}" failed.</value>
-  </data>
-  <data name="PackageSuccessfullyRemovedMessageTemplate" xml:space="preserve">
-    <value>"{0}" has been successfully removed.</value>
-  </data>
-  <data name="ConfigurationFileTransformationFailedMessageTemplate" xml:space="preserve">
-    <value>The installation of the package "{0}" failed because the configuration files have not been transformed successfully.</value>
-  </data>
   <data name="InstallationIsNotRequiredMessageTemplate" xml:space="preserve">
-    <value>An installation/update of the package "{0}" is not required.</value>
+    <value>An installation of the package "{0}" in version "{1}" is not required because the currently installed version "{2}" is newer.</value>
   </data>
-  <data name="InstallationScriptExecutionFailedMessageTemplate" xml:space="preserve">
-    <value>The installation script "{0}" has not been executed successfully.</value>
+  <data name="InstallationIsRequiredMessageTemplate" xml:space="preserve">
+    <value>An installation of the package "{0}" in version "{1}" is required because the currently installed version "{2}" is older.</value>
   </data>
-  <data name="PackageCouldNotBeAddedToConfigurationMessageTemplate" xml:space="preserve">
-    <value>The package "{0}" in version "{1}" could not be added the package configuration.</value>
+  <data name="InstallationIsRequiredPackageIsNotInstalledMessageTemplate" xml:space="preserve">
+    <value>An installation of the package "{0}" in version "{1}" is required. The package is currently not installed.</value>
   </data>
-  <data name="PackageExtractionFailedMessageTemplate" xml:space="preserve">
-    <value>Could not extract the package "{0}" to folder "{1}".</value>
+  <data name="InstallIsRequiredForceSwitchIsSetMessageTemplate" xml:space="preserve">
+    <value>Installation of the package "{0}" in version "{1}" is required. The force option has been set.</value>
   </data>
-  <data name="PackageHasBeenSuccessfullyInstalledMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" in version "{1}" has been installed successfully.</value>
+  <data name="UninstallIsNotRequiredDeploymentTypeIsUpdateMessageTemplate" xml:space="preserve">
+    <value>An uninstall of package "{0}" is not necessary because the deployment is executed in the update-mode.</value>
   </data>
-  <data name="SystemSettingTransformationFailedMessageTemplate" xml:space="preserve">
-    <value>The installation of the package "{0}" failed because the system settings have not been transformed successfully.</value>
+  <data name="UninstallIsNotRequiredMessageTemplate" xml:space="preserve">
+    <value>An uninstall of package "{0}" is not necessary. The currently installed package is newer than the one you are trying to install (Installed Version: {1}, Package Version: {2}).</value>
+  </data>
+  <data name="UninstallIsNotRequiredPackageIsNotInstalledMessageTemplate" xml:space="preserve">
+    <value>An uninstall of package "{0}" is not necessary because the package is currently not installed.</value>
+  </data>
+  <data name="UninstallIsRequiredForceSwitchIsSetMessageTemplate" xml:space="preserve">
+    <value>An uninstall of package "{0}" is necessary. The force option has been set.</value>
+  </data>
+  <data name="UninstallIsRequiredNewPackageVersionIsGreaterThanCurrentVersionMessageTemplate" xml:space="preserve">
+    <value>An uninstall of package "{0}" is necessary. The new package version "{1}" is newer than the currently installed version "{2}".</value>
   </data>
 </root>

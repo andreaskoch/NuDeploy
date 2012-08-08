@@ -7,6 +7,7 @@ using Moq;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 
 using NUnit.Framework;
@@ -214,6 +215,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -241,6 +246,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -268,6 +277,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -303,6 +316,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -338,6 +355,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -371,6 +392,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -406,6 +431,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -445,6 +474,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -483,6 +516,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 
@@ -511,6 +548,10 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var packageInstaller = new Mock<IPackageInstaller>();
+            packageInstaller.Setup(
+                p => p.Install(It.IsAny<string>(), It.IsAny<DeploymentType>(), It.IsAny<bool>(), It.IsAny<string[]>(), It.IsAny<string[]>())).Returns(
+                    new SuccessResult());
+
             var deploymentTypeParser = new Mock<IDeploymentTypeParser>();
             deploymentTypeParser.Setup(d => d.GetDeploymentType(deploymentTypeString)).Returns(DeploymentType.Full);
 

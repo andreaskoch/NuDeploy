@@ -21,7 +21,7 @@ namespace NuDeploy.Core.Services.Installation.Status
             this.installationStatusProvider = installationStatusProvider;
         }
 
-        public bool IsInstallRequired(string packageId, SemanticVersion newPackageVersion, bool forceInstallation)
+        public IServiceResult IsInstallRequired(string packageId, SemanticVersion newPackageVersion, bool forceInstallation)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -35,19 +35,32 @@ namespace NuDeploy.Core.Services.Installation.Status
 
             if (forceInstallation)
             {
-                return true;
+                return new SuccessResult(
+                    Resources.InstallationLogicProvider.InstallIsRequiredForceSwitchIsSetMessageTemplate, packageId, newPackageVersion);
             }
 
             NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId).FirstOrDefault(p => p.IsInstalled);
             if (installedPackage == null)
             {
-                return true;
+                return new SuccessResult(
+                    Resources.InstallationLogicProvider.InstallationIsRequiredPackageIsNotInstalledMessageTemplate, packageId, newPackageVersion);
             }
 
-            return newPackageVersion > installedPackage.Version;
+            bool newVersionIsGreatedThanTheInstalledVersion = newPackageVersion > installedPackage.Version;
+            if (newVersionIsGreatedThanTheInstalledVersion)
+            {
+                return new SuccessResult(
+                    Resources.InstallationLogicProvider.InstallationIsRequiredMessageTemplate,
+                    packageId,
+                    newPackageVersion,
+                    installedPackage.Version);
+            }
+
+            return new FailureResult(
+                Resources.InstallationLogicProvider.InstallationIsNotRequiredMessageTemplate, packageId, newPackageVersion, installedPackage.Version);
         }
 
-        public bool IsUninstallRequired(string packageId, SemanticVersion newPackageVersion, DeploymentType deploymentType, bool forceInstallation)
+        public IServiceResult IsUninstallRequired(string packageId, SemanticVersion newPackageVersion, DeploymentType deploymentType, bool forceInstallation)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -61,21 +74,32 @@ namespace NuDeploy.Core.Services.Installation.Status
 
             if (deploymentType == DeploymentType.Update)
             {
-                return false;
+                return new FailureResult(Resources.InstallationLogicProvider.UninstallIsNotRequiredDeploymentTypeIsUpdateMessageTemplate, packageId);
             }
 
             NuDeployPackageInfo installedPackage = this.installationStatusProvider.GetPackageInfo(packageId).FirstOrDefault(p => p.IsInstalled);
             if (installedPackage == null)
             {
-                return false;
+                return new FailureResult(Resources.InstallationLogicProvider.UninstallIsNotRequiredPackageIsNotInstalledMessageTemplate, packageId);
             }
 
             if (forceInstallation)
             {
-                return true;
+                return new SuccessResult(Resources.InstallationLogicProvider.UninstallIsRequiredForceSwitchIsSetMessageTemplate, packageId);
             }
 
-            return newPackageVersion > installedPackage.Version;
+            bool newVersionIsGreatedThanTheInstalledVersion = newPackageVersion > installedPackage.Version;
+            if (newVersionIsGreatedThanTheInstalledVersion)
+            {
+                return new SuccessResult(
+                    Resources.InstallationLogicProvider.UninstallIsRequiredNewPackageVersionIsGreaterThanCurrentVersionMessageTemplate,
+                    packageId,
+                    newPackageVersion,
+                    installedPackage.Version);
+            }
+
+            return new FailureResult(
+                Resources.InstallationLogicProvider.UninstallIsNotRequiredMessageTemplate, packageId, installedPackage.Version, newPackageVersion);
         }
     }
 }

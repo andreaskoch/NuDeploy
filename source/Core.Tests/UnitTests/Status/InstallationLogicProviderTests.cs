@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Moq;
 
 using NuDeploy.Core.Common;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.Status;
 
@@ -88,10 +89,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
+            var result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -110,10 +111,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
+            var result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -136,10 +137,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
+            var result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -165,10 +166,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
+            var result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -191,10 +192,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
+            var result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -217,10 +218,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
+            var result = installationLogicProvider.IsInstallRequired(packageId, newPackageVersion, forceInstallation);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion
@@ -275,10 +276,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -298,10 +299,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -325,10 +326,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -352,10 +353,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         [Test]
@@ -379,10 +380,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -406,10 +407,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -433,10 +434,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Status
             var installationLogicProvider = new InstallationLogicProvider(installationStatusProvider.Object);
 
             // Act
-            bool result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
+            var result = installationLogicProvider.IsUninstallRequired(packageId, newPackageVersion, deploymentType, forceInstallation);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion

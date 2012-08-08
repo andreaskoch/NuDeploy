@@ -4,6 +4,7 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Transformation;
 
@@ -122,8 +123,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             if (!string.IsNullOrWhiteSpace(buildConfigurationProfileNamesArgument))
             {
                 buildConfigurationProfileNames =
-                    buildConfigurationProfileNamesArgument.Split(NuDeployConstants.MultiValueSeperator).Where(arg => string.IsNullOrWhiteSpace(arg) == false).
-                        Select(arg => arg.Trim()).ToArray();
+                    buildConfigurationProfileNamesArgument.Split(NuDeployConstants.MultiValueSeperator).Where(arg => string.IsNullOrWhiteSpace(arg) == false).Select(arg => arg.Trim()).ToArray();
             }
 
             // options
@@ -134,7 +134,31 @@ namespace NuDeploy.CommandLine.Commands.Console
                     && pair.Value.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase));
 
             // install the package
-            return this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfileNames);
+            IServiceResult installResult = this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfileNames);
+            if (installResult.Status == ServiceResultType.Failure)
+            {
+                this.userInterface.WriteLine(
+                    string.Format(
+                        Resources.InstallCommand.InstallationFailedMessageTemplate,
+                        packageId,
+                        deploymentType,
+                        forceInstallation,
+                        string.Join(", ", systemSettingTransformationProfileNames),
+                        string.Join(", ", buildConfigurationProfileNames)));
+
+                return false;
+            }
+
+            this.userInterface.WriteLine(
+                string.Format(
+                    Resources.InstallCommand.InstallationSucceededMessageTemplate,
+                    packageId,
+                    deploymentType,
+                    forceInstallation,
+                    string.Join(", ", systemSettingTransformationProfileNames),
+                    string.Join(", ", buildConfigurationProfileNames)));
+
+            return true;
         }
     }
 }

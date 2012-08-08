@@ -124,6 +124,24 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The installation of package &quot;{0}&quot; failed (Deployment Type: {1}, Force Installation: {2}, Systemsetting Transformations: {3}, Buildconfiguration Transformations: {4})..
+        /// </summary>
+        internal static string InstallationFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("InstallationFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The installation of package &quot;{0}&quot; succeeded (Deployment Type: {1}, Force Installation: {2}, Systemsetting Transformations: {3}, Buildconfiguration Transformations: {4})..
+        /// </summary>
+        internal static string InstallationSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("InstallationSucceededMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No package id specified..
         /// </summary>
         internal static string NoPackageIdSpecifiedMessage {
