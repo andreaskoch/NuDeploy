@@ -6,6 +6,7 @@ using Moq;
 using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
@@ -278,7 +279,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
-            publishConfigurationAccessor.Setup(s => s.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, It.IsAny<string>())).Returns(false);
+            publishConfigurationAccessor.Setup(s => s.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, It.IsAny<string>())).Returns(new FailureResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);
@@ -306,7 +307,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
-            publishConfigurationAccessor.Setup(s => s.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, It.IsAny<string>())).Returns(true);
+            publishConfigurationAccessor.Setup(s => s.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, It.IsAny<string>())).Returns(new SuccessResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);
@@ -385,7 +386,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
-            publishConfigurationAccessor.Setup(s => s.DeletePublishConfiguration(publishConfigurationName)).Returns(false);
+            publishConfigurationAccessor.Setup(s => s.DeletePublishConfiguration(publishConfigurationName)).Returns(new FailureResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);
@@ -411,7 +412,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
-            publishConfigurationAccessor.Setup(s => s.DeletePublishConfiguration(publishConfigurationName)).Returns(true);
+            publishConfigurationAccessor.Setup(s => s.DeletePublishConfiguration(publishConfigurationName)).Returns(new SuccessResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);
@@ -502,6 +503,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
+            publishConfigurationAccessor.Setup(p => p.ResetPublishConfiguration()).Returns(new SuccessResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);
@@ -523,7 +525,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
-            publishConfigurationAccessor.Setup(s => s.ResetPublishConfiguration()).Returns(false);
+            publishConfigurationAccessor.Setup(s => s.ResetPublishConfiguration()).Returns(new FailureResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);
@@ -545,7 +547,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             publishingTargetConfigurationCommandParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var publishConfigurationAccessor = new Mock<IPublishConfigurationAccessor>();
-            publishConfigurationAccessor.Setup(s => s.ResetPublishConfiguration()).Returns(true);
+            publishConfigurationAccessor.Setup(s => s.ResetPublishConfiguration()).Returns(new SuccessResult());
 
             var publishingTargetConfigurationCommand = new PublishingTargetConfigurationCommand(
                 this.loggingUserInterface.UserInterface, publishingTargetConfigurationCommandParser.Object, publishConfigurationAccessor.Object);

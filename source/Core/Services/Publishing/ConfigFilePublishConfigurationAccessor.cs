@@ -54,7 +54,7 @@ namespace NuDeploy.Core.Services.Publishing
             return this.GetExistingPublishConfigurationList();
         }
 
-        public bool AddOrUpdatePublishConfiguration(string configurationName, string publishLocation, string apiKey)
+        public IServiceResult AddOrUpdatePublishConfiguration(string configurationName, string publishLocation, string apiKey)
         {
             if (string.IsNullOrWhiteSpace(configurationName))
             {
@@ -67,9 +67,23 @@ namespace NuDeploy.Core.Services.Publishing
             }
 
             PublishConfiguration publishConfiguration = this.publishConfigurationFactory.GetPublishConfiguration(configurationName, publishLocation, apiKey);
-            if (publishConfiguration == null || !publishConfiguration.IsValid)
+
+            if (publishConfiguration == null)
             {
-                return false;
+                return new FailureResult(
+                    Resources.ConfigFilePublishConfigurationAccessor.AddOrUpdateErrorPublishConfigurationCouldNotBeCreatedMessageTemplate,
+                    configurationName,
+                    publishLocation,
+                    apiKey);
+            }
+
+            if (publishConfiguration.IsValid == false)
+            {
+                return new FailureResult(
+                    Resources.ConfigFilePublishConfigurationAccessor.AddOrUpdateErrorPublishConfigurationIsNotValidMessageTemplate,
+                    configurationName,
+                    publishLocation,
+                    apiKey);
             }
 
             // add or update
@@ -85,10 +99,17 @@ namespace NuDeploy.Core.Services.Publishing
                 preExistingConfigurations[existingKey] = publishConfiguration;
             }
 
-            return this.SaveNewPublishConfigurationList(preExistingConfigurations.Values.ToArray());
+            if (this.SaveNewPublishConfigurationList(preExistingConfigurations.Values.ToArray()) == false)
+            {
+                return new FailureResult(
+                    Resources.ConfigFilePublishConfigurationAccessor.AddOrUpdateErrorFailedMessageTemplate, configurationName, publishLocation, apiKey);
+            }
+
+            return new SuccessResult(
+                Resources.ConfigFilePublishConfigurationAccessor.AddOrUpdateErrorSuccessMessageTemplate, configurationName, publishLocation, apiKey);
         }
 
-        public bool DeletePublishConfiguration(string configurationName)
+        public IServiceResult DeletePublishConfiguration(string configurationName)
         {
             if (string.IsNullOrWhiteSpace(configurationName))
             {
@@ -98,16 +119,27 @@ namespace NuDeploy.Core.Services.Publishing
             var existingConfigurations = this.GetExistingPublishConfigurationList().ToList();
             if (!existingConfigurations.Any(r => r.Name.Equals(configurationName, StringComparison.OrdinalIgnoreCase)))
             {
-                return false;
+                return new FailureResult(Resources.ConfigFilePublishConfigurationAccessor.DeleteConfigurationDoesNotExistMessageTemplate, configurationName);
             }
 
             var newConfigurationList = existingConfigurations.Where(r => r.Name.Equals(configurationName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
-            return this.SaveNewPublishConfigurationList(newConfigurationList);
+
+            if (this.SaveNewPublishConfigurationList(newConfigurationList) == false)
+            {
+                return new FailureResult(Resources.ConfigFilePublishConfigurationAccessor.DeleteFailureMessageTemplate, configurationName);
+            }
+
+            return new SuccessResult(Resources.ConfigFilePublishConfigurationAccessor.DeleteSuccessMessageTemplate, configurationName);
         }
 
-        public bool ResetPublishConfiguration()
+        public IServiceResult ResetPublishConfiguration()
         {
-            return this.SaveNewPublishConfigurationList(new PublishConfiguration[] { });
+            if (this.SaveNewPublishConfigurationList(new PublishConfiguration[] { }) == false)
+            {
+                return new FailureResult(Resources.ConfigFilePublishConfigurationAccessor.ResetFailureMessage);
+            }
+
+            return new SuccessResult(Resources.ConfigFilePublishConfigurationAccessor.ResetSuccessMessage);
         }
 
         private IEnumerable<PublishConfiguration> GetExistingPublishConfigurationList()

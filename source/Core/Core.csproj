@@ -82,6 +82,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ConfigFilePublishConfigurationAccessor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigFilePublishConfigurationAccessor.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\ConfigurationFileTransformationService.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -229,6 +234,10 @@
     <EmbeddedResource Include="Resources\CleanupService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CleanupService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ConfigFilePublishConfigurationAccessor.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfigFilePublishConfigurationAccessor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ConfigurationFileTransformationService.resx">
       <Generator>ResXFileCodeGenerator</Generator>

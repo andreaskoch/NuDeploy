@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 namespace NuDeploy.CommandLine.Commands.Console
@@ -151,9 +152,14 @@ namespace NuDeploy.CommandLine.Commands.Console
                     string publishLocation = this.Arguments[ArgumentNamePublishLocation];
                     string apiKey = this.Arguments.ContainsKey(ArgumentNameApiKey) ? this.Arguments[ArgumentNameApiKey] : null;
 
-                    if (!this.publishConfigurationAccessor.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, apiKey))
+                    IServiceResult addResult = this.publishConfigurationAccessor.AddOrUpdatePublishConfiguration(
+                        publishConfigurationName, publishLocation, apiKey);
+
+                    if (addResult.Status == ServiceResultType.Failure)
                     {
                         // failure
+                        this.userInterface.Display(addResult);
+
                         this.userInterface.WriteLine(
                             string.Format(
                                 Resources.PublishingTargetConfigurationCommand.SavePublishingConfigurationFailedMessageTemplate,
@@ -185,9 +191,13 @@ namespace NuDeploy.CommandLine.Commands.Console
                     }
 
                     string publishConfigurationName = this.Arguments[ArgumentNamePublishConfigurationName] ?? this.Arguments.Values.Skip(1).Take(1).FirstOrDefault();
-                    if (!this.publishConfigurationAccessor.DeletePublishConfiguration(publishConfigurationName))
+
+                    IServiceResult deleteResult = this.publishConfigurationAccessor.DeletePublishConfiguration(publishConfigurationName);
+                    if (deleteResult.Status == ServiceResultType.Failure)
                     {
                         // failure
+                        this.userInterface.Display(deleteResult);
+
                         this.userInterface.WriteLine(
                             string.Format(
                                 Resources.PublishingTargetConfigurationCommand.DeletePublishingConfigurationFailedMessageTemplate, publishConfigurationName));
@@ -230,8 +240,11 @@ namespace NuDeploy.CommandLine.Commands.Console
 
                 case PublishingTargetConfigurationCommandAction.Reset:
                 {
-                    if (!this.publishConfigurationAccessor.ResetPublishConfiguration())
+                    IServiceResult resetResult = this.publishConfigurationAccessor.ResetPublishConfiguration();
+                    if (resetResult.Status == ServiceResultType.Failure)
                     {
+                        // failure
+                        this.userInterface.Display(resetResult);
                         this.userInterface.WriteLine(Resources.PublishingTargetConfigurationCommand.ResetPublishingConfigurationFailedMessage);
                         return false;
                     }

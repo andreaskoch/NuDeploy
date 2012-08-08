@@ -5,6 +5,7 @@ using Moq;
 
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Persistence;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Publishing;
 
 using NUnit.Framework;
@@ -332,10 +333,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.AddOrUpdatePublishConfiguration(configurationName, publishLocation, apiKey);
+            var result = configFilePublishConfigurationAccessor.AddOrUpdatePublishConfiguration(configurationName, publishLocation, apiKey);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -357,10 +358,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.AddOrUpdatePublishConfiguration(configurationName, publishLocation, apiKey);
+            var result = configFilePublishConfigurationAccessor.AddOrUpdatePublishConfiguration(configurationName, publishLocation, apiKey);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -470,10 +471,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
+            var result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -493,10 +494,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
+            var result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -522,10 +523,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
+            var result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [TestCase("Some Name 1")]
@@ -588,10 +589,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
+            var result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -618,10 +619,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
                 applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
 
             // Act
-            bool result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
+            var result = configFilePublishConfigurationAccessor.DeletePublishConfiguration(configurationName);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion
