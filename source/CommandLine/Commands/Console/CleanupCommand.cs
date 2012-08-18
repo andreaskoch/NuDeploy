@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Cleanup;
 
 namespace NuDeploy.CommandLine.Commands.Console
@@ -12,7 +13,7 @@ namespace NuDeploy.CommandLine.Commands.Console
         public const string CommandName = "cleanup";
 
         public const string ArgumentNameNugetPackageId = "NugetPackageId";
-
+        
         private readonly string[] alternativeCommandNames = new[] { "purge" };
 
         private readonly IUserInterface userInterface;
@@ -70,14 +71,35 @@ namespace NuDeploy.CommandLine.Commands.Console
         {
             // package id (required parameter)
             string packageId = this.Arguments.Values.FirstOrDefault();
+
+            // package specific cleanup
             if (string.IsNullOrWhiteSpace(packageId))
             {
-                this.userInterface.WriteLine(Resources.CleanupCommand.CleanupMessageAllInstalledPackages);
-                return this.cleanupService.Cleanup();
+                IServiceResult generalCleanupResult = this.cleanupService.Cleanup();
+                if (generalCleanupResult.Status == ServiceResultType.Failure)
+                {
+                    this.userInterface.Display(generalCleanupResult);
+                    this.userInterface.WriteLine(string.Format(Resources.CleanupCommand.PackageCleanupFailedMessageTemplate, packageId));
+
+                    return false;
+                }
+
+                this.userInterface.WriteLine(string.Format(Resources.CleanupCommand.PackageCleanupSucceededMessageTemplate, packageId));
+                return true;
+            }
+            
+            // general cleanup
+            IServiceResult packageSpecificCleanupResult = this.cleanupService.Cleanup(packageId);
+            if (packageSpecificCleanupResult.Status == ServiceResultType.Failure)
+            {
+                this.userInterface.Display(packageSpecificCleanupResult);
+                this.userInterface.WriteLine(Resources.CleanupCommand.GeneralCleanupFailed);
+
+                return false;
             }
 
-            this.userInterface.WriteLine(string.Format(Resources.CleanupCommand.CleanupMessageTemplateSpecificPackage, packageId));
-            return this.cleanupService.Cleanup(packageId);
+            this.userInterface.WriteLine(Resources.CleanupCommand.GeneralCleanupSucceeded);
+            return true;
         }
     }
 }

@@ -70,24 +70,6 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Starting cleanup for all installed packages..
-        /// </summary>
-        internal static string CleanupMessageAllInstalledPackages {
-            get {
-                return ResourceManager.GetString("CleanupMessageAllInstalledPackages", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starting cleanup for package &quot;{0}&quot;..
-        /// </summary>
-        internal static string CleanupMessageTemplateSpecificPackage {
-            get {
-                return ResourceManager.GetString("CleanupMessageTemplateSpecificPackage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Removes previously installed versions of a specific package or for all packages in the current folder..
         /// </summary>
         internal static string CommandDescriptionText {
@@ -111,6 +93,42 @@ namespace NuDeploy.CommandLine.Resources {
         internal static string CommandExampleDescription2 {
             get {
                 return ResourceManager.GetString("CommandExampleDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cleanup failed..
+        /// </summary>
+        internal static string GeneralCleanupFailed {
+            get {
+                return ResourceManager.GetString("GeneralCleanupFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cleanup succeeded..
+        /// </summary>
+        internal static string GeneralCleanupSucceeded {
+            get {
+                return ResourceManager.GetString("GeneralCleanupSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cleanup for package &quot;{0}&quot; failed..
+        /// </summary>
+        internal static string PackageCleanupFailedMessageTemplate {
+            get {
+                return ResourceManager.GetString("PackageCleanupFailedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cleanup for package &quot;{0}&quot; succeeded..
+        /// </summary>
+        internal static string PackageCleanupSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("PackageCleanupSucceededMessageTemplate", resourceCulture);
             }
         }
     }

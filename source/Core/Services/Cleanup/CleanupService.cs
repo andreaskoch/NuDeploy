@@ -4,26 +4,18 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation.Status;
 
 namespace NuDeploy.Core.Services.Cleanup
 {
     public class CleanupService : ICleanupService
     {
-        private readonly IUserInterface userInterface;
-
         private readonly IInstallationStatusProvider installationStatusProvider;
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
-        public CleanupService(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IFilesystemAccessor filesystemAccessor)
+        public CleanupService(IInstallationStatusProvider installationStatusProvider, IFilesystemAccessor filesystemAccessor)
         {
-            if (userInterface == null)
-            {
-                throw new ArgumentNullException("userInterface");
-            }
-
             if (installationStatusProvider == null)
             {
                 throw new ArgumentNullException("installationStatusProvider");
@@ -34,26 +26,30 @@ namespace NuDeploy.Core.Services.Cleanup
                 throw new ArgumentNullException("filesystemAccessor");
             }
 
-            this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
             this.filesystemAccessor = filesystemAccessor;
         }
 
-        public bool Cleanup()
+        public IServiceResult Cleanup()
         {
             var packages = this.installationStatusProvider.GetPackageInfo().Where(p => p.IsInstalled == false).ToList();
 
             if (packages.Count == 0)
             {
-                this.userInterface.WriteLine(Resources.CleanupService.NoApplicablePackagesForCleanupFound);
-                return false;
+                return new FailureResult(Resources.CleanupService.NoApplicablePackagesForCleanupFound);
             }
 
-            this.DeletePackages(packages);
-            return true;
+            var deleteResults = this.DeletePackages(packages);
+            if (deleteResults.Any(r => r.Status == ServiceResultType.Failure))
+            {
+                return new FailureResult(
+                    Resources.CleanupService.CleanupFailedMessageTemplate, string.Join(Environment.NewLine, deleteResults.Select(result => result.Message)));
+            }
+
+            return new SuccessResult(Resources.CleanupService.CleanupSucceeded);
         }
 
-        public bool Cleanup(string packageId)
+        public IServiceResult Cleanup(string packageId)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -66,21 +62,39 @@ namespace NuDeploy.Core.Services.Cleanup
 
             if (packages.Count == 0)
             {
-                this.userInterface.WriteLine(string.Format(Resources.CleanupService.NoApplicableVersionForPackageCleanupFoundTemplate, packageId));
-                return false;
+                return new FailureResult(Resources.CleanupService.NoApplicableVersionForPackageCleanupFoundTemplate, packageId);
             }
 
-            this.DeletePackages(packages);
-            return true;
+            var deleteResults = this.DeletePackages(packages);
+            if (deleteResults.Any(r => r.Status == ServiceResultType.Failure))
+            {
+                return new FailureResult(
+                    Resources.CleanupService.PackageSpecificCleanupFailedMessageTemplate,
+                    packageId,
+                    string.Join(Environment.NewLine, deleteResults.Select(result => result.Message)));
+            }
+
+            return new SuccessResult(Resources.CleanupService.PackageSpecificCleanupSucceededMessageTemplate, packageId);
         }
 
-        private void DeletePackages(IEnumerable<NuDeployPackageInfo> packages)
+        private IServiceResult[] DeletePackages(IEnumerable<NuDeployPackageInfo> packages)
         {
+            var results = new List<IServiceResult>();
+
             foreach (NuDeployPackageInfo package in packages)
             {
-                this.userInterface.WriteLine(string.Format(Resources.CleanupService.DeleteMessageTemplate, package.Id, package.Version));
-                this.filesystemAccessor.DeleteDirectory(package.Folder);
+                var deleteResult = this.filesystemAccessor.DeleteDirectory(package.Folder);
+                if (deleteResult)
+                {
+                    results.Add(new SuccessResult(Resources.CleanupService.DeleteSucceededMessageTemplate, package.Id, package.Version));
+                }
+                else
+                {
+                    results.Add(new FailureResult(Resources.CleanupService.DeleteFailedMessageTemplate, package.Id, package.Version));
+                }
             }
+
+            return results.ToArray();
         }
     }
 }

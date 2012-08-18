@@ -117,13 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeleteMessageTemplate" xml:space="preserve">
-    <value>Deleting package "{0} (Version {1})".</value>
+  <data name="CleanupFailedMessageTemplate" xml:space="preserve">
+    <value>Cleanup failed. Results:
+{0}</value>
+  </data>
+  <data name="CleanupSucceeded" xml:space="preserve">
+    <value>Cleanup succeeded.</value>
+  </data>
+  <data name="DeleteFailedMessageTemplate" xml:space="preserve">
+    <value>Package {0} (Version: {1}) could not be deleted.</value>
+  </data>
+  <data name="DeleteSucceededMessageTemplate" xml:space="preserve">
+    <value>Package {0} (Version: {1}) has been successfully deleted.</value>
   </data>
   <data name="NoApplicablePackagesForCleanupFound" xml:space="preserve">
     <value>No packages applicable for a cleanup.</value>
   </data>
   <data name="NoApplicableVersionForPackageCleanupFoundTemplate" xml:space="preserve">
     <value>There are no versions of "{0}" applicable for a cleanup.</value>
+  </data>
+  <data name="PackageSpecificCleanupFailedMessageTemplate" xml:space="preserve">
+    <value>Cleanup for package "{0}" failed. Results:
+{0}</value>
+  </data>
+  <data name="PackageSpecificCleanupSucceededMessageTemplate" xml:space="preserve">
+    <value>Cleanup for package "{0}" succeeded.</value>
   </data>
 </root>

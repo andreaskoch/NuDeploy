@@ -6,12 +6,11 @@ using Moq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Cleanup;
+using NuDeploy.Core.Services.Installation.Status;
 
 using NUnit.Framework;
-
-using NuDeploy.Core.Services.Installation.Status;
 
 namespace NuDeploy.Core.Tests.UnitTests.Cleanup
 {
@@ -24,12 +23,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         public void Constructor_AllParametersAreSet_ObjectIsInstantiated()
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
             // Act
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Assert
             Assert.IsNotNull(cleanupService);
@@ -37,26 +35,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_UserInterfaceParametersIsNotSet_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-
-            // Act
-            new CleanupService(null, installationStatusProvider.Object, filesystemAccessor.Object);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_InstallationStatusProviderParametersIsNotSet_ArgumentNullExceptionIsThrown()
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
             // Act
-            new CleanupService(userInterface.Object, null, filesystemAccessor.Object);
+            new CleanupService(null, filesystemAccessor.Object);
         }
 
         [Test]
@@ -64,11 +49,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         public void Constructor_FilesystemAccessorParametersIsNotSet_ArgumentNullExceptionIsThrown()
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
 
             // Act
-            new CleanupService(userInterface.Object, installationStatusProvider.Object, null);
+            new CleanupService(installationStatusProvider.Object, null);
         }
 
         #endregion
@@ -79,26 +63,24 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         public void Cleanup_InstallationStatusProviderReturnNoPackages_ResultIsFalse()
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(new List<NuDeployPackageInfo>());
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup();
+            var result = cleanupService.Cleanup();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
         public void Cleanup_InstallationStatusProviderReturnPackages_AllPackagesAreInstalled_ResultIsFalse()
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
@@ -110,22 +92,22 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
                 };
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup();
+            var result = cleanupService.Cleanup();
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
         public void Cleanup_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteDirectoryIsCalledForEachLegacyPackage_ResultIsTrue()
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            filesystemAccessor.Setup(f => f.DeleteDirectory(It.IsAny<string>())).Returns(true);
 
             var installedPackages = new List<NuDeployPackageInfo>
                 {
@@ -142,10 +124,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
 
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup();
+            var result = cleanupService.Cleanup();
 
             // Assert
             foreach (var package in installedPackages)
@@ -160,7 +142,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
                 filesystemAccessor.Verify(f => f.DeleteDirectory(packageFolder), Times.Once());
             }
 
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion
@@ -174,11 +156,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         public void Cleanup_Parameterized_PackageIdIsInvalid_ArgumentExceptionIsThrown(string packageId)
         {
             // Arrange
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
             cleanupService.Cleanup(packageId);
@@ -190,19 +171,18 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
             // Arrange
             string packageId = "Package.A";
 
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(new List<NuDeployPackageInfo>());
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup(packageId);
+            var result = cleanupService.Cleanup(packageId);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -211,7 +191,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
             // Arrange
             string packageId = "Package.D";
 
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
@@ -224,13 +203,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
 
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup(packageId);
+            var result = cleanupService.Cleanup(packageId);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -239,7 +218,6 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
             // Arrange
             string packageId = "Package.A";
 
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
 
@@ -251,13 +229,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
                 };
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup(packageId);
+            var result = cleanupService.Cleanup(packageId);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]
@@ -266,9 +244,9 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
             // Arrange
             string packageId = "Package.A";
 
-            var userInterface = new Mock<IUserInterface>();
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            filesystemAccessor.Setup(f => f.DeleteDirectory(It.IsAny<string>())).Returns(true);
 
             var installedPackages = new List<NuDeployPackageInfo>
                 {
@@ -285,10 +263,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
 
             installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
 
-            var cleanupService = new CleanupService(userInterface.Object, installationStatusProvider.Object, filesystemAccessor.Object);
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
 
             // Act
-            bool result = cleanupService.Cleanup(packageId);
+            var result = cleanupService.Cleanup(packageId);
 
             // Assert
             foreach (var package in installedPackages)
@@ -303,7 +281,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
                 filesystemAccessor.Verify(f => f.DeleteDirectory(packageFolder), Times.Once());
             }
 
-            Assert.IsTrue(result);
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion

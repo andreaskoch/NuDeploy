@@ -4,6 +4,7 @@ using Moq;
 
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Cleanup;
 
 using NUnit.Framework;
@@ -77,6 +78,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             // Arrange
             var userInterface = new Mock<IUserInterface>();
             var cleanupService = new Mock<ICleanupService>();
+            cleanupService.Setup(c => c.Cleanup()).Returns(new SuccessResult());
 
             var cleanupCommand = new CleanupCommand(userInterface.Object, cleanupService.Object);
 
@@ -97,6 +99,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var userInterface = new Mock<IUserInterface>();
             var cleanupService = new Mock<ICleanupService>();
+            cleanupService.Setup(c => c.Cleanup(It.IsAny<string>())).Returns(new SuccessResult());
 
             var cleanupCommand = new CleanupCommand(userInterface.Object, cleanupService.Object);
 

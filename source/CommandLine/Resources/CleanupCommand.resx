@@ -120,12 +120,6 @@
   <data name="ArgumentDescriptionNugetPackageId" xml:space="preserve">
     <value>The id of the NuGet package to install (e.g. "NuDeploy.CommandLine"). If you don't specifiy a package id, the cleanup will be performed for all packages in the current folder.</value>
   </data>
-  <data name="CleanupMessageAllInstalledPackages" xml:space="preserve">
-    <value>Starting cleanup for all installed packages.</value>
-  </data>
-  <data name="CleanupMessageTemplateSpecificPackage" xml:space="preserve">
-    <value>Starting cleanup for package "{0}".</value>
-  </data>
   <data name="CommandDescriptionText" xml:space="preserve">
     <value>Removes previously installed versions of a specific package or for all packages in the current folder.</value>
   </data>
@@ -134,5 +128,17 @@
   </data>
   <data name="CommandExampleDescription2" xml:space="preserve">
     <value>Remove all package folders which are not the currently installed version of the given NuGet package id.</value>
+  </data>
+  <data name="GeneralCleanupFailed" xml:space="preserve">
+    <value>Cleanup failed.</value>
+  </data>
+  <data name="GeneralCleanupSucceeded" xml:space="preserve">
+    <value>Cleanup succeeded.</value>
+  </data>
+  <data name="PackageCleanupFailedMessageTemplate" xml:space="preserve">
+    <value>Cleanup for package "{0}" failed.</value>
+  </data>
+  <data name="PackageCleanupSucceededMessageTemplate" xml:space="preserve">
+    <value>Cleanup for package "{0}" succeeded.</value>
   </data>
 </root>
