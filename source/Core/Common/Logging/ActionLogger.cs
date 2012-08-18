@@ -13,7 +13,7 @@ namespace NuDeploy.Core.Common.Logging
     {
         public const string LogFilenamePattern = "NuDeploy.{0}.log";
 
-        public const string ValueSeperator = " - ";
+        public const string ValueSeperator = "\t";
 
         private readonly ApplicationInformation applicationInformation;
 
@@ -23,12 +23,15 @@ namespace NuDeploy.Core.Common.Logging
 
         private readonly string logfilPath;
 
+        private readonly string[] colmns = new[] { "Date", "Time", "UTC-Offset", "User", "Computer", "Message" }; 
+
         public ActionLogger(ApplicationInformation applicationInformation, IEncodingProvider encodingProvider)
         {
             this.applicationInformation = applicationInformation;
             this.logfileEncoding = encodingProvider.GetEncoding();
 
             this.logfilPath = this.GetLogfilePath();
+            this.InitializeLogFile();
         }
 
         public void Log(string message, params object[] args)
@@ -55,6 +58,14 @@ namespace NuDeploy.Core.Common.Logging
             string line = string.Join(ValueSeperator, entry);
 
             File.AppendAllLines(this.logfilPath, new List<string> { line }, this.logfileEncoding);
+        }
+
+        private void InitializeLogFile()
+        {
+            if (!File.Exists(this.logfilPath))
+            {
+                File.WriteAllText(this.logfilPath, string.Join(ValueSeperator, this.colmns) + Environment.NewLine, this.logfileEncoding);
+            }
         }
 
         private string GetLogfilePath()
