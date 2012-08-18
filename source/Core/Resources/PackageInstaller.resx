@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeletingPackageFolderMessageTemplate" xml:space="preserve">
-    <value>Deleting package folder "{0}".</value>
-  </data>
   <data name="DownloadingPackageMessageTemplate" xml:space="preserve">
     <value>Downloading package "{0}" (Version: {1}) to folder "{2}".</value>
   </data>
@@ -150,20 +147,11 @@
   <data name="StartingInstallationMessageTemplate" xml:space="preserve">
     <value>Starting installation of package "{0}" (Version: {1}).</value>
   </data>
-  <data name="StartingUninstallMessageTemplate" xml:space="preserve">
-    <value>Uninstalling package "{0} (Version {1})".</value>
-  </data>
   <data name="UninstallScriptNotFoundMessageTemplate" xml:space="preserve">
     <value>Uninstall script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
   </data>
   <data name="NoPackageRepositoryConfigurationsAvailable" xml:space="preserve">
     <value>There are no package repositories configured. Please check your package repository configuration.</value>
-  </data>
-  <data name="ExecutingUninstallScriptMessageTemplate" xml:space="preserve">
-    <value>Executing uninstall script "{0}".</value>
-  </data>
-  <data name="RemovingPackageFromConfigurationMessageTemplate" xml:space="preserve">
-    <value>Removing package "{0}" Version({1}) from the package configuration.</value>
   </data>
   <data name="ExecutingUninstallScriptFailedMessageTemplate" xml:space="preserve">
     <value>Executing the uninstall script "{0}" failed.</value>

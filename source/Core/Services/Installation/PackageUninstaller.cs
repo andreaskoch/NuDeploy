@@ -4,7 +4,6 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
-using NuDeploy.Core.Common.UserInterface;
 using NuDeploy.Core.Services.Installation.PowerShell;
 using NuDeploy.Core.Services.Installation.Status;
 
@@ -16,8 +15,6 @@ namespace NuDeploy.Core.Services.Installation
     {
         public const string UninstallPowerShellScriptName = "Remove.ps1";
 
-        private readonly IUserInterface userInterface;
-
         private readonly IInstallationStatusProvider installationStatusProvider;
 
         private readonly IPackageConfigurationAccessor packageConfigurationAccessor;
@@ -26,13 +23,8 @@ namespace NuDeploy.Core.Services.Installation
 
         private readonly IPowerShellExecutor powerShellExecutor;
 
-        public PackageUninstaller(IUserInterface userInterface, IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IFilesystemAccessor filesystemAccessor, IPowerShellExecutor powerShellExecutor)
+        public PackageUninstaller(IInstallationStatusProvider installationStatusProvider, IPackageConfigurationAccessor packageConfigurationAccessor, IFilesystemAccessor filesystemAccessor, IPowerShellExecutor powerShellExecutor)
         {
-            if (userInterface == null)
-            {
-                throw new ArgumentNullException("userInterface");
-            }
-
             if (installationStatusProvider == null)
             {
                 throw new ArgumentNullException("installationStatusProvider");
@@ -53,7 +45,6 @@ namespace NuDeploy.Core.Services.Installation
                 throw new ArgumentNullException("powerShellExecutor");
             }
 
-            this.userInterface = userInterface;
             this.installationStatusProvider = installationStatusProvider;
             this.packageConfigurationAccessor = packageConfigurationAccessor;
             this.filesystemAccessor = filesystemAccessor;
@@ -90,21 +81,15 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // uninstall
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.StartingUninstallMessageTemplate, installedPackage.Id, installedPackage.Version));
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptMessageTemplate, uninstallScriptPath));
-
             if (!this.powerShellExecutor.ExecuteScript(uninstallScriptPath))
             {
                 return new FailureResult(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath);
             }
 
             // update package configuration
-            this.userInterface.WriteLine(
-                string.Format(Resources.PackageInstaller.RemovingPackageFromConfigurationMessageTemplate, installedPackage.Id, installedPackage.Id));
             this.packageConfigurationAccessor.Remove(installedPackage.Id);
 
             // remove package files
-            this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
             this.filesystemAccessor.DeleteDirectory(installedPackage.Folder);
 
             return new SuccessResult(Resources.PackageInstaller.UninstallSucceededMessageTemplate, installedPackage.Id, installedPackage.Version);
