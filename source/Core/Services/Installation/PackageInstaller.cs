@@ -221,9 +221,15 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // update package configuration
-            if (this.packageConfigurationAccessor.AddOrUpdate(new PackageInfo { Id = package.Id, Version = package.Version.ToString() }) == false)
+            IServiceResult packageConfigurationUpdateResult =
+                this.packageConfigurationAccessor.AddOrUpdate(new PackageInfo { Id = package.Id, Version = package.Version.ToString() });
+
+            if (packageConfigurationUpdateResult.Status == ServiceResultType.Failure)
             {
-                return new FailureResult(Resources.PackageInstaller.PackageCouldNotBeAddedToConfigurationMessageTemplate, packageId, package.Version);
+                return new FailureResult(Resources.PackageInstaller.PackageCouldNotBeAddedToConfigurationMessageTemplate, packageId, package.Version)
+                    {
+                        InnerResult = packageConfigurationUpdateResult
+                    };
             }
 
             return new SuccessResult(Resources.PackageInstaller.PackageHasBeenSuccessfullyInstalledMessageTemplate, packageId, package.Version);

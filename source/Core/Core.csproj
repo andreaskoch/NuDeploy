@@ -107,6 +107,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InstallationLogicProvider.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\PackageConfigurationAccessor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PackageConfigurationAccessor.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PackageConfigurationTransformationService.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -264,6 +269,10 @@
     <EmbeddedResource Include="Resources\InstallationLogicProvider.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InstallationLogicProvider.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PackageConfigurationAccessor.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackageConfigurationAccessor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PackageConfigurationTransformationService.resx">
       <Generator>ResXFileCodeGenerator</Generator>

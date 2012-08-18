@@ -117,76 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DownloadingPackageMessageTemplate" xml:space="preserve">
-    <value>Downloading package "{0}" (Version: {1}) to folder "{2}".</value>
+  <data name="AddOrUpdateInvalidPackageMessageTemplate" xml:space="preserve">
+    <value>Cannot add or updat the supplied package info because it is invalid. {0}</value>
   </data>
-  <data name="InstallationFinishedMessage" xml:space="preserve">
-    <value>Installation finished.</value>
+  <data name="AddOrUpdateSaveFailedMessageTemplate" xml:space="preserve">
+    <value>Canot save the the the supplied package info ({0}).</value>
   </data>
-  <data name="InstallScriptNotFoundMessageTemplate" xml:space="preserve">
-    <value>Install script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
+  <data name="AddOrUpdateSucceededMessageTemplate" xml:space="preserve">
+    <value>The package info ({0}) has been saved successfully.</value>
   </data>
-  <data name="LatestVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
-    <value>You already have the latest version installed: {0} (Version: {1}).</value>
+  <data name="RemoveFailedMessageTemplate" xml:space="preserve">
+    <value>The package "{0}" could not be removed.</value>
   </data>
-  <data name="NewerVersionAlreadyInstalledMessageTemplate" xml:space="preserve">
-    <value>You already have a more recent version installed: {0} (Version: {1}). Use the -{2} option if you still want to install this older version.</value>
+  <data name="RemovePackageIdNotFoundMessageTemplate" xml:space="preserve">
+    <value>Cannot remove the package with the id "{0}", because it does not exist.</value>
   </data>
-  <data name="PackageDownloadedMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" (Version: {1}) has been downloaded to folder "{2}".</value>
-  </data>
-  <data name="PackageIsNotInstalledMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" is not installed in the current folder.</value>
-  </data>
-  <data name="PackageNotFoundMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" was not found at "{1}". Please check your spelling or your package source configuration.</value>
-  </data>
-  <data name="PackageRemovalFailedMessageTemplate" xml:space="preserve">
-    <value>The removal of the the previous version of "{0}" failed.</value>
-  </data>
-  <data name="StartingInstallationMessageTemplate" xml:space="preserve">
-    <value>Starting installation of package "{0}" (Version: {1}).</value>
-  </data>
-  <data name="UninstallScriptNotFoundMessageTemplate" xml:space="preserve">
-    <value>Uninstall script "{0}" not found for package "{1} (Version {2})" in folder "{3}".</value>
-  </data>
-  <data name="NoPackageRepositoryConfigurationsAvailable" xml:space="preserve">
-    <value>There are no package repositories configured. Please check your package repository configuration.</value>
-  </data>
-  <data name="ExecutingUninstallScriptFailedMessageTemplate" xml:space="preserve">
-    <value>Executing the uninstall script "{0}" failed.</value>
-  </data>
-  <data name="PackageSuccessfullyRemovedMessageTemplate" xml:space="preserve">
-    <value>"{0}" has been successfully removed.</value>
-  </data>
-  <data name="ConfigurationFileTransformationFailedMessageTemplate" xml:space="preserve">
-    <value>The installation of the package "{0}" failed because the configuration files have not been transformed successfully.</value>
-  </data>
-  <data name="InstallationIsNotRequiredMessageTemplate" xml:space="preserve">
-    <value>An installation/update of the package "{0}" is not required.</value>
-  </data>
-  <data name="InstallationScriptExecutionFailedMessageTemplate" xml:space="preserve">
-    <value>The installation script "{0}" has not been executed successfully.</value>
-  </data>
-  <data name="PackageCouldNotBeAddedToConfigurationMessageTemplate" xml:space="preserve">
-    <value>The package "{0}" in version "{1}" could not be added the package configuration.</value>
-  </data>
-  <data name="PackageExtractionFailedMessageTemplate" xml:space="preserve">
-    <value>Could not extract the package "{0}" to folder "{1}".</value>
-  </data>
-  <data name="PackageHasBeenSuccessfullyInstalledMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" in version "{1}" has been installed successfully.</value>
-  </data>
-  <data name="SystemSettingTransformationFailedMessageTemplate" xml:space="preserve">
-    <value>The installation of the package "{0}" failed because the system settings have not been transformed successfully.</value>
-  </data>
-  <data name="UninstallSucceededMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" (Version: {1}) has been successfully removed.</value>
-  </data>
-  <data name="UninstallSucceededButPackageCouldNotBeRemovedFromConfigurationMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" (Version: {1}) has been successfully removed but could not be removed from the package configuration.</value>
-  </data>
-  <data name="UninstallSucceededButPackageDirectoryCouldNotBeRemovedMessageTemplate" xml:space="preserve">
-    <value>Package "{0}" (Version: {1}) has been successfully removed but the package directory "{1}" could not be deleted.</value>
+  <data name="RemoveSucceededMessageTemplate" xml:space="preserve">
+    <value>The package "{0}" has been successfully removed.</value>
   </data>
 </root>

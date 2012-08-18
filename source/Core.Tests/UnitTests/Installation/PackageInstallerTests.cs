@@ -1123,6 +1123,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
 
+            packageConfigurationAccessor.Setup(p => p.AddOrUpdate(It.IsAny<PackageInfo>())).Returns(new SuccessResult());
+
             packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(new SuccessResult());
             configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(new SuccessResult());
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
@@ -1196,7 +1198,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             // configure powershell script execution
             powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
-            packageConfigurationAccessor.Setup(p => p.AddOrUpdate(It.IsAny<PackageInfo>())).Returns(true);
+            packageConfigurationAccessor.Setup(p => p.AddOrUpdate(It.IsAny<PackageInfo>())).Returns(new SuccessResult());
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,

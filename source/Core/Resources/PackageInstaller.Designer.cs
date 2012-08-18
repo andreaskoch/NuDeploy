@@ -250,6 +250,24 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package &quot;{0}&quot; (Version: {1}) has been successfully removed but could not be removed from the package configuration..
+        /// </summary>
+        internal static string UninstallSucceededButPackageCouldNotBeRemovedFromConfigurationMessageTemplate {
+            get {
+                return ResourceManager.GetString("UninstallSucceededButPackageCouldNotBeRemovedFromConfigurationMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package &quot;{0}&quot; (Version: {1}) has been successfully removed but the package directory &quot;{1}&quot; could not be deleted..
+        /// </summary>
+        internal static string UninstallSucceededButPackageDirectoryCouldNotBeRemovedMessageTemplate {
+            get {
+                return ResourceManager.GetString("UninstallSucceededButPackageDirectoryCouldNotBeRemovedMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Package &quot;{0}&quot; (Version: {1}) has been successfully removed..
         /// </summary>
         internal static string UninstallSucceededMessageTemplate {

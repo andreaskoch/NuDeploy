@@ -6,6 +6,7 @@ using Moq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Persistence;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 
 using NUnit.Framework;
@@ -207,7 +208,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var result = packageConfigurationAccessor.AddOrUpdate(packageInfo);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -353,7 +354,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var result = packageConfigurationAccessor.Remove(packageId);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -377,7 +378,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var result = packageConfigurationAccessor.Remove(packageId);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -427,7 +428,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var result = packageConfigurationAccessor.Remove(packageId);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -453,7 +454,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var result = packageConfigurationAccessor.Remove(packageId);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Success);
         }
 
         #endregion

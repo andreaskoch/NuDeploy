@@ -44,7 +44,7 @@ namespace NuDeploy.Core.Services.Installation
             return packages.Where(p => p.IsValid).Distinct().OrderBy(PackageSortKeySelector).ToList();
         }
 
-        public bool AddOrUpdate(PackageInfo packageInfo)
+        public IServiceResult AddOrUpdate(PackageInfo packageInfo)
         {
             if (packageInfo == null)
             {
@@ -53,7 +53,7 @@ namespace NuDeploy.Core.Services.Installation
 
             if (!packageInfo.IsValid)
             {
-                return false;
+                return new FailureResult(Resources.PackageConfigurationAccessor.AddOrUpdateInvalidPackageMessageTemplate, packageInfo);
             }
 
             var packages = this.GetExistingPackageConfigurationList().ToDictionary(p => p.Id, p => p);
@@ -77,10 +77,15 @@ namespace NuDeploy.Core.Services.Installation
             var packagesSorted = packages.Values.OrderBy(PackageSortKeySelector).ToArray();
 
             // save
-            return this.SaveNewPackageConfigurationList(packagesSorted);
+            if (!this.SaveNewPackageConfigurationList(packagesSorted))
+            {
+                return new FailureResult(Resources.PackageConfigurationAccessor.AddOrUpdateSaveFailedMessageTemplate, packageInfo);
+            }
+
+            return new SuccessResult(Resources.PackageConfigurationAccessor.AddOrUpdateSucceededMessageTemplate, packageInfo);
         }
 
-        public bool Remove(string packageId)
+        public IServiceResult Remove(string packageId)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -90,11 +95,16 @@ namespace NuDeploy.Core.Services.Installation
             var existingPackageList = this.GetExistingPackageConfigurationList().ToList();
             if (!existingPackageList.Any(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase)))
             {
-                return false;
+                return new FailureResult(Resources.PackageConfigurationAccessor.RemovePackageIdNotFoundMessageTemplate, packageId);
             }
 
             var newPackageList = existingPackageList.Where(p => p.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase) == false).ToArray();
-            return this.SaveNewPackageConfigurationList(newPackageList);
+            if (!this.SaveNewPackageConfigurationList(newPackageList))
+            {
+                return new FailureResult(Resources.PackageConfigurationAccessor.RemoveFailedMessageTemplate, packageId);
+            }
+
+            return new SuccessResult(Resources.PackageConfigurationAccessor.RemoveSucceededMessageTemplate, packageId);
         }
 
         private IEnumerable<PackageInfo> GetExistingPackageConfigurationList()

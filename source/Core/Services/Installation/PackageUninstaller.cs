@@ -91,10 +91,27 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // update package configuration
-            this.packageConfigurationAccessor.Remove(installedPackage.Id);
+            IServiceResult removePackageFromConfigResult = this.packageConfigurationAccessor.Remove(installedPackage.Id);
+            if (removePackageFromConfigResult.Status == ServiceResultType.Failure)
+            {
+                return new FailureResult(
+                    Resources.PackageInstaller.UninstallSucceededButPackageCouldNotBeRemovedFromConfigurationMessageTemplate,
+                    installedPackage.Id,
+                    installedPackage.Version)
+                    {
+                        InnerResult = removePackageFromConfigResult
+                    };
+            }
 
             // remove package files
-            this.filesystemAccessor.DeleteDirectory(installedPackage.Folder);
+            if (!this.filesystemAccessor.DeleteDirectory(installedPackage.Folder))
+            {
+                return new FailureResult(
+                    Resources.PackageInstaller.UninstallSucceededButPackageDirectoryCouldNotBeRemovedMessageTemplate,
+                    installedPackage.Id,
+                    installedPackage.Version,
+                    installedPackage.Folder);
+            }
 
             return new SuccessResult(Resources.PackageInstaller.UninstallSucceededMessageTemplate, installedPackage.Id, installedPackage.Version);
         }
