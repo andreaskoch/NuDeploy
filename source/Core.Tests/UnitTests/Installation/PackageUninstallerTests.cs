@@ -6,6 +6,7 @@ using Moq;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 using NuDeploy.Core.Services.Installation.PowerShell;
 using NuDeploy.Core.Services.Installation.Status;
@@ -188,10 +189,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 powerShellExecutor.Object);
 
             // Act
-            bool result = packageUninstaller.Uninstall(packageId, version);
+            var result = packageUninstaller.Uninstall(packageId, version);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -224,10 +225,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 powerShellExecutor.Object);
 
             // Act
-            bool result = packageUninstaller.Uninstall(packageId, version);
+            var result = packageUninstaller.Uninstall(packageId, version);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -256,10 +257,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 powerShellExecutor.Object);
 
             // Act
-            bool result = packageUninstaller.Uninstall(packageId, version);
+            var result = packageUninstaller.Uninstall(packageId, version);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -290,10 +291,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 powerShellExecutor.Object);
 
             // Act
-            bool result = packageUninstaller.Uninstall(packageId, version);
+            var result = packageUninstaller.Uninstall(packageId, version);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -392,10 +393,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
                 powerShellExecutor.Object);
 
             // Act
-            bool result = packageUninstaller.Uninstall(packageId, version);
+            var result = packageUninstaller.Uninstall(packageId, version);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Success);
         }
 
         #endregion         

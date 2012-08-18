@@ -156,11 +156,11 @@ namespace NuDeploy.Core.Services.Installation
             IServiceResult uninstallRequired = this.installationLogicProvider.IsUninstallRequired(packageId, package.Version, deploymentType, forceInstallation);
             if (uninstallRequired.Status == ServiceResultType.Success)
             {
-                bool uninstallSucceeded = this.packageUninstaller.Uninstall(package.Id, null);
-                if (!uninstallSucceeded && !forceInstallation)
+                IServiceResult uninstallResult = this.packageUninstaller.Uninstall(package.Id, null);
+                if (uninstallResult.Status == ServiceResultType.Failure && !forceInstallation)
                 {
                     // abort installation
-                    return new FailureResult(Resources.PackageInstaller.PackageRemovalFailedMessageTemplate, package.Id);
+                    return new FailureResult(Resources.PackageInstaller.PackageRemovalFailedMessageTemplate, package.Id) { InnerResult = uninstallResult };
                 }
             }
 

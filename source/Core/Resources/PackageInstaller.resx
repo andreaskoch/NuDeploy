@@ -192,4 +192,7 @@
   <data name="SystemSettingTransformationFailedMessageTemplate" xml:space="preserve">
     <value>The installation of the package "{0}" failed because the system settings have not been transformed successfully.</value>
   </data>
+  <data name="UninstallSucceededMessageTemplate" xml:space="preserve">
+    <value>Package "{0}" (Version: {1}) has been successfully removed.</value>
+  </data>
 </root>

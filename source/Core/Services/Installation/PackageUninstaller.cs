@@ -60,7 +60,7 @@ namespace NuDeploy.Core.Services.Installation
             this.powerShellExecutor = powerShellExecutor;
         }
 
-        public bool Uninstall(string packageId, SemanticVersion version)
+        public IServiceResult Uninstall(string packageId, SemanticVersion version)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -74,23 +74,19 @@ namespace NuDeploy.Core.Services.Installation
                                                            p => p.Version.Equals(version));
             if (installedPackage == null)
             {
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.PackageIsNotInstalledMessageTemplate, packageId));
-                return false;
+                return new FailureResult(Resources.PackageInstaller.PackageIsNotInstalledMessageTemplate, packageId);
             }
 
             // find the uninstall script
             string uninstallScriptPath = Path.Combine(installedPackage.Folder, UninstallPowerShellScriptName);
             if (this.filesystemAccessor.FileExists(uninstallScriptPath) == false)
             {
-                this.userInterface.WriteLine(
-                    string.Format(
-                        Resources.PackageInstaller.UninstallScriptNotFoundMessageTemplate,
-                        UninstallPowerShellScriptName,
-                        installedPackage.Id,
-                        installedPackage.Version,
-                        installedPackage.Folder));
-
-                return false;
+                return new FailureResult(
+                    Resources.PackageInstaller.UninstallScriptNotFoundMessageTemplate,
+                    UninstallPowerShellScriptName,
+                    installedPackage.Id,
+                    installedPackage.Version,
+                    installedPackage.Folder);
             }
 
             // uninstall
@@ -99,8 +95,7 @@ namespace NuDeploy.Core.Services.Installation
 
             if (!this.powerShellExecutor.ExecuteScript(uninstallScriptPath))
             {
-                this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath));
-                return false;
+                return new FailureResult(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath);
             }
 
             // update package configuration
@@ -112,7 +107,7 @@ namespace NuDeploy.Core.Services.Installation
             this.userInterface.WriteLine(string.Format(Resources.PackageInstaller.DeletingPackageFolderMessageTemplate, installedPackage.Folder));
             this.filesystemAccessor.DeleteDirectory(installedPackage.Folder);
 
-            return true;
+            return new SuccessResult(Resources.PackageInstaller.UninstallSucceededMessageTemplate, installedPackage.Id, installedPackage.Version);
         }
     }
 }

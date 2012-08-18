@@ -284,5 +284,14 @@ namespace NuDeploy.Core.Resources {
                 return ResourceManager.GetString("UninstallScriptNotFoundMessageTemplate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package &quot;{0}&quot; (Version: {1}) has been successfully removed..
+        /// </summary>
+        internal static string UninstallSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("UninstallSucceededMessageTemplate", resourceCulture);
+            }
+        }
     }
 }

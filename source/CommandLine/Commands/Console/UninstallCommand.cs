@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 
 namespace NuDeploy.CommandLine.Commands.Console
@@ -72,8 +73,10 @@ namespace NuDeploy.CommandLine.Commands.Console
                 return false;
             }
 
-            if (!this.packageUninstaller.Uninstall(packageId, null))
+            IServiceResult uninstallResult = this.packageUninstaller.Uninstall(packageId, null);
+            if (uninstallResult.Status == ServiceResultType.Failure)
             {
+                this.userInterface.Display(uninstallResult);
                 this.userInterface.WriteLine(string.Format(Resources.UninstallCommand.UninstallFailedMessageTemplate, packageId));
                 return false;
             }

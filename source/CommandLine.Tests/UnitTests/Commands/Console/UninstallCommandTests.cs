@@ -5,6 +5,7 @@ using Moq;
 
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation;
 
 using NuGet;
@@ -161,6 +162,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
         {
             // Arrange
             var packageUninstaller = new Mock<IPackageUninstaller>();
+            packageUninstaller.Setup(p => p.Uninstall(It.IsAny<string>(), It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var uninstallCommand = new UninstallCommand(this.loggingUserInterface.UserInterface, packageUninstaller.Object);
 
@@ -182,7 +184,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             string packageId = "Package.A";
 
             var packageUninstaller = new Mock<IPackageUninstaller>();
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(false);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new FailureResult());
 
             var uninstallCommand = new UninstallCommand(this.loggingUserInterface.UserInterface, packageUninstaller.Object);
 
@@ -203,7 +205,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             string packageId = "Package.A";
 
             var packageUninstaller = new Mock<IPackageUninstaller>();
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var uninstallCommand = new UninstallCommand(this.loggingUserInterface.UserInterface, packageUninstaller.Object);
 

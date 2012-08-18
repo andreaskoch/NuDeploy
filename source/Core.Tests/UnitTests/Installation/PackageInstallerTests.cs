@@ -690,7 +690,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             // configure uninstaller
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(false);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new FailureResult());
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -749,7 +749,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
             // configure uninstaller
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(false);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new FailureResult());
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -804,7 +804,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             // configure package extraction
             NuDeployPackageInfo extractedPackage = null;
@@ -863,7 +863,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
@@ -925,7 +925,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
@@ -988,7 +988,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
@@ -1052,7 +1052,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
@@ -1118,7 +1118,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
@@ -1184,7 +1184,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
             installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
 
-            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(true);
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
 
             var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
             nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
