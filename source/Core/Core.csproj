@@ -122,6 +122,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PackagingService.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\PowerShellExecutor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PowerShellExecutor.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PrepackagingService.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -272,6 +277,10 @@
     <EmbeddedResource Include="Resources\PackagingService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PackagingService.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PowerShellExecutor.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PowerShellExecutor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PrepackagingService.resx">
       <Generator>ResXFileCodeGenerator</Generator>

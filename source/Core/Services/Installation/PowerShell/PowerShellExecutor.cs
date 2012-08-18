@@ -16,28 +16,34 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
             this.powerShellSessionFactory = powerShellSessionFactory;
         }
 
-        public bool ExecuteScript(string scriptPath, params string[] parameters)
+        public IServiceResult ExecuteScript(string scriptPath, params string[] parameters)
         {
             if (string.IsNullOrWhiteSpace(scriptPath))
             {
-                return false;
+                return new FailureResult(Resources.PowerShellExecutor.ScriptPathCannotBeNullOrEmpty);
             }
 
             using (var powerShellSession = this.powerShellSessionFactory.GetSession())
             {
                 if (powerShellSession == null)
                 {
-                    return false;
+                    return new FailureResult(
+                        Resources.PowerShellExecutor.CannotCreatePowerShellSessionMessageTemplate, scriptPath, string.Join(", ", parameters));
                 }
 
                 try
                 {
-                    powerShellSession.ExecuteScript(scriptPath, parameters);
-                    return true;
+                    string scriptOutput = powerShellSession.ExecuteScript(scriptPath, parameters);
+                    return new SuccessResult(
+                        Resources.PowerShellExecutor.ScriptHasBeenSuccessfullyExecutedMessageTemplate, scriptPath, string.Join(", ", parameters), scriptOutput);
                 }
-                catch (Exception)
+                catch (Exception powerShellException)
                 {
-                    return false;
+                    return new FailureResult(
+                        Resources.PowerShellExecutor.ScriptExecutionFailedWithExceptionMessageTemplate,
+                        scriptPath,
+                        string.Join(", ", parameters),
+                        powerShellException.Message);
                 }
             }
         }

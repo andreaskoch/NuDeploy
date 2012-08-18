@@ -242,7 +242,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
 
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(false);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(new FailureResult());
 
             var packageUninstaller = new PackageUninstaller(
                 installationStatusProvider.Object,
@@ -274,7 +274,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
 
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(new SuccessResult());
 
             var packageUninstaller = new PackageUninstaller(
                 installationStatusProvider.Object,
@@ -306,7 +306,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
 
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(new SuccessResult());
 
             var packageUninstaller = new PackageUninstaller(
                 installationStatusProvider.Object,
@@ -338,7 +338,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
 
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(new SuccessResult());
 
             var packageUninstaller = new PackageUninstaller(
                 installationStatusProvider.Object,

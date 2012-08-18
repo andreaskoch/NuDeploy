@@ -211,9 +211,13 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // execute installation script
-            if (!this.powerShellExecutor.ExecuteScript(installScriptPath, scriptParameter))
+            IServiceResult powerShellResult = this.powerShellExecutor.ExecuteScript(installScriptPath, scriptParameter);
+            if (powerShellResult.Status == ServiceResultType.Failure)
             {
-                return new FailureResult(Resources.PackageInstaller.InstallationScriptExecutionFailedMessageTemplate, installScriptPath);
+                return new FailureResult(Resources.PackageInstaller.InstallationScriptExecutionFailedMessageTemplate, installScriptPath)
+                    {
+                        InnerResult = powerShellResult
+                    };
             }
 
             // update package configuration

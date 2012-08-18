@@ -81,9 +81,13 @@ namespace NuDeploy.Core.Services.Installation
             }
 
             // uninstall
-            if (!this.powerShellExecutor.ExecuteScript(uninstallScriptPath))
+            IServiceResult powerShellResult = this.powerShellExecutor.ExecuteScript(uninstallScriptPath);
+            if (powerShellResult.Status == ServiceResultType.Failure)
             {
-                return new FailureResult(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath);
+                return new FailureResult(Resources.PackageInstaller.ExecutingUninstallScriptFailedMessageTemplate, uninstallScriptPath)
+                    {
+                        InnerResult = powerShellResult
+                    };
             }
 
             // update package configuration

@@ -2,6 +2,7 @@
 
 using Moq;
 
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation.PowerShell;
 
 using NUnit.Framework;
@@ -48,10 +49,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             var powerShellExecutor = new PowerShellExecutor(powerShellSessionFactory.Object);
 
             // Act
-            bool result = powerShellExecutor.ExecuteScript(scriptPath);
+            var result = powerShellExecutor.ExecuteScript(scriptPath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
         
         [Test]
@@ -67,10 +68,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             powerShellSessionFactory.Setup(s => s.GetSession()).Returns(powerShellSession);
 
             // Act
-            bool result = powerShellExecutor.ExecuteScript(scriptPath);
+            var result = powerShellExecutor.ExecuteScript(scriptPath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -88,10 +89,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             powerShellSessionFactory.Setup(s => s.GetSession()).Returns(powerShellSessionMock.Object);
 
             // Act
-            bool result = powerShellExecutor.ExecuteScript(scriptPath);
+            var result = powerShellExecutor.ExecuteScript(scriptPath);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Failure);
         }
 
         [Test]
@@ -107,10 +108,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             powerShellSessionFactory.Setup(s => s.GetSession()).Returns(powerShellSessionMock.Object);
 
             // Act
-            bool result = powerShellExecutor.ExecuteScript(scriptPath);
+            var result = powerShellExecutor.ExecuteScript(scriptPath);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.AreEqual(result.Status, ServiceResultType.Success);
         }
 
         #endregion

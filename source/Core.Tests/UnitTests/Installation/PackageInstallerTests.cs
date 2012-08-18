@@ -1062,7 +1062,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(new FailureResult());
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -1128,7 +1128,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
             var packageInstaller = new PackageInstaller(
                 applicationInformation,
@@ -1194,7 +1194,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
             filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
 
             // configure powershell script execution
-            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
             packageConfigurationAccessor.Setup(p => p.AddOrUpdate(It.IsAny<PackageInfo>())).Returns(true);
 
