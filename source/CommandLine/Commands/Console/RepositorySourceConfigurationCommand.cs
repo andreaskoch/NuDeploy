@@ -4,6 +4,7 @@ using System.Linq;
 
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation.Repositories;
 
 namespace NuDeploy.CommandLine.Commands.Console
@@ -144,9 +145,12 @@ namespace NuDeploy.CommandLine.Commands.Console
 
                     string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName];
                     string repositoryUrlString = this.Arguments[ArgumentNameRepositoryUrl];
-                    if (!this.sourceRepositoryProvider.SaveRepositoryConfiguration(sourceRepositoryName, repositoryUrlString))
+
+                    IServiceResult saveRepostoryResult = this.sourceRepositoryProvider.SaveRepositoryConfiguration(sourceRepositoryName, repositoryUrlString);
+                    if (saveRepostoryResult.Status == ServiceResultType.Failure)
                     {
                         // failure
+                        this.userInterface.Display(saveRepostoryResult);
                         this.userInterface.WriteLine(
                             string.Format(
                                 Resources.RepositorySourceConfigurationCommand.SaveSourceRepositoryConfigurationFailedMessageTemplate,
@@ -178,9 +182,12 @@ namespace NuDeploy.CommandLine.Commands.Console
                     }
 
                     string sourceRepositoryName = this.Arguments[ArgumentNameRepositoryName] ?? this.Arguments.Values.Skip(1).Take(1).FirstOrDefault();
-                    if (!this.sourceRepositoryProvider.DeleteRepositoryConfiguration(sourceRepositoryName))
+
+                    IServiceResult deleteRepositoryResult = this.sourceRepositoryProvider.DeleteRepositoryConfiguration(sourceRepositoryName);
+                    if (deleteRepositoryResult.Status == ServiceResultType.Failure)
                     {
                         // failure
+                        this.userInterface.Display(deleteRepositoryResult);
                         this.userInterface.WriteLine(
                             string.Format(
                                 Resources.RepositorySourceConfigurationCommand.DeleteSourceRepositoryConfigurationFailedMessageTemplate, sourceRepositoryName));
@@ -223,12 +230,16 @@ namespace NuDeploy.CommandLine.Commands.Console
 
                 case RepositoryConfigurationCommandAction.Reset:
                 {
-                    if (!this.sourceRepositoryProvider.ResetRepositoryConfiguration())
+                    IServiceResult resetConfigurationResult = this.sourceRepositoryProvider.ResetRepositoryConfiguration();
+                    if (resetConfigurationResult.Status == ServiceResultType.Failure)
                     {
+                        // reset failed
+                        this.userInterface.Display(resetConfigurationResult);
                         this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ResetSourceRepositoryConfigurationFailedMessage);
                         return false;
                     }
 
+                    // success
                     this.userInterface.WriteLine(Resources.RepositorySourceConfigurationCommand.ResetSourceRepositoryConfigurationSuccessMessage);
                     return true;
                 }

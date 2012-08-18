@@ -52,32 +52,38 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             return configurations;
         }
 
-        public bool SaveRepositoryConfiguration(string repositoryName, string repositoryUrl)
+        public IServiceResult SaveRepositoryConfiguration(string repositoryName, string repositoryUrl)
         {
-            var sourceRepositoryConfiguration = this.sourceRepositoryConfigurationFactory.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl);
-            if (sourceRepositoryConfiguration == null)
+            var repositoryConfiguration = this.sourceRepositoryConfigurationFactory.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl);
+            if (repositoryConfiguration == null)
             {
-                return false;
+                return new FailureResult(
+                    Resources.ConfigFileSourceRepositoryProvider.SaveFailedBecauseRepositoryCouldNotBeCreatedMessageTemplate, repositoryName, repositoryUrl);
             }
 
             // get existing repositoriesConfiguration
             var repositories = this.GetExistingSourceRepsitoryConfigurationList().ToDictionary(r => r.Name, r => r);
 
             // add or update
-            string existingKey = repositories.Keys.FirstOrDefault(k => k.Equals(sourceRepositoryConfiguration.Name, StringComparison.OrdinalIgnoreCase));
+            string existingKey = repositories.Keys.FirstOrDefault(k => k.Equals(repositoryConfiguration.Name, StringComparison.OrdinalIgnoreCase));
             if (existingKey == null)
             {
-                repositories.Add(sourceRepositoryConfiguration.Name, sourceRepositoryConfiguration);
+                repositories.Add(repositoryConfiguration.Name, repositoryConfiguration);
             }
             else
             {
-                repositories[existingKey] = sourceRepositoryConfiguration;
+                repositories[existingKey] = repositoryConfiguration;
             }
 
-            return this.SaveNewSourceRepositoryConfigurationList(repositories.Values.ToArray());
+            if (!this.SaveNewSourceRepositoryConfigurationList(repositories.Values.ToArray()))
+            {
+                return new FailureResult(Resources.ConfigFileSourceRepositoryProvider.SaveFailedMessageTemplate, repositoryConfiguration);
+            }
+
+            return new SuccessResult(Resources.ConfigFileSourceRepositoryProvider.SaveSucceededMessageTemplate, repositoryConfiguration);
         }
 
-        public bool DeleteRepositoryConfiguration(string repositoryName)
+        public IServiceResult DeleteRepositoryConfiguration(string repositoryName)
         {
             if (string.IsNullOrWhiteSpace(repositoryName))
             {
@@ -87,17 +93,27 @@ namespace NuDeploy.Core.Services.Installation.Repositories
             var repositories = this.GetExistingSourceRepsitoryConfigurationList().ToList();
             if (!repositories.Any(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase)))
             {
-                return false;
+                return new FailureResult(Resources.ConfigFileSourceRepositoryProvider.DeleteFailedRepositoryDoesNotExistMessageTemplate, repositoryName);
             }
 
             var newRepositoryList = repositories.Where(r => r.Name.Equals(repositoryName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
-            return this.SaveNewSourceRepositoryConfigurationList(newRepositoryList);
+            if (!this.SaveNewSourceRepositoryConfigurationList(newRepositoryList))
+            {
+                return new FailureResult(Resources.ConfigFileSourceRepositoryProvider.DeleteFailedMessageTemplate, repositoryName);
+            }
+
+            return new SuccessResult(Resources.ConfigFileSourceRepositoryProvider.DeleteSucceededMessageTemplate, repositoryName);
         }
 
-        public bool ResetRepositoryConfiguration()
+        public IServiceResult ResetRepositoryConfiguration()
         {
             var defaultSources = new[] { new SourceRepositoryConfiguration { Name = DefaultRepositoryName, Url = NuDeployConstants.DefaultFeedUrl } };
-            return this.SaveNewSourceRepositoryConfigurationList(defaultSources);
+            if (!this.SaveNewSourceRepositoryConfigurationList(defaultSources))
+            {
+                return new FailureResult(Resources.ConfigFileSourceRepositoryProvider.ResetFailed);
+            }
+
+            return new SuccessResult(Resources.ConfigFileSourceRepositoryProvider.ResetSucceeded);
         }
 
         private IEnumerable<SourceRepositoryConfiguration> GetExistingSourceRepsitoryConfigurationList()

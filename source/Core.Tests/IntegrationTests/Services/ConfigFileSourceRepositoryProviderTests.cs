@@ -8,6 +8,7 @@ using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Common.Infrastructure;
 using NuDeploy.Core.Common.Persistence;
 using NuDeploy.Core.Common.Serialization;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation.Repositories;
 
 using NUnit.Framework;
@@ -57,10 +58,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
             string repositoryUrl = "http://sample-url.com";
 
             // Act
-            bool result = this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+            var result = this.sourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]

@@ -7,6 +7,7 @@ using NuDeploy.CommandLine.Commands;
 using NuDeploy.CommandLine.Commands.Console;
 using NuDeploy.Core.Common;
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 using NuDeploy.Core.Services.Installation.Repositories;
 
 using NUnit.Framework;
@@ -279,7 +280,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             repositoryConfigurationCommandActionParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
-            sourceRepositoryProvider.Setup(s => s.SaveRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(false);
+            sourceRepositoryProvider.Setup(s => s.SaveRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(new FailureResult());
 
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);
@@ -307,7 +308,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             repositoryConfigurationCommandActionParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
-            sourceRepositoryProvider.Setup(s => s.SaveRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(true);
+            sourceRepositoryProvider.Setup(s => s.SaveRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(new SuccessResult());
 
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);
@@ -386,7 +387,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             repositoryConfigurationCommandActionParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
-            sourceRepositoryProvider.Setup(s => s.DeleteRepositoryConfiguration(repositoryName)).Returns(false);
+            sourceRepositoryProvider.Setup(s => s.DeleteRepositoryConfiguration(repositoryName)).Returns(new FailureResult());
 
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);
@@ -412,7 +413,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             repositoryConfigurationCommandActionParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
-            sourceRepositoryProvider.Setup(s => s.DeleteRepositoryConfiguration(repositoryName)).Returns(true);
+            sourceRepositoryProvider.Setup(s => s.DeleteRepositoryConfiguration(repositoryName)).Returns(new SuccessResult());
 
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);
@@ -504,6 +505,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
 
+            sourceRepositoryProvider.Setup(s => s.ResetRepositoryConfiguration()).Returns(new SuccessResult());
+
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);
 
@@ -524,7 +527,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             repositoryConfigurationCommandActionParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
-            sourceRepositoryProvider.Setup(s => s.ResetRepositoryConfiguration()).Returns(false);
+            sourceRepositoryProvider.Setup(s => s.ResetRepositoryConfiguration()).Returns(new FailureResult());
 
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);
@@ -546,7 +549,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             repositoryConfigurationCommandActionParser.Setup(r => r.ParseAction(It.IsAny<string>())).Returns(commandAction);
 
             var sourceRepositoryProvider = new Mock<ISourceRepositoryProvider>();
-            sourceRepositoryProvider.Setup(s => s.ResetRepositoryConfiguration()).Returns(true);
+            sourceRepositoryProvider.Setup(s => s.ResetRepositoryConfiguration()).Returns(new SuccessResult());
 
             var repositorySourceConfigurationCommand = new RepositorySourceConfigurationCommand(
                 this.loggingUserInterface.UserInterface, repositoryConfigurationCommandActionParser.Object, sourceRepositoryProvider.Object);

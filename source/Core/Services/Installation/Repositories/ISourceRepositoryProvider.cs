@@ -8,10 +8,10 @@ namespace NuDeploy.Core.Services.Installation.Repositories
     {
         IEnumerable<SourceRepositoryConfiguration> GetRepositoryConfigurations();
 
-        bool SaveRepositoryConfiguration(string repositoryName, string repositoryUrl);
+        IServiceResult SaveRepositoryConfiguration(string repositoryName, string repositoryUrl);
 
-        bool DeleteRepositoryConfiguration(string repositoryName);
+        IServiceResult DeleteRepositoryConfiguration(string repositoryName);
 
-        bool ResetRepositoryConfiguration();
+        IServiceResult ResetRepositoryConfiguration();
     }
 }

@@ -87,6 +87,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigFilePublishConfigurationAccessor.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ConfigFileSourceRepositoryProvider.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigFileSourceRepositoryProvider.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\ConfigurationFileTransformationService.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -253,6 +258,10 @@
     <EmbeddedResource Include="Resources\ConfigFilePublishConfigurationAccessor.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigFilePublishConfigurationAccessor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ConfigFileSourceRepositoryProvider.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfigFileSourceRepositoryProvider.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ConfigurationFileTransformationService.resx">
       <Generator>ResXFileCodeGenerator</Generator>
