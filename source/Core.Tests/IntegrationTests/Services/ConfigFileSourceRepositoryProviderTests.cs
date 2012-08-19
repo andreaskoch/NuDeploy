@@ -18,6 +18,8 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
     [TestFixture]
     public class ConfigFileSourceRepositoryProviderTests
     {
+        #region Setup
+        
         private ConfigFileSourceRepositoryProvider sourceRepositoryProvider;
 
         [TestFixtureSetUp]
@@ -40,6 +42,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
             File.Delete(ConfigFileSourceRepositoryProvider.SourceRepositoryConfigurationFileName);
         }
 
+        #endregion
+
+        #region Get
+
         [Test]
         public void GetRepositories_ConfigFileDoesNotExist_ResultContainsNoEntries()
         {
@@ -49,6 +55,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
             // Assert
             Assert.AreEqual(0, result.Count);
         }
+
+        #endregion
+
+        #region Save
 
         [Test]
         public void SaveRepository_SuppliedRepositoryIsInvalid_ResultIsFalse()
@@ -117,6 +127,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
             Assert.AreEqual(repository2Url, savedRepo.Url.ToString());
         }
 
+        #endregion
+
+        #region Delete
+
         [Test]
         public void DeleteRepository_RemoveNonExistingRepository_NoRepositoryIsRemoved()
         {
@@ -173,6 +187,10 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
             this.sourceRepositoryProvider.DeleteRepositoryConfiguration(" ");
         }
 
+        #endregion
+
+        #region Reset
+        
         [Test]
         public void ResetRepositoryConfiguration()
         {
@@ -189,5 +207,7 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Services
             Assert.AreNotEqual(fileContentBefore, fileContentAfter);
             Assert.IsFalse(this.sourceRepositoryProvider.GetRepositoryConfigurations().Any(c => c.Name.Equals(config.Name)));
         }
+
+        #endregion
     }
 }
