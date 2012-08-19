@@ -626,5 +626,69 @@ namespace NuDeploy.Core.Tests.UnitTests.Publishing
         }
 
         #endregion
+
+        #region Reset
+
+        [Test]
+        public void ResetPublishConfiguration_EmptyArrayIsSaved()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var publishConfigurationFactory = new Mock<IPublishConfigurationFactory>();
+            var publishConfigurationPersistence = new Mock<IFilesystemPersistence<PublishConfiguration[]>>();
+
+            publishConfigurationPersistence.Setup(p => p.Save(It.IsAny<PublishConfiguration[]>(), It.IsAny<string>())).Returns(true);
+
+            var configFilePublishConfigurationAccessor = new ConfigFilePublishConfigurationAccessor(
+                applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
+
+            // Act
+            configFilePublishConfigurationAccessor.ResetPublishConfiguration();
+
+            // Assert
+            publishConfigurationPersistence.Verify(p => p.Save(It.Is<PublishConfiguration[]>(configs => configs.Length == 0), It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public void ResetPublishConfiguration_SaveSucceeds_SuccessResultIsReturned()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var publishConfigurationFactory = new Mock<IPublishConfigurationFactory>();
+            var publishConfigurationPersistence = new Mock<IFilesystemPersistence<PublishConfiguration[]>>();
+
+            publishConfigurationPersistence.Setup(p => p.Save(It.IsAny<PublishConfiguration[]>(), It.IsAny<string>())).Returns(true);
+
+            var configFilePublishConfigurationAccessor = new ConfigFilePublishConfigurationAccessor(
+                applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
+
+            // Act
+            var result = configFilePublishConfigurationAccessor.ResetPublishConfiguration();
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
+        }
+
+        [Test]
+        public void ResetPublishConfiguration_SaveFailse_FailureResultIsReturned()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var publishConfigurationFactory = new Mock<IPublishConfigurationFactory>();
+            var publishConfigurationPersistence = new Mock<IFilesystemPersistence<PublishConfiguration[]>>();
+
+            publishConfigurationPersistence.Setup(p => p.Save(It.IsAny<PublishConfiguration[]>(), It.IsAny<string>())).Returns(false);
+
+            var configFilePublishConfigurationAccessor = new ConfigFilePublishConfigurationAccessor(
+                applicationInformation, publishConfigurationFactory.Object, publishConfigurationPersistence.Object);
+
+            // Act
+            var result = configFilePublishConfigurationAccessor.ResetPublishConfiguration();
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        #endregion
     }
 }
