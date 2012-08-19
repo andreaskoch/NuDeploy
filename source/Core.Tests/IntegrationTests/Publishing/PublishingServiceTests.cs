@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
@@ -83,6 +84,26 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Publishing
 
             Assert.AreEqual(ServiceResultType.Success, result.Status);
             Assert.IsTrue(File.Exists(targetPath));
+        }
+
+        [Test]
+        public void PublishPackage_RemotePublishingTarget_CannotPublishToSpecifiedRemoteLocation_FailureResultIsReturned()
+        {
+            // Arrange Publish Configuration
+            string publishConfigurationName = "Nuget Gallery";
+            string publishLocation = "http://www.nuget.org/api/v2";
+            string apiKey = Guid.NewGuid().ToString();
+
+            this.publishConfigurationAccessor.AddOrUpdatePublishConfiguration(publishConfigurationName, publishLocation, apiKey);
+
+            // Arrange Nuget Package
+            string packagePath = this.samplePackageFilepath;
+
+            // Act
+            var result = this.publishingService.PublishPackage(packagePath, publishConfigurationName);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
     }
 }
