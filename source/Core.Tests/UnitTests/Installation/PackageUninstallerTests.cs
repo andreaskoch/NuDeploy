@@ -292,6 +292,40 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
         }
 
         [Test]
+        public void Uninstall_ExecutingUninstallScriptSucceeds_PackageConfigurationUpdateFails_FailureResultIsReturned()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            SemanticVersion version = null;
+
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
+
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(new SuccessResult());
+
+            packageConfigurationAccessor.Setup(p => p.Remove(It.IsAny<string>())).Returns(new FailureResult());
+
+            var packageUninstaller = new PackageUninstaller(
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                filesystemAccessor.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            var result = packageUninstaller.Uninstall(packageId, version);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
         public void Uninstall_ExecutingUninstallScriptSucceeds_PackageDirectoryIsRemoved()
         {
             // Arrange
@@ -323,6 +357,41 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
 
             // Assert
             filesystemAccessor.Verify(f => f.DeleteDirectory(package.Folder), Times.Once());
+        }
+
+        [Test]
+        public void Uninstall_ExecutingUninstallScriptSucceeds_PackageDirectoryRemovalFails_FailureResultIsReturned()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            SemanticVersion version = null;
+
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+
+            var package = TestUtilities.GetPackage(packageId, true);
+            installationStatusProvider.Setup(i => i.GetPackageInfo(packageId)).Returns(new[] { package });
+
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(true);
+            filesystemAccessor.Setup(f => f.DeleteDirectory(It.IsAny<string>())).Returns(false);
+
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.Is<string>(s => s.EndsWith(PackageUninstaller.UninstallPowerShellScriptName)))).Returns(new SuccessResult());
+
+            packageConfigurationAccessor.Setup(p => p.Remove(It.IsAny<string>())).Returns(new SuccessResult());
+
+            var packageUninstaller = new PackageUninstaller(
+                installationStatusProvider.Object,
+                packageConfigurationAccessor.Object,
+                filesystemAccessor.Object,
+                powerShellExecutor.Object);
+
+            // Act
+            var result = packageUninstaller.Uninstall(packageId, version);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         [Test]

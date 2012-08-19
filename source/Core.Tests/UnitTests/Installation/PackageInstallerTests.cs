@@ -1152,6 +1152,74 @@ namespace NuDeploy.Core.Tests.UnitTests.Installation
         }
 
         [Test]
+        public void Install_InstallationScriptExecutionSucceeds_PackageConfigurationUpdateFails_SuccessResultIsReturned()
+        {
+            // Arrange
+            string packageId = "Package.A";
+            DeploymentType deploymentType = DeploymentType.Full;
+            bool forceInstallation = false;
+            var systemSettingTransformationProfileNames = new string[] { };
+            var buildConfigurationProfiles = new string[] { };
+
+            var applicationInformation = new ApplicationInformation();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            var packageConfigurationAccessor = new Mock<IPackageConfigurationAccessor>();
+            var packageRepositoryBrowser = new Mock<IPackageRepositoryBrowser>();
+            var powerShellExecutor = new Mock<IPowerShellExecutor>();
+            var installationLogicProvider = new Mock<IInstallationLogicProvider>();
+            var packageUninstaller = new Mock<IPackageUninstaller>();
+            var nugetPackageExtractor = new Mock<INugetPackageExtractor>();
+            var packageConfigurationTransformationService = new Mock<IPackageConfigurationTransformationService>();
+            var configurationFileTransformationService = new Mock<IConfigurationFileTransformationService>();
+
+            var sourceRepositoryConfigurations = new List<SourceRepositoryConfiguration>
+                {
+                    new SourceRepositoryConfiguration { Name = "Test Repository", Url = new Uri("http://nuget.example.com/api/v2") }
+                };
+            packageRepositoryBrowser.Setup(p => p.RepositoryConfigurations).Returns(sourceRepositoryConfigurations);
+
+            var package = new Mock<IPackage>();
+            package.Setup(p => p.Id).Returns(packageId);
+            package.Setup(p => p.Version).Returns(new SemanticVersion(1, 0, 0, 0));
+            packageRepositoryBrowser.Setup(r => r.FindPackage(packageId)).Returns(package.Object);
+
+            installationLogicProvider.Setup(i => i.IsInstallRequired(packageId, It.IsAny<SemanticVersion>(), forceInstallation)).Returns(new SuccessResult());
+            installationLogicProvider.Setup(i => i.IsUninstallRequired(packageId, It.IsAny<SemanticVersion>(), deploymentType, forceInstallation)).Returns(new SuccessResult());
+
+            packageUninstaller.Setup(p => p.Uninstall(packageId, It.IsAny<SemanticVersion>())).Returns(new SuccessResult());
+
+            var extractedPackage = new NuDeployPackageInfo { Folder = "Package.A.1.0.0", Id = packageId, IsInstalled = false, Version = new SemanticVersion(1, 0, 0, 0) };
+            nugetPackageExtractor.Setup(e => e.Extract(package.Object, It.IsAny<string>())).Returns(extractedPackage);
+
+            packageConfigurationAccessor.Setup(p => p.AddOrUpdate(It.IsAny<PackageInfo>())).Returns(new FailureResult());
+
+            packageConfigurationTransformationService.Setup(t => t.TransformSystemSettings(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(new SuccessResult());
+            configurationFileTransformationService.Setup(c => c.TransformConfigurationFiles(extractedPackage.Folder, systemSettingTransformationProfileNames)).Returns(new SuccessResult());
+            filesystemAccessor.Setup(f => f.FileExists(It.Is<string>(s => s.Contains(PackageInstaller.InstallPowerShellScriptName)))).Returns(true);
+
+            // configure powershell script execution
+            powerShellExecutor.Setup(p => p.ExecuteScript(It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
+
+            var packageInstaller = new PackageInstaller(
+                applicationInformation,
+                filesystemAccessor.Object,
+                packageConfigurationAccessor.Object,
+                packageRepositoryBrowser.Object,
+                powerShellExecutor.Object,
+                installationLogicProvider.Object,
+                packageUninstaller.Object,
+                nugetPackageExtractor.Object,
+                packageConfigurationTransformationService.Object,
+                configurationFileTransformationService.Object);
+
+            // Act
+            var result = packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfiles);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
         public void Install_EverythingSucceeds_ResultIsTrue()
         {
             // Arrange
