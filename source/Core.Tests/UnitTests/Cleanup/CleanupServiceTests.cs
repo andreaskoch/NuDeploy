@@ -60,7 +60,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         #region Cleanup (parameterless)
 
         [Test]
-        public void Cleanup_InstallationStatusProviderReturnNoPackages_ResultIsFalse()
+        public void Cleanup_InstallationStatusProviderReturnNoPackages_FailureResultIsReturned()
         {
             // Arrange
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
@@ -78,7 +78,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         }
 
         [Test]
-        public void Cleanup_InstallationStatusProviderReturnPackages_AllPackagesAreInstalled_ResultIsFalse()
+        public void Cleanup_InstallationStatusProviderReturnPackages_AllPackagesAreInstalled_FailureResultIsReturned()
         {
             // Arrange
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
@@ -102,7 +102,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         }
 
         [Test]
-        public void Cleanup_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteDirectoryIsCalledForEachLegacyPackage_ResultIsTrue()
+        public void Cleanup_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteDirectoryIsCalledForEachLegacyPackage_SuccessResultIsReturned()
         {
             // Arrange
             var installationStatusProvider = new Mock<IInstallationStatusProvider>();
@@ -145,6 +145,38 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
             Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
+        [Test]
+        public void Cleanup_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteFails_FailureResultIsReturned()
+        {
+            // Arrange
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            filesystemAccessor.Setup(f => f.DeleteDirectory(It.IsAny<string>())).Returns(false);
+
+            var installedPackages = new List<NuDeployPackageInfo>
+                {
+                    TestUtilities.GetPackage("Package.A", true)
+                };
+
+            var legacyPackages = new List<NuDeployPackageInfo>
+                {
+                    TestUtilities.GetPackage("Package.B", false),
+                    TestUtilities.GetPackage("Package.C", false),
+                };
+
+            var packages = installedPackages.Union(legacyPackages).ToList();
+
+            installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
+
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
+
+            // Act
+            var result = cleanupService.Cleanup();
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
         #endregion
 
         #region Cleanup (parameterized)
@@ -166,7 +198,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         }
 
         [Test]
-        public void Cleanup_Parameterized_InstallationStatusProviderReturnNoPackages_ResultIsFalse()
+        public void Cleanup_Parameterized_InstallationStatusProviderReturnNoPackages_FailureResultIsReturned()
         {
             // Arrange
             string packageId = "Package.A";
@@ -186,7 +218,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         }
 
         [Test]
-        public void Cleanup_Parameterized_InstallationStatusProviderReturnNoPackagesWhichMatchTheSuppliedName_ResultIsFalse()
+        public void Cleanup_Parameterized_InstallationStatusProviderReturnNoPackagesWhichMatchTheSuppliedName_FailureResultIsReturned()
         {
             // Arrange
             string packageId = "Package.D";
@@ -213,7 +245,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         }
 
         [Test]
-        public void Cleanup_Parameterized_InstallationStatusProviderReturnPackages_AllPackageVersionsAreInstalled_ResultIsFalse()
+        public void Cleanup_Parameterized_InstallationStatusProviderReturnPackages_AllPackageVersionsAreInstalled_FailureResultIsReturned()
         {
             // Arrange
             string packageId = "Package.A";
@@ -239,7 +271,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
         }
 
         [Test]
-        public void Cleanup_Parameterized_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteDirectoryIsCalledForEachLegacyPackage_ResultIsTrue()
+        public void Cleanup_Parameterized_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteDirectoryIsCalledForEachLegacyPackage_SuccessResultIsReturned()
         {
             // Arrange
             string packageId = "Package.A";
@@ -282,6 +314,40 @@ namespace NuDeploy.Core.Tests.UnitTests.Cleanup
             }
 
             Assert.AreEqual(ServiceResultType.Success, result.Status);
+        }
+
+        [Test]
+        public void Cleanup_Parameterized_InstallationStatusProviderReturnThreePackages_OneIsInstalled_TwoAreNot_DeleteFails_FailureResultIsReturned()
+        {
+            // Arrange
+            string packageId = "Package.A";
+
+            var installationStatusProvider = new Mock<IInstallationStatusProvider>();
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            filesystemAccessor.Setup(f => f.DeleteDirectory(It.IsAny<string>())).Returns(false);
+
+            var installedPackages = new List<NuDeployPackageInfo>
+                {
+                    TestUtilities.GetPackage("Package.A", true, 9)
+                };
+
+            var legacyPackages = new List<NuDeployPackageInfo>
+                {
+                    TestUtilities.GetPackage("Package.A", false, 8),
+                    TestUtilities.GetPackage("Package.A", false, 7),
+                };
+
+            var packages = installedPackages.Union(legacyPackages).ToList();
+
+            installationStatusProvider.Setup(i => i.GetPackageInfo()).Returns(packages);
+
+            var cleanupService = new CleanupService(installationStatusProvider.Object, filesystemAccessor.Object);
+
+            // Act
+            var result = cleanupService.Cleanup(packageId);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
         }
 
         #endregion
