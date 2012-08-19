@@ -89,7 +89,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             string buildConfiguration = "Debug";
-            var buildProperties = new KeyValuePair<string, string>[] { };
+            var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
 
             // Act
             var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
@@ -111,7 +111,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
 
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
-            var buildProperties = new KeyValuePair<string, string>[] { };
+            var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
 
             // Act
             var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
@@ -147,7 +147,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            var buildProperties = new KeyValuePair<string, string>[] { };
+            var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new FailureResult());
@@ -170,7 +170,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            var buildProperties = new KeyValuePair<string, string>[] { };
+            var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
@@ -195,7 +195,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            var buildProperties = new KeyValuePair<string, string>[] { };
+            var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
@@ -221,7 +221,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
-            var buildProperties = new KeyValuePair<string, string>[] { };
+            var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
 
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
