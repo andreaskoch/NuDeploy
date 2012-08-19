@@ -123,6 +123,12 @@
   <data name="NoTransformationProfilesSupplied" xml:space="preserve">
     <value>Nothing to transform.</value>
   </data>
+  <data name="SaveFailedWithExceptionMessageTemplate" xml:space="preserve">
+    <value>Saving the transformed XML document to "{0}" failed. Error details: {1}</value>
+  </data>
+  <data name="SaveSucceededMessageTemplate" xml:space="preserve">
+    <value>The transformed XML document has been successfully saved to "{0}".</value>
+  </data>
   <data name="SuccessMessageTemplate" xml:space="preserve">
     <value>Configuration files have been successfully transformed (Base Path: {0}, Profiles: {1}).</value>
   </data>

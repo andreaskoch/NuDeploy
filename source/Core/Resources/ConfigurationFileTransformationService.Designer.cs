@@ -79,6 +79,24 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saving the transformed XML document to &quot;{0}&quot; failed. Error details: {1}.
+        /// </summary>
+        internal static string SaveFailedWithExceptionMessageTemplate {
+            get {
+                return ResourceManager.GetString("SaveFailedWithExceptionMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The transformed XML document has been successfully saved to &quot;{0}&quot;..
+        /// </summary>
+        internal static string SaveSucceededMessageTemplate {
+            get {
+                return ResourceManager.GetString("SaveSucceededMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configuration files have been successfully transformed (Base Path: {0}, Profiles: {1})..
         /// </summary>
         internal static string SuccessMessageTemplate {

@@ -77,10 +77,14 @@ namespace NuDeploy.Core.Services.Transformation
             }
 
             // save
-            if (!this.SaveTransformedFile(transformableDocument, destinationFilePath))
+            IServiceResult saveResult = this.SaveTransformedFile(transformableDocument, destinationFilePath);
+            if (saveResult.Status == ServiceResultType.Failure)
             {
                 return new FailureResult(
-                    Resources.ConfigurationFileTransformer.TransformationFailedMessageTemplate, sourceFilePath, transformationFilePath, destinationFilePath);
+                    Resources.ConfigurationFileTransformer.TransformationFailedMessageTemplate, sourceFilePath, transformationFilePath, destinationFilePath)
+                    {
+                        InnerResult = saveResult
+                    };
             }
 
             return new SuccessResult(
@@ -117,18 +121,8 @@ namespace NuDeploy.Core.Services.Transformation
             }
         }
 
-        private bool SaveTransformedFile(XmlTransformableDocument transformedDocument, string destinationFilePath)
+        private IServiceResult SaveTransformedFile(XmlTransformableDocument transformedDocument, string destinationFilePath)
         {
-            if (transformedDocument == null)
-            {
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(destinationFilePath))
-            {
-                return false;
-            }
-
             try
             {
                 this.filesystemAccessor.EnsureParentDirectoryExists(destinationFilePath);
@@ -137,11 +131,12 @@ namespace NuDeploy.Core.Services.Transformation
                     transformedDocument.Save(textWriter);
                 }
 
-                return true;
+                return new SuccessResult(Resources.ConfigurationFileTransformationService.SaveSucceededMessageTemplate, destinationFilePath);
             }
-            catch (Exception)
+            catch (Exception saveException)
             {
-                return false;
+                return new FailureResult(
+                    Resources.ConfigurationFileTransformationService.SaveFailedWithExceptionMessageTemplate, destinationFilePath, saveException.Message);
             }
         }
     }
