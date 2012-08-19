@@ -210,7 +210,6 @@
     <Compile Include="Services\Installation\Status\InstallationLogicProvider.cs" />
     <Compile Include="Services\Installation\Status\InstallationStatusProvider.cs" />
     <Compile Include="Services\IServiceResult.cs" />
-    <Compile Include="Services\NoResult.cs" />
     <Compile Include="Services\Packaging\Build\BuildPropertyProvider.cs" />
     <Compile Include="Services\Packaging\Build\ConventionBasedBuildResultFilePathProvider.cs" />
     <Compile Include="Services\Packaging\Build\IBuildFolderPathProvider.cs" />
