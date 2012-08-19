@@ -99,7 +99,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public void Prepackage_PrepackagingFolderIsInvalid_ResultIsFalse(string prepackagingFolder)
+        public void Prepackage_PrepackagingFolderIsInvalid_FailureResultIsReturned(string prepackagingFolder)
         {
             // Arrange
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -121,7 +121,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_PrepackagingFolderIsDoesNotExist_ResultIsFalse()
+        public void Prepackage_PrepackagingFolderIsDoesNotExist_FailureResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Non-Existing-Folder");
@@ -143,7 +143,33 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_NoFilesInBuildResultFolder_NothingIsCopied_ResultIsTrue()
+        public void Prepackage_OneOfTheSubFunctionsThrowsAnExecption_FailureResultIsReturned()
+        {
+            // Arrange
+            string prepackagingFolder = Path.GetFullPath("Prepackaging");
+
+            var filesystemAccessor = new Mock<IFilesystemAccessor>();
+            filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+
+            var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
+            var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
+            var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
+
+            prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
+            buildResultFilePathProvider.Setup(b => b.GetDeploymentPackageAdditionFilePaths()).Throws(new Exception());
+
+            var prepackagingService = new PrepackagingService(
+                filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
+
+            // Act
+            var result = prepackagingService.Prepackage();
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
+        public void Prepackage_NoFilesInBuildResultFolder_NothingIsCopied_SuccessResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
@@ -168,7 +194,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_DeploymentPackageAdditions_FilesAreCopied_ResultIsTrue()
+        public void Prepackage_DeploymentPackageAdditions_FilesAreCopied_SuccessResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
@@ -207,7 +233,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_AssemblyResourcesAreDownloaded_ResultIsTrue()
+        public void Prepackage_AssemblyResourcesAreDownloaded_SuccessResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
@@ -232,7 +258,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_Websites_FilesAreCopiedToTheWebsitesFolder_ResultIsTrue()
+        public void Prepackage_Websites_FilesAreCopiedToTheWebsitesFolder_SuccessResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
@@ -271,7 +297,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_WebApplications_FilesAreCopiedToTheWebApplicationsFolder_ResultIsTrue()
+        public void Prepackage_WebApplications_FilesAreCopiedToTheWebApplicationsFolder_SuccessResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
@@ -310,7 +336,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         }
 
         [Test]
-        public void Prepackage_Applications_FilesAreCopiedToTheApplicationsFolder_ResultIsTrue()
+        public void Prepackage_Applications_FilesAreCopiedToTheApplicationsFolder_SuccessResultIsReturned()
         {
             // Arrange
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
