@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Moq;
@@ -69,6 +68,201 @@ namespace NuDeploy.Core.Tests.UnitTests.Repositories
 
             // Act
             new ConfigFileSourceRepositoryProvider(applicationInformation, sourceRepositoryConfigurationFactory.Object, null);
+        }
+
+        #endregion
+
+        #region
+
+        [Test]
+        public void Get_AllRepositoriesThatAreReturnedByTheFilesystemPersistence_AreReturned()
+        {
+            // Arrange
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            var reposotories = new[] { new SourceRepositoryConfiguration { Name = "Nuget Gallery", Url = new Uri("http://www.nuget.org/api/v3") } };
+            filesystemPersistence.Setup(f => f.Load(It.IsAny<string>())).Returns(reposotories);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            var result = configFileSourceRepositoryProvider.GetRepositoryConfigurations();
+
+            // Assert
+            Assert.AreEqual(reposotories, result);
+        }
+
+        #endregion
+
+        #region Save
+
+        [Test]
+        public void Save_RepositoryObjectCannotBeCreated_FailureResultIsReturned()
+        {
+            // Arrange
+            string repositoryName = "does not matter here";
+            string repositoryUrl = "does not matter either";
+
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            SourceRepositoryConfiguration repositoryConfiguration = null;
+            sourceRepositoryConfigurationFactory.Setup(s => s.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(repositoryConfiguration);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            var result = configFileSourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
+        public void Save_RepositoryExists_OneRepositoryIsSaved()
+        {
+            // Arrange
+            string repositoryName = "Nuget Gallery";
+            string repositoryUrl = "http://www.nuget.org/api/v2";
+
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            sourceRepositoryConfigurationFactory.Setup(s => s.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(
+                new SourceRepositoryConfiguration { Name = repositoryName, Url = new Uri(repositoryUrl) });
+
+            var reposotories = new[] { new SourceRepositoryConfiguration { Name = repositoryName, Url = new Uri("http://www.nuget.org/api/v3") } };
+            filesystemPersistence.Setup(f => f.Load(It.IsAny<string>())).Returns(reposotories);
+            filesystemPersistence.Setup(f => f.Save(It.IsAny<SourceRepositoryConfiguration[]>(), It.IsAny<string>())).Returns(true);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            configFileSourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            filesystemPersistence.Verify(
+                f => f.Save(It.Is<SourceRepositoryConfiguration[]>(configurations => configurations.Length == 1), It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public void Save_RepositoryExists_SaveFails_FailureResultIsReturned()
+        {
+            // Arrange
+            string repositoryName = "Nuget Gallery";
+            string repositoryUrl = "http://www.nuget.org/api/v2";
+
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            sourceRepositoryConfigurationFactory.Setup(s => s.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(
+                new SourceRepositoryConfiguration { Name = repositoryName, Url = new Uri(repositoryUrl) });
+
+            var reposotories = new[] { new SourceRepositoryConfiguration { Name = "Nuget Gallery", Url = new Uri("http://www.nuget.org/api/v2") } };
+            filesystemPersistence.Setup(f => f.Load(It.IsAny<string>())).Returns(reposotories);
+            filesystemPersistence.Setup(f => f.Save(It.IsAny<SourceRepositoryConfiguration[]>(), It.IsAny<string>())).Returns(false);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            var result = configFileSourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Failure, result.Status);
+        }
+
+        [Test]
+        public void Save_RepositoryExists_SaveSucceeds_SuccessResultIsReturned()
+        {
+            // Arrange
+            string repositoryName = "Nuget Gallery";
+            string repositoryUrl = "http://www.nuget.org/api/v2";
+
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            sourceRepositoryConfigurationFactory.Setup(s => s.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(
+                new SourceRepositoryConfiguration { Name = repositoryName, Url = new Uri(repositoryUrl) });
+
+            var reposotories = new[] { new SourceRepositoryConfiguration { Name = "Nuget Gallery", Url = new Uri("http://www.nuget.org/api/v2") } };
+            filesystemPersistence.Setup(f => f.Load(It.IsAny<string>())).Returns(reposotories);
+            filesystemPersistence.Setup(f => f.Save(It.IsAny<SourceRepositoryConfiguration[]>(), It.IsAny<string>())).Returns(true);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            var result = configFileSourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
+        }
+
+        [Test]
+        public void Save_RepositoryDoesNotExist_TwoRepositoriesAreSaved()
+        {
+            // Arrange
+            string repositoryName = "2nd Nuget Gallery";
+            string repositoryUrl = "http://www.nuget.org/api/v2";
+
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            sourceRepositoryConfigurationFactory.Setup(s => s.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(
+                new SourceRepositoryConfiguration { Name = repositoryName, Url = new Uri(repositoryUrl) });
+
+            var reposotories = new[] { new SourceRepositoryConfiguration { Name = "Nuget Gallery", Url = new Uri("http://www.nuget.org/api/v2") } };
+            filesystemPersistence.Setup(f => f.Load(It.IsAny<string>())).Returns(reposotories);
+            filesystemPersistence.Setup(f => f.Save(It.IsAny<SourceRepositoryConfiguration[]>(), It.IsAny<string>())).Returns(true);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            configFileSourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            filesystemPersistence.Verify(
+                f => f.Save(It.Is<SourceRepositoryConfiguration[]>(configurations => configurations.Length == 2), It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public void Save_RepositoryDoesNotExist_SaveSucceeds_SuccessResultIsReturned()
+        {
+            // Arrange
+            string repositoryName = "2nd Nuget Gallery";
+            string repositoryUrl = "http://www.nuget.org/api/v2";
+
+            var applicationInformation = new ApplicationInformation { ConfigurationFileFolder = Environment.CurrentDirectory };
+            var sourceRepositoryConfigurationFactory = new Mock<ISourceRepositoryConfigurationFactory>();
+            var filesystemPersistence = new Mock<IFilesystemPersistence<SourceRepositoryConfiguration[]>>();
+
+            sourceRepositoryConfigurationFactory.Setup(s => s.GetSourceRepositoryConfiguration(repositoryName, repositoryUrl)).Returns(
+                new SourceRepositoryConfiguration { Name = repositoryName, Url = new Uri(repositoryUrl) });
+
+            var reposotories = new[] { new SourceRepositoryConfiguration { Name = "Nuget Gallery", Url = new Uri("http://www.nuget.org/api/v2") } };
+            filesystemPersistence.Setup(f => f.Load(It.IsAny<string>())).Returns(reposotories);
+            filesystemPersistence.Setup(f => f.Save(It.IsAny<SourceRepositoryConfiguration[]>(), It.IsAny<string>())).Returns(true);
+
+            var configFileSourceRepositoryProvider = new ConfigFileSourceRepositoryProvider(
+                applicationInformation, sourceRepositoryConfigurationFactory.Object, filesystemPersistence.Object);
+
+            // Act
+            var result = configFileSourceRepositoryProvider.SaveRepositoryConfiguration(repositoryName, repositoryUrl);
+
+            // Assert
+            Assert.AreEqual(ServiceResultType.Success, result.Status);
         }
 
         #endregion
