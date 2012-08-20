@@ -287,6 +287,6 @@
   </Target>
   <Target Name="AfterBuild">
     <CallTarget Targets="MergeExecutable" />
-    <MSBuild Projects="$(SolutionDir)\Build\Package.targets" />
+    <MSBuild Projects="$(SolutionDir)\Build\Package.NuDeploy.CommandLine.target" />
   </Target>
 </Project>
