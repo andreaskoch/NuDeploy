@@ -2,10 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="CreateNugetPackage" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<BinariesDirectory>$(SolutionDir)..\binaries\$(Configuration)</BinariesDirectory>
-		<PackageDirectory>$(SolutionDir)..\package</PackageDirectory>		
-	
-		<NuGetPackageId>NuDeploy.CommandLine</NuGetPackageId>
-		
+		<PackageDirectory>$(SolutionDir)..\package</PackageDirectory>
 		<NuGetToolsPath>$([System.IO.Path]::Combine($(SolutionDir), ".nuget"))</NuGetToolsPath>
 		<NuGetExePath>$(NuGetToolsPath)\nuget.exe</NuGetExePath>
 		<NuGetCommand>"$(NuGetExePath)"</NuGetCommand>
@@ -13,45 +10,22 @@
 		<NuSpecFileSource>$([System.IO.Path]::Combine($(SolutionDir), $(NuSpecFileName)))</NuSpecFileSource>
 		<NuSpecFileDestination>$([System.IO.Path]::Combine($(PackageDirectory), $(NuSpecFileName)))</NuSpecFileDestination>
 	</PropertyGroup>
-	
 	<ItemGroup>
 		<VersionSeedAssemblies Include="$(BinariesDirectory)\*.exe" />
 		<NugetPackageContent Include="$(BinariesDirectory)\*.*" />
 	</ItemGroup>
-	
 	<Target Name="GetVersion">
 		<Message Text="Determining NuGet Package Version from file (@(VersionSeedAssemblies))" />
-	
-		<GetAssemblyIdentity
-				AssemblyFiles="@(VersionSeedAssemblies)">
-				<Output
-					TaskParameter="Assemblies"
-					ItemName="NugetPackageAssemblyIdentities"/>
-			</GetAssemblyIdentity>
-			
+		<GetAssemblyIdentity AssemblyFiles="@(VersionSeedAssemblies)">
+			<Output TaskParameter="Assemblies" ItemName="NugetPackageAssemblyIdentities" />
+		</GetAssemblyIdentity>
 		<Message Text="The Version is %(NugetPackageAssemblyIdentities.Version)" />
-	</Target>	
-
-    <Target Name="CreateNugetPackage" DependsOnTargets="GetVersion" Condition="$(Configuration)=='Release'">
-        <Message Text="Creating a NuGet Package" />
-		
-		<Message Text="NuGetPackageId: $(NuGetPackageId)" />
-		<Message Text="NuSpecFileVersion: %(NugetPackageAssemblyIdentities.Version)" />
-		
-		<Message Text="BinariesDirectory: $(BinariesDirectory)" />
-		<Message Text="PackageDirectory: $(PackageDirectory)" />
-		<Message Text="Package Content: @(NugetPackageContent)" />
-		
-		<Message Text="BuildConfiguration: $(Configuration)" />
-		<Message Text="NuGetToolsPath: $(NuGetToolsPath)" />
-		<Message Text="NuGetExePath: $(NuGetExePath)" />
-		<Message Text="NuGetCommand: $(NuGetCommand)" />
-		<Message Text="NuSpecFileSource: $(NuSpecFileSource)" />
-		
-		<Message Text="Preparing NuSpec file" />
+	</Target>
+	<Target Name="CreateNugetPackage" DependsOnTargets="GetVersion" Condition="$(Configuration)=='Release'">
+		<Message Text="Creating a NuGet Package with $(NuSpecFileName)" />
 		<Copy SourceFiles="$(NuSpecFileSource)" DestinationFiles="$(NuSpecFileDestination)" />
-        <Exec Command="$(NuGetCommand) pack &quot;$(NuSpecFileDestination)&quot; -version &quot;%(NugetPackageAssemblyIdentities.Version)&quot; -o &quot;$(PackageDirectory)&quot; -BasePath &quot;$(BinariesDirectory)&quot;" />
+		<Exec Command="$(NuGetCommand) pack &quot;$(NuSpecFileDestination)&quot; -version &quot;%(NugetPackageAssemblyIdentities.Version)&quot; -o &quot;$(PackageDirectory)&quot; -BasePath &quot;$(BinariesDirectory)&quot;" />
 		<Delete Files="$(NuSpecFileDestination)" />
-    </Target>
-	
+	</Target>
 </Project>
+
