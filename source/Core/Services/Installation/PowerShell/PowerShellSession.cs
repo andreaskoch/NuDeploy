@@ -47,10 +47,18 @@ namespace NuDeploy.Core.Services.Installation.PowerShell
                 throw new ArgumentNullException("scriptText");
             }
 
-            this.pipelineExecutor = new PipelineExecutor(this.powerShell.Runspace, scriptText);
-            this.pipelineExecutor.OnDataReady += this.PipelineExecutorOnDataReady;
-            this.pipelineExecutor.OnErrorReady += this.PipelineExecutorOnErrorReady;
-            this.pipelineExecutor.Start();
+            try
+            {
+                this.pipelineExecutor = new PipelineExecutor(this.powerShell.Runspace, scriptText);
+                this.pipelineExecutor.OnDataReady += this.PipelineExecutorOnDataReady;
+                this.pipelineExecutor.OnErrorReady += this.PipelineExecutorOnErrorReady;
+                this.pipelineExecutor.Start();
+            }
+            catch (InvalidRunspaceStateException sessionStateException)
+            {
+                throw new PowerShellException(
+                    string.Format(Resources.PowerShellSession.CannotExecuteCommandBecauseSessionIsClosedMessageTemplate, scriptText), sessionStateException);
+            }
 
             while (!this.pipelineExecutor.Pipeline.Output.EndOfPipeline)
             {

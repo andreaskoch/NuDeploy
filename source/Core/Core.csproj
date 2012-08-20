@@ -137,6 +137,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PowerShellExecutor.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\PowerShellSession.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PowerShellSession.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PrepackagingService.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -193,6 +198,7 @@
     <Compile Include="Services\Installation\PowerShell\NuDeployPowerShellUserInterface.cs" />
     <Compile Include="Services\Installation\PowerShell\NuDeployRawPowerShellUserInterface.cs" />
     <Compile Include="Services\Installation\PowerShell\PipelineExecutor.cs" />
+    <Compile Include="Services\Installation\PowerShell\PowerShellException.cs" />
     <Compile Include="Services\Installation\PowerShell\PowerShellHost.cs" />
     <Compile Include="Services\Installation\PowerShell\PowerShellSession.cs" />
     <Compile Include="Services\Installation\PowerShell\PowerShellExecutor.cs" />
@@ -298,6 +304,10 @@
     <EmbeddedResource Include="Resources\PowerShellExecutor.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PowerShellExecutor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PowerShellSession.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PowerShellSession.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PrepackagingService.resx">
       <Generator>ResXFileCodeGenerator</Generator>

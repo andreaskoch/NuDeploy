@@ -23,19 +23,23 @@ namespace NuDeploy.Core.Tests.IntegrationTests.PowerShell
 
         private IUserInterface userInterface;
 
+        private PhysicalFilesystemAccessor fileSystemAccessor;
+
+        private IPowerShellHost powerShellHost;
+
         [SetUp]
         public void Setup()
         {
             var applicationInformation = ApplicationInformationProvider.GetApplicationInformation();
 
             var encodingProvider = new DefaultFileEncodingProvider();
-            var fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
+            this.fileSystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
             this.userInterface = new Mock<IUserInterface>().Object;
             this.powerShellUserInterface = new NuDeployPowerShellUserInterface(this.userInterface);
-            IPowerShellHost powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
+            this.powerShellHost = new PowerShellHost(this.powerShellUserInterface, applicationInformation);
 
-            this.powerShellSession = new PowerShellSession(powerShellHost, fileSystemAccessor);
+            this.powerShellSession = new PowerShellSession(this.powerShellHost, this.fileSystemAccessor);
         }
 
         #region ExecuteCommand
@@ -296,6 +300,51 @@ namespace NuDeploy.Core.Tests.IntegrationTests.PowerShell
 
             // Assert
             Assert.AreEqual("IIS:\\", result.Trim());
+        }
+
+        [Test]
+        public void ExecuteScript_ScriptThrowsException()
+        {
+            // Arrange
+            string scriptPath = GetAbsoluteScriptPath("TestScript-06-Exception.ps1");
+
+            // Act
+            string result = this.powerShellSession.ExecuteScript(scriptPath);
+
+            // Assert
+            Assert.AreEqual(string.Empty, result.Trim());
+        }
+
+        #endregion
+
+        #region Disposable
+
+        [Test]
+        public void ExecuteScriptAndDisposeSessionAfterwards()
+        {
+            // Arrange
+            string scriptPath = GetAbsoluteScriptPath("TestScript-01-ReturnResults.ps1");
+
+            // Act
+            using (IPowerShellSession session = new PowerShellSession(this.powerShellHost, this.fileSystemAccessor))
+            {
+                string result = session.ExecuteScript(scriptPath);
+
+                // Assert
+                Assert.AreEqual("TestScript-01-ReturnResults.ps1", result.Trim());
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(PowerShellException))]
+        public void DisposeSessionAndUseSessionAfterwards_PowerShellExceptionIsThrown()
+        {
+            // Arrange
+            string scriptPath = GetAbsoluteScriptPath("TestScript-01-ReturnResults.ps1");
+
+            // Act
+            this.powerShellSession.Dispose();
+            this.powerShellSession.ExecuteScript(scriptPath);
         }
 
         #endregion
