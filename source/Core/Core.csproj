@@ -330,32 +330,6 @@
       <LastGenOutput>SolutionPackagingService.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\Deploy.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\PostDeploy.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\PreDeploy.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\Remove.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\Init.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\Install.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\apply-filesystem-permissions.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\apply-system-settings.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\create-filesystem-links.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\deploy-content.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\install-external-dependencies.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\certificate-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\filesystem-permission-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\firewall-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\hostfile-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\iis-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\local-security-policy-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\local-usermanagement.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\scheduled-task-management.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\modules\utilities.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\remove-content.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\remove-filesystem-links.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\remove-filesystem-permissions.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\restore-system-settings.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\scripts\uninstall-external-dependencies.ps1" />
-    <EmbeddedResource Include="Resources\DeploymentScripts\tools\Uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeploymentScripts\DeploymentScripts.csproj">

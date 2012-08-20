@@ -29,6 +29,7 @@ using NuDeploy.Core.Services.Packaging.PrePackaging;
 using NuDeploy.Core.Services.Publishing;
 using NuDeploy.Core.Services.Transformation;
 using NuDeploy.Core.Services.Update;
+using NuDeploy.DeploymentScripts.PowerShell.WebServer;
 
 using NuGet;
 
@@ -78,15 +79,13 @@ namespace NuDeploy.CommandLine.DependencyResolution
                         config.For<IPowerShellSessionFactory>().Use<PowerShellSessionFactory>();
 
                         /* assembly resource access */
-                        config.For<_Assembly>().Use(typeof(ApplicationInformationProvider).Assembly);
+                        config.For<_Assembly>().Use(typeof(WebServerDeploymentResouceInfo).Assembly);
                         config.For<IAssemblyResourceFilePathProvider>().Use<AssemblyResourceFilePathProvider>();
                         config.For<IAssemblyFileResourceProvider>().Use<AssemblyFileResourceProvider>();
                         config.For<IAssemblyResourceDownloader>().Use<DeploymentScriptResourceDownloader>();
 
                         /* cleanup */
                         config.For<ICleanupService>().Use<CleanupService>();
-
-                        /* configuration */
 
                         /* file system */
                         config.For<IRelativeFilePathInfoFactory>().Use<RelativeFilePathInfoFactory>();

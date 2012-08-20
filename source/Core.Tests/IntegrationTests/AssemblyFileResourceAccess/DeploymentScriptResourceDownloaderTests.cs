@@ -3,6 +3,7 @@
 using NuDeploy.Core.Common.FileEncoding;
 using NuDeploy.Core.Common.FilesystemAccess;
 using NuDeploy.Core.Services.AssemblyResourceAccess;
+using NuDeploy.DeploymentScripts.PowerShell.WebServer;
 
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ namespace NuDeploy.Core.Tests.IntegrationTests.AssemblyFileResourceAccess
         {
             var encodingProvider = new DefaultFileEncodingProvider();
             var assemblyResourceFilePathProvider = new AssemblyResourceFilePathProvider();
-            var sourceAssembly = typeof(AssemblyFileResourceProvider).Assembly;
+            var sourceAssembly = typeof(WebServerDeploymentResouceInfo).Assembly;
             var filesystemAccessor = new PhysicalFilesystemAccessor(encodingProvider);
 
             this.assemblyFileResourceProvider = new AssemblyFileResourceProvider(sourceAssembly, assemblyResourceFilePathProvider);

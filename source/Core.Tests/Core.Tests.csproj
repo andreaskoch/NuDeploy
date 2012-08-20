@@ -123,6 +123,10 @@
       <Project>{F8556D09-5A6D-457F-9F74-416F59C393E0}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DeploymentScripts\DeploymentScripts.csproj">
+      <Project>{05C051BF-0A46-491D-AED5-87A3AD4E675C}</Project>
+      <Name>DeploymentScripts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="IntegrationTests\PowerShell\TestScript-06-Exception.ps1">

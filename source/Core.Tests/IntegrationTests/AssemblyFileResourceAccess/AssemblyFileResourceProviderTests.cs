@@ -2,6 +2,7 @@
 using System.Linq;
 
 using NuDeploy.Core.Services.AssemblyResourceAccess;
+using NuDeploy.DeploymentScripts.PowerShell.WebServer;
 
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace NuDeploy.Core.Tests.IntegrationTests.AssemblyFileResourceAccess
         [TestFixtureSetUp]
         public void Setup()
         {
-            var sourceAssembly = typeof(AssemblyFileResourceProvider).Assembly;
+            var sourceAssembly = typeof(WebServerDeploymentResouceInfo).Assembly;
             var assemblyResourceFilePathProvider = new AssemblyResourceFilePathProvider();
             this.assemblyFileResourceProvider = new AssemblyFileResourceProvider(sourceAssembly, assemblyResourceFilePathProvider);
         }

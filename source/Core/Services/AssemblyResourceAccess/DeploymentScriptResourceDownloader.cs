@@ -7,7 +7,7 @@ namespace NuDeploy.Core.Services.AssemblyResourceAccess
 {
     public class DeploymentScriptResourceDownloader : IAssemblyResourceDownloader
     {
-        public const string DeploymentScriptNamespace = "NuDeploy.Core.Resources.DeploymentScripts";
+        public const string DeploymentScriptNamespace = "NuDeploy.DeploymentScripts.PowerShell.WebServer";
 
         private readonly IAssemblyFileResourceProvider assemblyFileResourceProvider;
 
