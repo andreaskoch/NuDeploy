@@ -12,11 +12,15 @@ namespace NuDeploy.CommandLine.UserInterface
 {
     public class ConsoleUserInterface : IUserInterface
     {
+        private const int DefaultWindowWidth = 60;
+
         private readonly IConsoleTextManipulation textManipulation;
 
         private readonly IActionLogger logger;
 
         private readonly IServiceResultVisualizer serviceResultVisualizer;
+
+        private int windowWidth = DefaultWindowWidth;
 
         private readonly StringBuilder userInterfaceContent = new StringBuilder();
 
@@ -52,13 +56,26 @@ namespace NuDeploy.CommandLine.UserInterface
                 }
                 catch (IOException)
                 {
-                    return 60;
+                    return this.windowWidth;
                 }
             }
 
             set
             {
-                Console.WindowWidth = value;
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException("value");
+                }
+
+                try
+                {
+                    Console.WindowWidth = value;
+                }
+                catch (IOException)
+                {
+                    this.windowWidth = value;
+                }
+                
             }
         }
 
@@ -72,10 +89,10 @@ namespace NuDeploy.CommandLine.UserInterface
 
         public string GetInput()
         {
-            this.CaptureLine("Requesting input from user.");
+            this.CaptureLine(Resources.ConsoleUserInterface.GetInputLabel);
             string input = Console.ReadLine();
 
-            this.CaptureLine("User entered {0}", input);
+            this.CaptureLine(Resources.ConsoleUserInterface.GetInputLogMessageTemplate, input);
             return input;
         }
 

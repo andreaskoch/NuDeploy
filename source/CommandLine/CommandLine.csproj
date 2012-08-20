@@ -113,6 +113,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ConsoleUserInterface.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConsoleUserInterface.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PublishingTargetConfigurationCommand.Designer.cs">
       <DependentUpon>PublishingTargetConfigurationCommand.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -178,6 +183,10 @@
     <EmbeddedResource Include="Resources\Application.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ConsoleUserInterface.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConsoleUserInterface.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PublishingTargetConfigurationCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

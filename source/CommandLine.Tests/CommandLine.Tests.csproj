@@ -79,6 +79,7 @@
     <Compile Include="UnitTests\Commands\RepositoryConfigurationCommandActionParserTests.cs" />
     <Compile Include="UnitTests\UserInterface\ConsoleServiceResultVisualizerTests.cs" />
     <Compile Include="UnitTests\UserInterface\ConsoleTextManipulationTests.cs" />
+    <Compile Include="UnitTests\UserInterface\ConsoleUserInterfaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandLine\CommandLine.csproj">
