@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NuDeploy.Core</id>
+    <version>1.0.0</version>
+    <authors>andreaskoch</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Library for NuGet based deployments</description>
+    <language>en-US</language>
+    <projectUrl>https://bitbucket.org/andreaskoch/nudeploy</projectUrl>
+    <tags>NuGet Deployment NuDeploy Library</tags>
+    <dependencies>
+      <group targetFramework="net40">
+        <dependency id="Newtonsoft.Json" />
+        <dependency id="NuGet.Core" />
+        <dependency id="structuremap" />
+        <dependency id="NuGet.DeploymentScripts" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.Build" targetFramework="net40" />
+      <frameworkAssembly assemblyName="Microsoft.Build.Framework" targetFramework="net40" />
+      <frameworkAssembly assemblyName="Microsoft.Web.Publishing.Tasks" targetFramework="net40" />
+      <frameworkAssembly assemblyName="System.Management.Automation" targetFramework="net40" />
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework="net40" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="NuDeploy.Core.dll" target="lib\net40" />
+  </files>
+</package>

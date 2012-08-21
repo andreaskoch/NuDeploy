@@ -8,9 +8,12 @@
     <description>Utility for NuGet based web-server deployments</description>
     <language>en-US</language>
     <projectUrl>https://bitbucket.org/andreaskoch/nudeploy</projectUrl>
-    <tags>NuGet Deployment NuDeploy</tags>
+    <tags>NuGet Deployment NuDeploy Tool</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Management.Automation" targetFramework="net40" />
+    </frameworkAssemblies>    
   </metadata>
   <files>
-    <file src="NuDeploy.exe" target="tools" />
-  </files>
+    <file src="merged\NuDeploy.exe" target="tools" />
+  </files> 
 </package>

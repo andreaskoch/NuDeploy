@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NuDeploy.CommandLine</RootNamespace>
-    <AssemblyName>NuDeploy</AssemblyName>
+    <AssemblyName>NuDeploy.CommandLine</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -232,6 +232,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UninstallCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="NuDeploy.CommandLine.nuspec">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -263,23 +266,41 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ilmerge.internalize.ignore.txt" />
+  </ItemGroup>
   <Target Name="MergeExecutable">
     <PropertyGroup>
+      <!--MSBuild 4.0 property-->
+      <ProgramFiles32>$(MSBuildProgramFiles32)</ProgramFiles32>
+      <!--Use OS env var as a fallback:- 32 bit MSBuild 2.0/3.5 on x64 will use this-->
+      <ProgramFiles32 Condition=" '' == '$(ProgramFiles32)'">$(ProgramFiles%28x86%29)</ProgramFiles32>
+      <!-- Handle MSBuild 2.0/3.5 running in 64 bit mode - neither of the above env vars are available. http://stackoverflow.com/questions/336633 NB this trick (Adding a literal " (x86)" to the 64 bit Program Files path) may or may not work on all versions of Windows -->
+      <ProgramFiles32 Condition="'$(ProgramFiles32)'=='' AND 'AMD64' == '$(PROCESSOR_ARCHITECTURE)'">$(ProgramFiles) (x86)</ProgramFiles32>
+      <!--Catch-all - handles .NET 2.0/3.5 non-AMD64 and .NET 2.0 on x86 -->
+      <ProgramFiles32 Condition=" '' == '$(ProgramFiles32)' ">$(ProgramFiles)</ProgramFiles32>
+    </PropertyGroup>
+    <PropertyGroup>
       <ILMergeExe>$(SolutionDir)\tools\ILMerge\ILMerge.exe</ILMergeExe>
-      <ILMergeInternalizeIgnoreFile>$(SolutionDir)\Build\ilmerge.internalize.ignore.txt</ILMergeInternalizeIgnoreFile>
-      <ILMergeOutputFile>$(AssemblyName).exe</ILMergeOutputFile>
-      <ILMergeOutputFolder>$(SolutionDir)\..\binaries\$(Configuration)</ILMergeOutputFolder>
+      <ILMergeInternalizeIgnoreFile>$(ProjectDir)ilmerge.internalize.ignore.txt</ILMergeInternalizeIgnoreFile>
+      <ILMergeOutputFile>NuDeploy.exe</ILMergeOutputFile>
+      <ILMergeOutputFolder>$(SolutionDir)..\binaries\$(AssemblyName)</ILMergeOutputFolder>
       <ILMergeOutputFilePath>$(ILMergeOutputFolder)\$(ILMergeOutputFile)</ILMergeOutputFilePath>
       <ILMergeLogFilePath>$(ILMergeOutputFolder)\ilmerge.msbuild.log</ILMergeLogFilePath>
-      <FrameworkPath>$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0</FrameworkPath>
+      <FrameworkPath>$(ProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0</FrameworkPath>
     </PropertyGroup>
     <ItemGroup>
-      <ILMergeItems Include="$(OutputPath)\*.dll;$(OutputPath)\*.exe" />
+      <ILMergeItems Include="$(OutputPath)\*.dll,$(OutputPath)\*.exe" />
     </ItemGroup>
+	<MakeDir Directories="$(ILMergeOutputFolder)"/>
     <Delete Files="$(ILMergeOutputFilePath)" Condition="Exists($(ILMergeOutputFilePath))" />
     <!-- ILMerge does not yet support .NET 4.0  http://nitoprograms.blogspot.com/2010/09/using-ilmerge-with-net-40-andor-rx.html /targetplatform:v4,"%ProgramFiles%\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" -->
     <Error Condition="!Exists('$(FrameworkPath)')" Text="Could not find 4.0 reference assemblies in $(FrameworkPath)" />
-    <Exec Command="&quot;$(ILMergeExe)&quot; /targetplatform:&quot;v4, $(FrameworkPath)&quot; /internalize:&quot;$(ILMergeInternalizeIgnoreFile)&quot; /target:exe /out:&quot;$(ILMergeOutputFilePath)&quot; /log:&quot;$(ILMergeLogFilePath)&quot; /allowDup NuDeploy.exe Microsoft.Web.Publishing.Tasks.dll Newtonsoft.Json.dll StructureMap.dll NuGet.Core.dll NuDeploy.Core.dll NuDeploy.DeploymentScripts.dll" WorkingDirectory="$(OutputPath)" />
+    <Exec Command="&quot;$(ILMergeExe)&quot; /targetplatform:&quot;v4, $(FrameworkPath)&quot; /internalize:&quot;$(ILMergeInternalizeIgnoreFile)&quot; /target:exe /out:&quot;$(ILMergeOutputFilePath)&quot; /log:&quot;$(ILMergeLogFilePath)&quot; /allowDup NuDeploy.CommandLine.exe Microsoft.Web.Publishing.Tasks.dll Newtonsoft.Json.dll StructureMap.dll NuGet.Core.dll NuDeploy.Core.dll NuDeploy.DeploymentScripts.dll" WorkingDirectory="$(OutputPath)" />
+    <ItemGroup>
+      <MergedExecutable Include="$(ILMergeOutputFilePath)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(MergedExecutable)" DestinationFiles="@(MergedExecutable->'$(OutputPath)merged\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
@@ -287,6 +308,5 @@
   </Target>
   <Target Name="AfterBuild">
     <CallTarget Targets="MergeExecutable" />
-    <MSBuild Projects="$(SolutionDir)\Build\Package.NuDeploy.CommandLine.target" />
   </Target>
 </Project>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NuDeploy.DeploymentScripts</id>
+    <version>1.0.0</version>
+    <authors>andreaskoch</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Deployment scripts for NuGet based deployments</description>
+    <language>en-US</language>
+    <projectUrl>https://bitbucket.org/andreaskoch/nudeploy</projectUrl>
+    <tags>NuGet Deployment NuDeploy PowerShell Scripts</tags>
+  </metadata>
+  <files>
+    <file src="PowerShell\**" target="content" />
+  </files>
+</package>
