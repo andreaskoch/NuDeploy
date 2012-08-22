@@ -125,21 +125,8 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <Target Name="ExportBinaries">
-    <PropertyGroup>
-      <BinaryOutputFolder>$(SolutionDir)..\binaries\$(AssemblyName)</BinaryOutputFolder>
-    </PropertyGroup>
-    <ItemGroup>
-      <BinaryOutputFolderFiles Include="$(BinaryOutputFolder)\*.*" />
-    </ItemGroup>
-    <MakeDir Directories="$(BinaryOutputFolder)" />
-    <Delete Files="@(BinaryOutputFolderFiles)" />
-    <ItemGroup>
-      <SourceBinaries Include="$(TargetPath)" />
-    </ItemGroup>
-    <Copy SourceFiles="@(SourceBinaries)" DestinationFiles="@(SourceBinaries->'$(BinaryOutputFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\Build\BinaryExport.targets" />
   <Target Name="AfterBuild">
     <CallTarget Targets="ExportBinaries" />
   </Target>

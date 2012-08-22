@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="ExportBinaries">
+    <PropertyGroup>
+      <BinaryOutputFolder>$(SolutionDir)..\binaries\$(AssemblyName)</BinaryOutputFolder>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <BinaryOutputFolderFiles Include="$(BinaryOutputFolder)\*.*" />
+    </ItemGroup>
+
+    <MakeDir Directories="$(BinaryOutputFolder)"/>
+    <Delete Files="@(BinaryOutputFolderFiles)" />
+
+    <ItemGroup>
+      <SourceBinaries Include="$(TargetPath)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceBinaries)" DestinationFiles="@(SourceBinaries->'$(BinaryOutputFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>  
+</Project>

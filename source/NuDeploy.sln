@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{6C5A7227-47B8-490B-A74B-99753A62BB94}"
 	ProjectSection(SolutionItems) = preProject
+		Build\BinaryExport.targets = Build\BinaryExport.targets
 		Build\BuildVariables.targets = Build\BuildVariables.targets
 	EndProjectSection
 EndProject
