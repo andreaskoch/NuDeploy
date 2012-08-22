@@ -11,6 +11,6 @@
     <tags>NuGet Deployment NuDeploy PowerShell Scripts</tags>
   </metadata>
   <files>
-    <file src="PowerShell\**" target="content" />
+    <file src="NuDeploy.DeploymentScripts.dll" target="lib\net40" />
   </files>
 </package>

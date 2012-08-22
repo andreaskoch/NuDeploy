@@ -42,134 +42,82 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\Init.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\Init.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\Install.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\Install.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\apply-filesystem-permissions.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\apply-filesystem-permissions.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\apply-system-settings.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\apply-system-settings.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\create-filesystem-links.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\create-filesystem-links.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\deploy-content.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\deploy-content.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\install-external-dependencies.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\install-external-dependencies.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\certificate-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\certificate-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\filesystem-permission-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\filesystem-permission-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\firewall-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\firewall-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\hostfile-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\hostfile-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\iis-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\iis-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\local-security-policy-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\local-security-policy-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\local-usermanagement.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\local-usermanagement.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\scheduled-task-management.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\scheduled-task-management.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\utilities.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\modules\utilities.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\remove-content.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\remove-content.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\remove-filesystem-links.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\remove-filesystem-links.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\remove-filesystem-permissions.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\remove-filesystem-permissions.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\restore-system-settings.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\restore-system-settings.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\uninstall-external-dependencies.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\scripts\uninstall-external-dependencies.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\tools\Uninstall.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\tools\Uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\Remove.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\Remove.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\Deploy.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\Deploy.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\PostDeploy.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\PostDeploy.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PowerShell\WebServer\PreDeploy.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="PowerShell\WebServer\PreDeploy.ps1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuDeploy.DeploymentScripts.nuspec">
@@ -177,5 +125,22 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <Target Name="ExportBinaries">
+    <PropertyGroup>
+      <BinaryOutputFolder>$(SolutionDir)..\binaries\$(AssemblyName)</BinaryOutputFolder>
+    </PropertyGroup>
+    <ItemGroup>
+      <BinaryOutputFolderFiles Include="$(BinaryOutputFolder)\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(BinaryOutputFolder)" />
+    <Delete Files="@(BinaryOutputFolderFiles)" />
+    <ItemGroup>
+      <SourceBinaries Include="$(TargetPath)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceBinaries)" DestinationFiles="@(SourceBinaries->'$(BinaryOutputFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <CallTarget Targets="ExportBinaries" />
+  </Target>
 </Project>
