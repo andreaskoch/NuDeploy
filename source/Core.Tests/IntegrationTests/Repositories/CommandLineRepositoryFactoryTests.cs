@@ -36,14 +36,14 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Repositories
         }
 
         [Test]
-        public void CreateRepository_PackageSourceParameterIsValid_GetPackagesReturnsAPackage()
+        public void CreateRepository_PackageSourceParameterIsValid_GetNugetCorePackageReturnsAPackage()
         {
             // Arrange
             string packageSource = NuDeployConstants.DefaultFeedUrl.ToString();
             IPackageRepository packageRepository = this.commandLineRepositoryFactory.CreateRepository(packageSource);
 
             // Act
-            var package = packageRepository.GetPackages().First();
+            var package = packageRepository.GetPackages().Where(p => p.Id.Equals("Nuget.Core", StringComparison.OrdinalIgnoreCase));
            
             // Assert
             Assert.IsNotNull(package);

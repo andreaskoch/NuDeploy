@@ -57,8 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NuGet.Core.2.0.1\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -283,7 +284,7 @@
     <ItemGroup>
       <ILMergeItems Include="$(OutputPath)\*.dll,$(OutputPath)\*.exe" />
     </ItemGroup>
-	<MakeDir Directories="$(ILMergeOutputFolder)"/>
+    <MakeDir Directories="$(ILMergeOutputFolder)" />
     <Delete Files="$(ILMergeOutputFilePath)" Condition="Exists($(ILMergeOutputFilePath))" />
     <!-- ILMerge does not yet support .NET 4.0  http://nitoprograms.blogspot.com/2010/09/using-ilmerge-with-net-40-andor-rx.html /targetplatform:v4,"%ProgramFiles%\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" -->
     <Error Condition="!Exists('$(FrameworkPath)')" Text="Could not find 4.0 reference assemblies in $(FrameworkPath)" />
