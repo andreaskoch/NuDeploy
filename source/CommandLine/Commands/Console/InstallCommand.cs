@@ -137,6 +137,7 @@ namespace NuDeploy.CommandLine.Commands.Console
             IServiceResult installResult = this.packageInstaller.Install(packageId, deploymentType, forceInstallation, systemSettingTransformationProfileNames, buildConfigurationProfileNames);
             if (installResult.Status == ServiceResultType.Failure)
             {
+                this.userInterface.Display(installResult);
                 this.userInterface.WriteLine(
                     string.Format(
                         Resources.InstallCommand.InstallationFailedMessageTemplate,
