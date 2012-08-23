@@ -80,16 +80,19 @@ namespace NuDeploy.Core.Services.Transformation
 
                     string transformationFilePath = Path.Combine(sourceFileFolder, transformationFilename);
 
-                    // transform
-                    IServiceResult transformationResult = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath: sourceFilePath);
-                    if (transformationResult.Status == ServiceResultType.Failure)
+                    if (this.filesystemAccessor.FileExists(transformationFilePath))
                     {
-                        return new FailureResult(
-                            Resources.ConfigurationFileTransformationService.TransformationFailedForProfileMessageTemplate,
-                            systemSettingTransformationProfileName)
+                        // transform
+                        IServiceResult transformationResult = this.configurationFileTransformer.Transform(sourceFilePath, transformationFilePath, destinationFilePath: sourceFilePath);
+                        if (transformationResult.Status == ServiceResultType.Failure)
+                        {
+                            return new FailureResult(
+                                Resources.ConfigurationFileTransformationService.TransformationFailedForProfileMessageTemplate,
+                                systemSettingTransformationProfileName)
                             {
                                 InnerResult = transformationResult
                             };
+                        }                        
                     }
                 }
 
