@@ -4,12 +4,12 @@ namespace NuDeploy.Core.Services.Packaging.Build
 {
     public interface IBuildResultFilePathProvider
     {
-        RelativeFilePathInfo[] GetWebsiteFilePaths();
+        RelativeFilePathInfo[] GetWebsiteFilePaths(string buildFolder);
 
-        RelativeFilePathInfo[] GetWebApplicationFilePaths();
+        RelativeFilePathInfo[] GetWebApplicationFilePaths(string buildFolder);
 
-        RelativeFilePathInfo[] GetApplicationFilePaths();
+        RelativeFilePathInfo[] GetApplicationFilePaths(string buildFolder);
 
-        RelativeFilePathInfo[] GetDeploymentPackageAdditionFilePaths();
+        RelativeFilePathInfo[] GetDeploymentPackageAdditionFilePaths(string buildFolder);
     }
 }

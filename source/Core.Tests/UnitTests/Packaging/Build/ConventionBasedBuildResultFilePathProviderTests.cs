@@ -22,12 +22,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
         {
             // Arrange
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
             // Act
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Assert
             Assert.IsNotNull(buildResultFilePathProvider);
@@ -38,23 +36,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
         public void Constructor_FilesystemAccessorParameterIsNull_ArgumentNullExceptionIsThrown()
         {
             // Arrange
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
             // Act
-            new ConventionBasedBuildResultFilePathProvider(null, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Constructor_BuildFolderPathProviderParameterIsNull_ArgumentNullExceptionIsThrown()
-        {
-            // Arrange
-            var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
-
-            // Act
-            new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, null, relativeFilePathInfoFactory.Object);
+            new ConventionBasedBuildResultFilePathProvider(null, relativeFilePathInfoFactory.Object);
         }
 
         [Test]
@@ -63,10 +48,9 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
         {
             // Arrange
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
 
             // Act
-            new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, buildFolderPathProvider.Object, null);
+            new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, null);
         }
 
         #endregion
@@ -81,17 +65,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(false);
-            
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
 
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebsiteFilePaths();
+            var result = buildResultFilePathProvider.GetWebsiteFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -107,16 +87,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(new List<DirectoryInfo>());
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebsiteFilePaths();
+            var result = buildResultFilePathProvider.GetWebsiteFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -139,16 +115,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(publishedWebApplicationDirectories);
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebsiteFilePaths();
+            var result = buildResultFilePathProvider.GetWebsiteFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -181,16 +153,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(publishedWebApplicationDirectories);
             filesystemAccessor.Setup(f => f.GetAllFiles(websitePath)).Returns(websiteFiles);
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebsiteFilePaths();
+            var result = buildResultFilePathProvider.GetWebsiteFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(websiteFiles.Count, result.Length);
@@ -214,16 +182,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(false);
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebApplicationFilePaths();
+            var result = buildResultFilePathProvider.GetWebApplicationFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -239,16 +203,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(new List<DirectoryInfo>());
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebApplicationFilePaths();
+            var result = buildResultFilePathProvider.GetWebApplicationFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -277,17 +237,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(publishedWebApplicationDirectories);
             filesystemAccessor.Setup(f => f.GetAllFiles(webApplicationPath)).Returns(files);
-
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
+            
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetWebApplicationFilePaths();
+            var result = buildResultFilePathProvider.GetWebApplicationFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(files.Count, result.Length);
@@ -311,16 +267,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(false);
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetApplicationFilePaths();
+            var result = buildResultFilePathProvider.GetApplicationFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -336,16 +288,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(new List<DirectoryInfo>());
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetApplicationFilePaths();
+            var result = buildResultFilePathProvider.GetApplicationFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -369,16 +317,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(files);
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetApplicationFilePaths();
+            var result = buildResultFilePathProvider.GetApplicationFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(files.Count, result.Length);
@@ -401,17 +345,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(false);
-
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
+            
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths();
+            var result = buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -427,16 +367,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetSubDirectories(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(new List<DirectoryInfo>());
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths();
+            var result = buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(0, result.Length);
@@ -460,16 +396,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Build
             filesystemAccessor.Setup(f => f.DirectoryExists(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(true);
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(s => s.StartsWith(buildFolder)))).Returns(files);
 
-            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
-            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns(buildFolder);
-
             var relativeFilePathInfoFactory = new Mock<IRelativeFilePathInfoFactory>();
 
-            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(
-                filesystemAccessor.Object, buildFolderPathProvider.Object, relativeFilePathInfoFactory.Object);
+            var buildResultFilePathProvider = new ConventionBasedBuildResultFilePathProvider(filesystemAccessor.Object, relativeFilePathInfoFactory.Object);
 
             // Act
-            var result = buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths();
+            var result = buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths(buildFolder);
 
             // Assert
             Assert.AreEqual(files.Count, result.Length);

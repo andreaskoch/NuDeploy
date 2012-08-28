@@ -35,7 +35,7 @@ namespace NuDeploy.Core.Services.Packaging
             }
 
             // pre-packaging
-            IServiceResult prepackagingResult = this.prepackagingService.Prepackage();
+            IServiceResult prepackagingResult = this.prepackagingService.Prepackage(buildOutputFolderPath);
             if (prepackagingResult.Status == ServiceResultType.Failure)
             {
                 return new FailureResult(Resources.BuildOutputPackagingService.PrepackagingFailedMessageTemplate, buildOutputFolderPath) { InnerResult = prepackagingResult };

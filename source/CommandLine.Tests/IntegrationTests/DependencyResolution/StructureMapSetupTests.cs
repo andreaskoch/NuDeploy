@@ -77,6 +77,7 @@ namespace NuDeploy.CommandLine.Tests.IntegrationTests.DependencyResolution
         [TestCase(typeof(INugetPackageExtractor))]
         [TestCase(typeof(IPackageUninstaller))]
         [TestCase(typeof(ISolutionPackagingService))]
+        [TestCase(typeof(IBuildOutputPackagingService))]
         [TestCase(typeof(IBuildFolderPathProvider))]
         [TestCase(typeof(ISolutionBuilder))]
         [TestCase(typeof(IBuildResultFilePathProvider))]

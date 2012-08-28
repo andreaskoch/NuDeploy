@@ -52,16 +52,21 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             this.prePackagingFolderPath = prePackagingFolderPathProvider.GetPrePackagingFolderPath();
         }
 
-        public IServiceResult Prepackage()
+        public IServiceResult Prepackage(string buildFolder)
         {
             if (!this.filesystemAccessor.DirectoryExists(this.prePackagingFolderPath))
             {
                 return new FailureResult(Resources.PrepackagingService.ErrorPrepackagingFolderDoesNotExistMessageTemplate, this.prePackagingFolderPath);
             }
 
+            if (!this.filesystemAccessor.DirectoryExists(buildFolder))
+            {
+                return new FailureResult(Resources.PrepackagingService.ErrorBuildFolderDoesNotexistMessageTemplate, buildFolder);
+            }
+
             try
             {
-                this.CopyFilesToPrePackagingFolder();
+                this.CopyFilesToPrePackagingFolder(buildFolder);
                 return new SuccessResult(Resources.PrepackagingService.SuccessMessageTemplate, this.prePackagingFolderPath);
             }
             catch (Exception prepackagingException)
@@ -70,10 +75,10 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             }
         }
 
-        private void CopyFilesToPrePackagingFolder()
+        private void CopyFilesToPrePackagingFolder(string buildFolder)
         {
             // deployment package additions
-            var deploymentPackageAdditionSourceFiles = this.buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths();
+            var deploymentPackageAdditionSourceFiles = this.buildResultFilePathProvider.GetDeploymentPackageAdditionFilePaths(buildFolder);
             foreach (var sourceFile in deploymentPackageAdditionSourceFiles)
             {
                 string sourcePath = sourceFile.AbsoluteFilePath;
@@ -85,7 +90,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             this.assemblyResourceDownloader.Download(this.prePackagingFolderPath);
 
             // web sites
-            var websiteSourceFiles = this.buildResultFilePathProvider.GetWebsiteFilePaths();
+            var websiteSourceFiles = this.buildResultFilePathProvider.GetWebsiteFilePaths(buildFolder);
             foreach (var sourceFile in websiteSourceFiles)
             {
                 string sourcePath = sourceFile.AbsoluteFilePath;
@@ -94,7 +99,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             }
 
             // web applications
-            var webApplicationSourceFiles = this.buildResultFilePathProvider.GetWebApplicationFilePaths();
+            var webApplicationSourceFiles = this.buildResultFilePathProvider.GetWebApplicationFilePaths(buildFolder);
             foreach (var sourceFile in webApplicationSourceFiles)
             {
                 string sourcePath = sourceFile.AbsoluteFilePath;
@@ -103,7 +108,7 @@ namespace NuDeploy.Core.Services.Packaging.PrePackaging
             }
 
             // applications
-            var applicationSourceFiles = this.buildResultFilePathProvider.GetApplicationFilePaths();
+            var applicationSourceFiles = this.buildResultFilePathProvider.GetApplicationFilePaths(buildFolder);
             foreach (var sourceFile in applicationSourceFiles)
             {
                 string sourcePath = sourceFile.AbsoluteFilePath;

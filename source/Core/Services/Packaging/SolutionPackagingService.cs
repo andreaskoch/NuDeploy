@@ -16,7 +16,9 @@ namespace NuDeploy.Core.Services.Packaging
 
         private readonly IPackagingService packagingService;
 
-        public SolutionPackagingService(ISolutionBuilder solutionBuilder, IPrepackagingService prepackagingService, IPackagingService packagingService)
+        private readonly string buildFolder;
+
+        public SolutionPackagingService(ISolutionBuilder solutionBuilder, IPrepackagingService prepackagingService, IPackagingService packagingService, IBuildFolderPathProvider buildFolderPathProvider)
         {
             if (solutionBuilder == null)
             {
@@ -33,9 +35,15 @@ namespace NuDeploy.Core.Services.Packaging
                 throw new ArgumentNullException("packagingService");
             }
 
+            if (buildFolderPathProvider == null)
+            {
+                throw new ArgumentNullException("buildFolderPathProvider");
+            }
+
             this.solutionBuilder = solutionBuilder;
             this.prepackagingService = prepackagingService;
             this.packagingService = packagingService;
+            this.buildFolder = buildFolderPathProvider.GetBuildFolderPath();
         }
 
         public IServiceResult PackageSolution(string solutionPath, string buildConfiguration, KeyValuePair<string, string>[] buildProperties)
@@ -71,7 +79,7 @@ namespace NuDeploy.Core.Services.Packaging
             }
 
             // pre-packaging
-            IServiceResult prepackagingResult = this.prepackagingService.Prepackage();
+            IServiceResult prepackagingResult = this.prepackagingService.Prepackage(this.buildFolder);
             if (prepackagingResult.Status == ServiceResultType.Failure)
             {
                 return new FailureResult(Resources.SolutionPackagingService.PrepackagingFailedMessageTemplate, solutionPath) { InnerResult = prepackagingResult };

@@ -80,7 +80,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             string buildOutputFolderPath = "C:\\built-output";
 
             var prepackagingService = new Mock<IPrepackagingService>();
-            prepackagingService.Setup(p => p.Prepackage()).Returns(new FailureResult());
+            prepackagingService.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new FailureResult());
 
             var packagingService = new Mock<IPackagingService>();
             var buildOutputPackagingService = new BuildOutputPackagingService(prepackagingService.Object, packagingService.Object);
@@ -99,7 +99,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             string buildOutputFolderPath = "C:\\built-output";
 
             var prepackagingService = new Mock<IPrepackagingService>();
-            prepackagingService.Setup(p => p.Prepackage()).Returns(new FailureResult());
+            prepackagingService.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new FailureResult());
 
             var packagingService = new Mock<IPackagingService>();
             var buildOutputPackagingService = new BuildOutputPackagingService(prepackagingService.Object, packagingService.Object);
@@ -118,7 +118,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             string buildOutputFolderPath = "C:\\built-output";
 
             var prepackagingService = new Mock<IPrepackagingService>();
-            prepackagingService.Setup(p => p.Prepackage()).Returns(new SuccessResult());
+            prepackagingService.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new SuccessResult());
 
             var packagingService = new Mock<IPackagingService>();
             packagingService.Setup(p => p.Package()).Returns(new FailureResult());
@@ -139,7 +139,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             string buildOutputFolderPath = "C:\\built-output";
 
             var prepackagingService = new Mock<IPrepackagingService>();
-            prepackagingService.Setup(p => p.Prepackage()).Returns(new SuccessResult());
+            prepackagingService.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new SuccessResult());
 
             var packagingService = new Mock<IPackagingService>();
             packagingService.Setup(p => p.Package()).Returns(new FailureResult());
@@ -160,7 +160,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             string buildOutputFolderPath = "C:\\built-output";
 
             var prepackagingService = new Mock<IPrepackagingService>();
-            prepackagingService.Setup(p => p.Prepackage()).Returns(new SuccessResult());
+            prepackagingService.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new SuccessResult());
 
             var packagingService = new Mock<IPackagingService>();
             packagingService.Setup(p => p.Package()).Returns(new SuccessResult());
@@ -181,7 +181,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             string buildOutputFolderPath = "C:\\built-output";
 
             var prepackagingService = new Mock<IPrepackagingService>();
-            prepackagingService.Setup(p => p.Prepackage()).Returns(new SuccessResult());
+            prepackagingService.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new SuccessResult());
 
             var packagingService = new Mock<IPackagingService>();
             packagingService.Setup(p => p.Package()).Returns(new SuccessResult());

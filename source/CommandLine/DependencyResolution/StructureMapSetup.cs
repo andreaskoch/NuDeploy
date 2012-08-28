@@ -106,6 +106,7 @@ namespace NuDeploy.CommandLine.DependencyResolution
 
                         /* packaging */
                         config.For<ISolutionPackagingService>().Use<SolutionPackagingService>();
+                        config.For<IBuildOutputPackagingService>().Use<BuildOutputPackagingService>();
 
                         /* build */
                         config.For<IBuildFolderPathProvider>().Use<BuildFolderPathProvider>();

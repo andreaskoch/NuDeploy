@@ -21,18 +21,11 @@ namespace NuDeploy.Core.Services.Packaging.Build
 
         private readonly IRelativeFilePathInfoFactory relativeFilePathInfoFactory;
 
-        private readonly string buildFolder;
-
-        public ConventionBasedBuildResultFilePathProvider(IFilesystemAccessor filesystemAccessor, IBuildFolderPathProvider buildFolderPathProvider, IRelativeFilePathInfoFactory relativeFilePathInfoFactory)
+        public ConventionBasedBuildResultFilePathProvider(IFilesystemAccessor filesystemAccessor, IRelativeFilePathInfoFactory relativeFilePathInfoFactory)
         {
             if (filesystemAccessor == null)
             {
                 throw new ArgumentNullException("filesystemAccessor");
-            }
-
-            if (buildFolderPathProvider == null)
-            {
-                throw new ArgumentNullException("buildFolderPathProvider");
             }
 
             if (relativeFilePathInfoFactory == null)
@@ -41,13 +34,12 @@ namespace NuDeploy.Core.Services.Packaging.Build
             }
 
             this.filesystemAccessor = filesystemAccessor;
-            this.buildFolder = buildFolderPathProvider.GetBuildFolderPath();
             this.relativeFilePathInfoFactory = relativeFilePathInfoFactory;
         }
 
-        public RelativeFilePathInfo[] GetWebsiteFilePaths()
+        public RelativeFilePathInfo[] GetWebsiteFilePaths(string buildFolder)
         {
-            var publishedWebapplicationsSourceFolderPath = Path.Combine(this.buildFolder, FolderNamePublishedWebsites);
+            var publishedWebapplicationsSourceFolderPath = Path.Combine(buildFolder, FolderNamePublishedWebsites);
             if (this.filesystemAccessor.DirectoryExists(publishedWebapplicationsSourceFolderPath))
             {
                 // get all directories which contain the term website
@@ -67,9 +59,9 @@ namespace NuDeploy.Core.Services.Packaging.Build
             return new RelativeFilePathInfo[] { };
         }
 
-        public RelativeFilePathInfo[] GetWebApplicationFilePaths()
+        public RelativeFilePathInfo[] GetWebApplicationFilePaths(string buildFolder)
         {
-            var publishedWebapplicationsSourceFolderPath = Path.Combine(this.buildFolder, FolderNamePublishedWebsites);
+            var publishedWebapplicationsSourceFolderPath = Path.Combine(buildFolder, FolderNamePublishedWebsites);
             if (this.filesystemAccessor.DirectoryExists(publishedWebapplicationsSourceFolderPath))
             {
                 var publishedWebapplicationDirectories =
@@ -87,9 +79,9 @@ namespace NuDeploy.Core.Services.Packaging.Build
             return new RelativeFilePathInfo[] { };
         }
 
-        public RelativeFilePathInfo[] GetApplicationFilePaths()
+        public RelativeFilePathInfo[] GetApplicationFilePaths(string buildFolder)
         {
-            var publishedApplicationsSourceFolderPath = Path.Combine(this.buildFolder, FolderNamePublishedApplications);
+            var publishedApplicationsSourceFolderPath = Path.Combine(buildFolder, FolderNamePublishedApplications);
             if (this.filesystemAccessor.DirectoryExists(publishedApplicationsSourceFolderPath))
             {
                 var publishedApplicationFiles = this.filesystemAccessor.GetAllFiles(publishedApplicationsSourceFolderPath);
@@ -102,9 +94,9 @@ namespace NuDeploy.Core.Services.Packaging.Build
             return new RelativeFilePathInfo[] { };
         }
 
-        public RelativeFilePathInfo[] GetDeploymentPackageAdditionFilePaths()
+        public RelativeFilePathInfo[] GetDeploymentPackageAdditionFilePaths(string buildFolder)
         {
-            var publishedDeploymentPackageAdditionsSourceFolderPath = Path.Combine(this.buildFolder, FolderNameDeploymentPackageAdditions);
+            var publishedDeploymentPackageAdditionsSourceFolderPath = Path.Combine(buildFolder, FolderNameDeploymentPackageAdditions);
             if (this.filesystemAccessor.DirectoryExists(publishedDeploymentPackageAdditionsSourceFolderPath))
             {
                 var publishedDeploymentPackageAdditionFiles = this.filesystemAccessor.GetAllFiles(publishedDeploymentPackageAdditionsSourceFolderPath);

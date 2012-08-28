@@ -37,6 +37,11 @@ namespace NuDeploy.CommandLine.Commands
                 throw new ArgumentNullException("packageSolution");
             }
 
+            if (packageBuildOutput == null)
+            {
+                throw new ArgumentNullException("packageBuildOutput");
+            }
+
             if (configureSources == null)
             {
                 throw new ArgumentNullException("configureSources");

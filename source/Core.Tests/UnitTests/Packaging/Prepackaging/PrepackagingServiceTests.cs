@@ -102,6 +102,8 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_PrepackagingFolderIsInvalid_FailureResultIsReturned(string prepackagingFolder)
         {
             // Arrange
+            string buildFolder = "C:\\build";
+
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(false);
 
@@ -114,7 +116,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Failure, result.Status);
@@ -124,6 +126,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_PrepackagingFolderIsDoesNotExist_FailureResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Non-Existing-Folder");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -136,7 +139,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Failure, result.Status);
@@ -146,6 +149,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_OneOfTheSubFunctionsThrowsAnExecption_FailureResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
@@ -156,13 +160,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
             var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
 
             prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
-            buildResultFilePathProvider.Setup(b => b.GetDeploymentPackageAdditionFilePaths()).Throws(new Exception());
+            buildResultFilePathProvider.Setup(b => b.GetDeploymentPackageAdditionFilePaths(It.IsAny<string>())).Throws(new Exception());
 
             var prepackagingService = new PrepackagingService(
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Failure, result.Status);
@@ -172,10 +176,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_NoFilesInBuildResultFolder_NothingIsCopied_SuccessResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+            filesystemAccessor.Setup(f => f.DirectoryExists(buildFolder)).Returns(true);
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
@@ -186,7 +192,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Success, result.Status);
@@ -197,6 +203,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_DeploymentPackageAdditions_FilesAreCopied_SuccessResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -208,10 +215,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+            filesystemAccessor.Setup(f => f.DirectoryExists(buildFolder)).Returns(true);
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetDeploymentPackageAdditionFilePaths()).Returns(relativeFilePathInfos);
+            buildResultFilePathProvider.Setup(b => b.GetDeploymentPackageAdditionFilePaths(It.IsAny<string>())).Returns(relativeFilePathInfos);
 
             var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
             prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
@@ -220,7 +228,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Success, result.Status);
@@ -236,10 +244,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_AssemblyResourcesAreDownloaded_SuccessResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+            filesystemAccessor.Setup(f => f.DirectoryExists(buildFolder)).Returns(true);
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
@@ -250,7 +260,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Success, result.Status);
@@ -261,6 +271,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_Websites_FilesAreCopiedToTheWebsitesFolder_SuccessResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -272,10 +283,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+            filesystemAccessor.Setup(f => f.DirectoryExists(buildFolder)).Returns(true);
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetWebsiteFilePaths()).Returns(relativeFilePathInfos);
+            buildResultFilePathProvider.Setup(b => b.GetWebsiteFilePaths(It.IsAny<string>())).Returns(relativeFilePathInfos);
 
             var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
             prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
@@ -284,7 +296,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Success, result.Status);
@@ -300,6 +312,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_WebApplications_FilesAreCopiedToTheWebApplicationsFolder_SuccessResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -311,10 +324,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+            filesystemAccessor.Setup(f => f.DirectoryExists(buildFolder)).Returns(true);
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetWebApplicationFilePaths()).Returns(relativeFilePathInfos);
+            buildResultFilePathProvider.Setup(b => b.GetWebApplicationFilePaths(It.IsAny<string>())).Returns(relativeFilePathInfos);
 
             var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
             prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
@@ -323,7 +337,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Success, result.Status);
@@ -339,6 +353,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
         public void Prepackage_Applications_FilesAreCopiedToTheApplicationsFolder_SuccessResultIsReturned()
         {
             // Arrange
+            string buildFolder = "C:\\build";
             string prepackagingFolder = Path.GetFullPath("Prepackaging");
 
             var relativeFilePathInfos = new[]
@@ -350,10 +365,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
 
             var filesystemAccessor = new Mock<IFilesystemAccessor>();
             filesystemAccessor.Setup(f => f.DirectoryExists(prepackagingFolder)).Returns(true);
+            filesystemAccessor.Setup(f => f.DirectoryExists(buildFolder)).Returns(true);
 
             var assemblyResourceDownloader = new Mock<IAssemblyResourceDownloader>();
             var buildResultFilePathProvider = new Mock<IBuildResultFilePathProvider>();
-            buildResultFilePathProvider.Setup(b => b.GetApplicationFilePaths()).Returns(relativeFilePathInfos);
+            buildResultFilePathProvider.Setup(b => b.GetApplicationFilePaths(It.IsAny<string>())).Returns(relativeFilePathInfos);
 
             var prePackagingFolderPathProvider = new Mock<IPrePackagingFolderPathProvider>();
             prePackagingFolderPathProvider.Setup(p => p.GetPrePackagingFolderPath()).Returns(prepackagingFolder);
@@ -362,7 +378,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging.Prepackaging
                 filesystemAccessor.Object, assemblyResourceDownloader.Object, buildResultFilePathProvider.Object, prePackagingFolderPathProvider.Object);
 
             // Act
-            var result = prepackagingService.Prepackage();
+            var result = prepackagingService.Prepackage(buildFolder);
 
             // Assert
             Assert.AreEqual(ServiceResultType.Success, result.Status);

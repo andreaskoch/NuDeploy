@@ -181,6 +181,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                     new FileInfo(Path.Combine(baseDirectoryPath, "applications", "some-app", "app.config"))
                 };
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
+            filesystemAccessor.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
 
             configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 
@@ -221,6 +222,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                     new FileInfo(Path.Combine(baseDirectoryPath, "applications", "some-app", "app.config"))
                 };
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
+            filesystemAccessor.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
 
             configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FailureResult());
 
@@ -253,6 +255,7 @@ namespace NuDeploy.Core.Tests.UnitTests.Transformation
                 };
             filesystemAccessor.Setup(f => f.GetAllFiles(It.Is<string>(folder => folder.StartsWith(baseDirectoryPath)))).Returns(configurationFiles);
             filesystemAccessor.Setup(f => f.DeleteFile(It.IsAny<string>())).Returns(false);
+            filesystemAccessor.Setup(f => f.FileExists(It.IsAny<string>())).Returns(true);
 
             configurationFileTransformer.Setup(t => t.Transform(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
 

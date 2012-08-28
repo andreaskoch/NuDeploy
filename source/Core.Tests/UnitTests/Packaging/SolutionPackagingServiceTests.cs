@@ -25,9 +25,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             ISolutionBuilder solutionBuilder = new Mock<ISolutionBuilder>().Object;
             IPrepackagingService prepackagingService = new Mock<IPrepackagingService>().Object;
             IPackagingService packagingService = new Mock<IPackagingService>().Object;
+            IBuildFolderPathProvider buildFolderPathProvider = new Mock<IBuildFolderPathProvider>().Object;
 
             // Act
-            var result = new SolutionPackagingService(solutionBuilder, prepackagingService, packagingService);
+            var result = new SolutionPackagingService(solutionBuilder, prepackagingService, packagingService, buildFolderPathProvider);
 
             // Assert
             Assert.IsNotNull(result);
@@ -38,12 +39,12 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
         public void Constructor_SolutionBuilderParameterIsNull_ArgumentNullExceptionIsThrown()
         {
             // Arrange
-            ISolutionBuilder solutionBuilder = null;
             IPrepackagingService prepackagingService = new Mock<IPrepackagingService>().Object;
             IPackagingService packagingService = new Mock<IPackagingService>().Object;
+            IBuildFolderPathProvider buildFolderPathProvider = new Mock<IBuildFolderPathProvider>().Object;
 
             // Act
-            new SolutionPackagingService(solutionBuilder, prepackagingService, packagingService);
+            new SolutionPackagingService(null, prepackagingService, packagingService, buildFolderPathProvider);
         }
 
         [Test]
@@ -52,11 +53,11 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
         {
             // Arrange
             ISolutionBuilder solutionBuilder = new Mock<ISolutionBuilder>().Object;
-            IPrepackagingService prepackagingService = null;
             IPackagingService packagingService = new Mock<IPackagingService>().Object;
+            IBuildFolderPathProvider buildFolderPathProvider = new Mock<IBuildFolderPathProvider>().Object;
 
             // Act
-            new SolutionPackagingService(solutionBuilder, prepackagingService, packagingService);
+            new SolutionPackagingService(solutionBuilder, null, packagingService, buildFolderPathProvider);
         }
 
         [Test]
@@ -66,10 +67,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             // Arrange
             ISolutionBuilder solutionBuilder = new Mock<ISolutionBuilder>().Object;
             IPrepackagingService prepackagingService = new Mock<IPrepackagingService>().Object;
-            IPackagingService packagingService = null;
+            IBuildFolderPathProvider buildFolderPathProvider = new Mock<IBuildFolderPathProvider>().Object;
 
             // Act
-            new SolutionPackagingService(solutionBuilder, prepackagingService, packagingService);
+            new SolutionPackagingService(solutionBuilder, prepackagingService, null, buildFolderPathProvider);
         }
 
         #endregion
@@ -85,8 +86,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
             var packagingServiceMock = new Mock<IPackagingService>();
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             string buildConfiguration = "Debug";
             var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
@@ -107,8 +110,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
             var packagingServiceMock = new Mock<IPackagingService>();
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             var buildProperties = new[] { new KeyValuePair<string, string>("IsAutoBuild", "True") };
@@ -127,8 +132,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             var solutionBuilderMock = new Mock<ISolutionBuilder>();
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
             var packagingServiceMock = new Mock<IPackagingService>();
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             string solutionPath = @"C:\dev\someproject\some-solution.sln";
             string buildConfiguration = "Debug";
@@ -154,8 +161,10 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
             var packagingServiceMock = new Mock<IPackagingService>();
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             // Act
             var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
@@ -176,11 +185,13 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(new FailureResult());
+            prepackagingServiceMock.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new FailureResult());
 
             var packagingServiceMock = new Mock<IPackagingService>();
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             // Act
             var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
@@ -201,12 +212,14 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(new SuccessResult());
+            prepackagingServiceMock.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new SuccessResult());
 
             var packagingServiceMock = new Mock<IPackagingService>();
             packagingServiceMock.Setup(p => p.Package()).Returns(new FailureResult());
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             // Act
             var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);
@@ -227,12 +240,15 @@ namespace NuDeploy.Core.Tests.UnitTests.Packaging
             solutionBuilderMock.Setup(b => b.Build(solutionPath, buildConfiguration, buildProperties)).Returns(new SuccessResult());
 
             var prepackagingServiceMock = new Mock<IPrepackagingService>();
-            prepackagingServiceMock.Setup(p => p.Prepackage()).Returns(new SuccessResult());
+            prepackagingServiceMock.Setup(p => p.Prepackage(It.IsAny<string>())).Returns(new SuccessResult());
 
             var packagingServiceMock = new Mock<IPackagingService>();
             packagingServiceMock.Setup(p => p.Package()).Returns(new SuccessResult());
 
-            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object);
+            var buildFolderPathProvider = new Mock<IBuildFolderPathProvider>();
+            buildFolderPathProvider.Setup(b => b.GetBuildFolderPath()).Returns("C:\\build");
+
+            var solutionPackagingService = new SolutionPackagingService(solutionBuilderMock.Object, prepackagingServiceMock.Object, packagingServiceMock.Object, buildFolderPathProvider.Object);
 
             // Act
             var result = solutionPackagingService.PackageSolution(solutionPath, buildConfiguration, buildProperties);

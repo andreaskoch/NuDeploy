@@ -61,6 +61,15 @@ namespace NuDeploy.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prepackaging failed because the supplied build result folder &quot;{0}&quot; does not exist..
+        /// </summary>
+        internal static string ErrorBuildFolderDoesNotexistMessageTemplate {
+            get {
+                return ResourceManager.GetString("ErrorBuildFolderDoesNotexistMessageTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prepackaging failed because the pre-packaging folder &quot;{0}&quot; does not exist..
         /// </summary>
         internal static string ErrorPrepackagingFolderDoesNotExistMessageTemplate {
