@@ -449,8 +449,12 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
                 Times.Once());
         }
 
+        #endregion
+
+        #region Execute - Package Tests
+
         [Test]
-        public void Execute_PackagingFails_FailIsWrittenToUserInterface()
+        public void Execute_PackagingFails_ResultIsFalse()
         {
             // Arrange
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -468,14 +472,69 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
 
             // Act
-            packageSolutionCommand.Execute();
+            var result = packageSolutionCommand.Execute();
 
             // Assert
-            Assert.IsTrue(this.loggingUserInterface.UserInterfaceOutput.ToLower().Contains("fail"));
+            Assert.IsFalse(result);
         }
 
         [Test]
-        public void Execute_PackagingSucceeds_SucceessIsWrittenToUserInterface()
+        public void Execute_PackagingFails_FailureMessageIsWrittenToUserInterface()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+
+            string failureMessage = "Packaging failed due to yada yada. " + Guid.NewGuid().ToString();
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new FailureResult(failureMessage));
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            Assert.IsTrue(
+                this.loggingUserInterface.UserInterfaceOutput.Contains(failureMessage),
+                "The user interface should contain the failure message \"{0}\" but contains this \"{1}\"",
+                failureMessage,
+                this.loggingUserInterface.UserInterfaceOutput);
+        }
+
+        [Test]
+        public void Execute_PackagingSucceeds_ResultIsTrue()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+
+            // Act
+            var result = packageSolutionCommand.Execute();
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Execute_PackagingSucceeds_MessageIsWrittenToUserInterface()
         {
             // Arrange
             string solutionPath = @"C:\dev\project-xy\solution.sln";
@@ -499,6 +558,204 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands.Console
             Assert.IsTrue(
                 this.loggingUserInterface.UserInterfaceOutput.ToLower().Contains("succeeded")
                 || this.loggingUserInterface.UserInterfaceOutput.ToLower().Contains("success"));
+        }
+
+        #endregion
+
+        #region Execute - Publish Tests
+
+        [Test]
+        public void Execute_PublishConfigurationIsNotSet_PackageIsNotPublished()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            publishingService.Verify(p => p.PublishPackage(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void Execute_PublishConfigurationIsInvalid_PackageIsNotPublished(string publishConfigurationName)
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNamePublishingConfiguration, publishConfigurationName);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            publishingService.Verify(p => p.PublishPackage(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void Execute_PublishConfigurationIsSet_PublishIsExecuted()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+            string publishConfigurationName = "Some Publish Config";
+
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+            var publishingService = new Mock<IPublishingService>();
+            publishingService.Setup(p => p.PublishPackage(It.IsAny<string>(), publishConfigurationName)).Returns(new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNamePublishingConfiguration, publishConfigurationName);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            publishingService.Verify(p => p.PublishPackage(It.IsAny<string>(), publishConfigurationName), Times.Once());
+        }
+
+        [Test]
+        public void Execute_PublishingFails_FailureResultIsWrittenTouUserInterface()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+            string publishConfigurationName = "Some Publish Config";
+
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(new SuccessResult());
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+
+            var publishingService = new Mock<IPublishingService>();
+            string publishingFailureMessage = "Publishing failed. yada yada. " + Guid.NewGuid().ToString();
+            publishingService.Setup(p => p.PublishPackage(It.IsAny<string>(), It.IsAny<string>())).Returns(new FailureResult(publishingFailureMessage));
+
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNamePublishingConfiguration, publishConfigurationName);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            Assert.IsTrue(
+                this.loggingUserInterface.UserInterfaceOutput.Contains(publishingFailureMessage),
+                "The user interface should contain the failure message \"{0}\" but contains this \"{1}\"",
+                publishingFailureMessage,
+                this.loggingUserInterface.UserInterfaceOutput);
+        }
+
+        [Test]
+        public void Execute_PublishingFails_FailureMessageIsWrittenTouUserInterface()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+            string publishConfigurationName = "Some Publish Config";
+
+            string packagePath = @"C:\some-package.nupkg";
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult { ResultArtefact = packagePath });
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+
+            var publishingService = new Mock<IPublishingService>();
+            publishingService.Setup(p => p.PublishPackage(It.IsAny<string>(), It.IsAny<string>())).Returns(new FailureResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNamePublishingConfiguration, publishConfigurationName);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            Assert.IsTrue(
+                this.loggingUserInterface.UserInterfaceOutput.Contains(packagePath)
+                && this.loggingUserInterface.UserInterfaceOutput.Contains(publishConfigurationName),
+                "The user interface should contain the package path \"{0}\" and the publish configuration name \"{1}\" but contains this \"{2}\"",
+                packagePath,
+                publishConfigurationName,
+                this.loggingUserInterface.UserInterfaceOutput);
+        }
+
+        [Test]
+        public void Execute_PublishingSucceeds_SuccessMessageIsWrittenTouUserInterface()
+        {
+            // Arrange
+            string solutionPath = @"C:\dev\project-xy\solution.sln";
+            string buildConfiguration = "Debug";
+            string publishConfigurationName = "Some Publish Config";
+
+            string packagePath = @"C:\some-package.nupkg";
+            var solutionPackagingService = new Mock<ISolutionPackagingService>();
+            solutionPackagingService.Setup(s => s.PackageSolution(solutionPath, buildConfiguration, It.IsAny<KeyValuePair<string, string>[]>())).Returns(
+                new SuccessResult { ResultArtefact = packagePath });
+
+            var buildPropertyParser = new Mock<IBuildPropertyParser>();
+
+            var publishingService = new Mock<IPublishingService>();
+            publishingService.Setup(p => p.PublishPackage(It.IsAny<string>(), It.IsAny<string>())).Returns(new SuccessResult());
+
+            var packageSolutionCommand = new PackageSolutionCommand(this.loggingUserInterface.UserInterface, solutionPackagingService.Object, buildPropertyParser.Object, publishingService.Object);
+
+            // prepare command arguments
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameSolutionPath, solutionPath);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNameBuildConfiguration, buildConfiguration);
+            packageSolutionCommand.Arguments.Add(PackageSolutionCommand.ArgumentNamePublishingConfiguration, publishConfigurationName);
+
+            // Act
+            packageSolutionCommand.Execute();
+
+            // Assert
+            Assert.IsTrue(
+                this.loggingUserInterface.UserInterfaceOutput.Contains(packagePath)
+                && this.loggingUserInterface.UserInterfaceOutput.Contains(publishConfigurationName),
+                "The user interface should contain the package path \"{0}\" and the publish configuration name \"{1}\" but contains this \"{2}\"",
+                packagePath,
+                publishConfigurationName,
+                this.loggingUserInterface.UserInterfaceOutput);
         }
 
         #endregion

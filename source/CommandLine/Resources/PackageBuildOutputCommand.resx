@@ -117,26 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ArgumentDescriptionBuildConfiguration" xml:space="preserve">
-    <value>The name of the build configuration to use (e.g. Debug, Release).</value>
-  </data>
-  <data name="ArgumentDescriptionMSBuildProperties" xml:space="preserve">
-    <value>The properties to pass to MS Build (e.g. IsAutoBuild=True).</value>
+  <data name="ArgumentDescriptionBuildOutputPath" xml:space="preserve">
+    <value>The path of the build output folder (e.g. C:\build).</value>
   </data>
   <data name="ArgumentDescriptionPublishingConfiguration" xml:space="preserve">
     <value>If you specify this parameter the package will be published using the supplied publish configuration.</value>
   </data>
-  <data name="ArgumentDescriptionSolutionPath" xml:space="preserve">
-    <value>The path of the solution to package (e.g. C:\dev\projects\sample\sample.sln).</value>
-  </data>
-  <data name="BuildConfigurationArgumentNotSetMessage" xml:space="preserve">
-    <value>You must specify a build configuration (e.g. Debug, Release).</value>
+  <data name="BuildOutputPathArgumentNotSetMessage" xml:space="preserve">
+    <value>You must specifiy the path to the build output folder.</value>
   </data>
   <data name="CommandDescriptionText" xml:space="preserve">
-    <value>Creates a nuget package from the given solution (and pushes it to the specified nuget repository).</value>
+    <value>Creates a nuget package from the given build output (and pushes it to the specified nuget repository).</value>
   </data>
   <data name="CommandExampleDescription1" xml:space="preserve">
-    <value>Create a nuget deployment package from the solution "C:\dev\projects\sample\sample.sln" using the "Release" build configuration with the MS Build parameter "IsAutoBuild=True".</value>
+    <value>Create a nuget deployment package from the build output folder "C:\build-output".</value>
   </data>
   <data name="PackagingFailureMessage" xml:space="preserve">
     <value>Packaging failed.</value>
@@ -149,8 +143,5 @@
   </data>
   <data name="PublishingSucceededMessageTemplate" xml:space="preserve">
     <value>Publishing succeeded (Package: {0}, Publish Configuration: {1}).</value>
-  </data>
-  <data name="SolutionPathArgumentNotSetMessage" xml:space="preserve">
-    <value>You must specifiy a solution path.</value>
   </data>
 </root>

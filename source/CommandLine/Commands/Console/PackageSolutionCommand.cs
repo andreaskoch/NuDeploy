@@ -11,7 +11,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 {
     public class PackageSolutionCommand : ICommand
     {
-        public const string CommandName = "package";
+        public const string CommandName = "packagesolution";
 
         public const string ArgumentNameSolutionPath = "SolutionPath";
 
@@ -21,7 +21,7 @@ namespace NuDeploy.CommandLine.Commands.Console
 
         public const string ArgumentNamePublishingConfiguration = "PublishingConfiguration";
 
-        private readonly string[] alternativeCommandNames = new[] { "pack" };
+        private readonly string[] alternativeCommandNames = new[] { "package", "packsolution", "packsln" };
 
         private readonly IUserInterface userInterface;
 

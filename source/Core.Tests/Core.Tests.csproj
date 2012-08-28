@@ -92,6 +92,7 @@
     <Compile Include="UnitTests\Installation\PackageUninstallerTests.cs" />
     <Compile Include="UnitTests\Installation\PowerShellExecutorTests.cs" />
     <Compile Include="UnitTests\Installation\PowerShellSessionFactoryTests.cs" />
+    <Compile Include="UnitTests\Packaging\BuildOutputPackagingServiceTests.cs" />
     <Compile Include="UnitTests\Packaging\Build\BuildPropertyProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Build\ConventionBasedBuildResultFilePathProviderTests.cs" />
     <Compile Include="UnitTests\Packaging\Build\SolutionBuilderTests.cs" />

@@ -33,7 +33,7 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
 
         private CleanupCommand cleanup;
 
-        private PackageSolutionCommand package;
+        private PackageSolutionCommand packageSolution;
 
         private RepositorySourceConfigurationCommand configureSources;
 
@@ -45,6 +45,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
 
         private HelpCommand help;
 
+        private PackageBuildOutputCommand packageBuildOutput;
+
         [TestFixtureSetUp]
         public void Setup()
         {
@@ -53,7 +55,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
             this.install = new InstallCommand(this.userInterface, new Mock<IPackageInstaller>().Object, new Mock<IDeploymentTypeParser>().Object);
             this.uninstall = new UninstallCommand(this.userInterface, new Mock<IPackageUninstaller>().Object);
             this.cleanup = new CleanupCommand(this.userInterface, new Mock<ICleanupService>().Object);
-            this.package = new PackageSolutionCommand(this.userInterface, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object, new Mock<IPublishingService>().Object);
+            this.packageSolution = new PackageSolutionCommand(this.userInterface, new Mock<ISolutionPackagingService>().Object, new Mock<IBuildPropertyParser>().Object, new Mock<IPublishingService>().Object);
+            this.packageBuildOutput = new PackageBuildOutputCommand(this.userInterface, new Mock<IBuildOutputPackagingService>().Object, new Mock<IPublishingService>().Object);
             this.configureSources = new RepositorySourceConfigurationCommand(this.userInterface, new Mock<IRepositoryConfigurationCommandActionParser>().Object, new Mock<ISourceRepositoryProvider>().Object);
             this.configurePublishingTargets = new PublishingTargetConfigurationCommand(this.userInterface, new Mock<IPublishingTargetConfigurationCommandActionParser>().Object, new Mock<IPublishConfigurationAccessor>().Object);
             this.selfUpdate = new SelfUpdateCommand(new ApplicationInformation(), new Mock<ISelfUpdateService>().Object, new Mock<_Assembly>().Object);
@@ -70,7 +73,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -91,7 +95,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -108,7 +113,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 null,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -125,7 +131,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 null,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -142,7 +149,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 null,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -160,6 +168,25 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.uninstall,
                 this.cleanup,
                 null,
+                this.packageBuildOutput,
+                this.configureSources,
+                this.configurePublishingTargets,
+                this.selfUpdate,
+                this.publishCommand,
+                this.help);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Constructor_PackageBuildOutputCommandIsNull_ArgumentNullExceptionIsThrown()
+        {
+            new ConsoleCommandProvider(
+                this.installationStatus,
+                this.install,
+                this.uninstall,
+                this.cleanup,
+                this.packageSolution,
+                null,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -176,7 +203,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 null,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -193,7 +221,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 null,
                 this.selfUpdate,
@@ -211,7 +240,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 null,
@@ -229,7 +259,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,
@@ -247,7 +278,8 @@ namespace NuDeploy.CommandLine.Tests.UnitTests.Commands
                 this.install,
                 this.uninstall,
                 this.cleanup,
-                this.package,
+                this.packageSolution,
+                this.packageBuildOutput,
                 this.configureSources,
                 this.configurePublishingTargets,
                 this.selfUpdate,

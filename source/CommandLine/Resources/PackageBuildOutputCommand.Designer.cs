@@ -22,14 +22,14 @@ namespace NuDeploy.CommandLine.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PackageSolutionCommand {
+    internal class PackageBuildOutputCommand {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PackageSolutionCommand() {
+        internal PackageBuildOutputCommand() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace NuDeploy.CommandLine.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NuDeploy.CommandLine.Resources.PackageSolutionCommand", typeof(PackageSolutionCommand).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NuDeploy.CommandLine.Resources.PackageBuildOutputCommand", typeof(PackageBuildOutputCommand).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,11 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the build configuration to use (e.g. Debug, Release)..
+        ///   Looks up a localized string similar to The path of the build output folder (e.g. C:\build)..
         /// </summary>
-        internal static string ArgumentDescriptionBuildConfiguration {
+        internal static string ArgumentDescriptionBuildOutputPath {
             get {
-                return ResourceManager.GetString("ArgumentDescriptionBuildConfiguration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The properties to pass to MS Build (e.g. IsAutoBuild=True)..
-        /// </summary>
-        internal static string ArgumentDescriptionMSBuildProperties {
-            get {
-                return ResourceManager.GetString("ArgumentDescriptionMSBuildProperties", resourceCulture);
+                return ResourceManager.GetString("ArgumentDescriptionBuildOutputPath", resourceCulture);
             }
         }
         
@@ -88,25 +79,16 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The path of the solution to package (e.g. C:\dev\projects\sample\sample.sln)..
+        ///   Looks up a localized string similar to You must specifiy the path to the build output folder..
         /// </summary>
-        internal static string ArgumentDescriptionSolutionPath {
+        internal static string BuildOutputPathArgumentNotSetMessage {
             get {
-                return ResourceManager.GetString("ArgumentDescriptionSolutionPath", resourceCulture);
+                return ResourceManager.GetString("BuildOutputPathArgumentNotSetMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must specify a build configuration (e.g. Debug, Release)..
-        /// </summary>
-        internal static string BuildConfigurationArgumentNotSetMessage {
-            get {
-                return ResourceManager.GetString("BuildConfigurationArgumentNotSetMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Creates a nuget package from the given solution (and pushes it to the specified nuget repository)..
+        ///   Looks up a localized string similar to Creates a nuget package from the given build output (and pushes it to the specified nuget repository)..
         /// </summary>
         internal static string CommandDescriptionText {
             get {
@@ -115,7 +97,7 @@ namespace NuDeploy.CommandLine.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a nuget deployment package from the solution &quot;C:\dev\projects\sample\sample.sln&quot; using the &quot;Release&quot; build configuration with the MS Build parameter &quot;IsAutoBuild=True&quot;..
+        ///   Looks up a localized string similar to Create a nuget deployment package from the build output folder &quot;C:\build-output&quot;..
         /// </summary>
         internal static string CommandExampleDescription1 {
             get {
@@ -156,15 +138,6 @@ namespace NuDeploy.CommandLine.Resources {
         internal static string PublishingSucceededMessageTemplate {
             get {
                 return ResourceManager.GetString("PublishingSucceededMessageTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You must specifiy a solution path..
-        /// </summary>
-        internal static string SolutionPathArgumentNotSetMessage {
-            get {
-                return ResourceManager.GetString("SolutionPathArgumentNotSetMessage", resourceCulture);
             }
         }
     }

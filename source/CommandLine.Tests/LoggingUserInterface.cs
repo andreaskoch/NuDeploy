@@ -6,6 +6,7 @@ using System.Text;
 using Moq;
 
 using NuDeploy.Core.Common.UserInterface;
+using NuDeploy.Core.Services;
 
 namespace NuDeploy.CommandLine.Tests
 {
@@ -19,6 +20,9 @@ namespace NuDeploy.CommandLine.Tests
         {
             this.output = new StringBuilder();
             this.loggingUserInterface = new Mock<IUserInterface>();
+
+            this.loggingUserInterface.Setup(u => u.Display(It.IsAny<IServiceResult>())).Callback(
+                (IServiceResult serviceResult) => this.output.Append(serviceResult.Message));
 
             this.loggingUserInterface.Setup(u => u.Write(It.IsAny<string>())).Callback((string text) => this.output.Append(text));
 

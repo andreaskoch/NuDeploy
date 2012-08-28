@@ -69,6 +69,7 @@
     <Compile Include="UnitTests\Commands\CommandProviderTests.cs" />
     <Compile Include="UnitTests\Commands\CommandTestUtilities.cs" />
     <Compile Include="UnitTests\Commands\Console\CleanupCommandTests.cs" />
+    <Compile Include="UnitTests\Commands\Console\PackageBuildOutputCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\PublishingTargetConfigurationCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\HelpCommandTests.cs" />
     <Compile Include="UnitTests\Commands\Console\InstallationStatusCommandTests.cs" />

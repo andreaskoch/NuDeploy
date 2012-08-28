@@ -72,6 +72,7 @@
     <Compile Include="Commands\BuildPropertyParser.cs" />
     <Compile Include="Commands\CommandAttributes.cs" />
     <Compile Include="Commands\Console\CleanupCommand.cs" />
+    <Compile Include="Commands\Console\PackageBuildOutputCommand.cs" />
     <Compile Include="Commands\Console\PublishingTargetConfigurationCommand.cs" />
     <Compile Include="Commands\Console\PublishCommand.cs" />
     <Compile Include="Commands\Console\HelpCommand.cs" />
@@ -119,6 +120,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ConsoleUserInterface.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PackageBuildOutputCommand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PackageBuildOutputCommand.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\PublishingTargetConfigurationCommand.Designer.cs">
       <DependentUpon>PublishingTargetConfigurationCommand.resx</DependentUpon>
@@ -193,6 +199,10 @@
     <EmbeddedResource Include="Resources\ConsoleUserInterface.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ConsoleUserInterface.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PackageBuildOutputCommand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PackageBuildOutputCommand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PublishingTargetConfigurationCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
