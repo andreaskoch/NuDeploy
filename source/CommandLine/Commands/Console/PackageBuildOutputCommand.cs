@@ -12,7 +12,7 @@ namespace NuDeploy.CommandLine.Commands.Console
     {
         public const string CommandName = "packagebuildoutput";
 
-        public const string ArgumentNameBuildOutputFolderPath = "SolutionPath";
+        public const string ArgumentNameBuildOutputFolderPath = "BuildOutputPath";
 
         public const string ArgumentNamePublishingConfiguration = "PublishingConfiguration";
 
