@@ -5,12 +5,12 @@ syntax: glob
 *.orig
 
 # Ignore Nuget Packages
-source\packages\*
-packages\*
+source/packages/*
+packages/*.nupkg
 
 # Binary Folders
-binaries\*\*.log
-binaries\*\*.config
+binaries/*/*.log
+binaries/*/*.config
 
 # Ignore Visual Studio 2008 files
 *.obj
@@ -38,7 +38,7 @@ logs/*
 source/[Dd]ebug*/
 Data
 obj/
-source\[Rr]elease*/
+source/[Rr]elease*/
 [Tt]est[Rr]esult*
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml
@@ -48,6 +48,7 @@ StyleCop.Cache
 _ReSharper*/
 *.[Rr]esharper
 *.[Rr]esharper.user
+*.dotSettings.user
 
 # DotCover
 *.dotCover
