@@ -6,7 +6,7 @@ syntax: glob
 
 # Ignore Nuget Packages
 source/packages/*
-packages/*.nupkg
+packages/*/*.nupkg
 
 # Binary Folders
 binaries/*/*.log
