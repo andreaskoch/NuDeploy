@@ -99,7 +99,9 @@ namespace NuDeploy.Core.Services.Transformation
                 // cleanup
                 var transformationFiles =
                     this.filesystemAccessor.GetFiles(sourceFileFolder).Where(
-                        file => file.Name.Equals(sourceFileName, StringComparison.OrdinalIgnoreCase) == false);
+                        file =>
+                        file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase)
+                        && file.Name.Equals(sourceFileName, StringComparison.OrdinalIgnoreCase) == false).ToList();
 
                 foreach (var transformationFile in transformationFiles)
                 {
