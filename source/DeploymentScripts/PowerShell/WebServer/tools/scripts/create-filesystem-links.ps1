@@ -26,13 +26,33 @@ if ($systemsettings.Settings.FileSystemLinks -and $systemsettings.Settings.FileS
 	# Filesystem Links
 	foreach ($link in $systemsettings.Settings.FileSystemLinks.Links.Link)
 	{
+		$linkType = $link.Type
 		$linkPath = Join-Path $link.Path $link.Name
 		$targetPath = $link.Target
 		
 		if (((Test-Path $linkPath) -eq $false) -and (Test-Path $targetPath))
 		{
-			"Creating a file-system link from `"$targetPath`" to `"$linkPath`""
-			cmd /c mklink /J "$linkPath" "$targetPath"
+			"Creating a file-system link from `"$targetPath`" to `"$linkPath`" (link-type: $linkType)"
+			switch ($linkType)
+			{
+				"Folder"
+				{
+					cmd /c mklink /J "$linkPath" "$targetPath"
+					break
+				}
+
+				"File"
+				{
+					cmd /c mklink /H "$linkPath" "$targetPath"
+					break
+				}
+
+				default
+				{
+					"No link type specified."
+					break
+				}
+			}
 		}
 	}
 }
