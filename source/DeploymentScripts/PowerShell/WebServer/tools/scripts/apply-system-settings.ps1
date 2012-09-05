@@ -213,6 +213,17 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.Sites -and $s
 	}
 }
 
+# FTP Sites
+if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.FtpSites -and $systemsettings.Settings.IIS.FtpSites.FtpSite)
+{
+	"Creating FTP Sites"
+	foreach($site in $systemsettings.Settings.IIS.FtpSites.FtpSite) 
+	{
+		"Creating ftp site $($site.Name)"
+		Create-FtpSite -Name $site.Name -ipAddress $site.IPAddress -Port $site.Port -PhysicalPath $site.PhysicalPath -SslCertificateThumbprint $site.SslCertificateThumbprint -LogFileDirectory $site.LogFileDirectory
+	}
+}
+
 # Hosts file
 if ($systemsettings.Settings.HostFileAdditions -and $systemsettings.Settings.HostFileAdditions.Enabled -eq "true")
 {

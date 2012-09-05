@@ -88,6 +88,17 @@ if ($systemsettings.Settings.HostFileAdditions -and $systemsettings.Settings.Hos
     }
 }
 
+# FTP Sites
+if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.FtpSites -and $systemsettings.Settings.IIS.FtpSites.FtpSite)
+{
+	"Removing FTP Sites"
+	foreach($site in $systemsettings.Settings.IIS.FtpSites.FtpSite) 
+	{
+		"Removing ftp site $($site.Name)"
+		Remove-Website -Name $site.Name
+	}
+}
+
 # Websites
 if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.Sites -and $systemsettings.Settings.IIS.Sites.Site)
 {
