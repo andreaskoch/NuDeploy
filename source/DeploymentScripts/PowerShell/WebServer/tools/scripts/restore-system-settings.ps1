@@ -93,7 +93,18 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.FtpSites -and
 {
 	"Removing FTP Sites"
 	foreach($site in $systemsettings.Settings.IIS.FtpSites.FtpSite) 
-	{
+	{		
+		"Removing Authorization Rules"
+		if ($site.AuthorizationRules -and $site.AuthorizationRules.Groups)
+		{
+			"Removing group authorization rules"
+			foreach($group in $site.AuthorizationRules.Groups.Group)
+			{
+				"Removing group $($group.Name) from site $($site.Name)"
+				Remove-FtpSiteGroupAuthorizationRole -SiteName $site.Name -GroupName $group.Name
+			}
+		}		
+	
 		"Removing ftp site $($site.Name)"
 		Remove-Website -Name $site.Name
 	}

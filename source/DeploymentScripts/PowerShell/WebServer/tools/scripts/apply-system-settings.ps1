@@ -221,6 +221,17 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.FtpSites -and
 	{
 		"Creating ftp site $($site.Name)"
 		Create-FtpSite -Name $site.Name -PhysicalPath $site.PhysicalPath -LogFileDirectory $site.LogFileDirectory -IPAddress $site.IPAddress -HostHeader $site.HostHeader -Port $site.Port -SslCertificateThumbprint $site.SslCertificateThumbprint
+		
+		"Applying Authorization Rules"
+		if ($site.AuthorizationRules -and $site.AuthorizationRules.Groups)
+		{
+			"Adding group authorization rules"
+			foreach($group in $site.AuthorizationRules.Groups.Group)
+			{
+				"Adding group $($group.Name) to site $($site.Name)"
+				Add-FtpSiteGroupAuthorizationRole -SiteName $site.Name -GroupName $group.Name -Permissions $group.Permissions
+			}
+		}		
 	}
 }
 

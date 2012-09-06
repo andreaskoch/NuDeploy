@@ -599,3 +599,40 @@ Function Create-FtpSite
 	$site = (Get-WebSite -Name $name)
 	return $site
 }
+
+Function Add-FtpSiteGroupAuthorizationRole
+{ 
+	[CmdletBinding()]
+	Param(
+		[Parameter(Position=0, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$SiteName,
+
+		[Parameter(Position=1, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$GroupName,
+
+		[Parameter(Position=2, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$Permissions
+	)
+
+	$appcmdPath = Join-Path $env:windir "System32\inetsrv\appcmd.exe"
+
+	Write-Host "Adding authorization rule to FTP Site `"$SiteName`" (Group Name: $GroupName, Permissions: $Permissions)."
+	Invoke-Expression "$appcmdPath set config `"$SiteName`" /section:system.ftpserver/security/authorization `"/+[accessType='Allow',permissions='$Permissions',roles='$GroupName',users='']`" /commit:apphost"
+}
+
+Function Remove-FtpSiteGroupAuthorizationRole
+{ 
+	[CmdletBinding()]
+	Param(
+		[Parameter(Position=0, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$SiteName,
+
+		[Parameter(Position=1, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$GroupName
+	)
+
+	$appcmdPath = Join-Path $env:windir "System32\inetsrv\appcmd.exe"
+
+	Write-Host "Remove authorization rule from FTP Site `"$SiteName`" (Group Name: $GroupName)."
+	Invoke-Expression "$appcmdPath set config `"$SiteName`" /section:system.ftpserver/security/authorization `"/-[Roles='$GroupName']`" /commit:apphost"
+}
