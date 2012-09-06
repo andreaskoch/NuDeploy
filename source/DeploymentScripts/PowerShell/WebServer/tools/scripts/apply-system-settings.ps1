@@ -220,7 +220,7 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.FtpSites -and
 	foreach($site in $systemsettings.Settings.IIS.FtpSites.FtpSite) 
 	{
 		"Creating ftp site $($site.Name)"
-		Create-FtpSite -Name $site.Name -ipAddress $site.IPAddress -Port $site.Port -PhysicalPath $site.PhysicalPath -SslCertificateThumbprint $site.SslCertificateThumbprint -LogFileDirectory $site.LogFileDirectory
+		Create-FtpSite -Name $site.Name -PhysicalPath $site.PhysicalPath -LogFileDirectory $site.LogFileDirectory -IPAddress $site.IPAddress -HostHeader $site.HostHeader -Port $site.Port -SslCertificateThumbprint $site.SslCertificateThumbprint
 	}
 }
 

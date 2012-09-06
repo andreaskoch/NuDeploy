@@ -543,34 +543,58 @@ Function Create-FtpSite
 		[string]$name,
 
 		[Parameter(Position=1, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$ipAddress,
-
-		[Parameter(Position=2, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$port,		
-		
-		[Parameter(Position=3, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$physicalPath,
 
-		[Parameter(Position=4, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$SslCertificateThumbprint,
+		[Parameter(Position=2, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$LogFileDirectory,		
 
-		[Parameter(Position=5, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$LogFileDirectory
+		[Parameter(Position=3, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$ipAddress="*",
+
+		[Parameter(Position=4, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$HostHeader="",
+
+		[Parameter(Position=5, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$port="22",
+
+		[Parameter(Position=6, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$anonymousAuthenticationEnabled="false",
+
+		[Parameter(Position=7, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$basicAuthenticationEnabled="true",
+
+		[Parameter(Position=8, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$SslCertificateThumbprint=$null,
+
+		[Parameter(Position=8, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$SslPolicy="SslRequire"
 	)
 
 	$appcmdPath = Join-Path $env:windir "System32\inetsrv\appcmd.exe"
-	Invoke-Expression "$appcmdPath add site /name:`"$name`" /bindings:ftp://*:$port /physicalpath:`"$physicalPath`""
-	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.ssl.controlChannelPolicy:SslRequire`""
-	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.ssl.dataChannelPolicy:SslRequire`""
-	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.ssl.serverCertHash:$SslCertificateThumbprint`""
-	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.authentication.basicAuthentication.enabled:true`""
-	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.authentication.anonymousAuthentication.enabled:false`""
+	$authenticationAnonymousEnabled = "false"
+	$authenticationBasicEnabled = "true"
+
+	Write-Host "Creating FTP-Site `"$name`" (IPAddress: $ipAddress, HostHeader: $HostHeader, PhysicalPath: $physicalpath)."
+	$createSiteCommand = "$appcmdPath add site /name:`"$name`" /bindings:ftp/" + $ipAddress + ":" + $port + ":" + $HostHeader + " /physicalpath:`"$physicalPath`""
+    Invoke-Expression $createSiteCommand
+
+	Write-Host "Setting log file path to `"$LogFileDirectory`"."
 	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.logFile.directory:$LogFileDirectory`""
-	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.logFile.logExtFileFlags:Date, Time, ClientIP, UserName, SiteName, ComputerName, ServerIP, Method, UriStem, FtpStatus, Win32Status, BytesSent, BytesRecv, TimeTaken, ServerPort, Host, FtpSubStatus, Session, FullPath, Info, ClientPort`""
-	<#
-	Invoke-Expression "$appcmdPath set config `"$name`" /section:system.ftpserver/security/authorization `"/-[users='*'] /commit:apphost`""
-	Invoke-Expression "$appcmdPath set config `"$name`" /section:system.ftpserver/security/authorization `"/+[accessType='Allow',permissions='Read,Write',roles='',users='*']`" /commit:apphost"
-	#>
+	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.logFile.logExtFileFlags:Date, Time, ClientIP, UserName, SiteName, ComputerName, ServerIP, Method, UriStem, FtpStatus, Win32Status, BytesSent, BytesRecv, TimeTaken, ServerPort, Host, FtpSubStatus, Session, FullPath, Info, ClientPort`""	
+
+	if (($SslCertificateThumbprint -ne $null) -and ($SslCertificateThumbprint -ne ""))
+	{
+		Write-Host "Applying SSL settings (Certificate Thumbprint: $SslCertificateThumbprint, Policy: $sslPolicy)."
+		Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.ssl.serverCertHash:$SslCertificateThumbprint`""
+	}
+
+	Write-Host "Applying Security Policies (Policy: $sslPolicy)."
+	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.ssl.controlChannelPolicy:$sslPolicy`""
+	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.ssl.dataChannelPolicy:$sslPolicy`""
+
+	Write-Host "Applying authetication settings (Anonymous Authentication Enabled: $anonymousAuthenticationEnabled, Basic Authentication Enabled: $basicAuthenticationEnabled)."
+	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.authentication.anonymousAuthentication.enabled:$anonymousAuthenticationEnabled`""
+	Invoke-Expression "$appcmdPath set config -section:system.applicationHost/sites `"/[name='$name'].ftpServer.security.authentication.basicAuthentication.enabled:$basicAuthenticationEnabled`""
 
 	$site = (Get-WebSite -Name $name)
 	return $site
