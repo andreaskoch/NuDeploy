@@ -14,11 +14,9 @@ namespace NuDeploy.Core.Services.Transformation
 
         public const string WebConfigurationFileNamePrefix = "web";
 
-        public const string ApplicationConfigurationFileNamePrefix = "app";
-
         public const string WebConfigurationFileName = WebConfigurationFileNamePrefix + ConfigurationFileExtension;
 
-        public const string ApplicationConfigurationFileName = ApplicationConfigurationFileNamePrefix + ConfigurationFileExtension;
+        public const string ApplicationConfigurationFilenameSuffix = ".exe" + ConfigurationFileExtension;
 
         private readonly IFilesystemAccessor filesystemAccessor;
 
@@ -63,7 +61,7 @@ namespace NuDeploy.Core.Services.Transformation
                 this.filesystemAccessor.GetAllFiles(contentFolder).Where(
                     file =>
                     file.Name.Equals(WebConfigurationFileName, StringComparison.OrdinalIgnoreCase)
-                    || file.Name.Equals(ApplicationConfigurationFileName, StringComparison.OrdinalIgnoreCase));
+                    || file.Name.EndsWith(ApplicationConfigurationFilenameSuffix, StringComparison.OrdinalIgnoreCase));
 
             // transform config files
             foreach (var configurationFile in configurationFiles)

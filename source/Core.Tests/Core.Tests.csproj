@@ -155,19 +155,19 @@
     <Content Include="IntegrationTests\Publishing\Sample.1.0.0.nupkg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.config">
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\SomeApplication.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.INT.config">
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\SomeApplication.exe.INT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.UAT.config">
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\SomeApplication.exe.UAT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.DEV.config">
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\SomeApplication.exe.DEV.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\App.PROD.config">
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\SomeApplication.exe.PROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.config">
