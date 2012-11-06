@@ -150,18 +150,21 @@ Function CreateOrUpdate-ScheduledTask
 		[string]$TaskRun,
         
         [Parameter(Position=6, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$Schedule = "Daily",
+		[string]$Parameters,
         
         [Parameter(Position=7, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$StartTime,
+		[string]$Schedule = "Daily",
         
         [Parameter(Position=8, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$EndTime,
+		[string]$StartTime,
         
         [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$EndTime,
+        
+        [Parameter(Position=10, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$Interval = "1",
 
-		[Parameter(Position=10, Mandatory=$False, ValueFromPipeline=$True)]
+		[Parameter(Position=11, Mandatory=$False, ValueFromPipeline=$True)]
 		[string]$StartDate
 	)
 	
@@ -170,7 +173,7 @@ Function CreateOrUpdate-ScheduledTask
 		Remove-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation
 	}
 
-	Create-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -TaskRun $TaskRun -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -Schedule $Schedule -StartTime $StartTime -EndTime $EndTime -Interval $Interval -StartDate $StartDate
+	Create-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -TaskRun $TaskRun -Parameters $Parameters -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -Schedule $Schedule -StartTime $StartTime -EndTime $EndTime -Interval $Interval -StartDate $StartDate
 }
 
 Function Create-ScheduledTask
@@ -195,18 +198,21 @@ Function Create-ScheduledTask
 		[string]$TaskRun,
         
         [Parameter(Position=6, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$Schedule = "Daily",
+		[string]$Parameters,
         
         [Parameter(Position=7, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$StartTime,
+		[string]$Schedule = "Daily",
         
         [Parameter(Position=8, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$EndTime,
+		[string]$StartTime,
         
         [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$EndTime,
+        
+        [Parameter(Position=10, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$Interval = "1",
 		
-		[Parameter(Position=10, Mandatory=$False, ValueFromPipeline=$True)]
+		[Parameter(Position=11, Mandatory=$False, ValueFromPipeline=$True)]
 		[string]$StartDate
 	)
 	$taskLocationAndName = Join-Path $TaskLocation $TaskName
@@ -216,30 +222,30 @@ Function Create-ScheduledTask
     { 
         "Daily" 
                 {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 } 
         "Hourly" 
                 {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 } 
         "Minute" 
                 {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 } 
         "Once" 
                 {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /st $StartTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /st $StartTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 } 
         "Weekly" 
                 {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 } 
         "Monthly" 
                 {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 } 
         default {
-                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
+                    $Command = "schtasks.exe /create /s `"$ComputerName`" /tn `"$taskLocationAndName`" /tr `"$TaskRun $Parameters`" /sc $Schedule /mo $Interval /st $StartTime /et $EndTime /ru `"$RunAsUser`" /rp `"$RunAsUserPassword`" /F"
                 }
     }
 
