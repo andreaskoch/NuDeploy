@@ -150,22 +150,25 @@ Function CreateOrUpdate-ScheduledTask
 		[string]$TaskRun,
         
         [Parameter(Position=6, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$Parameters,
-        
-        [Parameter(Position=7, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$Schedule = "Daily",
         
-        [Parameter(Position=8, Mandatory=$True, ValueFromPipeline=$True)]
+        [Parameter(Position=7, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$StartTime,
         
-        [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
+        [Parameter(Position=8, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$EndTime,
         
-        [Parameter(Position=10, Mandatory=$True, ValueFromPipeline=$True)]
+        [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$Interval = "1",
 
+		[Parameter(Position=10, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$StartDate,
+
 		[Parameter(Position=11, Mandatory=$False, ValueFromPipeline=$True)]
-		[string]$StartDate
+		[string]$Parameters,
+        
+        [Parameter(Position=12, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$HighestRunLevel = $false
 	)
 	
 	if ((Exists-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation) -eq $true)
@@ -173,7 +176,7 @@ Function CreateOrUpdate-ScheduledTask
 		Remove-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation
 	}
 
-	Create-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -TaskRun $TaskRun -Parameters $Parameters -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -Schedule $Schedule -StartTime $StartTime -EndTime $EndTime -Interval $Interval -StartDate $StartDate
+	Create-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -TaskRun $TaskRun -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -Schedule $Schedule -StartTime $StartTime -EndTime $EndTime -Interval $Interval -StartDate $StartDate -Parameters $Parameters -HighestRunLevel $HighestRunLevel
 }
 
 Function Create-ScheduledTask
@@ -198,22 +201,25 @@ Function Create-ScheduledTask
 		[string]$TaskRun,
         
         [Parameter(Position=6, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$Parameters,
-        
-        [Parameter(Position=7, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$Schedule = "Daily",
         
-        [Parameter(Position=8, Mandatory=$True, ValueFromPipeline=$True)]
+        [Parameter(Position=7, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$StartTime,
         
-        [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
+        [Parameter(Position=8, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$EndTime,
         
-        [Parameter(Position=10, Mandatory=$True, ValueFromPipeline=$True)]
+        [Parameter(Position=9, Mandatory=$True, ValueFromPipeline=$True)]
 		[string]$Interval = "1",
 		
+		[Parameter(Position=10, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$StartDate,
+
 		[Parameter(Position=11, Mandatory=$False, ValueFromPipeline=$True)]
-		[string]$StartDate
+		[string]$Parameters,
+        
+        [Parameter(Position=12, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$HighestRunLevel = $false
 	)
 	$taskLocationAndName = Join-Path $TaskLocation $TaskName
 	
@@ -253,6 +259,11 @@ Function Create-ScheduledTask
 	{
 		$Command += " /sd `"$StartDate`""
 	}
+
+    if ($HighestRunLevel -eq "TrUe")
+    {
+        $Command += " /RL HIGHEST"
+    }
 
 	Invoke-Expression $Command
 }
