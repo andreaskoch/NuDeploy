@@ -9,8 +9,7 @@ source/packages/*
 packages/*/*.nupkg
 
 # Binary Folders
-binaries/*/*.log
-binaries/*/*.config
+binaries
 
 # Ignore Visual Studio 2008 files
 *.obj
