@@ -267,3 +267,63 @@ Function Create-ScheduledTask
 
 	Invoke-Expression $Command
 }
+
+
+Function CreateOrUpdate-XmlBasedScheduledTask
+{
+	param(
+        [Parameter(Position=0, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$ComputerName = "localhost",
+        
+        [Parameter(Position=1, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$RunAsUser="System",
+        
+        [Parameter(Position=2, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$RunAsUserPassword,
+        
+        [Parameter(Position=3, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$TaskName,
+		
+        [Parameter(Position=4, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$TaskLocation,		
+        
+        [Parameter(Position=5, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$XmlConfigFilePath
+	)
+	
+	if ((Exists-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation) -eq $true)
+	{
+		Remove-ScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation
+	}
+
+	Create-XmlBasedScheduledTask -ComputerName $ComputerName -TaskName $TaskName -TaskLocation $TaskLocation -RunAsUser $RunAsUser -RunAsUserPassword $RunAsUserPassword -XmlConfigFilePath $XmlConfigFilePath
+}
+
+Function Create-XmlBasedScheduledTask
+{
+	param(
+        [Parameter(Position=0, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$ComputerName = "localhost",
+        
+        [Parameter(Position=1, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$RunAsUser="System",
+        
+        [Parameter(Position=2, Mandatory=$False, ValueFromPipeline=$True)]
+		[string]$RunAsUserPassword,
+        
+        [Parameter(Position=3, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$TaskName,
+		
+        [Parameter(Position=4, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$TaskLocation,		
+        
+        [Parameter(Position=5, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$XmlConfigFilePath
+	)
+	
+    $taskLocationAndName = Join-Path $TaskLocation $TaskName
+    
+	$Command = "schtasks.exe /create /tn `"$taskLocationAndName`" /XML `"$XmlConfigFilePath`" /RU `"$RunAsUser`" /RP `"$RunAsUserPassword`" /F"
+
+	Invoke-Expression $Command
+}

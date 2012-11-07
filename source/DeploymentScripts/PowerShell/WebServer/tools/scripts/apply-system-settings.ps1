@@ -265,6 +265,17 @@ if ($systemsettings.Settings.BatchJobs -and $systemsettings.Settings.BatchJobs.J
 	}
 }
 
+# Xml based Batch Jobs
+if ($systemsettings.Settings.BatchJobsXml -and $systemsettings.Settings.BatchJobsXml.Job)
+{
+	"Creating XML based Batch Jobs"
+	foreach($batchJob in $systemsettings.Settings.BatchJobsXml.Job) 
+	{
+		"Creating batch job $($batchJob.Name)"
+		CreateOrUpdate-XmlBasedScheduledTask -ComputerName localhost -TaskName $batchJob.Name -TaskLocation $batchJob.Location -RunAsUser $batchJob.Username -RunAsUserPassword $batchJob.Password -XmlConfigFilePath $batchJob.XmlConfigFilePath
+	}
+}
+
 # Firewall Rules
 if ($systemsettings.Settings.Firewall)
 {
