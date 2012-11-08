@@ -15,6 +15,7 @@ Import-Module (Join-Path $modulesDirectory hostfile-management.ps1)
 Import-Module (Join-Path $modulesDirectory scheduled-task-management.ps1)
 Import-Module (Join-Path $modulesDirectory firewall-management.ps1)
 Import-Module (Join-Path $modulesDirectory local-security-policy-management.ps1)
+Import-Module (Join-Path $modulesDirectory topshelf-windows-service-management.ps1)
 
 # Read system settings
 [xml]$systemsettings = Get-SystemSettings
@@ -270,4 +271,12 @@ if ($systemsettings.Settings.Certificates -and $systemsettings.Settings.Certific
 		"Removing certificate $($certificate.Thumbprint) from $certificatePath"
 		Remove-Certificate -Thumbprint $certificate.Thumbprint -CertificateRootStore $certificate.CertificateRootStore -CertificateStore $certificate.CertificateStore
 	}
+}
+
+# Uninstall TopShelf Service
+if ($systemsettings.Settings.TopshelfServices)
+{
+    foreach ($service in $systemsettings.Settings.TopshelfServices.Service) {
+        Uninstall-TopShelfService -exePath $service.Executable -name $service.Name -instance $service.Instance
+    }
 }

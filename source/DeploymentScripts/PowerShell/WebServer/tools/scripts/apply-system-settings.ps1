@@ -15,6 +15,7 @@ Import-Module (Join-Path $modulesDirectory hostfile-management.ps1)
 Import-Module (Join-Path $modulesDirectory scheduled-task-management.ps1)
 Import-Module (Join-Path $modulesDirectory firewall-management.ps1)
 Import-Module (Join-Path $modulesDirectory local-security-policy-management.ps1)
+Import-Module (Join-Path $modulesDirectory topshelf-windows-service-management.ps1)
 
 # Read system settings
 [xml]$systemsettings = Get-SystemSettings
@@ -295,4 +296,19 @@ if ($systemsettings.Settings.Firewall)
 			CreateOrUpdate-FirewallProgramRule -Name $programRule.Name -Direction $programRule.Direction -Program $programRule.Program -Action $portRule.Action
 		}
 	}
+}
+
+# Install TopShelf Service
+if ($systemsettings.Settings.TopshelfServices)
+{
+    foreach ($service in $systemsettings.Settings.TopshelfServices.Service) {
+                
+        $startAfterInstallation = $False
+        if ($service.startAfterInstallation -eq "true") {
+            $startAfterInstallation = $True
+        }
+        
+        Install-TopShelfService -exePath $service.Executable -name $service.Name -instance $service.Instance -username $service.Username -password $service.Password -description $service.Description -start $service.Start -startAfterInstallation:$startAfterInstallation
+        
+    }
 }
