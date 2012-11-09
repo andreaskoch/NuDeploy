@@ -277,6 +277,6 @@ if ($systemsettings.Settings.Certificates -and $systemsettings.Settings.Certific
 if ($systemsettings.Settings.TopshelfServices)
 {
     foreach ($service in $systemsettings.Settings.TopshelfServices.Service) {
-        Uninstall-TopShelfService -exePath $service.Executable -name $service.Name -instance $service.Instance
+        Uninstall-TopShelfService -exePath $service.Executable -displayName $service.DisplayName -instance $service.Instance
     }
 }

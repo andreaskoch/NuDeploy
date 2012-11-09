@@ -7,7 +7,7 @@ Function Install-TopShelfService {
         [string]$exePath,    
     
         [Parameter(Position=1, Mandatory=$False, ValueFromPipeline=$True)]
-        [string]$name,
+        [string]$displayName,
         
         [Parameter(Position=2, Mandatory=$False, ValueFromPipeline=$True)]
         [string]$instance,
@@ -29,20 +29,12 @@ Function Install-TopShelfService {
     )
 
     # ServiceName and DisplayName are always the same
-    if ($name) {
-        $nameParameter = "-servicename:$name -displayname:$name"
+    if ($displayName) {
+        $displayNameParameter = "-servicename:$displayName -displayname:$displayName"
     }
     
     if ($instance) {
         $instanceParameter = "-instance:$instance"
-    }
-    
-    if ($description) {
-        $descriptionParameter = "-description `"$description`""
-    }
-    
-    if ($username -and $password) {
-        $userParameter = "-username `"$username`" -password `"$password`""
     }
     
     switch ($start)
@@ -61,14 +53,26 @@ Function Install-TopShelfService {
         }
     }
     
-    $cmd = "$exePath install $nameParameter $instanceParameter $descriptionParameter $userParameter $startParameter"
     Write-Host Installing TopShelf Service
-    Write-Host $cmd
-    Invoke-Expression $cmd
+    # the duplicity here is pretty ugly but the only way I found to allow spaces and special characters within these parameters
+    if ($description) {
+        if ($username -and $password) {
+            & $exePath install $displayNameParameter $instanceParameter $startParameter -description `"$description`" -username `"$username`" -password `"$password`"
+        } else {
+            & $exePath install $displayNameParameter $instanceParameter $startParameter -description `"$description`"
+        }
+    } else {
+        if ($username -and $password) {
+            & $exePath install $displayNameParameter $instanceParameter $startParameter -username `"$username`" -password `"$password`"
+        } else {
+            & $exePath install $displayNameParameter $instanceParameter $startParameter
+        }
+    }
     
     if ($startAfterInstallation) {
         Write-Host Start Service After Installation
-        & $exePath start
+        $startCmd = "$exePath start $displayNameParameter $instanceParameter"
+        Invoke-Expression $startCmd
     }
 }
 
@@ -80,14 +84,14 @@ Function Uninstall-TopShelfService {
         [string]$exePath,
     
         [Parameter(Position=1, Mandatory=$False, ValueFromPipeline=$True)]
-        [string]$name,
+        [string]$displayName,
         
         [Parameter(Position=2, Mandatory=$False, ValueFromPipeline=$True)]
         [string]$instance
     )
 
-    if ($name) {
-        $nameParameter = "-servicename:$name -displayname:$name"
+    if ($displayName) {
+        $displayNameParameter = "-servicename:$displayName -displayname:$displayName"
     }
     
     if ($instance) {
@@ -96,7 +100,7 @@ Function Uninstall-TopShelfService {
     
     Write-Host Uninstalling TopShelf Service
     
-    $cmd = "$exePath uninstall $nameParameter $instanceParameter"
+    $cmd = "$exePath uninstall $displayNameParameter $instanceParameter"
     Write-Host $cmd
     
     Invoke-Expression $cmd

@@ -308,7 +308,7 @@ if ($systemsettings.Settings.TopshelfServices)
             $startAfterInstallation = $True
         }
         
-        Install-TopShelfService -exePath $service.Executable -name $service.Name -instance $service.Instance -username $service.Username -password $service.Password -description $service.Description -start $service.Start -startAfterInstallation:$startAfterInstallation
+        Install-TopShelfService -exePath $service.Executable -displayName $service.DisplayName -instance $service.Instance -username $service.Username -password $service.Password -description $service.Description -start $service.Start -startAfterInstallation:$startAfterInstallation
         
     }
 }
