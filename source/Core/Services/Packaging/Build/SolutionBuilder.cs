@@ -10,7 +10,7 @@ namespace NuDeploy.Core.Services.Packaging.Build
 {
     public class SolutionBuilder : ISolutionBuilder
     {
-        private const string DefaultBuildTarget = "Build";
+        private const string DefaultBuildTarget = "Rebuild";
 
         private const string DefaultTargetPlatform = "Any CPU";
 
