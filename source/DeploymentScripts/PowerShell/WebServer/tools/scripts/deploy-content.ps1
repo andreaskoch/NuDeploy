@@ -7,7 +7,7 @@ $toolsDirectory = (Get-Item $currentDirectory).parent.FullName
 $packageDirectory = (Get-Item $toolsDirectory).Parent.FullName
 
 # Imports
-Import-Module (Join-Path $modulesDirectory utilities.ps1)
+. (Join-Path $modulesDirectory utilities.ps1)
 
 # Read system settings
 [xml]$systemsettings = Get-SystemSettings

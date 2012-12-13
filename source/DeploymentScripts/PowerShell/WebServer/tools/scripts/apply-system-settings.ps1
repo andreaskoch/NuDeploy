@@ -7,15 +7,15 @@ $toolsDirectory = (Get-Item $currentDirectory).parent.FullName
 
 # Imports
 Import-Module WebAdministration
-Import-Module (Join-Path $modulesDirectory utilities.ps1)
-Import-Module (Join-Path $modulesDirectory certificate-management.ps1)
-Import-Module (Join-Path $modulesDirectory local-usermanagement.ps1)
-Import-Module (Join-Path $modulesDirectory iis-management.ps1)
-Import-Module (Join-Path $modulesDirectory hostfile-management.ps1)
-Import-Module (Join-Path $modulesDirectory scheduled-task-management.ps1)
-Import-Module (Join-Path $modulesDirectory firewall-management.ps1)
-Import-Module (Join-Path $modulesDirectory local-security-policy-management.ps1)
-Import-Module (Join-Path $modulesDirectory topshelf-windows-service-management.ps1)
+. (Join-Path $modulesDirectory utilities.ps1)
+. (Join-Path $modulesDirectory certificate-management.ps1)
+. (Join-Path $modulesDirectory local-usermanagement.ps1)
+. (Join-Path $modulesDirectory iis-management.ps1)
+. (Join-Path $modulesDirectory hostfile-management.ps1)
+. (Join-Path $modulesDirectory scheduled-task-management.ps1)
+. (Join-Path $modulesDirectory firewall-management.ps1)
+. (Join-Path $modulesDirectory local-security-policy-management.ps1)
+. (Join-Path $modulesDirectory topshelf-windows-service-management.ps1)
 
 # Read system settings
 [xml]$systemsettings = Get-SystemSettings

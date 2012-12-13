@@ -5,7 +5,7 @@ $currentDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path
 $modulesDirectory = Join-Path $currentDirectory modules
 
 # Imports
-Import-Module (Join-Path $modulesDirectory utilities.ps1)
+. (Join-Path $modulesDirectory utilities.ps1)
 
 # Read system settings
 [xml]$systemsettings = Get-SystemSettings
