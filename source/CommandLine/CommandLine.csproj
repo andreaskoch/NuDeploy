@@ -203,6 +203,7 @@
     <EmbeddedResource Include="Resources\PackageBuildOutputCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PackageBuildOutputCommand.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PublishingTargetConfigurationCommand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

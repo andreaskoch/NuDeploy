@@ -29,7 +29,6 @@ foreach ($directory in $contentDirectories)
 	
 	if((Test-Path $targetFolderPath))
 	{
-		"Removing existing folder $targetFolderPath"
 		Remove-Item $targetFolderPath -Recurse -Force
 	}
 	

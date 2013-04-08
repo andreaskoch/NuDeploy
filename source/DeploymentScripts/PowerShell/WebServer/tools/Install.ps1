@@ -12,6 +12,7 @@ $scriptsDirectory = Join-Path $toolsDirectory scripts
 
 $installExternalDependenciesScript = (Join-Path $scriptsDirectory install-external-dependencies.ps1)
 $deployContentScript = (Join-Path $scriptsDirectory deploy-content.ps1)
+$updateContentScript = (Join-Path $scriptsDirectory update-content.ps1)
 $createFilesystemLinksScript = (Join-Path $scriptsDirectory create-filesystem-links.ps1)
 $applySystemSettingsScript = (Join-Path $scriptsDirectory apply-system-settings.ps1)
 $applyFilesystemPermissions = (Join-Path $scriptsDirectory apply-filesystem-permissions.ps1)
@@ -39,8 +40,9 @@ switch ($DeploymentType)
 	
 	"Update" {
 		"Deploying content"
-		& $deployContentScript	
-		break
+		& $updateContentScript
+		
+		break	
 	}
 	
 	default {
