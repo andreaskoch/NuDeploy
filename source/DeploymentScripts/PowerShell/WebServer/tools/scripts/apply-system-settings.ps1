@@ -142,8 +142,15 @@ if ($systemsettings.Settings.IIS -and $systemsettings.Settings.IIS.ApplicationPo
 	"Creating Application Pools"
 	foreach($applicationPool in $systemsettings.Settings.IIS.ApplicationPools.ApplicationPool) 
 	{   
-		"Creating application pool $($applicationPool.Name)"
-		$pool = (CreateOrUpdate-AppPool -Name $applicationPool.Name -Username $applicationPool.Username -Password $applicationPool.Password -pipelineMode $applicationPool.PipelineMode -RuntimeVersion $applicationPool.RuntimeVersion) 
+		"Creating application pool $($applicationPool.Name)"		
+		if($applicationPool.Enable32BitAppOnWin64)
+		{
+			$pool = (CreateOrUpdate-AppPool -Name $applicationPool.Name -Username $applicationPool.Username -Password $applicationPool.Password -pipelineMode $applicationPool.PipelineMode -RuntimeVersion $applicationPool.RuntimeVersion -Enable32BitAppOnWin64 $applicationPool.Enable32BitAppOnWin64) 
+		}
+		else
+		{
+			$pool = (CreateOrUpdate-AppPool -Name $applicationPool.Name -Username $applicationPool.Username -Password $applicationPool.Password -pipelineMode $applicationPool.PipelineMode -RuntimeVersion $applicationPool.RuntimeVersion) 
+		}		
 	}
 }
 

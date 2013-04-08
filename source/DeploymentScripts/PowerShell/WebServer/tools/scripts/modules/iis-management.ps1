@@ -324,10 +324,10 @@ Function CreateOrUpdate-AppPool
 		[string]$username,
 		
 		[Parameter(Position=4, Mandatory=$True, ValueFromPipeline=$True)]
-		[string]$password
+		[string]$password,
 
 		[Parameter(Position=5, Mandatory=$False, ValueFromPipeline=$True)]
-		[string]$enable32BitAppOnWin64
+		[string]$enable32BitAppOnWin64 = "false"
 	)
 
 	try {
@@ -341,7 +341,7 @@ Function CreateOrUpdate-AppPool
 		$appPool.processModel.username = [string]($username)
 		$appPool.processModel.password = [string]($password)
 		$appPool.processModel.identityType = "SpecificUser"
-		$appPool.enable32BitAppOnWin64 = $enable32BitAppOnWin64
+		$appPool.enable32BitAppOnWin64 = [string]$enable32BitAppOnWin64
 		$appPool | Set-Item
 
 		return $appPool
