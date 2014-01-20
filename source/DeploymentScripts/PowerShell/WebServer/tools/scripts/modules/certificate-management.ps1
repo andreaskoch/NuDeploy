@@ -38,7 +38,7 @@ function Import-PfxCertificate
 		$pfxPass = read-host "Enter the pfx password" -assecurestring
 	}
 
-	$pfx.import($certPath, $pfxPass, "Exportable,PersistKeySet")
+	$pfx.import($certPath, $pfxPass, "Exportable,MachineKeySet,PersistKeySet")
 
 	$store = new-object System.Security.Cryptography.X509Certificates.X509Store($certStore,$certRootStore)
 	$store.open("MaxAllowed")
@@ -95,4 +95,30 @@ Function Remove-Certificate
     $store.Close()
 	
 	Set-Location $currentLocation
+}
+
+Function Certificate-Exists
+{ 
+	[CmdletBinding()]
+	Param(
+		[Parameter(Position=0, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$thumbprint,
+		
+		[Parameter(Position=1, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$certificateRootStore,
+		
+		[Parameter(Position=2, Mandatory=$True, ValueFromPipeline=$True)]
+		[string]$certificateStore  
+	)
+	
+	$store = New-Object System.Security.Cryptography.X509Certificates.X509Store $certificateStore,$certificateRootStore
+	$store.Open("ReadOnly")
+	$certificate = $store.Certificates | where-object {$_.Thumbprint -eq $thumbprint}
+	
+	if ($certificate -ne $null) 
+	{
+		return $true
+	}
+	
+	return $false
 }

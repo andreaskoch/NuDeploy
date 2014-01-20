@@ -27,6 +27,12 @@ if ($systemsettings.Settings.Certificates -and $systemsettings.Settings.Certific
 	$certificateFolder = Join-Path $toolsDirectory certificates
 	foreach($certificate in $systemsettings.Settings.Certificates.Certificate) 
 	{
+		if ($certificate.IsShared -eq "true" -and (Certificate-Exists -Thumbprint $certificate.Thumbprint -CertificateRootStore $certificate.CertificateRootStore -CertificateStore $certificate.CertificateStore) -eq $true)
+		{
+			"Skip installation of certificate $($certificate.Thumbprint) because it is shared and is already installed."
+			continue
+		}
+
 		"Importing certificate $($certificate.Filename)"
 		
 		$filepath =  Join-Path $certificateFolder $certificate.Filename
