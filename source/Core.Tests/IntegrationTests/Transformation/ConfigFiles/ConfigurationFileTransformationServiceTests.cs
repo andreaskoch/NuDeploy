@@ -40,7 +40,9 @@ namespace NuDeploy.Core.Tests.IntegrationTests.Transformation.ConfigFiles
 
             var appAndWebConfigFiles =
                 allConfigurationFilesBeforeTransformation.Where(
-                    f => f.EndsWith("web.config", StringComparison.OrdinalIgnoreCase) || f.EndsWith(".exe.config", StringComparison.OrdinalIgnoreCase)).ToList();
+                    f => f.EndsWith("web.config", StringComparison.OrdinalIgnoreCase) || 
+                        f.EndsWith(".exe.config", StringComparison.OrdinalIgnoreCase) ||
+                        f.EndsWith("log4net.config", StringComparison.OrdinalIgnoreCase)).ToList();
 
             var configFilesAndTheirContent = new Dictionary<string, string>();
             foreach (var appAndWebConfigFile in appAndWebConfigFiles)

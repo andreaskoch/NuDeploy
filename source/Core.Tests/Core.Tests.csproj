@@ -170,6 +170,21 @@
     <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\applications\someApp\SomeApplication.exe.PROD.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someLog4net\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someLog4net\log4net.DEV.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someLog4net\log4net.INT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someLog4net\log4net.PROD.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someLog4net\log4net.UAT.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="IntegrationTests\Transformation\ConfigFiles\sample-package-1\content\webapplications\someWebApp\Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -10,11 +12,14 @@ namespace NuDeploy.Core.Services.Transformation
     {
         public const string PackageContentFolderName = "Content";
 
-        public const string ConfigurationFileExtension = ".config";
+        public const string ConfigurationFileExtension = ".config";        
 
-        public const string WebConfigurationFileNamePrefix = "web";
-
-        public const string WebConfigurationFileName = WebConfigurationFileNamePrefix + ConfigurationFileExtension;
+        public static string[] SupportedBaseConfigFile =
+        {
+            "web.config",
+            "ioc.config",
+            "log4net.config"
+        };        
 
         public const string ApplicationConfigurationFilenameSuffix = ".exe" + ConfigurationFileExtension;
 
@@ -39,7 +44,7 @@ namespace NuDeploy.Core.Services.Transformation
         }
 
         public IServiceResult TransformConfigurationFiles(string baseDirectoryPath, string[] transformationProfileNames)
-        {
+        {           
             if (string.IsNullOrWhiteSpace(baseDirectoryPath))
             {
                 throw new ArgumentException("baseDirectoryPath");
@@ -53,19 +58,21 @@ namespace NuDeploy.Core.Services.Transformation
             if (transformationProfileNames.Length == 0)
             {
                 return new SuccessResult(Resources.ConfigurationFileTransformationService.NoTransformationProfilesSupplied);
-            }
+            }                          
             
-            // get all app and web.configs in the content folder
+            // get all config files in the content folder
             string contentFolder = Path.Combine(baseDirectoryPath, PackageContentFolderName);
+
             var configurationFiles =
                 this.filesystemAccessor.GetAllFiles(contentFolder).Where(
-                    file =>
-                    file.Name.Equals(WebConfigurationFileName, StringComparison.OrdinalIgnoreCase)
-                    || file.Name.EndsWith(ApplicationConfigurationFilenameSuffix, StringComparison.OrdinalIgnoreCase));
+                    file => SupportedBaseConfigFile.Contains(file.Name.ToLower())|| 
+                    file.Name.EndsWith(ApplicationConfigurationFilenameSuffix, StringComparison.OrdinalIgnoreCase));
+            
 
             // transform config files
             foreach (var configurationFile in configurationFiles)
             {
+                Console.WriteLine("Processing Sourcefile");
                 string sourceFileFolder = configurationFile.Directory.FullName;
                 string sourceFileName = configurationFile.Name;
                 string sourceFilePath = configurationFile.FullName;
@@ -98,12 +105,15 @@ namespace NuDeploy.Core.Services.Transformation
                 var transformationFiles =
                     this.filesystemAccessor.GetFiles(sourceFileFolder).Where(
                         file =>
-                        file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase)
-                        && file.Name.Equals(sourceFileName, StringComparison.OrdinalIgnoreCase) == false).ToList();
+                            file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase)
+                            && !SupportedBaseConfigFile.Contains(file.Name.ToLower())).ToList();
+                
+                Console.WriteLine("Cleaning up config files.");
 
                 foreach (var transformationFile in transformationFiles)
                 {
                     var filePath = transformationFile.FullName;
+                    Console.WriteLine("Deleting "+filePath);
                     if (!this.filesystemAccessor.DeleteFile(filePath))
                     {
                         return new FailureResult(Resources.ConfigurationFileTransformationService.CleanupFailedForFileMessageTemplate, filePath);
