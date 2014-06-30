@@ -76,6 +76,7 @@ namespace NuDeploy.Core.Services.Transformation
                 string sourceFileFolder = configurationFile.Directory.FullName;
                 string sourceFileName = configurationFile.Name;
                 string sourceFilePath = configurationFile.FullName;
+                string configFileType = sourceFileName.Substring(0, sourceFileName.IndexOf('.'));
 
                 foreach (var systemSettingTransformationProfileName in transformationProfileNames)
                 {
@@ -105,8 +106,9 @@ namespace NuDeploy.Core.Services.Transformation
                 var transformationFiles =
                     this.filesystemAccessor.GetFiles(sourceFileFolder).Where(
                         file =>
-                            file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase)
-                            && !SupportedBaseConfigFile.Contains(file.Name.ToLower())).ToList();
+                            file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase) &&
+                            file.Name.StartsWith(configFileType, StringComparison.OrdinalIgnoreCase) &&
+                            !SupportedBaseConfigFile.Contains(file.Name.ToLower())).ToList();
                                 
 
                 foreach (var transformationFile in transformationFiles)
