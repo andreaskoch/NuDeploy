@@ -107,13 +107,12 @@ namespace NuDeploy.Core.Services.Transformation
                         file =>
                             file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase)
                             && !SupportedBaseConfigFile.Contains(file.Name.ToLower())).ToList();
-                
-                Console.WriteLine("Cleaning up config files.");
+                                
 
                 foreach (var transformationFile in transformationFiles)
                 {
                     var filePath = transformationFile.FullName;
-                    Console.WriteLine("Deleting "+filePath);
+                
                     if (!this.filesystemAccessor.DeleteFile(filePath))
                     {
                         return new FailureResult(Resources.ConfigurationFileTransformationService.CleanupFailedForFileMessageTemplate, filePath);

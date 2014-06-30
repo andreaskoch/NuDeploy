@@ -74,11 +74,11 @@ namespace NuDeploy.CommandLine
                     return 0;
                 }
 
-//#if DEBUG
+#if DEBUG
                 int processId = Process.GetCurrentProcess().Id;
                 Console.WriteLine(string.Format(Resources.Application.AttachToProcessWaitMessageTemplate, processId));
                 Console.ReadLine();
-//#endif
+#endif
 
                 StructureMapSetup.Setup();
 
