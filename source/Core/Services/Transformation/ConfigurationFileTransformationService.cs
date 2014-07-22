@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-
+using System.Text.RegularExpressions;
 using NuDeploy.Core.Common.FilesystemAccess;
 
 namespace NuDeploy.Core.Services.Transformation
@@ -75,8 +75,11 @@ namespace NuDeploy.Core.Services.Transformation
                 Console.WriteLine("Processing Sourcefile");
                 string sourceFileFolder = configurationFile.Directory.FullName;
                 string sourceFileName = configurationFile.Name;
-                string sourceFilePath = configurationFile.FullName;
-                string configFileType = sourceFileName.Substring(0, sourceFileName.IndexOf('.'));
+                string sourceFilePath = configurationFile.FullName;                
+                //string configFileType = sourceFileName.Replace().Substring(0, sourceFileName.IndexOf('.'));
+
+                var cutExtension = new Regex(".exe.config|.config", RegexOptions.IgnoreCase);
+                string configFileType = cutExtension.Replace(sourceFileName, String.Empty);
 
                 foreach (var systemSettingTransformationProfileName in transformationProfileNames)
                 {
@@ -108,7 +111,7 @@ namespace NuDeploy.Core.Services.Transformation
                         file =>
                             file.Extension.Equals(ConfigurationFileExtension, StringComparison.OrdinalIgnoreCase) &&
                             file.Name.StartsWith(configFileType, StringComparison.OrdinalIgnoreCase) &&
-                            !SupportedBaseConfigFile.Contains(file.Name.ToLower())).ToList();
+                            !file.Name.Equals(sourceFileName, StringComparison.OrdinalIgnoreCase));
                                 
 
                 foreach (var transformationFile in transformationFiles)
