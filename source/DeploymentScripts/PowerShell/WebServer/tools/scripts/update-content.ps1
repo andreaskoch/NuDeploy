@@ -44,6 +44,8 @@ Import-Module WebAdministration
 . (Join-Path $modulesDirectory firewall-management.ps1)
 . (Join-Path $modulesDirectory local-security-policy-management.ps1)
 . (Join-Path $modulesDirectory topshelf-windows-service-management.ps1)
+. (Join-Path $modulesDirectory dacpac-management.ps1)
+
 
 # Read system settings
 [xml]$systemsettings = Get-SystemSettings
@@ -141,5 +143,17 @@ if ($systemsettings.Settings.TopshelfServices)
         }
         
         Install-TopShelfService -exePath $service.Executable -displayName $service.DisplayName -instance $service.Instance -username $service.Username -password $service.Password -description $service.Description -start $service.Start -startAfterInstallation:$startAfterInstallation
+    }
+}
+
+# Install DacPacs
+if ($systemsettings.Settings.DacPacs)
+{
+    foreach ($dac in $systemsettings.Settings.DacPacs.DacPac) {
+                
+        $sqlPackageExePath = $systemsettings.Settings.DacPacs.SqlPackageExePath
+        
+        Publish-DacPac -sqlPackageExePath $sqlPackageExePath -packagePath $dac.PackagePath -publishProfilePath $dac.PublishProfilePath
+        
     }
 }
